@@ -1,0 +1,16 @@
+{
+  "name": "汉字学习 — Vocabulary Mastery",
+  "short_name": "汉字学习",
+  "description": "Offline-first Chinese vocabulary mastery app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#4f7fff",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>学</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
