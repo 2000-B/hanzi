@@ -9,6 +9,7 @@
 <title>汉字学习 — vocabulary mastery</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ══════════════════════════════════════════
    DESIGN TOKENS
@@ -1578,6 +1579,115 @@ header {
 .search-result-pinyin { font-size:12px; color:var(--text2); }
 .search-result-english { font-size:12px; color:var(--text); }
 .search-result-deck { font-size:11px; color:var(--text3); padding:2px 6px; background:var(--bg4); border-radius:var(--radius); }
+
+/* ══════════════════════════════════════════
+   ANALYTICS DASHBOARD
+   ══════════════════════════════════════════ */
+.analytics-view {
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 24px;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+.analytics-view.active { display: flex; }
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.dash-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  box-shadow: var(--elevation);
+}
+.stat-card-value {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bff 50%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-card-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+.dash-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--elevation);
+}
+.dash-card-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 16px;
+}
+.dash-chart-wrap { position: relative; height: 180px; }
+
+.session-table-wrap {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--elevation);
+}
+.session-table-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.session-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 48px 56px 60px 64px;
+  gap: 8px;
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  align-items: center;
+  color: var(--text2);
+}
+.session-row:last-child { border-bottom: none; }
+.session-row.sh { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); }
+.session-row .acc-val { font-weight: 600; color: var(--green); }
+.session-row .acc-val.low { color: var(--red); }
+.session-row .deck-tag { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 6px; border-radius: var(--radius); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-empty { text-align: center; color: var(--text3); padding: 32px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -1615,10 +1725,10 @@ header {
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
     <button class="icon-btn" id="btn-analytics" onclick="showAnalytics()" title="progress dashboard">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="9" width="3" height="6" rx="1" fill="currentColor"/><rect x="6" y="5" width="3" height="10" rx="1" fill="currentColor"/><rect x="11" y="1" width="3" height="14" rx="1" fill="currentColor"/></svg>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
     </button>
     <button class="icon-btn" id="btn-settings" onclick="toggleSettings()" title="settings">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.55 3.55l1.2 1.2M11.25 11.25l1.2 1.2M12.45 3.55l-1.2 1.2M4.75 11.25l-1.2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
     </button>
   </div>
 </header>
@@ -1772,13 +1882,13 @@ header {
         <div class="mastered-pill" id="mastered-pill">
           <button class="mastered-pill-btn" id="btn-hide-mastered" onclick="toggleHideMastered()" title="hide mastered cards">
             <span class="mastered-eye-wrap">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="3.5" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 8s1.3-2.5 4-2.5S12 8 12 8s-1.3 2.5-4 2.5S4 8 4 8z" stroke="currentColor" stroke-width="1.1"/><circle cx="8" cy="8" r="1.3" stroke="currentColor" stroke-width="1.1"/></svg>
               <span class="mastered-eye-strike"></span>
             </span>
           </button>
           <div class="mastered-pill-sep"></div>
           <button class="mastered-pill-btn" onclick="toggleMasteredList()" title="mastered cards list">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4.5h12M2 8h12M2 11.5h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
           </button>
         </div>
         <div class="view-toggle-pill" id="view-toggle">
@@ -1821,6 +1931,23 @@ header {
         </div>
       </div>
 
+    </div>
+
+    <!-- Analytics dashboard -->
+    <div class="analytics-view" id="analytics-view">
+      <div class="dash-header">
+        <div class="dash-title">progress dashboard</div>
+        <button class="btn btn-sm" onclick="closeAnalytics()">← back to study</button>
+      </div>
+      <div class="stat-cards" id="dash-stat-cards"></div>
+      <div class="dash-card">
+        <div class="dash-card-title">accuracy over sessions</div>
+        <div class="dash-chart-wrap"><canvas id="accuracy-chart"></canvas></div>
+      </div>
+      <div class="session-table-wrap">
+        <div class="session-table-title">recent sessions</div>
+        <div id="session-history-table"></div>
+      </div>
     </div>
 
     <!-- Draggable divider -->
@@ -3619,11 +3746,156 @@ document.getElementById('search-input').addEventListener('keydown', function (e)
 
 
 // ══════════════════════════════════════════
-// ANALYTICS (stub)
+// ANALYTICS DASHBOARD
 // ══════════════════════════════════════════
+let _analyticsChart = null;
+
 function showAnalytics() {
-  // TODO: implement progress dashboard
-  alert('Progress dashboard coming in Phase 7.');
+  const view = document.getElementById('analytics-view');
+  if (view.classList.contains('active')) { closeAnalytics(); return; }
+
+  if (currentMode === 'test' && sessionLog.length > 0) saveSession();
+
+  // Hide all other main-content views
+  document.getElementById('study-view').classList.remove('active');
+  document.getElementById('card-controls').classList.remove('active');
+  document.getElementById('test-view').classList.remove('active');
+  document.getElementById('context-strip').classList.remove('active');
+  document.getElementById('empty-view').style.display = 'none';
+  document.getElementById('list-view').classList.remove('active');
+
+  view.classList.add('active');
+  document.getElementById('btn-analytics').classList.add('active');
+  renderAnalytics();
+}
+
+function closeAnalytics() {
+  document.getElementById('analytics-view').classList.remove('active');
+  document.getElementById('btn-analytics').classList.remove('active');
+  document.getElementById('empty-view').style.display = '';
+  setMode(currentMode);
+}
+
+function renderAnalytics() {
+  // ── Load session data ──
+  let allSessions = [];
+  try {
+    const raw = localStorage.getItem('hanzi-progress');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.sessions) {
+        for (const [deck, sessions] of Object.entries(data.sessions)) {
+          sessions.forEach(s => allSessions.push({ ...s, deck }));
+        }
+      }
+    }
+  } catch(e) {}
+  allSessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  // ── Aggregate stats from cardData ──
+  let totalStudied = 0, totalMastered = 0, totalCorrect = 0, totalWrong = 0;
+  for (const cd of Object.values(cardData)) {
+    if ((cd.correct || 0) + (cd.wrong || 0) > 0) totalStudied++;
+    if (cd.mastered) totalMastered++;
+    totalCorrect += cd.correct || 0;
+    totalWrong += cd.wrong || 0;
+  }
+  const overallAcc = (totalCorrect + totalWrong) > 0
+    ? Math.round(totalCorrect / (totalCorrect + totalWrong) * 100) : 0;
+  const dueCount = getReviewCards().length;
+
+  // ── Stat cards ──
+  document.getElementById('dash-stat-cards').innerHTML = [
+    { value: totalMastered, label: 'mastered' },
+    { value: totalStudied,  label: 'cards studied' },
+    { value: dueCount,      label: 'due for review' },
+    { value: overallAcc + '%', label: 'overall accuracy' },
+  ].map(s => `
+    <div class="stat-card">
+      <div class="stat-card-value">${s.value}</div>
+      <div class="stat-card-label">${s.label}</div>
+    </div>
+  `).join('');
+
+  // ── Chart ──
+  const isLight = document.body.classList.contains('light');
+  const gridColor  = isLight ? 'rgba(0,0,0,0.06)'  : 'rgba(255,255,255,0.06)';
+  const tickColor  = isLight ? '#9ca3af'            : '#4a4a60';
+  const recent = allSessions.slice(-30);
+
+  const canvas = document.getElementById('accuracy-chart');
+  if (_analyticsChart) { _analyticsChart.destroy(); _analyticsChart = null; }
+
+  if (recent.length > 0) {
+    _analyticsChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: recent.map(s => {
+          const d = new Date(s.date);
+          return (d.getMonth()+1) + '/' + d.getDate();
+        }),
+        datasets: [{
+          data: recent.map(s => s.accuracy),
+          borderColor: '#4f7fff',
+          backgroundColor: 'rgba(79,127,255,0.08)',
+          borderWidth: 2,
+          pointRadius: recent.length > 15 ? 2 : 4,
+          pointBackgroundColor: '#4f7fff',
+          tension: 0.35,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: {
+          callbacks: { label: ctx => ctx.parsed.y + '%' }
+        }},
+        scales: {
+          y: {
+            min: 0, max: 100,
+            ticks: { color: tickColor, callback: v => v + '%', stepSize: 25 },
+            grid: { color: gridColor },
+            border: { display: false },
+          },
+          x: {
+            ticks: { color: tickColor, maxTicksLimit: 10, maxRotation: 0 },
+            grid: { display: false },
+            border: { display: false },
+          }
+        }
+      }
+    });
+  } else {
+    canvas.style.display = 'none';
+    canvas.parentElement.innerHTML = '<div class="dash-empty">no sessions yet — complete a test to see your progress</div>';
+  }
+
+  // ── Session history table ──
+  const el = document.getElementById('session-history-table');
+  if (!allSessions.length) {
+    el.innerHTML = '<div class="dash-empty">no sessions recorded yet</div>';
+    return;
+  }
+  const rows = allSessions.slice(-50).reverse();
+  el.innerHTML = `
+    <div class="session-row sh">
+      <span>date</span><span>deck</span><span>cards</span><span>accuracy</span><span>avg speed</span><span>mastered</span>
+    </div>
+    ${rows.map(s => {
+      const d = new Date(s.date);
+      const dateStr = (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+      const accClass = s.accuracy >= 70 ? 'acc-val' : 'acc-val low';
+      return `<div class="session-row">
+        <span style="color:var(--text3)">${dateStr}</span>
+        <span class="deck-tag">${s.deck}</span>
+        <span>${s.cardsAnswered}</span>
+        <span class="${accClass}">${s.accuracy}%</span>
+        <span>${s.avgTime}s</span>
+        <span style="color:var(--green)">${s.mastered > 0 ? '+' + s.mastered : '—'}</span>
+      </div>`;
+    }).join('')}
+  `;
 }
 
 // ══════════════════════════════════════════
