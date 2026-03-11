@@ -1074,6 +1074,42 @@ header {
 }
 
 /* Card bottom controls */
+/* Context strip */
+.context-strip {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 16px 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+.context-strip::-webkit-scrollbar { display: none; }
+.context-strip.active { display: flex; }
+.ctx-tile {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  min-width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  color: var(--text3);
+  transition: all .15s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.ctx-tile:hover { background: var(--bg3); color: var(--text2); }
+.ctx-tile.ctx-current { background: var(--bg4); border-color: var(--border2); color: var(--text); }
+.ctx-tile.ctx-mastered { opacity: 0.35; }
+.ctx-tile.ctx-mastered.ctx-current { opacity: 1; }
+
 .card-controls {
   display: none;
   align-items: center;
@@ -1671,6 +1707,9 @@ header {
         <div class="empty-sub">choose from hsk decks · import csv · generate with ai</div>
       </div>
 
+      <!-- Context strip -->
+      <div class="context-strip" id="context-strip"></div>
+
       <!-- Study view -->
       <div class="study-area" id="study-view">
         <button class="side-nav" onclick="prevCard()">
@@ -2209,6 +2248,7 @@ function renderCard() {
 
   // Sync info panel if open
   if (infoPanelOpen) renderInfoPanel(card);
+  renderContextStrip();
 }
 
 function flipCard() {
@@ -2488,6 +2528,7 @@ function setMode(mode) {
   document.getElementById('study-view').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
   document.getElementById('card-controls').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
   document.getElementById('test-view').classList.toggle('active', mode === 'test' && activeDeck.length > 0);
+  renderContextStrip();
 
   if (mode === 'test' && activeDeck.length > 0) {
     stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
@@ -2819,14 +2860,48 @@ function toggleDiffRatings() {
 }
 
 // ══════════════════════════════════════════
-// LIST VIEW
+// CONTEXT STRIP
 // ══════════════════════════════════════════
+function renderContextStrip() {
+  const strip = document.getElementById('context-strip');
+  const isVisible = currentMode === 'study' && activeDeck.length > 0 && !listViewActive;
+  strip.classList.toggle('active', isVisible);
+  if (!isVisible) { strip.innerHTML = ''; return; }
+
+  const HALF = 6;
+  const total = activeDeck.length;
+  const strip_size = Math.min(HALF * 2 + 1, total);
+  const indices = [];
+
+  if (total <= HALF * 2 + 1) {
+    for (let i = 0; i < total; i++) indices.push(i);
+  } else {
+    for (let offset = -HALF; offset <= HALF; offset++) {
+      indices.push((currentIndex + offset + total) % total);
+    }
+  }
+
+  strip.innerHTML = '';
+  for (const idx of indices) {
+    const card = activeDeck[idx];
+    const cd = cardData[card.hanzi] || {};
+    const isCurrent = idx === currentIndex;
+    const tile = document.createElement('button');
+    tile.className = 'ctx-tile' + (isCurrent ? ' ctx-current' : '') + (cd.mastered ? ' ctx-mastered' : '');
+    tile.textContent = card.hanzi;
+    tile.title = `${card.pinyin} — ${card.english}`;
+    tile.onclick = () => { currentIndex = idx; renderCard(); };
+    strip.appendChild(tile);
+  }
+}
+
 function setListView(active) {
   listViewActive = active;
   document.getElementById('view-cards-btn').classList.toggle('active', !active);
   document.getElementById('view-list-btn').classList.toggle('active', active);
   document.getElementById('list-view').classList.toggle('active', active);
   document.getElementById('study-view').classList.toggle('active', !active && activeDeck.length > 0);
+  renderContextStrip();
   if (active) renderListView();
 }
 
