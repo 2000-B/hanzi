@@ -1100,15 +1100,35 @@ header {
   border: 1px solid transparent;
   background: none;
   cursor: pointer;
-  color: var(--text3);
   transition: all .15s;
   flex-shrink: 0;
   white-space: nowrap;
 }
-.ctx-tile:hover { background: var(--bg3); color: var(--text2); }
-.ctx-tile.ctx-current { background: var(--bg4); border-color: var(--border2); color: var(--text); }
+.ctx-tile:hover { background: var(--bg3); }
+.ctx-tile.ctx-current { background: var(--bg4); border-color: var(--border2); }
 .ctx-tile.ctx-mastered { opacity: 0.35; }
 .ctx-tile.ctx-mastered.ctx-current { opacity: 1; }
+.ctx-hanzi {
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bff 50%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Info panel back button */
+.ip-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 12px;
+  transition: color .15s;
+}
+.ip-back-btn:hover { color: var(--accent); }
 
 .card-controls {
   display: none;
@@ -1866,6 +1886,8 @@ let listViewActive = false;
 let hideMastered = false;
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
+let infoPanelHistory = [];    // stack of card objects for info panel back navigation
+let infoPanelCurrentCard = null;
 let sidebarOpen = true;
 let infoPanelOpen = false;
 
@@ -2247,7 +2269,7 @@ function renderCard() {
   updateProgress();
 
   // Sync info panel if open
-  if (infoPanelOpen) renderInfoPanel(card);
+  if (infoPanelOpen) { infoPanelHistory = []; renderInfoPanel(card); }
   renderContextStrip();
 }
 
@@ -2888,7 +2910,7 @@ function renderContextStrip() {
     const isCurrent = idx === currentIndex;
     const tile = document.createElement('button');
     tile.className = 'ctx-tile' + (isCurrent ? ' ctx-current' : '') + (cd.mastered ? ' ctx-mastered' : '');
-    tile.textContent = card.hanzi;
+    tile.innerHTML = `<span class="ctx-hanzi">${card.hanzi}</span>`;
     tile.title = `${card.pinyin} — ${card.english}`;
     tile.onclick = () => { currentIndex = idx; renderCard(); };
     strip.appendChild(tile);
@@ -2985,6 +3007,7 @@ function toggleInfoPanel() {
 
 function renderInfoPanel(card) {
   if (!card) return;
+  infoPanelCurrentCard = card;
   const scroll = document.getElementById('info-panel-scroll');
 
   const entry = CEDICT[card.hanzi] || null;
@@ -2993,6 +3016,14 @@ function renderInfoPanel(card) {
   const cd = cardData[card.hanzi] || {};
 
   let html = '';
+
+  // ── Back button ──
+  if (infoPanelHistory.length > 0) {
+    html += `<button class="ip-back-btn" onclick="infoPanelBack()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      back
+    </button>`;
+  }
 
   // ── Header ──
   html += `<div class="ip-header">
@@ -3138,32 +3169,33 @@ function renderInfoPanel(card) {
 
 // Navigate to a character from component links / related chars
 function navigateToChar(hanzi) {
-  // Search across all loaded data for this character
-  for (const [name, cards] of Object.entries(decks)) {
-    const idx = cards.findIndex(c => c.hanzi === hanzi);
-    if (idx >= 0) {
-      selectDeck(name);
-      currentIndex = idx;
-      renderCard();
-      return;
+  // Push current panel card onto history stack
+  if (infoPanelCurrentCard) infoPanelHistory.push(infoPanelCurrentCard);
+
+  // Find card data from any source (always stays in the info panel — never switches the deck)
+  let card = null;
+  for (const [, cards] of Object.entries(decks)) {
+    const found = cards.find(c => c.hanzi === hanzi);
+    if (found) { card = found; break; }
+  }
+  if (!card) {
+    for (const [, cards] of Object.entries(HSK_DATA)) {
+      if (!cards) continue;
+      const found = cards.find(c => c.hanzi === hanzi);
+      if (found) { card = found; break; }
     }
   }
-  for (const [level, cards] of Object.entries(HSK_DATA)) {
-    if (!cards) continue;
-    const idx = cards.findIndex(c => c.hanzi === hanzi);
-    if (idx >= 0) {
-      // Load as a temporary lookup
-      renderInfoPanel({ hanzi, pinyin: cards[idx].pinyin, english: cards[idx].english });
-      return;
-    }
+  if (!card) {
+    const ce = CEDICT[hanzi];
+    card = { hanzi, pinyin: ce ? ce.pinyin : '?', english: ce ? ce.defs.join(' / ') : 'unknown' };
   }
-  // Not found in any deck — just render info panel with what we know
-  const ceEntry = CEDICT[hanzi];
-  renderInfoPanel({
-    hanzi,
-    pinyin: ceEntry ? ceEntry.pinyin : '?',
-    english: ceEntry ? ceEntry.defs.join(' / ') : 'unknown'
-  });
+  renderInfoPanel(card);
+}
+
+function infoPanelBack() {
+  if (!infoPanelHistory.length) return;
+  const prev = infoPanelHistory.pop();
+  renderInfoPanel(prev);
 }
 
 // TTS
