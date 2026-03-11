@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉字学习 — Data Review</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         background: #0e0e12; color: #e0e0ec; font-size: 14px; line-height: 1.5; }
+
+  .top-bar { background: #18181f; border-bottom: 1px solid #2a2a38;
+             padding: 16px 32px; display: flex; align-items: center;
+             gap: 24px; position: sticky; top: 0; z-index: 100; }
+  .top-bar h1 { font-size: 22px; color: #C0392B; font-weight: 700; }
+  .stat { font-size: 13px; color: #888; }
+  .stat strong { color: #e0e0ec; }
+  .filter-bar { margin-left: auto; display: flex; gap: 8px; }
+  .filter-btn { background: #25252f; border: 1px solid #333; color: #aaa;
+                padding: 5px 12px; border-radius: 6px; cursor: pointer;
+                font-size: 12px; transition: all .15s; }
+  .filter-btn:hover, .filter-btn.active { background: #C0392B; border-color: #C0392B; color: white; }
+
+  .missing-bar { background: #2a1010; border: 1px solid #6b2020;
+                 margin: 20px 32px; padding: 12px 16px; border-radius: 8px;
+                 font-size: 13px; color: #e08080; }
+  .missing-bar strong { color: #ff9090; }
+
+  .flagged-bar { background: #1a1a2a; border: 1px solid #3a3a60;
+                 margin: 0 32px 20px; padding: 12px 16px; border-radius: 8px;
+                 font-size: 13px; color: #9090d0; display: none; }
+  .flagged-bar strong { color: #b0b0ff; }
+
+  .content { padding: 20px 32px 60px; }
+  .level-heading { font-size: 18px; font-weight: 700; color: #C0392B;
+                   margin: 32px 0 16px; padding-bottom: 8px;
+                   border-bottom: 1px solid #2a2a38; }
+  .level-count { font-size: 13px; color: #666; font-weight: 400; margin-left: 8px; }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 16px; }
+
+  .card { background: #16161e; border: 1px solid #2a2a38; border-radius: 10px; overflow: hidden; }
+  .card.card-warning { border-color: #6b4a10; }
+  .card.card-missing { border-color: #6b2020; opacity: 0.7; }
+  .card.card-flagged { border-color: #4a4a90; background: #14141e; }
+  .card.hidden { display: none; }
+
+  .card-header { padding: 14px 16px; display: flex; align-items: center;
+                 gap: 10px; flex-wrap: wrap; background: #1c1c26;
+                 border-bottom: 1px solid #2a2a38; }
+  .hanzi { font-size: 28px; font-family: "Noto Sans SC", sans-serif;
+           color: #fff; font-weight: 500; min-width: 36px; }
+  .pinyin { font-size: 14px; color: #8888c0; font-style: italic; }
+  .english { font-size: 13px; color: #666; flex: 1; }
+  .flag-btn { margin-left: auto; background: none; border: none; cursor: pointer;
+              font-size: 16px; opacity: 0.4; transition: opacity .15s; padding: 2px; }
+  .flag-btn:hover { opacity: 1; }
+
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px;
+           letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+  .badge-hsk { background: #1e2e50; color: #7090e0; }
+  .badge-radical { background: #1e3020; color: #60a070; }
+  .badge-strokes { background: #20201e; color: #908060; }
+  .badge-ok { background: #1a2e1a; color: #60a060; }
+  .badge-warning { background: #2e1e08; color: #e0a040; max-width: 280px;
+                   white-space: normal; line-height: 1.3; }
+  .badge-missing { background: #2e0808; color: #e04040; }
+
+  .card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: .08em;
+                   text-transform: uppercase; color: #555; margin-bottom: 6px; }
+  .empty { color: #444; font-style: italic; font-size: 12px; }
+
+  .components-list { display: flex; flex-direction: column; gap: 4px; }
+  .component { display: flex; align-items: baseline; gap: 8px; font-size: 13px; }
+  .comp-char { font-size: 18px; font-family: "Noto Sans SC", sans-serif;
+               color: #e0e0ff; min-width: 24px; }
+  .comp-role { font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 3px;
+               text-transform: uppercase; letter-spacing: .04em; }
+  .role-semantic { background: #1e3020; color: #60c080; }
+  .role-phonetic { background: #1e2030; color: #6080c0; }
+  .role-both { background: #2e2020; color: #c08060; }
+  .role-word-component { background: #202030; color: #8888c0; }
+  .comp-meaning { color: #aaa; }
+  .comp-note { color: #666; font-style: italic; font-size: 12px; }
+
+  .etymology { font-size: 13px; color: #b0b0c8; line-height: 1.6; }
+
+  .examples-list { display: flex; flex-direction: column; gap: 10px; }
+  .example { background: #101018; border: 1px solid #222230; border-radius: 6px;
+             padding: 10px 12px; position: relative; }
+  .ex-zh { font-size: 16px; font-family: "Noto Sans SC", sans-serif; color: #e0e0ff; }
+  .ex-pinyin { font-size: 12px; color: #6060a0; font-style: italic; margin-top: 2px; }
+  .ex-en { font-size: 12px; color: #606060; margin-top: 3px; }
+  .ex-level { position: absolute; top: 8px; right: 8px; font-size: 10px;
+              color: #444; font-weight: 600; }
+
+  .same-radical { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radical-char { font-size: 20px; font-family: "Noto Sans SC", sans-serif;
+                  color: #8888c0; background: #1a1a28; padding: 4px 8px;
+                  border-radius: 4px; }
+
+  .raw-json { font-family: "Courier New", monospace; font-size: 11px;
+              color: #666; background: #0c0c10; padding: 10px;
+              border-radius: 4px; overflow-x: auto; margin-top: 8px;
+              white-space: pre; }
+  details summary { cursor: pointer; }
+  details summary:hover .section-label { color: #888; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>汉字学习 · Data Review</h1>
+  <div class="stat">Total: <strong>300</strong></div>
+  <div class="stat">Enriched: <strong>2</strong></div>
+  <div class="stat">Missing: <strong>298</strong></div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all', this)">All</button>
+    <button class="filter-btn" onclick="filterCards('warning', this)">⚠ Issues</button>
+    <button class="filter-btn" onclick="filterCards('flagged', this)">🚩 Flagged</button>
+    <button class="filter-btn" onclick="filterCards('ok', this)">✓ OK only</button>
+  </div>
+</div>
+
+
+<div class="missing-bar">
+  <strong>Missing entries (298):</strong> 爱, 八, 爸爸, 杯子, 北京, 本, 不客气, 不, 菜, 茶, 吃, 出租车, 打电话, 大, 的, 点, 电脑, 电视, 电影, 东西, 都, 读, 对不起, 多, 多少, 儿子, 二, 饭店, 飞机, 分钟, 高兴, 个, 工作, 狗, 汉语, 号, 喝, 和, 很, 后面, 回, 会, 火车站, 几, 家, 叫, 今天, 九, 开, 看, 看见, 块, 来, 老师, 了, 冷, 里, 六, 妈妈, 吗, 买, 猫, 没关系, 没有, 米饭, 明天, 名字, 哪, 哪儿, 那, 呢, 能, 你, 年, 女儿, 朋友, 漂亮, 苹果, 七, 钱, 前面, 请, 去, 热, 人, 认识, 日, 三, 商店, 上, 上午, 少, 谁, 什么, 十, 时候, 是, 书, 水, 水果, 睡觉, 说, 四, 岁, 他, 她, 太, 天气, 听, 同学, 喂, 我, 我们, 五, 下, 下午, 下雨, 先生, 现在, 想, 小, 小姐, 些, 写, 谢谢, 星期, 学生, 学习, 学校, 一, 一点儿, 衣服, 医生, 医院, 椅子, 有, 月, 再见, 在, 怎么, 怎么样, 这, 中国, 中午, 住, 桌子, 字, 昨天, 坐, 做, 吧, 白, 百, 帮助, 报纸, 比, 别, 宾馆, 长, 唱歌, 出, 穿, 次, 从, 错, 打篮球, 大家, 但是, 地方, 弟弟, 第一, 懂, 对, 房间, 非常, 服务员, 告诉, 哥哥, 给, 公共汽车, 公司, 贵, 过, 还, 还是, 黑, 红, 欢迎, 回答, 机场, 鸡蛋, 件, 教室, 姐姐, 介绍, 进, 近, 就, 觉得, 开始, 考试, 可能, 可以, 课, 快, 快乐, 累, 离, 脸, 练习, 两, 零, 路, 旅游, 卖, 慢, 忙, 每, 妹妹, 门, 面条, 男, 您, 牛奶, 女, 旁边, 跑步, 便宜, 票, 妻子, 起床, 千, 铅笔, 晴, 去年, 让, 日记, 如果, 上班, 身体, 生病, 生日, 时间, 事情, 手表, 手机, 送, 虽然, 它, 踢足球, 题, 跳舞, 外, 完, 玩, 晚上, 往, 为什么, 问, 问题, 西瓜, 希望, 洗, 小时, 笑, 新, 姓, 休息, 雪, 颜色, 眼睛, 羊肉, 药, 要, 也, 一起, 一下, 已经, 一边, 因为, 游泳, 右边, 鱼, 远, 运动, 再, 早上, 丈夫, 找, 着, 真, 正在, 知道, 准备, 自行车, 走, 最, 左边 — re-run build-data.js to fill these in.
+</div>
+
+<div class="flagged-bar" id="flagged-bar">
+  🚩 Flagged: <strong id="flagged-list">none</strong>
+</div>
+
+<div class="content">
+  
+    <section class="level-section">
+      <h2 class="level-heading">HSK 1 <span class="level-count">152 entries</span></h2>
+      <div class="cards-grid">
+        
+      <div class="card card-missing" id="card-爱">
+        <div class="card-header">
+          <span class="hanzi">爱</span>
+          <span class="pinyin">ài</span>
+          <span class="english">to love / love</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-八">
+        <div class="card-header">
+          <span class="hanzi">八</span>
+          <span class="pinyin">bā</span>
+          <span class="english">eight</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-爸爸">
+        <div class="card-header">
+          <span class="hanzi">爸爸</span>
+          <span class="pinyin">bà ba</span>
+          <span class="english">father / dad</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-杯子">
+        <div class="card-header">
+          <span class="hanzi">杯子</span>
+          <span class="pinyin">bēi zi</span>
+          <span class="english">cup / glass</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-北京">
+        <div class="card-header">
+          <span class="hanzi">北京</span>
+          <span class="pinyin">běi jīng</span>
+          <span class="english">Beijing</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-本">
+        <div class="card-header">
+          <span class="hanzi">本</span>
+          <span class="pinyin">běn</span>
+          <span class="english">(measure word for books)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-不客气">
+        <div class="card-header">
+          <span class="hanzi">不客气</span>
+          <span class="pinyin">bù kè qi</span>
+          <span class="english">you're welcome</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-不">
+        <div class="card-header">
+          <span class="hanzi">不</span>
+          <span class="pinyin">bù</span>
+          <span class="english">no / not</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-菜">
+        <div class="card-header">
+          <span class="hanzi">菜</span>
+          <span class="pinyin">cài</span>
+          <span class="english">dish / vegetable / food</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-茶">
+        <div class="card-header">
+          <span class="hanzi">茶</span>
+          <span class="pinyin">chá</span>
+          <span class="english">tea</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-吃">
+        <div class="card-header">
+          <span class="hanzi">吃</span>
+          <span class="pinyin">chī</span>
+          <span class="english">to eat</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-出租车">
+        <div class="card-header">
+          <span class="hanzi">出租车</span>
+          <span class="pinyin">chū zū chē</span>
+          <span class="english">taxi</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-打电话">
+        <div class="card-header">
+          <span class="hanzi">打电话</span>
+          <span class="pinyin">dǎ diàn huà</span>
+          <span class="english">to make a phone call</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-大">
+        <div class="card-header">
+          <span class="hanzi">大</span>
+          <span class="pinyin">dà</span>
+          <span class="english">big / large</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-的">
+        <div class="card-header">
+          <span class="hanzi">的</span>
+          <span class="pinyin">de</span>
+          <span class="english">(possessive particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-点">
+        <div class="card-header">
+          <span class="hanzi">点</span>
+          <span class="pinyin">diǎn</span>
+          <span class="english">o'clock / a bit</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-电脑">
+        <div class="card-header">
+          <span class="hanzi">电脑</span>
+          <span class="pinyin">diàn nǎo</span>
+          <span class="english">computer</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-电视">
+        <div class="card-header">
+          <span class="hanzi">电视</span>
+          <span class="pinyin">diàn shì</span>
+          <span class="english">television</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-电影">
+        <div class="card-header">
+          <span class="hanzi">电影</span>
+          <span class="pinyin">diàn yǐng</span>
+          <span class="english">movie / film</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-东西">
+        <div class="card-header">
+          <span class="hanzi">东西</span>
+          <span class="pinyin">dōng xi</span>
+          <span class="english">thing / stuff</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-都">
+        <div class="card-header">
+          <span class="hanzi">都</span>
+          <span class="pinyin">dōu</span>
+          <span class="english">all / both</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-读">
+        <div class="card-header">
+          <span class="hanzi">读</span>
+          <span class="pinyin">dú</span>
+          <span class="english">to read / to study</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-对不起">
+        <div class="card-header">
+          <span class="hanzi">对不起</span>
+          <span class="pinyin">duì bu qǐ</span>
+          <span class="english">sorry / excuse me</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-多">
+        <div class="card-header">
+          <span class="hanzi">多</span>
+          <span class="pinyin">duō</span>
+          <span class="english">many / much</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-多少">
+        <div class="card-header">
+          <span class="hanzi">多少</span>
+          <span class="pinyin">duō shao</span>
+          <span class="english">how many / how much</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-儿子">
+        <div class="card-header">
+          <span class="hanzi">儿子</span>
+          <span class="pinyin">ér zi</span>
+          <span class="english">son</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-二">
+        <div class="card-header">
+          <span class="hanzi">二</span>
+          <span class="pinyin">èr</span>
+          <span class="english">two</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-饭店">
+        <div class="card-header">
+          <span class="hanzi">饭店</span>
+          <span class="pinyin">fàn diàn</span>
+          <span class="english">restaurant / hotel</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-飞机">
+        <div class="card-header">
+          <span class="hanzi">飞机</span>
+          <span class="pinyin">fēi jī</span>
+          <span class="english">airplane</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-分钟">
+        <div class="card-header">
+          <span class="hanzi">分钟</span>
+          <span class="pinyin">fēn zhōng</span>
+          <span class="english">minute</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-高兴">
+        <div class="card-header">
+          <span class="hanzi">高兴</span>
+          <span class="pinyin">gāo xìng</span>
+          <span class="english">happy / glad</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-个">
+        <div class="card-header">
+          <span class="hanzi">个</span>
+          <span class="pinyin">gè</span>
+          <span class="english">(general measure word)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-工作">
+        <div class="card-header">
+          <span class="hanzi">工作</span>
+          <span class="pinyin">gōng zuò</span>
+          <span class="english">work / job / to work</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-狗">
+        <div class="card-header">
+          <span class="hanzi">狗</span>
+          <span class="pinyin">gǒu</span>
+          <span class="english">dog</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-汉语">
+        <div class="card-header">
+          <span class="hanzi">汉语</span>
+          <span class="pinyin">hàn yǔ</span>
+          <span class="english">Chinese language (Mandarin)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+    <div class="card " id="card-好">
+      <div class="card-header">
+        <span class="hanzi">好</span>
+        <span class="pinyin">hǎo</span>
+        <span class="english">good / well</span>
+        <span class="badge badge-hsk">HSK 1</span>
+        <span class="badge badge-radical">radical: 女</span>
+        <span class="badge badge-strokes">6 strokes</span>
+        <span class="badge badge-ok">✓ ok</span>
+        <button class="flag-btn" onclick="toggleFlag('好')" title="Flag for review">🚩</button>
+      </div>
+
+      <div class="card-body">
+        <div class="section">
+          <div class="section-label">components</div>
+          <div class="components-list">
+    <div class="component">
+      <span class="comp-char">女</span>
+      <span class="comp-role role-semantic">semantic</span>
+      <span class="comp-meaning">woman</span>
+      <span class="comp-note">suggests person</span>
+    </div>
+    <div class="component">
+      <span class="comp-char">子</span>
+      <span class="comp-role role-semantic">semantic</span>
+      <span class="comp-meaning">child</span>
+      <span class="comp-note">together: goodness</span>
+    </div></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">etymology</div>
+          <div class="etymology">A woman beside a child — the image of a mother with her child, signifying goodness.</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">examples</div>
+          <div class="examples-list">
+    <div class="example">
+      <div class="ex-zh">你好！</div>
+      <div class="ex-pinyin">Nǐ hǎo!</div>
+      <div class="ex-en">Hello!</div>
+      <span class="ex-level">HSK 1</span>
+    </div>
+    <div class="example">
+      <div class="ex-zh">这个很好。</div>
+      <div class="ex-pinyin">Zhège hěn hǎo.</div>
+      <div class="ex-en">This is very good.</div>
+      <span class="ex-level">HSK 1</span>
+    </div></div>
+        </div>
+
+        
+        <div class="section">
+          <div class="section-label">same radical</div>
+          <div class="same-radical"><span class="radical-char">她</span><span class="radical-char">妈</span><span class="radical-char">姐</span></div>
+        </div>
+
+        <div class="section section-raw">
+          <details>
+            <summary class="section-label">raw JSON</summary>
+            <pre class="raw-json">{
+  &quot;hanzi&quot;: &quot;好&quot;,
+  &quot;pinyin&quot;: &quot;hǎo&quot;,
+  &quot;english&quot;: &quot;good / well&quot;,
+  &quot;hsk&quot;: 1,
+  &quot;components&quot;: [
+    {
+      &quot;char&quot;: &quot;女&quot;,
+      &quot;role&quot;: &quot;semantic&quot;,
+      &quot;meaning&quot;: &quot;woman&quot;,
+      &quot;note&quot;: &quot;suggests person&quot;
+    },
+    {
+      &quot;char&quot;: &quot;子&quot;,
+      &quot;role&quot;: &quot;semantic&quot;,
+      &quot;meaning&quot;: &quot;child&quot;,
+      &quot;note&quot;: &quot;together: goodness&quot;
+    }
+  ],
+  &quot;radical&quot;: &quot;女&quot;,
+  &quot;strokeCount&quot;: 6,
+  &quot;etymology&quot;: &quot;A woman beside a child — the image of a mother with her child, signifying goodness.&quot;,
+  &quot;examples&quot;: [
+    {
+      &quot;zh&quot;: &quot;你好！&quot;,
+      &quot;pinyin&quot;: &quot;Nǐ hǎo!&quot;,
+      &quot;en&quot;: &quot;Hello!&quot;,
+      &quot;level&quot;: 1
+    },
+    {
+      &quot;zh&quot;: &quot;这个很好。&quot;,
+      &quot;pinyin&quot;: &quot;Zhège hěn hǎo.&quot;,
+      &quot;en&quot;: &quot;This is very good.&quot;,
+      &quot;level&quot;: 1
+    }
+  ],
+  &quot;sameRadical&quot;: [
+    &quot;她&quot;,
+    &quot;妈&quot;,
+    &quot;姐&quot;
+  ]
+}</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+
+      <div class="card card-missing" id="card-号">
+        <div class="card-header">
+          <span class="hanzi">号</span>
+          <span class="pinyin">hào</span>
+          <span class="english">number / day of month</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-喝">
+        <div class="card-header">
+          <span class="hanzi">喝</span>
+          <span class="pinyin">hē</span>
+          <span class="english">to drink</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-和">
+        <div class="card-header">
+          <span class="hanzi">和</span>
+          <span class="pinyin">hé</span>
+          <span class="english">and / with</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-很">
+        <div class="card-header">
+          <span class="hanzi">很</span>
+          <span class="pinyin">hěn</span>
+          <span class="english">very</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-后面">
+        <div class="card-header">
+          <span class="hanzi">后面</span>
+          <span class="pinyin">hòu miàn</span>
+          <span class="english">behind / back</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-回">
+        <div class="card-header">
+          <span class="hanzi">回</span>
+          <span class="pinyin">huí</span>
+          <span class="english">to return / to go back</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-会">
+        <div class="card-header">
+          <span class="hanzi">会</span>
+          <span class="pinyin">huì</span>
+          <span class="english">can / will / to be able to</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-火车站">
+        <div class="card-header">
+          <span class="hanzi">火车站</span>
+          <span class="pinyin">huǒ chē zhàn</span>
+          <span class="english">train station</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-几">
+        <div class="card-header">
+          <span class="hanzi">几</span>
+          <span class="pinyin">jǐ</span>
+          <span class="english">how many / several</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-家">
+        <div class="card-header">
+          <span class="hanzi">家</span>
+          <span class="pinyin">jiā</span>
+          <span class="english">home / family</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-叫">
+        <div class="card-header">
+          <span class="hanzi">叫</span>
+          <span class="pinyin">jiào</span>
+          <span class="english">to be called / to call</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-今天">
+        <div class="card-header">
+          <span class="hanzi">今天</span>
+          <span class="pinyin">jīn tiān</span>
+          <span class="english">today</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-九">
+        <div class="card-header">
+          <span class="hanzi">九</span>
+          <span class="pinyin">jiǔ</span>
+          <span class="english">nine</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-开">
+        <div class="card-header">
+          <span class="hanzi">开</span>
+          <span class="pinyin">kāi</span>
+          <span class="english">to open / to drive</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-看">
+        <div class="card-header">
+          <span class="hanzi">看</span>
+          <span class="pinyin">kàn</span>
+          <span class="english">to look / to watch / to read</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-看见">
+        <div class="card-header">
+          <span class="hanzi">看见</span>
+          <span class="pinyin">kàn jiàn</span>
+          <span class="english">to see / to catch sight of</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-块">
+        <div class="card-header">
+          <span class="hanzi">块</span>
+          <span class="pinyin">kuài</span>
+          <span class="english">yuan (currency) / piece</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-来">
+        <div class="card-header">
+          <span class="hanzi">来</span>
+          <span class="pinyin">lái</span>
+          <span class="english">to come</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-老师">
+        <div class="card-header">
+          <span class="hanzi">老师</span>
+          <span class="pinyin">lǎo shī</span>
+          <span class="english">teacher</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-了">
+        <div class="card-header">
+          <span class="hanzi">了</span>
+          <span class="pinyin">le</span>
+          <span class="english">(completed action particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-冷">
+        <div class="card-header">
+          <span class="hanzi">冷</span>
+          <span class="pinyin">lěng</span>
+          <span class="english">cold</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-里">
+        <div class="card-header">
+          <span class="hanzi">里</span>
+          <span class="pinyin">lǐ</span>
+          <span class="english">inside / in</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-六">
+        <div class="card-header">
+          <span class="hanzi">六</span>
+          <span class="pinyin">liù</span>
+          <span class="english">six</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-妈妈">
+        <div class="card-header">
+          <span class="hanzi">妈妈</span>
+          <span class="pinyin">mā ma</span>
+          <span class="english">mother / mom</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-吗">
+        <div class="card-header">
+          <span class="hanzi">吗</span>
+          <span class="pinyin">ma</span>
+          <span class="english">(question particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-买">
+        <div class="card-header">
+          <span class="hanzi">买</span>
+          <span class="pinyin">mǎi</span>
+          <span class="english">to buy</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-猫">
+        <div class="card-header">
+          <span class="hanzi">猫</span>
+          <span class="pinyin">māo</span>
+          <span class="english">cat</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-没关系">
+        <div class="card-header">
+          <span class="hanzi">没关系</span>
+          <span class="pinyin">méi guān xi</span>
+          <span class="english">it doesn't matter / never mind</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-没有">
+        <div class="card-header">
+          <span class="hanzi">没有</span>
+          <span class="pinyin">méi yǒu</span>
+          <span class="english">don't have / there isn't</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-米饭">
+        <div class="card-header">
+          <span class="hanzi">米饭</span>
+          <span class="pinyin">mǐ fàn</span>
+          <span class="english">cooked rice</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-明天">
+        <div class="card-header">
+          <span class="hanzi">明天</span>
+          <span class="pinyin">míng tiān</span>
+          <span class="english">tomorrow</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-名字">
+        <div class="card-header">
+          <span class="hanzi">名字</span>
+          <span class="pinyin">míng zi</span>
+          <span class="english">name</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-哪">
+        <div class="card-header">
+          <span class="hanzi">哪</span>
+          <span class="pinyin">nǎ</span>
+          <span class="english">which</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-哪儿">
+        <div class="card-header">
+          <span class="hanzi">哪儿</span>
+          <span class="pinyin">nǎr</span>
+          <span class="english">where</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-那">
+        <div class="card-header">
+          <span class="hanzi">那</span>
+          <span class="pinyin">nà</span>
+          <span class="english">that</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-呢">
+        <div class="card-header">
+          <span class="hanzi">呢</span>
+          <span class="pinyin">ne</span>
+          <span class="english">(question particle — and you?)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-能">
+        <div class="card-header">
+          <span class="hanzi">能</span>
+          <span class="pinyin">néng</span>
+          <span class="english">can / to be able to</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-你">
+        <div class="card-header">
+          <span class="hanzi">你</span>
+          <span class="pinyin">nǐ</span>
+          <span class="english">you</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+    <div class="card card-warning" id="card-你好">
+      <div class="card-header">
+        <span class="hanzi">你好</span>
+        <span class="pinyin">nǐ hǎo</span>
+        <span class="english">hello / hi</span>
+        <span class="badge badge-hsk">HSK 1</span>
+        <span class="badge badge-radical">radical: 人</span>
+        <span class="badge badge-strokes">12 strokes</span>
+        <span class="badge badge-warning">⚠ fewer than 2 examples</span>
+        <button class="flag-btn" onclick="toggleFlag('你好')" title="Flag for review">🚩</button>
+      </div>
+
+      <div class="card-body">
+        <div class="section">
+          <div class="section-label">components</div>
+          <div class="components-list">
+    <div class="component">
+      <span class="comp-char">你</span>
+      <span class="comp-role role-word-component">word-component</span>
+      <span class="comp-meaning">you</span>
+      
+    </div>
+    <div class="component">
+      <span class="comp-char">好</span>
+      <span class="comp-role role-word-component">word-component</span>
+      <span class="comp-meaning">good</span>
+      
+    </div></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">etymology</div>
+          <div class="etymology">Literally &quot;you good&quot; — a standard greeting expressing goodwill toward the person addressed.</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">examples</div>
+          <div class="examples-list">
+    <div class="example">
+      <div class="ex-zh">你好，我叫李明。</div>
+      <div class="ex-pinyin">Nǐ hǎo, wǒ jiào Lǐ Míng.</div>
+      <div class="ex-en">Hello, my name is Li Ming.</div>
+      <span class="ex-level">HSK 1</span>
+    </div></div>
+        </div>
+
+        
+
+        <div class="section section-raw">
+          <details>
+            <summary class="section-label">raw JSON</summary>
+            <pre class="raw-json">{
+  &quot;hanzi&quot;: &quot;你好&quot;,
+  &quot;pinyin&quot;: &quot;nǐ hǎo&quot;,
+  &quot;english&quot;: &quot;hello / hi&quot;,
+  &quot;hsk&quot;: 1,
+  &quot;components&quot;: [
+    {
+      &quot;char&quot;: &quot;你&quot;,
+      &quot;role&quot;: &quot;word-component&quot;,
+      &quot;meaning&quot;: &quot;you&quot;,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;char&quot;: &quot;好&quot;,
+      &quot;role&quot;: &quot;word-component&quot;,
+      &quot;meaning&quot;: &quot;good&quot;,
+      &quot;note&quot;: &quot;&quot;
+    }
+  ],
+  &quot;radical&quot;: &quot;人&quot;,
+  &quot;strokeCount&quot;: 12,
+  &quot;etymology&quot;: &quot;Literally \&quot;you good\&quot; — a standard greeting expressing goodwill toward the person addressed.&quot;,
+  &quot;examples&quot;: [
+    {
+      &quot;zh&quot;: &quot;你好，我叫李明。&quot;,
+      &quot;pinyin&quot;: &quot;Nǐ hǎo, wǒ jiào Lǐ Míng.&quot;,
+      &quot;en&quot;: &quot;Hello, my name is Li Ming.&quot;,
+      &quot;level&quot;: 1
+    }
+  ],
+  &quot;sameRadical&quot;: []
+}</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+
+      <div class="card card-missing" id="card-年">
+        <div class="card-header">
+          <span class="hanzi">年</span>
+          <span class="pinyin">nián</span>
+          <span class="english">year</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-女儿">
+        <div class="card-header">
+          <span class="hanzi">女儿</span>
+          <span class="pinyin">nǚ ér</span>
+          <span class="english">daughter</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-朋友">
+        <div class="card-header">
+          <span class="hanzi">朋友</span>
+          <span class="pinyin">péng you</span>
+          <span class="english">friend</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-漂亮">
+        <div class="card-header">
+          <span class="hanzi">漂亮</span>
+          <span class="pinyin">piào liang</span>
+          <span class="english">beautiful / pretty</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-苹果">
+        <div class="card-header">
+          <span class="hanzi">苹果</span>
+          <span class="pinyin">píng guǒ</span>
+          <span class="english">apple</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-七">
+        <div class="card-header">
+          <span class="hanzi">七</span>
+          <span class="pinyin">qī</span>
+          <span class="english">seven</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-钱">
+        <div class="card-header">
+          <span class="hanzi">钱</span>
+          <span class="pinyin">qián</span>
+          <span class="english">money</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-前面">
+        <div class="card-header">
+          <span class="hanzi">前面</span>
+          <span class="pinyin">qián miàn</span>
+          <span class="english">in front / ahead</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-请">
+        <div class="card-header">
+          <span class="hanzi">请</span>
+          <span class="pinyin">qǐng</span>
+          <span class="english">please / to invite</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-去">
+        <div class="card-header">
+          <span class="hanzi">去</span>
+          <span class="pinyin">qù</span>
+          <span class="english">to go</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-热">
+        <div class="card-header">
+          <span class="hanzi">热</span>
+          <span class="pinyin">rè</span>
+          <span class="english">hot</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-人">
+        <div class="card-header">
+          <span class="hanzi">人</span>
+          <span class="pinyin">rén</span>
+          <span class="english">person / people</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-认识">
+        <div class="card-header">
+          <span class="hanzi">认识</span>
+          <span class="pinyin">rèn shi</span>
+          <span class="english">to know (a person) / to recognize</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-日">
+        <div class="card-header">
+          <span class="hanzi">日</span>
+          <span class="pinyin">rì</span>
+          <span class="english">day / sun</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-三">
+        <div class="card-header">
+          <span class="hanzi">三</span>
+          <span class="pinyin">sān</span>
+          <span class="english">three</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-商店">
+        <div class="card-header">
+          <span class="hanzi">商店</span>
+          <span class="pinyin">shāng diàn</span>
+          <span class="english">shop / store</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-上">
+        <div class="card-header">
+          <span class="hanzi">上</span>
+          <span class="pinyin">shàng</span>
+          <span class="english">on / above / up</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-上午">
+        <div class="card-header">
+          <span class="hanzi">上午</span>
+          <span class="pinyin">shàng wǔ</span>
+          <span class="english">morning / AM</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-少">
+        <div class="card-header">
+          <span class="hanzi">少</span>
+          <span class="pinyin">shǎo</span>
+          <span class="english">few / little</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-谁">
+        <div class="card-header">
+          <span class="hanzi">谁</span>
+          <span class="pinyin">shéi</span>
+          <span class="english">who</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-什么">
+        <div class="card-header">
+          <span class="hanzi">什么</span>
+          <span class="pinyin">shén me</span>
+          <span class="english">what</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-十">
+        <div class="card-header">
+          <span class="hanzi">十</span>
+          <span class="pinyin">shí</span>
+          <span class="english">ten</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-时候">
+        <div class="card-header">
+          <span class="hanzi">时候</span>
+          <span class="pinyin">shí hou</span>
+          <span class="english">time / moment / when</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-是">
+        <div class="card-header">
+          <span class="hanzi">是</span>
+          <span class="pinyin">shì</span>
+          <span class="english">to be / yes</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-书">
+        <div class="card-header">
+          <span class="hanzi">书</span>
+          <span class="pinyin">shū</span>
+          <span class="english">book</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-水">
+        <div class="card-header">
+          <span class="hanzi">水</span>
+          <span class="pinyin">shuǐ</span>
+          <span class="english">water</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-水果">
+        <div class="card-header">
+          <span class="hanzi">水果</span>
+          <span class="pinyin">shuǐ guǒ</span>
+          <span class="english">fruit</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-睡觉">
+        <div class="card-header">
+          <span class="hanzi">睡觉</span>
+          <span class="pinyin">shuì jiào</span>
+          <span class="english">to sleep</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-说">
+        <div class="card-header">
+          <span class="hanzi">说</span>
+          <span class="pinyin">shuō</span>
+          <span class="english">to speak / to say</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-四">
+        <div class="card-header">
+          <span class="hanzi">四</span>
+          <span class="pinyin">sì</span>
+          <span class="english">four</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-岁">
+        <div class="card-header">
+          <span class="hanzi">岁</span>
+          <span class="pinyin">suì</span>
+          <span class="english">years old / age</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-他">
+        <div class="card-header">
+          <span class="hanzi">他</span>
+          <span class="pinyin">tā</span>
+          <span class="english">he / him</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-她">
+        <div class="card-header">
+          <span class="hanzi">她</span>
+          <span class="pinyin">tā</span>
+          <span class="english">she / her</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-太">
+        <div class="card-header">
+          <span class="hanzi">太</span>
+          <span class="pinyin">tài</span>
+          <span class="english">too / extremely</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-天气">
+        <div class="card-header">
+          <span class="hanzi">天气</span>
+          <span class="pinyin">tiān qì</span>
+          <span class="english">weather</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-听">
+        <div class="card-header">
+          <span class="hanzi">听</span>
+          <span class="pinyin">tīng</span>
+          <span class="english">to listen / to hear</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-同学">
+        <div class="card-header">
+          <span class="hanzi">同学</span>
+          <span class="pinyin">tóng xué</span>
+          <span class="english">classmate</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-喂">
+        <div class="card-header">
+          <span class="hanzi">喂</span>
+          <span class="pinyin">wèi</span>
+          <span class="english">hello (on phone) / hey</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-我">
+        <div class="card-header">
+          <span class="hanzi">我</span>
+          <span class="pinyin">wǒ</span>
+          <span class="english">I / me</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-我们">
+        <div class="card-header">
+          <span class="hanzi">我们</span>
+          <span class="pinyin">wǒ men</span>
+          <span class="english">we / us</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-五">
+        <div class="card-header">
+          <span class="hanzi">五</span>
+          <span class="pinyin">wǔ</span>
+          <span class="english">five</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-下">
+        <div class="card-header">
+          <span class="hanzi">下</span>
+          <span class="pinyin">xià</span>
+          <span class="english">under / below / next</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-下午">
+        <div class="card-header">
+          <span class="hanzi">下午</span>
+          <span class="pinyin">xià wǔ</span>
+          <span class="english">afternoon / PM</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-下雨">
+        <div class="card-header">
+          <span class="hanzi">下雨</span>
+          <span class="pinyin">xià yǔ</span>
+          <span class="english">to rain</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-先生">
+        <div class="card-header">
+          <span class="hanzi">先生</span>
+          <span class="pinyin">xiān sheng</span>
+          <span class="english">mister / husband / teacher</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-现在">
+        <div class="card-header">
+          <span class="hanzi">现在</span>
+          <span class="pinyin">xiàn zài</span>
+          <span class="english">now / at present</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-想">
+        <div class="card-header">
+          <span class="hanzi">想</span>
+          <span class="pinyin">xiǎng</span>
+          <span class="english">to think / to want / to miss</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-小">
+        <div class="card-header">
+          <span class="hanzi">小</span>
+          <span class="pinyin">xiǎo</span>
+          <span class="english">small / little / young</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-小姐">
+        <div class="card-header">
+          <span class="hanzi">小姐</span>
+          <span class="pinyin">xiǎo jiě</span>
+          <span class="english">miss / young woman</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-些">
+        <div class="card-header">
+          <span class="hanzi">些</span>
+          <span class="pinyin">xiē</span>
+          <span class="english">some / a few</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-写">
+        <div class="card-header">
+          <span class="hanzi">写</span>
+          <span class="pinyin">xiě</span>
+          <span class="english">to write</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-谢谢">
+        <div class="card-header">
+          <span class="hanzi">谢谢</span>
+          <span class="pinyin">xiè xie</span>
+          <span class="english">thank you</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-星期">
+        <div class="card-header">
+          <span class="hanzi">星期</span>
+          <span class="pinyin">xīng qī</span>
+          <span class="english">week / day of the week</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-学生">
+        <div class="card-header">
+          <span class="hanzi">学生</span>
+          <span class="pinyin">xué sheng</span>
+          <span class="english">student</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-学习">
+        <div class="card-header">
+          <span class="hanzi">学习</span>
+          <span class="pinyin">xué xí</span>
+          <span class="english">to study / to learn</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-学校">
+        <div class="card-header">
+          <span class="hanzi">学校</span>
+          <span class="pinyin">xué xiào</span>
+          <span class="english">school</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-一">
+        <div class="card-header">
+          <span class="hanzi">一</span>
+          <span class="pinyin">yī</span>
+          <span class="english">one</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-一点儿">
+        <div class="card-header">
+          <span class="hanzi">一点儿</span>
+          <span class="pinyin">yī diǎnr</span>
+          <span class="english">a little / a bit</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-衣服">
+        <div class="card-header">
+          <span class="hanzi">衣服</span>
+          <span class="pinyin">yī fu</span>
+          <span class="english">clothes</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-医生">
+        <div class="card-header">
+          <span class="hanzi">医生</span>
+          <span class="pinyin">yī shēng</span>
+          <span class="english">doctor</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-医院">
+        <div class="card-header">
+          <span class="hanzi">医院</span>
+          <span class="pinyin">yī yuàn</span>
+          <span class="english">hospital</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-椅子">
+        <div class="card-header">
+          <span class="hanzi">椅子</span>
+          <span class="pinyin">yǐ zi</span>
+          <span class="english">chair</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-有">
+        <div class="card-header">
+          <span class="hanzi">有</span>
+          <span class="pinyin">yǒu</span>
+          <span class="english">to have / there is</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-月">
+        <div class="card-header">
+          <span class="hanzi">月</span>
+          <span class="pinyin">yuè</span>
+          <span class="english">month / moon</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-再见">
+        <div class="card-header">
+          <span class="hanzi">再见</span>
+          <span class="pinyin">zài jiàn</span>
+          <span class="english">goodbye</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-在">
+        <div class="card-header">
+          <span class="hanzi">在</span>
+          <span class="pinyin">zài</span>
+          <span class="english">at / in / on / to be located</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-怎么">
+        <div class="card-header">
+          <span class="hanzi">怎么</span>
+          <span class="pinyin">zěn me</span>
+          <span class="english">how / why / what</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-怎么样">
+        <div class="card-header">
+          <span class="hanzi">怎么样</span>
+          <span class="pinyin">zěn me yàng</span>
+          <span class="english">how about / how is it</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-这">
+        <div class="card-header">
+          <span class="hanzi">这</span>
+          <span class="pinyin">zhè</span>
+          <span class="english">this</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-中国">
+        <div class="card-header">
+          <span class="hanzi">中国</span>
+          <span class="pinyin">zhōng guó</span>
+          <span class="english">China</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-中午">
+        <div class="card-header">
+          <span class="hanzi">中午</span>
+          <span class="pinyin">zhōng wǔ</span>
+          <span class="english">noon / midday</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-住">
+        <div class="card-header">
+          <span class="hanzi">住</span>
+          <span class="pinyin">zhù</span>
+          <span class="english">to live / to reside</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-桌子">
+        <div class="card-header">
+          <span class="hanzi">桌子</span>
+          <span class="pinyin">zhuō zi</span>
+          <span class="english">table / desk</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-字">
+        <div class="card-header">
+          <span class="hanzi">字</span>
+          <span class="pinyin">zì</span>
+          <span class="english">character / word</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-昨天">
+        <div class="card-header">
+          <span class="hanzi">昨天</span>
+          <span class="pinyin">zuó tiān</span>
+          <span class="english">yesterday</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-坐">
+        <div class="card-header">
+          <span class="hanzi">坐</span>
+          <span class="pinyin">zuò</span>
+          <span class="english">to sit / to travel by</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-做">
+        <div class="card-header">
+          <span class="hanzi">做</span>
+          <span class="pinyin">zuò</span>
+          <span class="english">to do / to make</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+      </div>
+    </section>
+  
+    <section class="level-section">
+      <h2 class="level-heading">HSK 2 <span class="level-count">148 entries</span></h2>
+      <div class="cards-grid">
+        
+      <div class="card card-missing" id="card-吧">
+        <div class="card-header">
+          <span class="hanzi">吧</span>
+          <span class="pinyin">ba</span>
+          <span class="english">(suggestion/assumption particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-白">
+        <div class="card-header">
+          <span class="hanzi">白</span>
+          <span class="pinyin">bái</span>
+          <span class="english">white</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-百">
+        <div class="card-header">
+          <span class="hanzi">百</span>
+          <span class="pinyin">bǎi</span>
+          <span class="english">hundred</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-帮助">
+        <div class="card-header">
+          <span class="hanzi">帮助</span>
+          <span class="pinyin">bāng zhù</span>
+          <span class="english">to help / assistance</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-报纸">
+        <div class="card-header">
+          <span class="hanzi">报纸</span>
+          <span class="pinyin">bào zhǐ</span>
+          <span class="english">newspaper</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-比">
+        <div class="card-header">
+          <span class="hanzi">比</span>
+          <span class="pinyin">bǐ</span>
+          <span class="english">compared to / than</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-别">
+        <div class="card-header">
+          <span class="hanzi">别</span>
+          <span class="pinyin">bié</span>
+          <span class="english">don't / other</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-宾馆">
+        <div class="card-header">
+          <span class="hanzi">宾馆</span>
+          <span class="pinyin">bīn guǎn</span>
+          <span class="english">hotel</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-长">
+        <div class="card-header">
+          <span class="hanzi">长</span>
+          <span class="pinyin">cháng</span>
+          <span class="english">long</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-唱歌">
+        <div class="card-header">
+          <span class="hanzi">唱歌</span>
+          <span class="pinyin">chàng gē</span>
+          <span class="english">to sing (a song)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-出">
+        <div class="card-header">
+          <span class="hanzi">出</span>
+          <span class="pinyin">chū</span>
+          <span class="english">to go out / to come out</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-穿">
+        <div class="card-header">
+          <span class="hanzi">穿</span>
+          <span class="pinyin">chuān</span>
+          <span class="english">to wear / to put on</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-次">
+        <div class="card-header">
+          <span class="hanzi">次</span>
+          <span class="pinyin">cì</span>
+          <span class="english">time / occasion (measure word)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-从">
+        <div class="card-header">
+          <span class="hanzi">从</span>
+          <span class="pinyin">cóng</span>
+          <span class="english">from / since</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-错">
+        <div class="card-header">
+          <span class="hanzi">错</span>
+          <span class="pinyin">cuò</span>
+          <span class="english">wrong / mistake</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-打篮球">
+        <div class="card-header">
+          <span class="hanzi">打篮球</span>
+          <span class="pinyin">dǎ lán qiú</span>
+          <span class="english">to play basketball</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-大家">
+        <div class="card-header">
+          <span class="hanzi">大家</span>
+          <span class="pinyin">dà jiā</span>
+          <span class="english">everyone / everybody</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-但是">
+        <div class="card-header">
+          <span class="hanzi">但是</span>
+          <span class="pinyin">dàn shì</span>
+          <span class="english">but / however</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-地方">
+        <div class="card-header">
+          <span class="hanzi">地方</span>
+          <span class="pinyin">dì fāng</span>
+          <span class="english">place / location</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-弟弟">
+        <div class="card-header">
+          <span class="hanzi">弟弟</span>
+          <span class="pinyin">dì di</span>
+          <span class="english">younger brother</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-第一">
+        <div class="card-header">
+          <span class="hanzi">第一</span>
+          <span class="pinyin">dì yī</span>
+          <span class="english">first / number one</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-懂">
+        <div class="card-header">
+          <span class="hanzi">懂</span>
+          <span class="pinyin">dǒng</span>
+          <span class="english">to understand / to know</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-对">
+        <div class="card-header">
+          <span class="hanzi">对</span>
+          <span class="pinyin">duì</span>
+          <span class="english">correct / right / towards</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-房间">
+        <div class="card-header">
+          <span class="hanzi">房间</span>
+          <span class="pinyin">fáng jiān</span>
+          <span class="english">room</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-非常">
+        <div class="card-header">
+          <span class="hanzi">非常</span>
+          <span class="pinyin">fēi cháng</span>
+          <span class="english">very / extremely / unusual</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-服务员">
+        <div class="card-header">
+          <span class="hanzi">服务员</span>
+          <span class="pinyin">fú wù yuán</span>
+          <span class="english">waiter / attendant / service staff</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-告诉">
+        <div class="card-header">
+          <span class="hanzi">告诉</span>
+          <span class="pinyin">gào su</span>
+          <span class="english">to tell / to inform</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-哥哥">
+        <div class="card-header">
+          <span class="hanzi">哥哥</span>
+          <span class="pinyin">gē ge</span>
+          <span class="english">older brother</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-给">
+        <div class="card-header">
+          <span class="hanzi">给</span>
+          <span class="pinyin">gěi</span>
+          <span class="english">to give / for / to</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-公共汽车">
+        <div class="card-header">
+          <span class="hanzi">公共汽车</span>
+          <span class="pinyin">gōng gòng qì chē</span>
+          <span class="english">bus (public transport)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-公司">
+        <div class="card-header">
+          <span class="hanzi">公司</span>
+          <span class="pinyin">gōng sī</span>
+          <span class="english">company / firm</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-贵">
+        <div class="card-header">
+          <span class="hanzi">贵</span>
+          <span class="pinyin">guì</span>
+          <span class="english">expensive / honorable</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-过">
+        <div class="card-header">
+          <span class="hanzi">过</span>
+          <span class="pinyin">guò</span>
+          <span class="english">to pass / (experience particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-还">
+        <div class="card-header">
+          <span class="hanzi">还</span>
+          <span class="pinyin">hái</span>
+          <span class="english">still / also / in addition</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-还是">
+        <div class="card-header">
+          <span class="hanzi">还是</span>
+          <span class="pinyin">hái shì</span>
+          <span class="english">still / or (in questions)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-黑">
+        <div class="card-header">
+          <span class="hanzi">黑</span>
+          <span class="pinyin">hēi</span>
+          <span class="english">black / dark</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-红">
+        <div class="card-header">
+          <span class="hanzi">红</span>
+          <span class="pinyin">hóng</span>
+          <span class="english">red</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-欢迎">
+        <div class="card-header">
+          <span class="hanzi">欢迎</span>
+          <span class="pinyin">huān yíng</span>
+          <span class="english">to welcome / welcome</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-回答">
+        <div class="card-header">
+          <span class="hanzi">回答</span>
+          <span class="pinyin">huí dá</span>
+          <span class="english">to answer / to reply</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-机场">
+        <div class="card-header">
+          <span class="hanzi">机场</span>
+          <span class="pinyin">jī chǎng</span>
+          <span class="english">airport</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-鸡蛋">
+        <div class="card-header">
+          <span class="hanzi">鸡蛋</span>
+          <span class="pinyin">jī dàn</span>
+          <span class="english">egg</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-件">
+        <div class="card-header">
+          <span class="hanzi">件</span>
+          <span class="pinyin">jiàn</span>
+          <span class="english">(measure word for clothes/matters)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-教室">
+        <div class="card-header">
+          <span class="hanzi">教室</span>
+          <span class="pinyin">jiào shì</span>
+          <span class="english">classroom</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-姐姐">
+        <div class="card-header">
+          <span class="hanzi">姐姐</span>
+          <span class="pinyin">jiě jie</span>
+          <span class="english">older sister</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-介绍">
+        <div class="card-header">
+          <span class="hanzi">介绍</span>
+          <span class="pinyin">jiè shào</span>
+          <span class="english">to introduce / introduction</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-进">
+        <div class="card-header">
+          <span class="hanzi">进</span>
+          <span class="pinyin">jìn</span>
+          <span class="english">to enter / to go in</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-近">
+        <div class="card-header">
+          <span class="hanzi">近</span>
+          <span class="pinyin">jìn</span>
+          <span class="english">near / close</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-就">
+        <div class="card-header">
+          <span class="hanzi">就</span>
+          <span class="pinyin">jiù</span>
+          <span class="english">then / just / only</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-觉得">
+        <div class="card-header">
+          <span class="hanzi">觉得</span>
+          <span class="pinyin">jué de</span>
+          <span class="english">to feel / to think</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-开始">
+        <div class="card-header">
+          <span class="hanzi">开始</span>
+          <span class="pinyin">kāi shǐ</span>
+          <span class="english">to begin / start</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-考试">
+        <div class="card-header">
+          <span class="hanzi">考试</span>
+          <span class="pinyin">kǎo shì</span>
+          <span class="english">exam / to take an exam</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-可能">
+        <div class="card-header">
+          <span class="hanzi">可能</span>
+          <span class="pinyin">kě néng</span>
+          <span class="english">maybe / possible / possibly</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-可以">
+        <div class="card-header">
+          <span class="hanzi">可以</span>
+          <span class="pinyin">kě yǐ</span>
+          <span class="english">can / may / acceptable</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-课">
+        <div class="card-header">
+          <span class="hanzi">课</span>
+          <span class="pinyin">kè</span>
+          <span class="english">class / lesson / course</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-快">
+        <div class="card-header">
+          <span class="hanzi">快</span>
+          <span class="pinyin">kuài</span>
+          <span class="english">fast / quick / soon</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-快乐">
+        <div class="card-header">
+          <span class="hanzi">快乐</span>
+          <span class="pinyin">kuài lè</span>
+          <span class="english">happy / joyful</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-累">
+        <div class="card-header">
+          <span class="hanzi">累</span>
+          <span class="pinyin">lèi</span>
+          <span class="english">tired / fatigued</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-离">
+        <div class="card-header">
+          <span class="hanzi">离</span>
+          <span class="pinyin">lí</span>
+          <span class="english">away from / from</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-脸">
+        <div class="card-header">
+          <span class="hanzi">脸</span>
+          <span class="pinyin">liǎn</span>
+          <span class="english">face</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-练习">
+        <div class="card-header">
+          <span class="hanzi">练习</span>
+          <span class="pinyin">liàn xí</span>
+          <span class="english">to practice / exercise</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-两">
+        <div class="card-header">
+          <span class="hanzi">两</span>
+          <span class="pinyin">liǎng</span>
+          <span class="english">two / both</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-零">
+        <div class="card-header">
+          <span class="hanzi">零</span>
+          <span class="pinyin">líng</span>
+          <span class="english">zero</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-路">
+        <div class="card-header">
+          <span class="hanzi">路</span>
+          <span class="pinyin">lù</span>
+          <span class="english">road / way / route</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-旅游">
+        <div class="card-header">
+          <span class="hanzi">旅游</span>
+          <span class="pinyin">lǚ yóu</span>
+          <span class="english">to travel / tourism</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-卖">
+        <div class="card-header">
+          <span class="hanzi">卖</span>
+          <span class="pinyin">mài</span>
+          <span class="english">to sell</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-慢">
+        <div class="card-header">
+          <span class="hanzi">慢</span>
+          <span class="pinyin">màn</span>
+          <span class="english">slow</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-忙">
+        <div class="card-header">
+          <span class="hanzi">忙</span>
+          <span class="pinyin">máng</span>
+          <span class="english">busy</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-每">
+        <div class="card-header">
+          <span class="hanzi">每</span>
+          <span class="pinyin">měi</span>
+          <span class="english">every / each</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-妹妹">
+        <div class="card-header">
+          <span class="hanzi">妹妹</span>
+          <span class="pinyin">mèi mei</span>
+          <span class="english">younger sister</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-门">
+        <div class="card-header">
+          <span class="hanzi">门</span>
+          <span class="pinyin">mén</span>
+          <span class="english">door / gate</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-面条">
+        <div class="card-header">
+          <span class="hanzi">面条</span>
+          <span class="pinyin">miàn tiáo</span>
+          <span class="english">noodles</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-男">
+        <div class="card-header">
+          <span class="hanzi">男</span>
+          <span class="pinyin">nán</span>
+          <span class="english">male / man</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-您">
+        <div class="card-header">
+          <span class="hanzi">您</span>
+          <span class="pinyin">nín</span>
+          <span class="english">you (polite form)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-牛奶">
+        <div class="card-header">
+          <span class="hanzi">牛奶</span>
+          <span class="pinyin">niú nǎi</span>
+          <span class="english">milk</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-女">
+        <div class="card-header">
+          <span class="hanzi">女</span>
+          <span class="pinyin">nǚ</span>
+          <span class="english">female / woman</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-旁边">
+        <div class="card-header">
+          <span class="hanzi">旁边</span>
+          <span class="pinyin">páng biān</span>
+          <span class="english">beside / next to</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-跑步">
+        <div class="card-header">
+          <span class="hanzi">跑步</span>
+          <span class="pinyin">pǎo bù</span>
+          <span class="english">to run / jogging</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-便宜">
+        <div class="card-header">
+          <span class="hanzi">便宜</span>
+          <span class="pinyin">pián yi</span>
+          <span class="english">cheap / inexpensive</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-票">
+        <div class="card-header">
+          <span class="hanzi">票</span>
+          <span class="pinyin">piào</span>
+          <span class="english">ticket</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-妻子">
+        <div class="card-header">
+          <span class="hanzi">妻子</span>
+          <span class="pinyin">qī zi</span>
+          <span class="english">wife</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-起床">
+        <div class="card-header">
+          <span class="hanzi">起床</span>
+          <span class="pinyin">qǐ chuáng</span>
+          <span class="english">to get up / to get out of bed</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-千">
+        <div class="card-header">
+          <span class="hanzi">千</span>
+          <span class="pinyin"></span>
+          <span class="english">thousand</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-铅笔">
+        <div class="card-header">
+          <span class="hanzi">铅笔</span>
+          <span class="pinyin">qiān bǐ</span>
+          <span class="english">pencil</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-晴">
+        <div class="card-header">
+          <span class="hanzi">晴</span>
+          <span class="pinyin">qíng</span>
+          <span class="english">clear / sunny (weather)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-去年">
+        <div class="card-header">
+          <span class="hanzi">去年</span>
+          <span class="pinyin">qù nián</span>
+          <span class="english">last year</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-让">
+        <div class="card-header">
+          <span class="hanzi">让</span>
+          <span class="pinyin">ràng</span>
+          <span class="english">to let / to allow / to make</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-日记">
+        <div class="card-header">
+          <span class="hanzi">日记</span>
+          <span class="pinyin">rì jì</span>
+          <span class="english">diary / journal</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-如果">
+        <div class="card-header">
+          <span class="hanzi">如果</span>
+          <span class="pinyin">rú guǒ</span>
+          <span class="english">if / in case</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-上班">
+        <div class="card-header">
+          <span class="hanzi">上班</span>
+          <span class="pinyin">shàng bān</span>
+          <span class="english">to go to work / to start work</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-身体">
+        <div class="card-header">
+          <span class="hanzi">身体</span>
+          <span class="pinyin">shēn tǐ</span>
+          <span class="english">body / health</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-生病">
+        <div class="card-header">
+          <span class="hanzi">生病</span>
+          <span class="pinyin">shēng bìng</span>
+          <span class="english">to get sick / to fall ill</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-生日">
+        <div class="card-header">
+          <span class="hanzi">生日</span>
+          <span class="pinyin">shēng rì</span>
+          <span class="english">birthday</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-时间">
+        <div class="card-header">
+          <span class="hanzi">时间</span>
+          <span class="pinyin">shí jiān</span>
+          <span class="english">time</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-事情">
+        <div class="card-header">
+          <span class="hanzi">事情</span>
+          <span class="pinyin">shì qíng</span>
+          <span class="english">thing / matter / affair</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-手表">
+        <div class="card-header">
+          <span class="hanzi">手表</span>
+          <span class="pinyin">shǒu biǎo</span>
+          <span class="english">watch (wristwatch)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-手机">
+        <div class="card-header">
+          <span class="hanzi">手机</span>
+          <span class="pinyin">shǒu jī</span>
+          <span class="english">mobile phone / cell phone</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-送">
+        <div class="card-header">
+          <span class="hanzi">送</span>
+          <span class="pinyin">sòng</span>
+          <span class="english">to give (as a gift) / to send / to deliver</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-虽然">
+        <div class="card-header">
+          <span class="hanzi">虽然</span>
+          <span class="pinyin">suī rán</span>
+          <span class="english">although / even though</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-它">
+        <div class="card-header">
+          <span class="hanzi">它</span>
+          <span class="pinyin">tā</span>
+          <span class="english">it</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-踢足球">
+        <div class="card-header">
+          <span class="hanzi">踢足球</span>
+          <span class="pinyin">tī zú qiú</span>
+          <span class="english">to play football/soccer</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-题">
+        <div class="card-header">
+          <span class="hanzi">题</span>
+          <span class="pinyin">tí</span>
+          <span class="english">topic / question / problem</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-跳舞">
+        <div class="card-header">
+          <span class="hanzi">跳舞</span>
+          <span class="pinyin">tiào wǔ</span>
+          <span class="english">to dance</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-外">
+        <div class="card-header">
+          <span class="hanzi">外</span>
+          <span class="pinyin">wài</span>
+          <span class="english">outside / foreign</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-完">
+        <div class="card-header">
+          <span class="hanzi">完</span>
+          <span class="pinyin">wán</span>
+          <span class="english">to finish / to end / complete</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-玩">
+        <div class="card-header">
+          <span class="hanzi">玩</span>
+          <span class="pinyin">wán</span>
+          <span class="english">to play / to have fun</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-晚上">
+        <div class="card-header">
+          <span class="hanzi">晚上</span>
+          <span class="pinyin">wǎn shang</span>
+          <span class="english">evening / night</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-往">
+        <div class="card-header">
+          <span class="hanzi">往</span>
+          <span class="pinyin">wǎng</span>
+          <span class="english">towards / in the direction of</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-为什么">
+        <div class="card-header">
+          <span class="hanzi">为什么</span>
+          <span class="pinyin">wèi shén me</span>
+          <span class="english">why / for what reason</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-问">
+        <div class="card-header">
+          <span class="hanzi">问</span>
+          <span class="pinyin">wèn</span>
+          <span class="english">to ask</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-问题">
+        <div class="card-header">
+          <span class="hanzi">问题</span>
+          <span class="pinyin">wèn tí</span>
+          <span class="english">question / problem</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-西瓜">
+        <div class="card-header">
+          <span class="hanzi">西瓜</span>
+          <span class="pinyin">xī guā</span>
+          <span class="english">watermelon</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-希望">
+        <div class="card-header">
+          <span class="hanzi">希望</span>
+          <span class="pinyin">xī wàng</span>
+          <span class="english">to hope / hope</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-洗">
+        <div class="card-header">
+          <span class="hanzi">洗</span>
+          <span class="pinyin">xǐ</span>
+          <span class="english">to wash / to bathe</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-小时">
+        <div class="card-header">
+          <span class="hanzi">小时</span>
+          <span class="pinyin">xiǎo shí</span>
+          <span class="english">hour</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-笑">
+        <div class="card-header">
+          <span class="hanzi">笑</span>
+          <span class="pinyin">xiào</span>
+          <span class="english">to laugh / to smile</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-新">
+        <div class="card-header">
+          <span class="hanzi">新</span>
+          <span class="pinyin">xīn</span>
+          <span class="english">new</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-姓">
+        <div class="card-header">
+          <span class="hanzi">姓</span>
+          <span class="pinyin">xìng</span>
+          <span class="english">surname / to be surnamed</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-休息">
+        <div class="card-header">
+          <span class="hanzi">休息</span>
+          <span class="pinyin">xiū xi</span>
+          <span class="english">to rest / rest</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-雪">
+        <div class="card-header">
+          <span class="hanzi">雪</span>
+          <span class="pinyin">xuě</span>
+          <span class="english">snow</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-颜色">
+        <div class="card-header">
+          <span class="hanzi">颜色</span>
+          <span class="pinyin">yán sè</span>
+          <span class="english">color</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-眼睛">
+        <div class="card-header">
+          <span class="hanzi">眼睛</span>
+          <span class="pinyin">yǎn jing</span>
+          <span class="english">eye(s)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-羊肉">
+        <div class="card-header">
+          <span class="hanzi">羊肉</span>
+          <span class="pinyin">yáng ròu</span>
+          <span class="english">lamb / mutton</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-药">
+        <div class="card-header">
+          <span class="hanzi">药</span>
+          <span class="pinyin">yào</span>
+          <span class="english">medicine / drug</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-要">
+        <div class="card-header">
+          <span class="hanzi">要</span>
+          <span class="pinyin">yào</span>
+          <span class="english">to want / to need / will / important</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-也">
+        <div class="card-header">
+          <span class="hanzi">也</span>
+          <span class="pinyin">yě</span>
+          <span class="english">also / too</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-一起">
+        <div class="card-header">
+          <span class="hanzi">一起</span>
+          <span class="pinyin">yī qǐ</span>
+          <span class="english">together</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-一下">
+        <div class="card-header">
+          <span class="hanzi">一下</span>
+          <span class="pinyin">yī xià</span>
+          <span class="english">once / a moment / give it a try</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-已经">
+        <div class="card-header">
+          <span class="hanzi">已经</span>
+          <span class="pinyin">yǐ jīng</span>
+          <span class="english">already</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-一边">
+        <div class="card-header">
+          <span class="hanzi">一边</span>
+          <span class="pinyin">yī biān</span>
+          <span class="english">at the same time / simultaneously</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-因为">
+        <div class="card-header">
+          <span class="hanzi">因为</span>
+          <span class="pinyin">yīn wèi</span>
+          <span class="english">because</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-游泳">
+        <div class="card-header">
+          <span class="hanzi">游泳</span>
+          <span class="pinyin">yóu yǒng</span>
+          <span class="english">to swim / swimming</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-右边">
+        <div class="card-header">
+          <span class="hanzi">右边</span>
+          <span class="pinyin">yòu biān</span>
+          <span class="english">right side</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-鱼">
+        <div class="card-header">
+          <span class="hanzi">鱼</span>
+          <span class="pinyin">yú</span>
+          <span class="english">fish</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-远">
+        <div class="card-header">
+          <span class="hanzi">远</span>
+          <span class="pinyin">yuǎn</span>
+          <span class="english">far / distant</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-运动">
+        <div class="card-header">
+          <span class="hanzi">运动</span>
+          <span class="pinyin">yùn dòng</span>
+          <span class="english">sport / exercise / to exercise</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-再">
+        <div class="card-header">
+          <span class="hanzi">再</span>
+          <span class="pinyin">zài</span>
+          <span class="english">again / once more</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-早上">
+        <div class="card-header">
+          <span class="hanzi">早上</span>
+          <span class="pinyin">zǎo shang</span>
+          <span class="english">morning / early morning</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-丈夫">
+        <div class="card-header">
+          <span class="hanzi">丈夫</span>
+          <span class="pinyin">zhàng fu</span>
+          <span class="english">husband</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-找">
+        <div class="card-header">
+          <span class="hanzi">找</span>
+          <span class="pinyin">zhǎo</span>
+          <span class="english">to look for / to find / to seek</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-着">
+        <div class="card-header">
+          <span class="hanzi">着</span>
+          <span class="pinyin">zhe</span>
+          <span class="english">(ongoing action particle)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-真">
+        <div class="card-header">
+          <span class="hanzi">真</span>
+          <span class="pinyin">zhēn</span>
+          <span class="english">real / true / really</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-正在">
+        <div class="card-header">
+          <span class="hanzi">正在</span>
+          <span class="pinyin">zhèng zài</span>
+          <span class="english">in the process of / currently</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-知道">
+        <div class="card-header">
+          <span class="hanzi">知道</span>
+          <span class="pinyin">zhī dào</span>
+          <span class="english">to know</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-准备">
+        <div class="card-header">
+          <span class="hanzi">准备</span>
+          <span class="pinyin">zhǔn bèi</span>
+          <span class="english">to prepare / preparation</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-自行车">
+        <div class="card-header">
+          <span class="hanzi">自行车</span>
+          <span class="pinyin">zì xíng chē</span>
+          <span class="english">bicycle</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-走">
+        <div class="card-header">
+          <span class="hanzi">走</span>
+          <span class="pinyin">zǒu</span>
+          <span class="english">to walk / to go / to leave</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-最">
+        <div class="card-header">
+          <span class="hanzi">最</span>
+          <span class="pinyin">zuì</span>
+          <span class="english">most / -est (superlative)</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+
+      <div class="card card-missing" id="card-左边">
+        <div class="card-header">
+          <span class="hanzi">左边</span>
+          <span class="pinyin">zuǒ biān</span>
+          <span class="english">left side</span>
+          <span class="badge badge-missing">missing</span>
+        </div>
+      </div>
+      </div>
+    </section>
+</div>
+
+<script>
+  const flagged = new Set();
+
+  function toggleFlag(hanzi) {
+    const card = document.getElementById('card-' + hanzi);
+    if (flagged.has(hanzi)) {
+      flagged.delete(hanzi);
+      card.classList.remove('card-flagged');
+    } else {
+      flagged.add(hanzi);
+      card.classList.add('card-flagged');
+    }
+    updateFlaggedBar();
+  }
+
+  function updateFlaggedBar() {
+    const bar = document.getElementById('flagged-bar');
+    const list = document.getElementById('flagged-list');
+    if (flagged.size === 0) {
+      bar.style.display = 'none';
+    } else {
+      bar.style.display = 'block';
+      list.textContent = [...flagged].join(', ');
+    }
+  }
+
+  function filterCards(mode, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.card').forEach(card => {
+      if (mode === 'all') {
+        card.classList.remove('hidden');
+      } else if (mode === 'warning') {
+        card.classList.toggle('hidden',
+          !card.classList.contains('card-warning') &&
+          !card.classList.contains('card-missing'));
+      } else if (mode === 'flagged') {
+        card.classList.toggle('hidden', !card.classList.contains('card-flagged'));
+      } else if (mode === 'ok') {
+        card.classList.toggle('hidden',
+          card.classList.contains('card-warning') ||
+          card.classList.contains('card-missing'));
+      }
+    });
+  }
+</script>
+</body>
+</html>
