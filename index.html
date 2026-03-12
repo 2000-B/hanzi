@@ -1304,6 +1304,8 @@ header {
   top: calc(var(--header-h) + 6px);
   right: 12px;
   width: 280px;
+  max-height: calc(100vh - var(--header-h) - 24px);
+  overflow-y: auto;
   background: var(--bg2);
   border: 1px solid var(--border2);
   border-radius: var(--radius-md);
@@ -1314,14 +1316,18 @@ header {
   gap: 14px;
   z-index: 401;
 }
+@media (max-width: 480px) {
+  .settings-panel { right: 8px; left: 8px; width: auto; }
+}
 .settings-group { display: flex; flex-direction: column; gap: 8px; }
 .settings-label {
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text3);
 }
+.settings-pill-btn:disabled { opacity: 0.4; cursor: default; }
 .settings-toggle-row {
   display: flex;
   align-items: center;
@@ -1688,6 +1694,24 @@ header {
 .session-row .acc-val.low { color: var(--red); }
 .session-row .deck-tag { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 6px; border-radius: var(--radius); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dash-empty { text-align: center; color: var(--text3); padding: 32px; font-size: 13px; }
+@media (max-width: 900px) and (min-width: 601px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
+.session-row .deck-tag { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Session report */
+.sr-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+@media (max-width: 480px) { .sr-stats { grid-template-columns:repeat(2,1fr); } }
+.sr-stat { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center; }
+.sr-stat-label { font-size:9px; font-weight:600; letter-spacing:.08em; color:var(--text3); text-transform:uppercase; margin-bottom:4px; }
+.sr-stat-value { font-size:22px; font-weight:700; }
+.sr-flagged-title { font-size:10px; font-weight:600; letter-spacing:.08em; color:var(--text3); text-transform:uppercase; margin-bottom:8px; }
+.sr-flagged-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); }
+.sr-flagged-hanzi { font-family:'Noto Sans SC',sans-serif; font-size:20px; min-width:36px; background:linear-gradient(135deg,var(--accent) 0%,#a78bff 50%,#60c0ff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.sr-perfect { text-align:center; color:var(--green); padding:16px; font-size:14px; }
+
+/* Note save feedback */
+.ip-note-area { transition: border-color .2s; }
+.ip-note-saved { font-size:11px; color:var(--green); opacity:0; transition:opacity .3s; margin-top:4px; }
+.ip-note-saved.show { opacity:1; }
 </style>
 </head>
 <body>
@@ -1773,17 +1797,17 @@ header {
       <input class="api-key-input" id="api-key-input" type="password" placeholder="sk-ant-…" onchange="saveApiKey()">
     </div>
     <div class="settings-group">
-      <div class="settings-section-title">data</div>
+      <div class="settings-label">data</div>
       <div class="settings-btn-row">
         <button class="btn btn-sm" onclick="exportProgress()" style="flex:1">export progress</button>
         <label class="btn btn-sm" style="flex:1;cursor:pointer">import<input type="file" accept=".json" onchange="importProgress(this)" style="display:none"></label>
       </div>
     </div>
     <div class="settings-group">
-      <div class="settings-section-title">language</div>
+      <div class="settings-label">language</div>
       <div class="settings-pill">
         <button class="settings-pill-btn active">中文 chinese</button>
-        <button class="settings-pill-btn" style="opacity:.5;cursor:default" title="coming soon">日本語 japanese</button>
+        <button class="settings-pill-btn" disabled title="coming soon">日本語 japanese</button>
       </div>
     </div>
   </div>
@@ -1852,7 +1876,7 @@ header {
               <div class="card-review-flag" id="card-review-flag">review</div>
               <div class="card-hanzi" id="front-hanzi"></div>
               <div class="card-pinyin" id="front-pinyin"></div>
-              <div class="card-hint">tap to flip · arrows for prev / next</div>
+              <div class="card-hint">click to flip · ← → to navigate</div>
             </div>
             <div class="card-face card-back">
               <div class="card-english" id="back-english"></div>
@@ -2952,34 +2976,24 @@ function showSessionReport() {
   const accuracy = total > 0 ? Math.round(stats.correct / total * 100) : 0;
   const avgTime = stats.times.length > 0 ? (stats.times.reduce((a, b) => a + b, 0) / stats.times.length / 1000).toFixed(1) : '—';
 
+  const flagged = sessionLog.filter(l => !l.correct);
   content.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center">
-        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:4px">correct</div>
-        <div style="font-size:20px;font-weight:700;color:var(--green)">${stats.correct}</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center">
-        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:4px">wrong</div>
-        <div style="font-size:20px;font-weight:700;color:var(--red)">${stats.wrong}</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center">
-        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:4px">accuracy</div>
-        <div style="font-size:20px;font-weight:700;color:var(--accent)">${accuracy}%</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center">
-        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:4px">avg time</div>
-        <div style="font-size:20px;font-weight:700;color:var(--text)">${avgTime}s</div>
-      </div>
+    <div class="sr-stats">
+      <div class="sr-stat"><div class="sr-stat-label">correct</div><div class="sr-stat-value" style="color:var(--green)">${stats.correct}</div></div>
+      <div class="sr-stat"><div class="sr-stat-label">wrong</div><div class="sr-stat-value" style="color:var(--red)">${stats.wrong}</div></div>
+      <div class="sr-stat"><div class="sr-stat-label">accuracy</div><div class="sr-stat-value" style="color:var(--accent)">${accuracy}%</div></div>
+      <div class="sr-stat"><div class="sr-stat-label">avg time</div><div class="sr-stat-value" style="color:var(--text)">${avgTime}s</div></div>
     </div>
-    ${sessionLog.filter(l => !l.correct).length > 0 ? `
-      <div style="font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:8px">flagged for review</div>
-      ${sessionLog.filter(l => !l.correct).map(l => `
-        <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
-          <span style="font-family:'Noto Sans SC',sans-serif;font-size:18px;min-width:36px">${l.hanzi}</span>
-          <span style="flex:1;color:var(--text2)">${(l.time / 1000).toFixed(1)}s</span>
+    ${flagged.length > 0 ? `
+      <div class="sr-flagged-title">flagged for review</div>
+      ${flagged.map(l => `
+        <div class="sr-flagged-row">
+          <span class="sr-flagged-hanzi">${l.hanzi}</span>
+          <span style="flex:1;font-size:13px;color:var(--text2)">${cardData[l.hanzi]?.english || ''}</span>
+          <span style="font-size:12px;color:var(--text3)">${(l.time / 1000).toFixed(1)}s</span>
         </div>
       `).join('')}
-    ` : '<div style="text-align:center;color:var(--green);padding:12px">perfect score!</div>'}
+    ` : '<div class="sr-perfect">perfect score! 🎉</div>'}
   `;
 }
 
@@ -3286,6 +3300,7 @@ function renderInfoPanel(card) {
   html += `<div class="ip-section">
     <div class="ip-section-title">your note</div>
     <textarea class="ip-note-area" id="user-note" placeholder="add a personal note, memory hook, or association…" onblur="saveNote()">${cd.note || ''}</textarea>
+    <div class="ip-note-saved" id="ip-note-saved">saved ✓</div>
   </div>`;
 
   // ── Tutor messages area ──
@@ -3412,6 +3427,13 @@ function saveNote() {
   cd.note = note;
   saveProgress();
   renderCard();
+  // Brief save confirmation
+  const indicator = document.getElementById('ip-note-saved');
+  if (indicator) {
+    indicator.classList.add('show');
+    clearTimeout(indicator._t);
+    indicator._t = setTimeout(() => indicator.classList.remove('show'), 1500);
+  }
 }
 
 // ── AI TUTOR ──
