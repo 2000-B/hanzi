@@ -15,16 +15,16 @@
    DESIGN TOKENS
    ══════════════════════════════════════════ */
 :root {
-  --bg:       #0a0a0c;
-  --bg2:      #111114;
-  --bg3:      #18181d;
-  --bg4:      #1f1f26;
-  --border:   #1e1e26;
-  --border2:  #2a2a36;
-  --border3:  #363645;
+  --bg:       #07070e;
+  --bg2:      #0d0d1c;
+  --bg3:      #131326;
+  --bg4:      #1a1a30;
+  --border:   rgba(96,112,255,0.10);
+  --border2:  rgba(96,112,255,0.17);
+  --border3:  rgba(96,112,255,0.26);
   --text:     #e8e8f0;
-  --text2:    #8888a0;
-  --text3:    #4a4a60;
+  --text2:    #8888a8;
+  --text3:    #4a4a68;
   --accent:   #6070ff;
   --accent2:  #4a5aee;
   --accent-glow: rgba(96,112,255,0.18);
@@ -34,14 +34,14 @@
   --red:      #e05c6a;
   --green:    #3dba8a;
   --orange:   #e09a4f;
-  --card-bg:  #13131a;
+  --card-bg:  rgba(13,13,26,0.78);
   --sidebar-w: 260px;
   --header-h:  48px;
   --radius:    999px;
   --radius-sm: 8px;
   --radius-md: 12px;
-  --elevation: 0 4px 24px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
-  --elevation-hover: 0 8px 32px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.35);
+  --elevation: 0 8px 40px rgba(0,0,0,.5), 0 0 80px rgba(79,80,200,0.07), inset 0 1px 0 rgba(255,255,255,0.04);
+  --elevation-hover: 0 12px 50px rgba(0,0,0,.6), 0 0 100px rgba(96,112,255,0.10), inset 0 1px 0 rgba(255,255,255,0.06);
   --divider-w: 5px;
   --info-panel-w: 340px;
 }
@@ -77,7 +77,10 @@
 
 body {
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 5%, rgba(79,80,200,0.20) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 60% at 88% 94%, rgba(96,60,255,0.14) 0%, transparent 55%),
+    #07070e;
   color: var(--text);
   height: 100vh;
   height: 100dvh;
@@ -88,6 +91,12 @@ body {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+body.light {
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 5%, rgba(96,112,255,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 60% at 88% 94%, rgba(167,139,255,0.05) 0%, transparent 55%),
+    #f0f1f3;
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -106,10 +115,17 @@ header {
   height: var(--header-h);
   border-bottom: 1px solid var(--border);
   position: relative;
-  background: var(--bg2);
+  background: rgba(7,7,18,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   flex-shrink: 0;
   gap: 12px;
   z-index: 100;
+}
+body.light header {
+  background: rgba(244,245,248,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 .header-left { display: flex; align-items: center; gap: 10px; }
 .header-center { flex: 1; display: flex; justify-content: center; max-width: 400px; margin: 0 auto; }
@@ -243,12 +259,19 @@ header {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
   border-right: 1px solid var(--border);
-  background: var(--bg2);
+  background: rgba(9,9,22,0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: min-width .25s, width .25s, opacity .25s;
   flex-shrink: 0;
+}
+body.light .sidebar {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 .sidebar.collapsed { width: 0; min-width: 0; opacity: 0; pointer-events: none; }
 
@@ -312,7 +335,9 @@ header {
   min-width: 0;
   max-width: 0;
   overflow: hidden;
-  background: var(--bg2);
+  background: rgba(9,9,22,0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-left: none;
   display: flex;
   flex-direction: column;
@@ -323,6 +348,11 @@ header {
   min-width: 280px;
   max-width: 600px;
   border-left: 1px solid var(--border);
+}
+body.light .info-panel {
+  background: rgba(255,255,255,0.76);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .info-panel-scroll {
@@ -999,6 +1029,8 @@ header {
   border-radius: 16px;
   border: 1px solid var(--border2);
   background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   box-shadow: var(--elevation);
   display: flex;
   flex-direction: column;
@@ -1007,6 +1039,11 @@ header {
   padding: 30px;
   gap: 8px;
   overflow: hidden;
+}
+body.light .card-face {
+  background: rgba(255,255,255,0.80);
+  border-color: rgba(96,112,255,0.12);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 0 60px rgba(96,112,255,0.04), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .card-back { transform: rotateY(180deg); }
 
