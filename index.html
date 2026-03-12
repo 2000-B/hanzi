@@ -1774,7 +1774,7 @@ header {
     <div class="settings-group">
       <div class="settings-label">appearance</div>
       <div class="settings-toggle-row">
-        <span class="settings-toggle-label">light mode</span>
+        <span class="settings-toggle-label" id="theme-label">dark mode</span>
         <button class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"></button>
       </div>
     </div>
@@ -2241,7 +2241,9 @@ function closeSettings() {
 function toggleTheme() {
   document.body.classList.toggle('light');
   document.getElementById('theme-toggle').classList.toggle('on');
-  localStorage.setItem('hanzi-theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  const isLight = document.body.classList.contains('light');
+  document.getElementById('theme-label').textContent = isLight ? 'light mode' : 'dark mode';
+  localStorage.setItem('hanzi-theme', isLight ? 'light' : 'dark');
 }
 
 function togglePinyin() {
@@ -4025,6 +4027,7 @@ async function init() {
   if (localStorage.getItem('hanzi-theme') === 'light') {
     document.body.classList.add('light');
     document.getElementById('theme-toggle').classList.add('on');
+    document.getElementById('theme-label').textContent = 'light mode';
   }
 
   // Load saved difficulty ratings setting
