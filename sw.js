@@ -1,10 +1,14 @@
-const CACHE_NAME = 'hanzi-v5.8';
+const CACHE_NAME = 'hanzi-v5.9';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/data/hsk1.json',
   '/data/hsk2.json',
+  '/data/hsk3.json',
+  '/data/hsk4.json',
+  '/data/hsk5.json',
+  '/data/hsk6.json',
   '/data/cedict.json',
   '/data/hsk-enriched.json',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap',
