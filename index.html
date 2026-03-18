@@ -184,6 +184,14 @@ body.light header {
 .search-pill .search-input {
   width: 280px;
 }
+.search-pill .search-bar {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.search-pill .search-bar:focus-within {
+  border-color: var(--accent);
+}
 
 .header-title {
   font-family: 'Noto Sans SC', sans-serif;
@@ -471,7 +479,9 @@ body.light .sidebar {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 8px 0;
+  scrollbar-width: none;
 }
+.sidebar-scroll::-webkit-scrollbar { display: none; }
 /* Prevent text reflow during sidebar width animation */
 .sidebar .hsk-level-header,
 .sidebar .chunk-item,
@@ -504,6 +514,7 @@ body.light .sidebar {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 
 /* Resize handle — built into info panel left edge */
@@ -1177,7 +1188,7 @@ body.light .empty-sub {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 20px 20px 54px;
   gap: 16px;
   overflow: auto;
   min-height: 0;
@@ -1428,7 +1439,15 @@ body.light .card-face::before {
   flex-shrink: 0;
   padding-bottom: 16px;
 }
-.controls-tray-wrap.active { display: flex; }
+.controls-tray-wrap.active {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: var(--bg);
+}
 .controls-tray-chevron {
   width: 36px;
   height: 22px;
@@ -2111,7 +2130,7 @@ body.light .analytics-view .session-row .deck-tag {
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
     </button>
     <button class="icon-btn" id="btn-settings" onclick="toggleSettings()" data-tip="settings">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.55 3.55l1.2 1.2M11.25 11.25l1.2 1.2M12.45 3.55l-1.2 1.2M4.75 11.25l-1.2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polygon points="5.5,3.67 6.32,1.72 9.68,1.72 10.5,3.67 12.6,3.4 14.28,6.32 13,8 14.28,9.68 12.6,12.6 10.5,12.33 9.68,14.28 6.32,14.28 5.5,12.33 3.4,12.6 1.72,9.68 3,8 1.72,6.32 3.4,3.4" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/></svg>
     </button>
   </div>
 </header>
@@ -2706,6 +2725,8 @@ function scheduleSidebarCollapse() {
 document.addEventListener('click', (e) => {
   if (window.innerWidth <= 480) return;
   if (!sidebarInteracted) return;
+  // Ignore clicks on elements that were removed from DOM (e.g. sidebar re-rendered by selectDeck)
+  if (!document.body.contains(e.target)) return;
   const sidebar = document.getElementById('sidebar');
   if (!sidebar.contains(e.target) && !document.getElementById('sidebar-toggle').contains(e.target)) {
     sidebarOpen = false;
