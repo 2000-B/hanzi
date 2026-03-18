@@ -1367,11 +1367,13 @@ body.light .card-face::before {
   display: none;
   align-items: center;
   gap: 3px;
-  padding: 10px 16px 0;
+  padding: 10px 0 0;
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
   scroll-behavior: smooth;
+  /* Center the visible scroll window over the card column */
+  width: 100%;
 }
 .context-strip::-webkit-scrollbar { display: none; }
 .context-strip.active { display: flex; }
@@ -1449,6 +1451,7 @@ body.light .card-face::before {
   justify-content: center;
   gap: 8px;
   width: 100%;
+  max-width: 480px;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -3601,13 +3604,20 @@ function renderContextStrip() {
     strip.appendChild(tile);
     if (isCurrent) activeTile = tile;
   }
-  // Scroll active tile to horizontal center
+  // Scroll active tile to horizontal center.
+  // We add padding = stripWidth/2 on each side so the first and last tiles
+  // can always be scrolled to center (tiles alone are narrower than the strip).
   if (activeTile) {
     requestAnimationFrame(() => {
-      const tileLeft = activeTile.offsetLeft;
-      const tileWidth = activeTile.offsetWidth;
       const stripWidth = strip.offsetWidth;
-      strip.scrollLeft = tileLeft - (stripWidth / 2) + (tileWidth / 2);
+      strip.style.paddingLeft  = (stripWidth / 2) + 'px';
+      strip.style.paddingRight = (stripWidth / 2) + 'px';
+      // Second RAF: read offsetLeft after padding has been applied
+      requestAnimationFrame(() => {
+        const tileLeft  = activeTile.offsetLeft;
+        const tileWidth = activeTile.offsetWidth;
+        strip.scrollLeft = tileLeft - stripWidth / 2 + tileWidth / 2;
+      });
     });
   }
 }
