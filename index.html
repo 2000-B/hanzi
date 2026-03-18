@@ -1446,7 +1446,6 @@ body.light .card-face::before {
   left: 0;
   right: 0;
   z-index: 5;
-  background: var(--bg);
 }
 .controls-tray-chevron {
   width: 36px;
@@ -2679,6 +2678,7 @@ document.addEventListener('dblclick', function(e) {
   if (sidebar.classList.contains('collapsed') && sidebar.contains(e.target)) {
     e.preventDefault();
     sidebarOpen = true;
+    sidebarInteracted = true;
     sidebar.classList.remove('collapsed');
     updateNewDeckBtn();
   }
@@ -2689,7 +2689,7 @@ document.addEventListener('mousedown', function(e) {
   const sidebar = document.getElementById('sidebar');
   const toggle = document.getElementById('sidebar-toggle');
   if (!sidebarOpen) return;
-  if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+  if (!sidebar.contains(e.target) && (!toggle || !toggle.contains(e.target))) {
     sidebarOpen = false;
     sidebar.classList.add('collapsed');
     document.getElementById('new-deck-panel').classList.remove('open');
@@ -2725,7 +2725,8 @@ document.addEventListener('click', (e) => {
   // Ignore clicks on elements that were removed from DOM (e.g. sidebar re-rendered by selectDeck)
   if (!document.body.contains(e.target)) return;
   const sidebar = document.getElementById('sidebar');
-  if (!sidebar.contains(e.target) && !document.getElementById('sidebar-toggle').contains(e.target)) {
+  const _toggle = document.getElementById('sidebar-toggle');
+  if (!sidebar.contains(e.target) && (!_toggle || !_toggle.contains(e.target))) {
     sidebarOpen = false;
     sidebarInteracted = false;
     sidebar.classList.add('collapsed');
