@@ -313,7 +313,7 @@ body.light header {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: min-width .25s, width .25s;
+  transition: width .3s ease, min-width .3s ease;
   flex-shrink: 0;
   position: relative;
   z-index: 50;
@@ -1766,20 +1766,6 @@ body.light .card-face::before {
   margin-bottom: 16px;
 }
 
-/* ══════════════════════════════════════════
-   UI DIMMING (deck active, desktop only)
-   ══════════════════════════════════════════ */
-@media (min-width: 481px) {
-  body.deck-active header,
-  body.deck-active .sidebar {
-    opacity: 0.6;
-    transition: opacity .2s;
-  }
-  body.deck-active header:hover,
-  body.deck-active .sidebar:hover {
-    opacity: 1;
-  }
-}
 
 /* ══════════════════════════════════════════
    MOBILE RESPONSIVE
@@ -1870,8 +1856,8 @@ body.light .card-face::before {
 .mastered-pill-btn.active .mastered-eye-strike { display:block; }
 
 /* Undo button */
-.btn-undo { font-size:11px; padding:5px 10px; opacity:0; pointer-events:none; transition:opacity .3s; }
-.btn-undo.visible { opacity:1; pointer-events:auto; }
+.btn-undo { font-size:11px; padding:5px 10px; display:none; }
+.btn-undo.visible { display:flex; }
 
 /* Mastered list panel */
 .mastered-list-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
@@ -2592,7 +2578,6 @@ function getApiKey() {
 function toggleSearch() {
   const wrap = document.getElementById('header-search-wrap');
   const isOpen = wrap.classList.toggle('open');
-  document.getElementById('btn-search').classList.toggle('active', isOpen);
   if (isOpen) {
     setTimeout(() => document.getElementById('search-input').focus(), 50);
   } else {
@@ -2604,7 +2589,6 @@ function closeSearch() {
   const wrap = document.getElementById('header-search-wrap');
   if (!wrap.classList.contains('open')) return;
   wrap.classList.remove('open');
-  document.getElementById('btn-search').classList.remove('active');
   document.getElementById('search-input').value = '';
   document.getElementById('search-results').style.display = 'none';
 }
@@ -2749,7 +2733,7 @@ function renderSidebar() {
     const header = document.createElement('div');
     header.className = 'hsk-level-header';
     header.innerHTML = `
-      <span class="sidebar-icon" style="display:none;font-family:'Noto Sans SC',sans-serif;font-size:13px;font-weight:600;background:linear-gradient(135deg,#4f7fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${level}</span>
+      <span class="sidebar-icon" style="display:none;font-size:10px;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,#4f7fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">HSK${level}</span>
       <span class="sidebar-full">HSK ${level}</span>
       <span class="sidebar-full" style="display:flex;align-items:center;gap:8px">
         ${count !== null ? `<span class="count">${count}</span>` : '<span class="count" style="font-style:italic">loading…</span>'}
