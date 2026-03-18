@@ -299,7 +299,7 @@ body.light .sidebar {
   -webkit-backdrop-filter: blur(16px);
 }
 /* Desktop: collapsed = 52px icon strip */
-@media (min-width: 769px) {
+@media (min-width: 481px) {
   .sidebar.collapsed { width: 52px; min-width: 52px; }
   .sidebar.collapsed .sidebar-full { display: none !important; }
   .sidebar.collapsed .sidebar-icon { display: flex !important; }
@@ -318,7 +318,7 @@ body.light .sidebar {
   .sidebar:not(.collapsed) .sidebar-new-icon { display: none !important; }
 }
 /* Mobile: collapsed = off-screen */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .sidebar.collapsed { transform: translateX(-100%); width: var(--sidebar-w); min-width: var(--sidebar-w); opacity: 1; }
 }
 
@@ -1252,16 +1252,17 @@ body.light .card-face {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: 100%;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  padding: 0 20px;
+  padding: 0;
   transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
 }
 .controls-tray-wrap.tray-open .controls-tray {
   max-height: 60px;
   opacity: 1;
-  padding: 10px 20px 0;
+  padding: 10px 0 0;
 }
 
 /* ══════════════════════════════════════════
@@ -1569,7 +1570,7 @@ body.light .card-face {
 /* ══════════════════════════════════════════
    UI DIMMING (deck active, desktop only)
    ══════════════════════════════════════════ */
-@media (min-width: 769px) {
+@media (min-width: 481px) {
   body.deck-active header,
   body.deck-active .sidebar,
   body.deck-active .controls-tray-wrap {
@@ -1586,7 +1587,7 @@ body.light .card-face {
 /* ══════════════════════════════════════════
    MOBILE RESPONSIVE
    ══════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .sidebar {
     position: fixed;
     left: 0;
@@ -1611,26 +1612,7 @@ body.light .card-face {
 
   .pane-divider { display: none !important; }
 
-  .info-panel {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
-    height: 0;
-    width: 100% !important;
-    min-width: 0 !important;
-    border-left: none;
-    border-top: 1px solid var(--border);
-    border-radius: 16px 16px 0 0;
-    z-index: 250;
-    transition: height .3s ease;
-  }
-  .info-panel.open {
-    height: 70vh;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
+  /* Info panel stays on the side at all sizes */
 
   .card-scene { width: 280px; }
   .card-hanzi { font-size: 56px; }
@@ -2073,7 +2055,7 @@ body.light .card-face {
             <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 4.5h12M2 8h12M2 11.5h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
           </button>
           <!-- Hide/Show mastered -->
-          <button class="btn btn-sm btn-accent" onclick="toggleMastered()" id="btn-mastered">Hide</button>
+          <button class="btn btn-sm" onclick="toggleMastered()" id="btn-mastered">Hide</button>
           <!-- Undo -->
           <button class="btn btn-sm btn-undo" id="btn-undo" onclick="undoMastered()">undo</button>
         </div>
@@ -2417,7 +2399,7 @@ let sidebarHoverTimer = null;
 let sidebarInteracted = false;
 
 function toggleSidebar() {
-  if (window.innerWidth <= 768) {
+  if (window.innerWidth <= 480) {
     // Mobile: full slide-out toggle
     sidebarOpen = !sidebarOpen;
     document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
@@ -2438,7 +2420,7 @@ function closeSidebar() {
 }
 
 function expandSidebarOnHover() {
-  if (window.innerWidth <= 768) return;
+  if (window.innerWidth <= 480) return;
   clearTimeout(sidebarHoverTimer);
   if (!sidebarOpen) {
     sidebarOpen = true;
@@ -2447,7 +2429,7 @@ function expandSidebarOnHover() {
 }
 
 function scheduleSidebarCollapse() {
-  if (window.innerWidth <= 768) return;
+  if (window.innerWidth <= 480) return;
   if (sidebarInteracted) return;
   clearTimeout(sidebarHoverTimer);
   sidebarHoverTimer = setTimeout(() => {
@@ -2460,7 +2442,7 @@ function scheduleSidebarCollapse() {
 
 // Click-outside to collapse (desktop only, when interacted)
 document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 768) return;
+  if (window.innerWidth <= 480) return;
   if (!sidebarInteracted) return;
   const sidebar = document.getElementById('sidebar');
   if (!sidebar.contains(e.target) && !document.getElementById('sidebar-toggle').contains(e.target)) {
@@ -2533,7 +2515,7 @@ function renderSidebar() {
         item.onclick = () => {
           decks[name] = cards;
           selectDeck(name);
-          if (window.innerWidth <= 768) closeSidebar();
+          if (window.innerWidth <= 480) closeSidebar();
         };
         wrapper.appendChild(item);
       }
@@ -2558,7 +2540,7 @@ function renderSidebar() {
     `;
     item.onclick = () => {
       selectDeck(name);
-      if (window.innerWidth <= 768) closeSidebar();
+      if (window.innerWidth <= 480) closeSidebar();
     };
     item.ondblclick = (e) => {
       e.stopPropagation();
@@ -4054,7 +4036,8 @@ function showAnalytics() {
 function closeAnalytics() {
   document.getElementById('analytics-view').classList.remove('active');
   document.getElementById('btn-analytics').classList.remove('active');
-  document.getElementById('empty-view').style.display = '';
+  // Only show empty state if no deck is loaded
+  document.getElementById('empty-view').style.display = activeDeck.length ? 'none' : '';
   setMode(currentMode);
 }
 
@@ -4293,11 +4276,11 @@ async function init() {
 
   // Mark sidebar interaction on any click inside (except toggle button)
   sidebarEl.addEventListener('click', () => {
-    if (window.innerWidth > 768) sidebarInteracted = true;
+    if (window.innerWidth > 480) sidebarInteracted = true;
   });
 
   // Start collapsed on desktop
-  if (window.innerWidth > 768) {
+  if (window.innerWidth > 480) {
     sidebarOpen = false;
     sidebarEl.classList.add('collapsed');
   }
