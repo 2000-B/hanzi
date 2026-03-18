@@ -153,8 +153,42 @@ body.light header {
   -webkit-backdrop-filter: blur(20px);
 }
 .header-left { display: flex; align-items: center; gap: 10px; }
-.header-center { flex: 1; display: flex; justify-content: center; max-width: 400px; margin: 0 auto; }
-.header-right { display: flex; align-items: center; gap: 8px; }
+.header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+/* Collapsible search in header */
+.header-search-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.search-pill {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width .25s ease, opacity .2s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.header-search-wrap.open .search-pill {
+  max-width: 300px;
+  opacity: 1;
+  pointer-events: auto;
+}
+.header-search-wrap.open #btn-search {
+  visibility: hidden;
+}
+.search-pill .search-input {
+  width: 280px;
+}
+.search-pill .search-results {
+  right: 0;
+  left: auto;
+  width: 300px;
+}
 
 .header-title {
   font-family: 'Noto Sans SC', sans-serif;
@@ -298,8 +332,15 @@ body.light .sidebar {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
-/* Desktop: collapsed = 52px icon strip */
+/* Desktop: collapsed = 52px icon strip; sidebar is fixed overlay so card never resizes */
 @media (min-width: 481px) {
+  .sidebar {
+    position: fixed;
+    top: var(--header-h);
+    bottom: 0;
+    z-index: 50;
+  }
+  .split-pane { margin-left: 52px; }
   .sidebar.collapsed { width: 52px; min-width: 52px; }
   .sidebar.collapsed .sidebar-full { display: none !important; }
   .sidebar.collapsed .sidebar-icon { display: flex !important; }
@@ -1618,7 +1659,6 @@ body.light .card-face {
   .card-hanzi { font-size: 56px; }
 
   .search-kbd { display: none; }
-  .header-center { max-width: 200px; }
 }
 
 /* ══════════════════════════════════════════
@@ -1877,17 +1917,21 @@ body.light .card-face {
     </div>
   </div>
 
-  <div class="header-center">
-    <div class="search-bar" style="position:relative">
-      <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <input class="search-input" id="search-input" type="text" placeholder="search hanzi, pinyin, english…" autocomplete="off">
-      <span class="search-kbd">/</span>
-      <div class="search-results" id="search-results"></div>
-    </div>
-  </div>
-
   <div class="header-right">
     <span class="prog-counter" id="prog-counter">— / —</span>
+    <!-- Expandable search: pill grows left from icon -->
+    <div class="header-search-wrap" id="header-search-wrap">
+      <div class="search-pill" id="search-pill">
+        <div class="search-bar" style="position:relative">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input class="search-input" id="search-input" type="text" placeholder="search hanzi, pinyin, english…" autocomplete="off">
+          <div class="search-results" id="search-results"></div>
+        </div>
+      </div>
+      <button class="icon-btn" id="btn-search" onclick="toggleSearch()" data-tip="search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
     <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
@@ -2356,6 +2400,26 @@ function getApiKey() {
 // ══════════════════════════════════════════
 // SETTINGS
 // ══════════════════════════════════════════
+function toggleSearch() {
+  const wrap = document.getElementById('header-search-wrap');
+  const isOpen = wrap.classList.toggle('open');
+  document.getElementById('btn-search').classList.toggle('active', isOpen);
+  if (isOpen) {
+    setTimeout(() => document.getElementById('search-input').focus(), 50);
+  } else {
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').style.display = 'none';
+  }
+}
+function closeSearch() {
+  const wrap = document.getElementById('header-search-wrap');
+  if (!wrap.classList.contains('open')) return;
+  wrap.classList.remove('open');
+  document.getElementById('btn-search').classList.remove('active');
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').style.display = 'none';
+}
+
 function toggleSettings() {
   const overlay = document.getElementById('settings-overlay');
   overlay.classList.toggle('open');
@@ -4178,7 +4242,9 @@ document.addEventListener('keydown', e => {
 
   if (e.key === '/' || (e.metaKey && e.key === 'k')) {
     e.preventDefault();
-    document.getElementById('search-input').focus();
+    const wrap = document.getElementById('header-search-wrap');
+    if (!wrap.classList.contains('open')) toggleSearch();
+    else document.getElementById('search-input').focus();
     return;
   }
 
@@ -4198,8 +4264,7 @@ document.addEventListener('keydown', e => {
 
   if (e.key === 'Escape') {
     closeSettings();
-    document.getElementById('search-results').style.display = 'none';
-    document.getElementById('search-input').value = '';
+    closeSearch();
     searchSelectedIdx = -1;
     if (infoPanelOpen) toggleInfoPanel();
   }
@@ -4207,11 +4272,14 @@ document.addEventListener('keydown', e => {
 
 // Close search results on click outside
 document.addEventListener('click', e => {
-  const sr = document.getElementById('search-results');
-  const si = document.getElementById('search-input');
-  if (!sr.contains(e.target) && e.target !== si) {
-    sr.style.display = 'none';
+  const wrap = document.getElementById('header-search-wrap');
+  if (!wrap.contains(e.target)) {
+    document.getElementById('search-results').style.display = 'none';
     searchSelectedIdx = -1;
+    // Close the pill if click outside and results are empty
+    if (document.getElementById('search-input').value === '') {
+      closeSearch();
+    }
   }
 });
 
