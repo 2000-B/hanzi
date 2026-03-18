@@ -237,26 +237,19 @@ body.light header {
 }
 .mode-pill-btn:not(.active):hover { color: var(--text2); }
 
-/* Search bar */
-.search-bar {
-  width: 100%;
-  max-width: 320px;
-  position: relative;
-}
 .search-input {
   width: 100%;
   font-family: inherit;
   font-size: 13px;
   padding: 6px 12px 6px 32px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: none;
   border-radius: var(--radius);
   color: var(--text);
   outline: none;
-  transition: border-color .2s, box-shadow .2s;
 }
 .search-input::placeholder { color: var(--text3); }
-.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.search-input:focus { outline: none; }
 .search-icon {
   position: absolute;
   left: 10px;
@@ -317,20 +310,135 @@ body.light header {
 .sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
-  border-right: 1px solid var(--border);
-  background: rgba(9,9,22,0.68);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #101014;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  margin: 6px 0 6px 6px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition: min-width .25s, width .25s;
   flex-shrink: 0;
+  position: relative;
+  z-index: 50;
 }
 body.light .sidebar {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--bg2);
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+}
+.sidebar.collapsed {
+  width: 52px;
+  min-width: 52px;
+}
+/* Hide things that don't make sense in strip mode */
+.sidebar.collapsed .sidebar-section,
+.sidebar.collapsed .chunk-controls,
+.sidebar.collapsed .hsk-level.open .chunk-controls,
+.sidebar.collapsed .chunk-item,
+.sidebar.collapsed .csv-label,
+.sidebar.collapsed .new-deck-panel {
+  display: none !important;
+}
+/* Review deck collapsed: just ⟳ icon centered */
+.sidebar.collapsed .review-text {
+  display: none;
+}
+.sidebar.collapsed .review-deck {
+  justify-content: center;
+  padding: 8px 4px;
+  margin: 2px 6px 4px;
+}
+.sidebar.collapsed .review-badge {
+  display: none;
+}
+/* Gradient text for sidebar icons and labels */
+.review-icon {
+  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 15px;
+}
+.sidebar.collapsed #new-deck-btn {
+  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  border-color: var(--accent-border);
+  width: 32px !important;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all .2s;
+}
+.sidebar.collapsed #new-deck-btn:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+  transform: scale(1.08);
+}
+.sidebar.collapsed .hsk-level-header > span:first-child {
+  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+  font-size: 10px;
+}
+.sidebar.collapsed .deck-name {
+  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  max-width: 36px;
+  overflow: hidden;
+  text-overflow: clip;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+/* HSK level header in strip: compact centered label */
+.sidebar.collapsed .hsk-level-header {
+  padding: 6px 4px;
+  justify-content: center;
+  font-size: 11px;
+}
+.sidebar.collapsed .hsk-level-header .count,
+.sidebar.collapsed .hsk-level-header .chevron {
+  display: none;
+}
+/* Chunk items in strip: compact numbered buttons */
+.sidebar.collapsed .chunk-item {
+  padding: 5px 4px;
+  justify-content: center;
+  font-size: 10px;
+  margin: 1px 6px;
+  border-radius: 6px;
+  text-align: center;
+}
+.sidebar.collapsed .chunk-item .chunk-count {
+  display: none;
+}
+/* Custom deck items in strip */
+.sidebar.collapsed .deck-item {
+  padding: 6px 4px;
+  justify-content: center;
+  margin: 1px 6px;
+  border-radius: 6px;
+}
+.sidebar.collapsed .deck-tag {
+  display: none;
+}
+/* Bottom area in collapsed */
+.sidebar.collapsed .sidebar-bottom {
+  padding: 6px;
+  align-items: center;
+}
+.sidebar.collapsed .sidebar-scroll {
+  padding: 4px 0;
 }
 /* Desktop: collapsed = 52px icon strip; sidebar is fixed overlay so card never resizes */
 @media (min-width: 481px) {
@@ -366,7 +474,17 @@ body.light .sidebar {
 .sidebar-scroll {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 8px 0;
+}
+/* Prevent text reflow during sidebar width animation */
+.sidebar .hsk-level-header,
+.sidebar .chunk-item,
+.sidebar .deck-item,
+.sidebar .review-deck,
+.sidebar .sidebar-bottom {
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebar-bottom {
@@ -393,54 +511,46 @@ body.light .sidebar {
   overflow: hidden;
 }
 
-/* Draggable divider */
+/* Resize handle — built into info panel left edge */
 .pane-divider {
-  width: 3px;
-  background: var(--border2);
-  cursor: col-resize;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-  transition: background .15s;
-}
-.pane-divider:hover,
-.pane-divider.dragging { background: var(--accent); }
-.pane-divider::after {
-  content: '';
-  position: absolute;
-  inset: -4px -8px;
-}
-.pane-divider::after {
-  content: '';
-  position: absolute;
-  inset: -4px -8px;
-  /* larger hit area for easier grabbing */
-}
-
-/* Info panel (right) */
-.info-panel {
-  width: 0;
-  min-width: 0;
-  max-width: 0;
-  overflow: hidden;
-  background: rgba(9,9,22,0.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-left: none;
-  display: flex;
-  flex-direction: column;
-  transition: width .3s ease, min-width .3s ease, max-width .3s ease;
+  display: none !important;
 }
 .info-panel.open {
   width: var(--info-panel-w);
   min-width: 280px;
   max-width: 600px;
-  border-left: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  position: relative;
+  transition: width .3s ease, min-width .3s ease, max-width .3s ease, margin .3s ease, border-left-color .15s;
+}
+.info-panel.open .info-panel-scroll,
+.info-panel.open .tutor-bar {
+  cursor: default;
+}
+
+/* Info panel (right) — inline in split-pane, popover styling */
+.info-panel {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  overflow: hidden;
+  background: #101014;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  margin: 6px 6px 6px 0;
+  display: flex;
+  flex-direction: column;
+  transition: width .3s ease, min-width .3s ease, max-width .3s ease, margin .3s ease;
+}
+.info-panel.open {
+  width: var(--info-panel-w);
+  min-width: 280px;
+  max-width: 600px;
 }
 body.light .info-panel {
-  background: rgba(255,255,255,0.76);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: var(--bg2);
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
 
 .info-panel-scroll {
@@ -941,12 +1051,20 @@ body.light .info-panel {
 .deck-item .deck-name {
   flex: 1;
   font-size: 13px;
-  color: var(--text2);
+  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.deck-item.active .deck-name { color: var(--accent); }
+.deck-item.active .deck-name {
+  background: linear-gradient(135deg, #6070ff 0%, #b09cff 40%, #70d0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .deck-tag {
   font-size: 9px;
   font-weight: 600;
@@ -1042,13 +1160,20 @@ body.light .info-panel {
   user-select: none;
 }
 .empty-text {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
-  color: var(--text2);
+  color: rgba(232,232,240,0.85);
+  letter-spacing: 0.02em;
 }
 .empty-sub {
-  font-size: 12px;
-  color: var(--text3);
+  font-size: 13px;
+  color: rgba(160,160,200,0.7);
+}
+body.light .empty-text {
+  color: rgba(17,17,24,0.7);
+}
+body.light .empty-sub {
+  color: rgba(107,114,128,0.7);
 }
 
 /* Study area */
@@ -1114,12 +1239,17 @@ body.light .info-panel {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: 16px;
-  border: 1px solid var(--border2);
-  background: var(--card-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: var(--elevation);
+  border: 1px solid rgba(96,112,255,0.22);
+  background:
+    linear-gradient(165deg, rgba(60,65,120,0.12) 0%, rgba(30,30,60,0.06) 50%, rgba(80,70,140,0.10) 100%),
+    linear-gradient(to bottom, rgba(16,16,34,0.92) 0%, rgba(10,10,22,0.95) 100%);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(96,112,255,0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1128,10 +1258,32 @@ body.light .info-panel {
   gap: 8px;
   overflow: hidden;
 }
+/* Glass sheen overlay */
+.card-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.08) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(96,112,255,0.04) 100%);
+  pointer-events: none;
+}
 body.light .card-face {
-  background: rgba(255,255,255,0.80);
-  border-color: rgba(96,112,255,0.12);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 0 60px rgba(96,112,255,0.04), inset 0 1px 0 rgba(255,255,255,0.9);
+  background:
+    linear-gradient(165deg, rgba(96,112,255,0.05) 0%, rgba(200,200,255,0.04) 50%, rgba(140,130,255,0.06) 100%),
+    linear-gradient(to bottom, rgba(255,255,255,0.78) 0%, rgba(248,248,255,0.82) 100%);
+  border-color: rgba(96,112,255,0.18);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(96,112,255,0.06),
+    0 0 0 1px rgba(96,112,255,0.04);
+}
+body.light .card-face::before {
+  background:
+    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.5) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, rgba(96,112,255,0.03) 100%);
 }
 .card-back { transform: rotateY(180deg); }
 
@@ -1193,10 +1345,18 @@ body.light .card-face {
 }
 .card-hint {
   font-size: 11px;
-  color: var(--text3);
+  color: var(--text2);
   position: absolute;
   bottom: 16px;
   letter-spacing: .02em;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.card-face:hover .card-hint {
+  opacity: 1;
+}
+@media (hover: none) {
+  .card-hint { opacity: 1; }
 }
 .card-english {
   font-size: 26px;
@@ -1211,12 +1371,12 @@ body.light .card-face {
 .context-strip {
   display: none;
   align-items: center;
-  justify-content: center;
   gap: 3px;
   padding: 10px 16px 0;
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 .context-strip::-webkit-scrollbar { display: none; }
 .context-strip.active { display: flex; }
@@ -1639,7 +1799,7 @@ body.light .card-face {
     transform: translateX(0);
     transition: transform .25s ease;
   }
-  .sidebar.collapsed { transform: translateX(-100%); width: var(--sidebar-w); min-width: var(--sidebar-w); opacity: 1; }
+  .sidebar.collapsed { transform: translateX(-100%); width: var(--sidebar-w); min-width: var(--sidebar-w); }
 
   .sidebar-backdrop {
     position: fixed;
@@ -1781,6 +1941,7 @@ body.light .card-face {
   flex-shrink: 0;
 }
 @media (max-width: 600px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px) { .stat-cards { grid-template-columns: 1fr; } }
 
 .stat-card {
   background: var(--bg2);
@@ -1831,6 +1992,10 @@ body.light .card-face {
   overflow: hidden;
   box-shadow: var(--elevation);
 }
+.session-table-inner {
+  overflow-x: auto;
+  min-width: 0;
+}
 .session-table-title {
   font-size: 10px;
   font-weight: 600;
@@ -1842,22 +2007,47 @@ body.light .card-face {
 }
 .session-row {
   display: grid;
-  grid-template-columns: 90px 1fr 48px 56px 60px 64px;
+  grid-template-columns: 90px minmax(80px, 1fr) 48px 56px 60px 64px;
   gap: 8px;
   padding: 9px 18px;
   border-bottom: 1px solid var(--border);
   font-size: 12px;
   align-items: center;
   color: var(--text2);
+  min-width: 420px;
+}
+@media (max-width: 750px) {
+  .session-row {
+    grid-template-columns: 70px minmax(60px, 1fr) 36px 48px;
+    font-size: 11px;
+    padding: 8px 12px;
+    gap: 6px;
+    min-width: 260px;
+  }
+  .session-row .col-speed,
+  .session-row .col-mastered { display: none; }
 }
 .session-row:last-child { border-bottom: none; }
 .session-row.sh { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); }
 .session-row .acc-val { font-weight: 600; color: var(--green); }
 .session-row .acc-val.low { color: var(--red); }
-.session-row .deck-tag { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 6px; border-radius: var(--radius); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.session-row .deck-tag { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 6px; border-radius: var(--radius); white-space: nowrap; }
 .dash-empty { text-align: center; color: var(--text3); padding: 32px; font-size: 13px; }
-@media (max-width: 900px) and (min-width: 601px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
-.session-row .deck-tag { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Light mode: white text for progress dashboard (dark wave background shows through) */
+body.light .analytics-view .dash-title,
+body.light .analytics-view .dash-card-title,
+body.light .analytics-view .session-table-title,
+body.light .analytics-view .stat-card-label,
+body.light .analytics-view .session-row,
+body.light .analytics-view .session-row.sh,
+body.light .analytics-view .dash-empty {
+  color: #ffffff;
+}
+body.light .analytics-view .session-row .deck-tag {
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.12);
+}
 
 /* Session report */
 .sr-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
@@ -1937,6 +2127,9 @@ body.light .card-face {
     </button>
     <button class="icon-btn" id="btn-analytics" onclick="showAnalytics()" data-tip="progress dashboard">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
     <button class="icon-btn" id="btn-settings" onclick="toggleSettings()" data-tip="settings">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.55 3.55l1.2 1.2M11.25 11.25l1.2 1.2M12.45 3.55l-1.2 1.2M4.75 11.25l-1.2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
@@ -2049,7 +2242,6 @@ body.light .card-face {
 
       <!-- Empty state -->
       <div class="empty-state" id="empty-view">
-        <div class="empty-hanzi">学</div>
         <div class="empty-text">select a deck to begin</div>
         <div class="empty-sub">choose from hsk decks · import csv · generate with ai</div>
       </div>
@@ -2145,7 +2337,9 @@ body.light .card-face {
     <div class="analytics-view" id="analytics-view">
       <div class="dash-header">
         <div class="dash-title">progress dashboard</div>
-        <button class="btn btn-sm" onclick="closeAnalytics()">← back to study</button>
+        <button class="icon-btn" onclick="closeAnalytics()" data-tip="back to study">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
       <div class="stat-cards" id="dash-stat-cards"></div>
       <div class="dash-card">
@@ -2154,7 +2348,9 @@ body.light .card-face {
       </div>
       <div class="session-table-wrap">
         <div class="session-table-title">recent sessions</div>
-        <div id="session-history-table"></div>
+        <div class="session-table-inner">
+          <div id="session-history-table"></div>
+        </div>
       </div>
     </div>
 
@@ -2164,7 +2360,7 @@ body.light .card-face {
     <!-- Info panel (right) -->
     <div class="info-panel" id="info-panel">
       <div class="info-panel-scroll" id="info-panel-scroll">
-        <div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">
+        <div style="padding:20px;text-align:center;color:var(--text3);font-size:13px;white-space:nowrap">
           select a card to view details
         </div>
       </div>
@@ -2480,8 +2676,33 @@ function closeSidebar() {
   sidebarOpen = false;
   sidebarInteracted = false;
   document.getElementById('sidebar').classList.add('collapsed');
+  document.getElementById('new-deck-panel').classList.remove('open');
+  updateNewDeckBtn();
   document.getElementById('sidebar-backdrop').classList.remove('visible');
 }
+// Double-click on collapsed sidebar to expand
+document.addEventListener('dblclick', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar.classList.contains('collapsed') && sidebar.contains(e.target)) {
+    e.preventDefault();
+    sidebarOpen = true;
+    sidebar.classList.remove('collapsed');
+    updateNewDeckBtn();
+  }
+});
+// Click outside sidebar to collapse it (desktop only)
+document.addEventListener('mousedown', function(e) {
+  if (window.innerWidth <= 768) return;
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  if (!sidebarOpen) return;
+  if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+    sidebarOpen = false;
+    sidebar.classList.add('collapsed');
+    document.getElementById('new-deck-panel').classList.remove('open');
+    updateNewDeckBtn();
+  }
+});
 
 function expandSidebarOnHover() {
   if (window.innerWidth <= 480) return;
@@ -2617,7 +2838,37 @@ function renderSidebar() {
 }
 
 function toggleNewDeck() {
-  document.getElementById('new-deck-panel').classList.toggle('open');
+  const sidebar = document.getElementById('sidebar');
+  // If collapsed, expand first
+  if (sidebar.classList.contains('collapsed')) {
+    sidebarOpen = true;
+    sidebar.classList.remove('collapsed');
+    updateNewDeckBtn();
+    // Open the panel after expansion
+    setTimeout(() => {
+      document.getElementById('new-deck-panel').classList.add('open');
+      document.getElementById('new-deck-btn').innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7.5L8.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }, 260);
+    return;
+  }
+  const panel = document.getElementById('new-deck-panel');
+  const btn = document.getElementById('new-deck-btn');
+  panel.classList.toggle('open');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7.5L8.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  } else {
+    updateNewDeckBtn();
+  }
+}
+function updateNewDeckBtn() {
+  const btn = document.getElementById('new-deck-btn');
+  const collapsed = document.getElementById('sidebar').classList.contains('collapsed');
+  if (collapsed) {
+    btn.innerHTML = '+';
+  } else {
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> new deck';
+  }
 }
 
 // ══════════════════════════════════════════
@@ -2626,6 +2877,11 @@ function toggleNewDeck() {
 function selectDeck(name) {
   // Save session if switching away from test mode
   if (currentMode === 'test' && sessionLog.length > 0) saveSession();
+
+  // Close analytics dashboard if open
+  if (document.getElementById('analytics-view').classList.contains('active')) {
+    closeAnalytics();
+  }
 
   activeDeckName = name;
   activeDeck = [...decks[name]];
@@ -2738,8 +2994,10 @@ function updateProgress() {
   const counter = document.getElementById('prog-counter');
   if (activeDeck.length) {
     counter.textContent = `${currentIndex + 1} / ${activeDeck.length}`;
+    counter.style.display = '';
   } else {
     counter.textContent = '— / —';
+    counter.style.display = 'none';
   }
 }
 
@@ -3419,10 +3677,18 @@ function buildSearchIndex() {
 function navigateToSearchResult(card, deckName) {
   document.getElementById('search-results').style.display = 'none';
   document.getElementById('search-input').value = '';
+  closeSearchBar();
+
+  if (deckName === 'CEDICT') {
+    // CEDICT-only result: just show in info panel, don't navigate to deck
+    if (!infoPanelOpen) toggleInfoPanel();
+    renderInfoPanel(card);
+    return;
+  }
+
   // HSK deck names are like "HSK 1" → find chunk deck that contains the card
   const hskMatch = deckName.match(/^HSK (\d+)$/);
   if (hskMatch) {
-    // Find which named chunk deck contains this card
     const chunkKey = Object.keys(decks).find(k => k.startsWith('hsk ' + hskMatch[1] + ' ·') && decks[k].find(c => c.hanzi === card.hanzi));
     if (chunkKey) selectDeck(chunkKey);
   } else {
@@ -3431,6 +3697,7 @@ function navigateToSearchResult(card, deckName) {
   const idx = activeDeck.findIndex(c => c.hanzi === card.hanzi);
   if (idx >= 0) { currentIndex = idx; renderCard(); }
   if (!infoPanelOpen) toggleInfoPanel();
+  renderInfoPanel(activeDeck[currentIndex]);
 }
 
 // ══════════════════════════════════════════
@@ -3439,9 +3706,7 @@ function navigateToSearchResult(card, deckName) {
 function toggleInfoPanel() {
   infoPanelOpen = !infoPanelOpen;
   const panel = document.getElementById('info-panel');
-  const divider = document.getElementById('pane-divider');
   panel.classList.toggle('open', infoPanelOpen);
-  divider.style.display = infoPanelOpen ? 'block' : 'none';
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
 
   if (infoPanelOpen && activeDeck.length) {
@@ -3841,49 +4106,80 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 (function initDivider() {
-  const divider = document.getElementById('pane-divider');
   const panel = document.getElementById('info-panel');
-  let startX, startW;
+  let startX, startW, dragging = false;
+  const EDGE = 8; // px from left edge that triggers resize
 
-  function onMouseDown(e) {
+  function isOnEdge(e) {
+    const rect = panel.getBoundingClientRect();
+    return e.clientX >= rect.left - EDGE && e.clientX <= rect.left + EDGE;
+  }
+
+  panel.addEventListener('mousedown', function(e) {
+    if (!panel.classList.contains('open') || !isOnEdge(e)) return;
     e.preventDefault();
     startX = e.clientX;
     startW = panel.offsetWidth;
-    divider.classList.add('dragging');
+    dragging = true;
+    panel.style.borderLeftColor = 'var(--accent)';
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
+  });
+
+  // Show resize cursor and border when hovering near edge
+  panel.addEventListener('mousemove', function(e) {
+    if (dragging) return;
+    if (panel.classList.contains('open') && isOnEdge(e)) {
+      panel.style.cursor = 'col-resize';
+      panel.style.borderLeftColor = 'var(--accent)';
+    } else {
+      panel.style.cursor = '';
+      if (!dragging) panel.style.borderLeftColor = '';
+    }
+  });
+  panel.addEventListener('mouseleave', function() {
+    if (!dragging) {
+      panel.style.cursor = '';
+      panel.style.borderLeftColor = '';
+    }
+  });
 
   function onMouseMove(e) {
+    if (!dragging) return;
     const dx = startX - e.clientX;
     const newW = Math.max(240, Math.min(600, startW + dx));
     panel.style.width = newW + 'px';
   }
 
   function onMouseUp() {
-    divider.classList.remove('dragging');
+    dragging = false;
+    panel.style.borderLeftColor = '';
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   }
 
-  divider.addEventListener('mousedown', onMouseDown);
-
   // Touch support
-  divider.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
+  panel.addEventListener('touchstart', function(e) {
+    const touch = e.touches[0];
+    const rect = panel.getBoundingClientRect();
+    if (touch.clientX > rect.left + EDGE) return;
+    startX = touch.clientX;
     startW = panel.offsetWidth;
-    divider.classList.add('dragging');
+    dragging = true;
+    panel.style.borderLeftColor = 'var(--accent)';
   }, { passive: true });
 
-  document.addEventListener('touchmove', e => {
-    if (!divider.classList.contains('dragging')) return;
+  document.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
     const dx = startX - e.touches[0].clientX;
     const newW = Math.max(240, Math.min(600, startW + dx));
     panel.style.width = newW + 'px';
   }, { passive: true });
 
-  document.addEventListener('touchend', () => {
-    divider.classList.remove('dragging');
+  document.addEventListener('touchend', function() {
+    if (!dragging) return;
+    dragging = false;
+    panel.style.borderLeftColor = '';
   });
 })();
 
@@ -4026,23 +4322,42 @@ document.getElementById('search-input').addEventListener('input', function () {
   searchSelectedIdx = -1;
   if (!q) { results.style.display = 'none'; return; }
   const qNorm = normalizePinyin(q.toLowerCase());
-  const matches = searchIndex.filter(({ card }) =>
+
+  // Search deck cards
+  const deckMatches = searchIndex.filter(({ card }) =>
     card.hanzi.includes(q) ||
     normalizePinyin(card.pinyin).includes(qNorm) ||
     card.english.toLowerCase().includes(q.toLowerCase())
-  ).slice(0, 12);
+  ).slice(0, 8);
 
-  if (!matches.length) { results.style.display = 'none'; return; }
+  // Search full CEDICT dictionary for additional results
+  const deckHanzi = new Set(deckMatches.map(m => m.card.hanzi));
+  const cedictMatches = [];
+  for (const [hanzi, entry] of Object.entries(CEDICT)) {
+    if (deckHanzi.has(hanzi)) continue; // already in deck results
+    const defs = entry.defs ? entry.defs.join(' ') : '';
+    const pin = entry.pinyin || '';
+    if (hanzi.includes(q) ||
+        normalizePinyin(pin).includes(qNorm) ||
+        defs.toLowerCase().includes(q.toLowerCase())) {
+      cedictMatches.push({ card: { hanzi, pinyin: pin, english: defs }, deckName: 'CEDICT' });
+      if (cedictMatches.length >= 6) break;
+    }
+  }
+
+  const allMatches = [...deckMatches, ...cedictMatches];
+  if (!allMatches.length) { results.style.display = 'none'; return; }
   results.innerHTML = '';
-  matches.forEach(({ card, deckName }) => {
+  allMatches.forEach(({ card, deckName }) => {
     const item = document.createElement('div');
     item.className = 'search-result-item';
+    const deckLabel = deckName === 'CEDICT' ? '词典' : deckName;
     item.innerHTML = `<span class="search-result-hanzi">${card.hanzi}</span>
       <span class="search-result-text">
         <div class="search-result-pinyin">${card.pinyin}</div>
         <div class="search-result-english">${card.english}</div>
       </span>
-      <span class="search-result-deck">${deckName}</span>`;
+      <span class="search-result-deck">${deckLabel}</span>`;
     item.onclick = () => navigateToSearchResult(card, deckName);
     results.appendChild(item);
   });
@@ -4092,6 +4407,11 @@ function showAnalytics() {
   document.getElementById('empty-view').style.display = 'none';
   document.getElementById('list-view').classList.remove('active');
 
+  // Temporarily hide info panel to give analytics full width
+  if (infoPanelOpen) {
+    document.getElementById('info-panel').classList.remove('open');
+  }
+
   view.classList.add('active');
   document.getElementById('btn-analytics').classList.add('active');
   renderAnalytics();
@@ -4100,6 +4420,10 @@ function showAnalytics() {
 function closeAnalytics() {
   document.getElementById('analytics-view').classList.remove('active');
   document.getElementById('btn-analytics').classList.remove('active');
+  // Restore info panel if it was open
+  if (infoPanelOpen) {
+    document.getElementById('info-panel').classList.add('open');
+  }
   // Only show empty state if no deck is loaded
   document.getElementById('empty-view').style.display = activeDeck.length ? 'none' : '';
   setMode(currentMode);
@@ -4209,7 +4533,7 @@ function renderAnalytics() {
   const rows = allSessions.slice(-50).reverse();
   el.innerHTML = `
     <div class="session-row sh">
-      <span>date</span><span>deck</span><span>cards</span><span>accuracy</span><span>avg speed</span><span>mastered</span>
+      <span>date</span><span>deck</span><span>cards</span><span>accuracy</span><span class="col-speed">avg speed</span><span class="col-mastered">mastered</span>
     </div>
     ${rows.map(s => {
       const d = new Date(s.date);
@@ -4220,12 +4544,43 @@ function renderAnalytics() {
         <span class="deck-tag">${s.deck}</span>
         <span>${s.cardsAnswered}</span>
         <span class="${accClass}">${s.accuracy}%</span>
-        <span>${s.avgTime}s</span>
-        <span style="color:var(--green)">${s.mastered > 0 ? '+' + s.mastered : '—'}</span>
+        <span class="col-speed">${s.avgTime}s</span>
+        <span class="col-mastered" style="color:var(--green)">${s.mastered > 0 ? '+' + s.mastered : '—'}</span>
       </div>`;
     }).join('')}
   `;
 }
+
+// ══════════════════════════════════════════
+// SEARCH BAR TOGGLE
+// ══════════════════════════════════════════
+function toggleSearchBar() {
+  const bar = document.getElementById('search-bar');
+  const btn = document.getElementById('btn-search');
+  const isOpen = bar.classList.contains('open');
+  if (isOpen) {
+    closeSearchBar();
+  } else {
+    bar.classList.add('open');
+    btn.style.display = 'none';
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
+  }
+}
+function closeSearchBar() {
+  const bar = document.getElementById('search-bar');
+  bar.classList.remove('open');
+  document.getElementById('btn-search').style.display = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').style.display = 'none';
+}
+// Close search when clicking outside
+document.addEventListener('mousedown', e => {
+  const wrap = document.querySelector('.search-btn-wrap');
+  const bar = document.getElementById('search-bar');
+  if (bar.classList.contains('open') && !wrap.contains(e.target)) {
+    closeSearchBar();
+  }
+});
 
 // ══════════════════════════════════════════
 // KEYBOARD SHORTCUTS
@@ -4235,6 +4590,9 @@ document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
     if (e.key === '/' && e.target !== document.getElementById('search-input')) {
       // Allow / to focus search even from other inputs
+    } else if (e.key === 'Escape' && e.target === document.getElementById('search-input')) {
+      closeSearchBar();
+      return;
     } else {
       return;
     }
