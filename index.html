@@ -1747,6 +1747,157 @@ body.light .card-face::before {
   gap: 6px;
 }
 
+/* Prefs context rows */
+.prefs-footer {
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+.prefs-all-settings {
+  font-size: 12px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+  width: 100%;
+  text-align: left;
+  transition: opacity .15s;
+}
+.prefs-all-settings:hover { opacity: .7; }
+
+/* Full settings modal */
+.full-settings-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0,0,0,.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.full-settings-modal.open { display: flex; }
+.full-settings {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  width: 460px;
+  max-width: 100%;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
+  scrollbar-width: none;
+}
+.full-settings::-webkit-scrollbar { display: none; }
+.fs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: var(--bg2);
+  z-index: 1;
+}
+.fs-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.fs-close {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all .15s;
+  line-height: 1;
+}
+.fs-close:hover { color: var(--text); border-color: var(--border3); }
+.fs-body {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.fs-section {
+  padding: 14px 0 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fs-section:last-child { border-bottom: none; }
+.fs-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+/* Background picker */
+.bg-picker {
+  display: flex;
+  gap: 6px;
+}
+.bg-option {
+  flex: 1;
+  padding: 6px 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius);
+  background: var(--bg3);
+  color: var(--text3);
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+.bg-option.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.color-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.color-swatch input[type="color"] {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  opacity: 0;
+}
+/* Background layer for custom bg */
+#bg-layer {
+  position: fixed;
+  inset: -20px;
+  z-index: -1;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+body.bg-custom::after { display: none !important; }
+
 /* ══════════════════════════════════════════
    MODALS
    ══════════════════════════════════════════ */
@@ -2088,6 +2239,7 @@ body.light .analytics-view .session-row .deck-tag {
 </style>
 </head>
 <body>
+<div id="bg-layer"></div>
 
 <!-- Loading screen -->
 <div class="loading-screen" id="loading-screen">
@@ -2131,7 +2283,7 @@ body.light .analytics-view .session-row .deck-tag {
   </div>
 </header>
 
-<!-- Settings panel -->
+<!-- Preferences popover -->
 <div class="settings-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
   <div class="settings-panel" id="settings-panel">
     <div class="settings-group">
@@ -2141,47 +2293,119 @@ body.light .analytics-view .session-row .deck-tag {
         <button class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"></button>
       </div>
     </div>
-    <div class="settings-group">
+    <div class="settings-group" id="prefs-study-group">
       <div class="settings-label">study</div>
       <div class="settings-toggle-row">
         <span class="settings-toggle-label">show pinyin</span>
         <button class="toggle-switch on" id="pinyin-toggle" onclick="togglePinyin()"></button>
       </div>
     </div>
-    <div class="settings-group">
+    <div class="settings-group" id="prefs-format-group">
       <div class="settings-label">test format</div>
       <div class="settings-pill">
         <button class="settings-pill-btn active" id="fmt-mc" onclick="setFormat('mc')">multiple choice</button>
         <button class="settings-pill-btn" id="fmt-type" onclick="setFormat('type')">typing</button>
       </div>
     </div>
-    <div class="settings-group">
+    <div class="settings-group" id="prefs-test-group">
       <div class="settings-label">test</div>
       <div class="settings-toggle-row">
         <span class="settings-toggle-label">show timer</span>
         <button class="toggle-switch" id="timer-toggle" onclick="toggleTimer()"></button>
+      </div>
+      <div class="settings-toggle-row" id="timer-only-row" style="opacity:.4;pointer-events:none">
+        <span class="settings-toggle-label">timer display only</span>
+        <button class="toggle-switch" id="timer-only-toggle" onclick="toggleTimerOnly()"></button>
       </div>
       <div class="settings-toggle-row">
         <span class="settings-toggle-label">difficulty ratings</span>
         <button class="toggle-switch" id="diff-ratings-toggle" onclick="toggleDiffRatings()"></button>
       </div>
     </div>
-    <div class="settings-group">
-      <div class="settings-label">api key</div>
-      <input class="api-key-input" id="api-key-input" type="password" placeholder="sk-ant-…" onchange="saveApiKey()">
+    <div class="prefs-footer">
+      <button class="prefs-all-settings" onclick="openFullSettings()">all settings →</button>
     </div>
-    <div class="settings-group">
-      <div class="settings-label">data</div>
-      <div class="settings-btn-row">
-        <button class="btn btn-sm" onclick="exportProgress()" style="flex:1">export progress</button>
-        <label class="btn btn-sm" style="flex:1;cursor:pointer">import<input type="file" accept=".json" onchange="importProgress(this)" style="display:none"></label>
+  </div>
+</div>
+
+<!-- Full settings modal -->
+<div class="full-settings-modal" id="full-settings-modal" onclick="if(event.target===this)closeFullSettings()">
+  <div class="full-settings">
+    <div class="fs-header">
+      <span class="fs-title">settings</span>
+      <button class="fs-close" onclick="closeFullSettings()">✕</button>
+    </div>
+    <div class="fs-body">
+      <div class="fs-section">
+        <div class="fs-section-label">appearance</div>
+        <div class="settings-toggle-row">
+          <span class="settings-toggle-label" id="fs-theme-label">dark mode</span>
+          <button class="toggle-switch" id="fs-theme-toggle" onclick="toggleTheme()"></button>
+        </div>
+        <div class="fs-section-label" style="margin-top:4px">background</div>
+        <div class="bg-picker">
+          <button class="bg-option active" id="bg-opt-default" onclick="setBackground('default')">default</button>
+          <button class="bg-option" id="bg-opt-solid" onclick="setBackground('solid')">solid color</button>
+          <button class="bg-option" id="bg-opt-image" onclick="document.getElementById('bg-image-input').click()">custom image</button>
+          <input type="file" id="bg-image-input" accept="image/*" style="display:none" onchange="loadBgImage(this)">
+        </div>
+        <div class="color-preview-row" id="bg-color-row" style="display:none">
+          <span class="settings-toggle-label">color</span>
+          <div class="color-swatch" id="bg-color-swatch" style="background:#4f7fff">
+            <input type="color" id="bg-color-picker" value="#4f7fff" oninput="updateBgColor(this.value)">
+          </div>
+        </div>
+        <div class="settings-toggle-row" id="bg-blur-row" style="display:none">
+          <span class="settings-toggle-label">blur</span>
+          <button class="toggle-switch" id="bg-blur-toggle" onclick="toggleBgBlur()"></button>
+        </div>
+        <div>
+          <button class="btn btn-sm" onclick="resetAppearance()" style="width:100%">reset to default</button>
+        </div>
       </div>
-    </div>
-    <div class="settings-group">
-      <div class="settings-label">language</div>
-      <div class="settings-pill">
-        <button class="settings-pill-btn active">中文 chinese</button>
-        <button class="settings-pill-btn" disabled title="coming soon">日本語 japanese</button>
+      <div class="fs-section">
+        <div class="fs-section-label">study</div>
+        <div class="settings-toggle-row">
+          <span class="settings-toggle-label">show pinyin</span>
+          <button class="toggle-switch" id="fs-pinyin-toggle" onclick="togglePinyin()"></button>
+        </div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-label">test</div>
+        <div class="settings-pill">
+          <button class="settings-pill-btn active" id="fs-fmt-mc" onclick="setFormat('mc')">multiple choice</button>
+          <button class="settings-pill-btn" id="fs-fmt-type" onclick="setFormat('type')">typing</button>
+        </div>
+        <div class="settings-toggle-row">
+          <span class="settings-toggle-label">show timer</span>
+          <button class="toggle-switch" id="fs-timer-toggle" onclick="toggleTimer()"></button>
+        </div>
+        <div class="settings-toggle-row" id="fs-timer-only-row" style="opacity:.4;pointer-events:none">
+          <span class="settings-toggle-label">timer display only</span>
+          <button class="toggle-switch" id="fs-timer-only-toggle" onclick="toggleTimerOnly()"></button>
+        </div>
+        <div class="settings-toggle-row">
+          <span class="settings-toggle-label">difficulty ratings</span>
+          <button class="toggle-switch" id="fs-diff-ratings-toggle" onclick="toggleDiffRatings()"></button>
+        </div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-label">api key</div>
+        <input class="api-key-input" id="api-key-input" type="password" placeholder="sk-ant-…" onchange="saveApiKey()">
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-label">data</div>
+        <div class="settings-btn-row">
+          <button class="btn btn-sm" onclick="exportProgress()" style="flex:1">export progress</button>
+          <label class="btn btn-sm" style="flex:1;cursor:pointer">import<input type="file" accept=".json" onchange="importProgress(this)" style="display:none"></label>
+        </div>
+      </div>
+      <div class="fs-section">
+        <div class="fs-section-label">language</div>
+        <div class="settings-pill">
+          <button class="settings-pill-btn active">中文 chinese</button>
+          <button class="settings-pill-btn" disabled title="coming soon">日本語 japanese</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2608,40 +2832,164 @@ function closeSearch() {
   document.getElementById('search-results').style.display = 'none';
 }
 
+// Appearance state
+let appearance = { type: 'default', color: '#4f7fff', image: null, blur: false };
+let showTimerOnly = false;
+
+function syncSettingsUI() {
+  const isLight = document.body.classList.contains('light');
+  // Theme
+  const themeLabel = isLight ? 'light mode' : 'dark mode';
+  ['theme-toggle','fs-theme-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',isLight); });
+  ['theme-label','fs-theme-label'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=themeLabel; });
+  // Pinyin
+  ['pinyin-toggle','fs-pinyin-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showPinyin); });
+  // Format
+  ['fmt-mc','fs-fmt-mc'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('active',currentFormat==='mc'); });
+  ['fmt-type','fs-fmt-type'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('active',currentFormat==='type'); });
+  // Timer
+  ['timer-toggle','fs-timer-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showTimer); });
+  // Timer-only
+  ['timer-only-toggle','fs-timer-only-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showTimerOnly); });
+  ['timer-only-row','fs-timer-only-row'].forEach(id => { const el=document.getElementById(id); if(el){ el.style.opacity=showTimer?'1':'.4'; el.style.pointerEvents=showTimer?'':'none'; }});
+  // Diff ratings
+  ['diff-ratings-toggle','fs-diff-ratings-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showDifficultyRatings); });
+  // Background
+  ['default','solid','image'].forEach(t => { const el=document.getElementById('bg-opt-'+t); if(el) el.classList.toggle('active',appearance.type===t); });
+  const colorRow = document.getElementById('bg-color-row');
+  if(colorRow) colorRow.style.display = appearance.type==='solid' ? '' : 'none';
+  const blurRow = document.getElementById('bg-blur-row');
+  if(blurRow) blurRow.style.display = appearance.type==='image' ? '' : 'none';
+  const blurToggle = document.getElementById('bg-blur-toggle');
+  if(blurToggle) blurToggle.classList.toggle('on', appearance.blur);
+  const swatch = document.getElementById('bg-color-swatch');
+  if(swatch) swatch.style.background = appearance.color;
+  const picker = document.getElementById('bg-color-picker');
+  if(picker) picker.value = appearance.color;
+}
+
+function updatePrefsVisibility() {
+  const study = document.getElementById('prefs-study-group');
+  const fmt   = document.getElementById('prefs-format-group');
+  const test  = document.getElementById('prefs-test-group');
+  if(study) study.style.display = currentMode==='study' ? '' : 'none';
+  if(fmt)   fmt.style.display   = currentMode==='test'  ? '' : 'none';
+  if(test)  test.style.display  = currentMode==='test'  ? '' : 'none';
+}
+
 function toggleSettings() {
   const overlay = document.getElementById('settings-overlay');
   overlay.classList.toggle('open');
   if (overlay.classList.contains('open')) {
-    document.getElementById('api-key-input').value = getApiKey();
+    updatePrefsVisibility();
+    syncSettingsUI();
   }
 }
 function closeSettings() {
   document.getElementById('settings-overlay').classList.remove('open');
 }
 
+function openFullSettings() {
+  closeSettings();
+  const modal = document.getElementById('full-settings-modal');
+  modal.classList.add('open');
+  const keyInput = document.getElementById('api-key-input');
+  if(keyInput) keyInput.value = getApiKey();
+  syncSettingsUI();
+}
+function closeFullSettings() {
+  document.getElementById('full-settings-modal').classList.remove('open');
+}
+
+// ── Background system ──────────────────────
+function applyBackground() {
+  const layer = document.getElementById('bg-layer');
+  if (!layer) return;
+  document.body.classList.toggle('bg-custom', appearance.type !== 'default');
+  if (appearance.type === 'default') {
+    layer.style.background = '';
+    layer.style.backgroundImage = '';
+    layer.style.filter = '';
+  } else if (appearance.type === 'solid') {
+    layer.style.background = appearance.color;
+    layer.style.backgroundImage = '';
+    layer.style.filter = '';
+  } else if (appearance.type === 'image' && appearance.image) {
+    layer.style.backgroundImage = `url(${appearance.image})`;
+    layer.style.backgroundSize = 'cover';
+    layer.style.backgroundPosition = 'center';
+    layer.style.filter = appearance.blur ? 'blur(8px)' : '';
+  }
+  const toSave = { type: appearance.type, color: appearance.color, blur: appearance.blur };
+  if (appearance.type === 'image' && appearance.image) toSave.image = appearance.image;
+  try { localStorage.setItem('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
+}
+
+function setBackground(type) {
+  appearance.type = type;
+  applyBackground();
+  syncSettingsUI();
+}
+
+function updateBgColor(color) {
+  appearance.color = color;
+  const swatch = document.getElementById('bg-color-swatch');
+  if (swatch) swatch.style.background = color;
+  applyBackground();
+}
+
+function loadBgImage(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    appearance.type = 'image';
+    appearance.image = e.target.result;
+    applyBackground();
+    syncSettingsUI();
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleBgBlur() {
+  appearance.blur = !appearance.blur;
+  applyBackground();
+  syncSettingsUI();
+}
+
+function resetAppearance() {
+  appearance = { type: 'default', color: '#4f7fff', image: null, blur: false };
+  applyBackground();
+  syncSettingsUI();
+  localStorage.removeItem('hanzi-appearance');
+}
+
 function toggleTheme() {
   document.body.classList.toggle('light');
-  document.getElementById('theme-toggle').classList.toggle('on');
   const isLight = document.body.classList.contains('light');
-  document.getElementById('theme-label').textContent = isLight ? 'light mode' : 'dark mode';
   localStorage.setItem('hanzi-theme', isLight ? 'light' : 'dark');
+  syncSettingsUI();
 }
 
 function togglePinyin() {
   showPinyin = !showPinyin;
-  document.getElementById('pinyin-toggle').classList.toggle('on', showPinyin);
   renderCard();
+  syncSettingsUI();
 }
 
 function toggleTimer() {
   showTimer = !showTimer;
-  document.getElementById('timer-toggle').classList.toggle('on', showTimer);
+  syncSettingsUI();
+}
+
+function toggleTimerOnly() {
+  showTimerOnly = !showTimerOnly;
+  syncSettingsUI();
 }
 
 function setFormat(fmt) {
   currentFormat = fmt;
-  document.getElementById('fmt-mc').classList.toggle('active', fmt === 'mc');
-  document.getElementById('fmt-type').classList.toggle('active', fmt === 'type');
+  syncSettingsUI();
 }
 
 // ══════════════════════════════════════════
@@ -3251,6 +3599,7 @@ function setMode(mode) {
   document.getElementById('card-controls').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
   document.getElementById('test-view').classList.toggle('active', mode === 'test' && activeDeck.length > 0);
   renderContextStrip();
+  updatePrefsVisibility();
 
   if (mode === 'test' && activeDeck.length > 0) {
     stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
@@ -3568,7 +3917,7 @@ function rateCard(q) {
 function toggleDiffRatings() {
   showDifficultyRatings = !showDifficultyRatings;
   localStorage.setItem('hanzi-diff-ratings', showDifficultyRatings ? '1' : '');
-  document.getElementById('diff-ratings-toggle').classList.toggle('on', showDifficultyRatings);
+  syncSettingsUI();
 }
 
 // ══════════════════════════════════════════
@@ -4694,8 +5043,13 @@ async function init() {
   // Load saved difficulty ratings setting
   if (localStorage.getItem('hanzi-diff-ratings')) {
     showDifficultyRatings = true;
-    document.getElementById('diff-ratings-toggle').classList.add('on');
   }
+  // Load appearance
+  try {
+    const savedApp = JSON.parse(localStorage.getItem('hanzi-appearance') || 'null');
+    if (savedApp) { appearance = { ...appearance, ...savedApp }; applyBackground(); }
+  } catch(e) {}
+  syncSettingsUI();
 
   // Load progress from localStorage
   loadProgress();
