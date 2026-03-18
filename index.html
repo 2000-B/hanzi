@@ -3667,9 +3667,7 @@ function buildSearchIndex() {
 }
 
 function navigateToSearchResult(card, deckName) {
-  document.getElementById('search-results').style.display = 'none';
-  document.getElementById('search-input').value = '';
-  closeSearchBar();
+  closeSearch();
 
   if (deckName === 'CEDICT') {
     // CEDICT-only result: just show in info panel, don't navigate to deck
@@ -3678,18 +3676,32 @@ function navigateToSearchResult(card, deckName) {
     return;
   }
 
-  // HSK deck names are like "HSK 1" → find chunk deck that contains the card
+  // HSK deck names are like "HSK 1" — look up the card directly in HSK_DATA
+  // to find which chunk it belongs to, then load that chunk
   const hskMatch = deckName.match(/^HSK (\d+)$/);
   if (hskMatch) {
-    const chunkKey = Object.keys(decks).find(k => k.startsWith('hsk ' + hskMatch[1] + ' ·') && decks[k].find(c => c.hanzi === card.hanzi));
-    if (chunkKey) selectDeck(chunkKey);
+    const level = parseInt(hskMatch[1]);
+    const data = HSK_DATA[level];
+    if (!data) return;
+    const sz = getChunkSize(level);
+    const totalChunks = Math.ceil(data.length / sz);
+    const cardPos = data.findIndex(c => c.hanzi === card.hanzi);
+    if (cardPos < 0) return;
+    const chunkIdx = Math.floor(cardPos / sz);
+    const chunkNum = chunkIdx + 1;
+    const name = `hsk ${level} · ${chunkNum}/${totalChunks}`;
+    decks[name] = data.slice(chunkIdx * sz, (chunkIdx + 1) * sz);
+    selectDeck(name);
   } else {
+    if (!decks[deckName]) return;
     selectDeck(deckName);
   }
+
+  // Jump to the specific card
   const idx = activeDeck.findIndex(c => c.hanzi === card.hanzi);
   if (idx >= 0) { currentIndex = idx; renderCard(); }
-  if (!infoPanelOpen) toggleInfoPanel();
-  renderInfoPanel(activeDeck[currentIndex]);
+
+  if (window.innerWidth <= 480) closeSidebar();
 }
 
 // ══════════════════════════════════════════
