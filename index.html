@@ -184,11 +184,6 @@ body.light header {
 .search-pill .search-input {
   width: 280px;
 }
-.search-pill .search-results {
-  right: 0;
-  left: auto;
-  width: 300px;
-}
 
 .header-title {
   font-family: 'Noto Sans SC', sans-serif;
@@ -1898,8 +1893,8 @@ body.light .card-face::before {
 .list-mastered { color:var(--green); font-size:11px; }
 .list-review-badge { color:var(--orange); font-size:11px; }
 
-/* Search results dropdown */
-.search-results { position:absolute; top:100%; left:0; right:0; background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-md); box-shadow:var(--elevation); max-height:320px; overflow-y:auto; z-index:200; display:none; }
+/* Search results dropdown — anchored to header-search-wrap, outside the clipping pill */
+.search-results { position:absolute; top:calc(100% + 4px); right:0; width:300px; background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-md); box-shadow:var(--elevation); max-height:320px; overflow-y:auto; z-index:200; display:none; }
 .search-result-item { display:flex; align-items:center; gap:10px; padding:8px 12px; cursor:pointer; border-bottom:1px solid var(--border); }
 .search-result-item:hover, .search-result-item.selected { background:var(--bg3); }
 .search-result-hanzi { font-size:20px; font-family:'Noto Sans SC',sans-serif; min-width:32px; }
@@ -2115,21 +2110,18 @@ body.light .analytics-view .session-row .deck-tag {
         <div class="search-bar" style="position:relative">
           <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <input class="search-input" id="search-input" type="text" placeholder="search hanzi, pinyin, english…" autocomplete="off">
-          <div class="search-results" id="search-results"></div>
         </div>
       </div>
       <button class="icon-btn" id="btn-search" onclick="toggleSearch()" data-tip="search">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
+      <div class="search-results" id="search-results"></div>
     </div>
     <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
     <button class="icon-btn" id="btn-analytics" onclick="showAnalytics()" data-tip="progress dashboard">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
-    </button>
-    <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
     <button class="icon-btn" id="btn-settings" onclick="toggleSettings()" data-tip="settings">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.55 3.55l1.2 1.2M11.25 11.25l1.2 1.2M12.45 3.55l-1.2 1.2M4.75 11.25l-1.2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
