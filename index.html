@@ -1641,6 +1641,41 @@ body.light .card-face::before {
   background: var(--border);
 }
 
+/* Test mode sub-views */
+.test-no-deck, .test-start-screen {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  text-align: center;
+}
+.test-prompt-msg {
+  font-size: 14px;
+  color: var(--text3);
+}
+.test-start-deck {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 500;
+}
+.test-start-btn {
+  font-size: 15px;
+  padding: 12px 40px;
+}
+.test-start-hint {
+  font-size: 12px;
+  color: var(--text3);
+}
+.test-shuffle-wrap {
+  display: none;
+  justify-content: center;
+  padding-bottom: 16px;
+  flex-shrink: 0;
+}
+
 /* ══════════════════════════════════════════
    SETTINGS OVERLAY
    ══════════════════════════════════════════ */
@@ -2361,7 +2396,7 @@ body.light .analytics-view .session-row .deck-tag {
           <input type="file" id="bg-image-input" accept="image/*" style="display:none" onchange="loadBgImage(this)">
         </div>
         <div class="color-preview-row" id="bg-blob-tint-row">
-          <span class="settings-toggle-label">blob tint</span>
+          <span class="settings-toggle-label">tint</span>
           <div class="color-swatch" id="bg-blob-swatch" style="background:#4f50c8">
             <input type="color" id="bg-blob-picker" value="#4f50c8" oninput="updateBlobTint(this.value)">
           </div>
@@ -2534,7 +2569,21 @@ body.light .analytics-view .session-row .deck-tag {
 
       <!-- Test view -->
       <div class="test-view" id="test-view">
-        <div class="test-area">
+
+        <!-- No deck loaded -->
+        <div class="test-no-deck" id="test-no-deck">
+          <div class="test-prompt-msg">select a deck to begin testing</div>
+        </div>
+
+        <!-- Deck loaded, not started -->
+        <div class="test-start-screen" id="test-start-screen">
+          <div class="test-start-deck" id="test-start-deck"></div>
+          <button class="btn btn-accent test-start-btn" onclick="beginTest()">start test</button>
+          <div class="test-start-hint" id="test-start-hint"></div>
+        </div>
+
+        <!-- Active session -->
+        <div class="test-area" id="test-area">
           <div class="timer-bar-wrap" id="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div>
           <div class="test-hanzi" id="test-hanzi">—</div>
           <div class="test-pinyin" id="test-pinyin"></div>
@@ -2553,6 +2602,7 @@ body.light .analytics-view .session-row .deck-tag {
             <button class="rating-btn easy"   onclick="rateCard(5)">Easy</button>
           </div>
         </div>
+
         <div class="stats-bar" id="stats-bar">
           <div class="stat"><span class="stat-label">correct</span><span class="stat-value green" id="stat-correct">0</span></div>
           <div class="stats-sep"></div>
@@ -2564,6 +2614,14 @@ body.light .analytics-view .session-row .deck-tag {
           <div class="stats-sep"></div>
           <div class="stat"><span class="stat-label">streak</span><span class="stat-value orange" id="stat-streak">0</span></div>
         </div>
+
+        <!-- Shuffle button (replaces tray in test mode) -->
+        <div class="test-shuffle-wrap" id="test-shuffle-wrap">
+          <button class="btn btn-sm" onclick="shuffleDeck()" data-tip="shuffle">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 4h3l3 4-3 4H2M14 4h-3l-3 4 3 4h3M14 4l-2-2M14 4l-2 2M14 12l-2-2M14 12l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
       </div>
 
     </div>
@@ -2599,7 +2657,7 @@ body.light .analytics-view .session-row .deck-tag {
           select a card to view details
         </div>
       </div>
-      <div class="tutor-bar">
+      <div class="tutor-bar" id="tutor-bar" style="display:none">
         <input class="tutor-input" id="tutor-input" placeholder="ask about this character…" onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendTutorMsg()">
         <button class="btn btn-accent btn-sm" onclick="sendTutorMsg()">
           <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2644,6 +2702,7 @@ let activeDeckName = null;
 let activeDeck = [];
 let currentIndex = 0;
 let currentMode = 'study';
+let testSessionActive = false;
 let currentFormat = 'mc';
 let showPinyin = true;
 let showTimer = false;
@@ -2822,6 +2881,7 @@ function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim();
   if (key) localStorage.setItem('hanzi-api-key', key);
   else localStorage.removeItem('hanzi-api-key');
+  document.getElementById('tutor-bar').style.display = key ? '' : 'none';
 }
 
 function getApiKey() {
@@ -3417,14 +3477,19 @@ function selectDeck(name) {
   document.body.classList.add('deck-active');
   // Reset list view when switching decks
   if (listViewActive) setListView(false);
-  document.getElementById('study-view').classList.add('active');
-  document.getElementById('card-controls').classList.add('active');
 
-  renderCard();
+  if (currentMode === 'study') {
+    document.getElementById('study-view').classList.add('active');
+    document.getElementById('card-controls').classList.add('active');
+    renderCard();
+  } else if (currentMode === 'test') {
+    testSessionActive = false;
+    document.getElementById('test-view').classList.add('active');
+    updateTestView();
+  }
+
   updateProgress();
   renderSidebar();
-
-  if (currentMode === 'test') initTestCard();
 }
 
 function renderCard() {
@@ -3765,6 +3830,31 @@ function showToast(msg) {
 }
 
 // ══════════════════════════════════════════
+// ── Test sub-view management ──────────────────────────────────────────
+function updateTestView() {
+  const hasDeck = activeDeck.length > 0;
+  document.getElementById('test-no-deck').style.display       = (!hasDeck) ? 'flex' : 'none';
+  document.getElementById('test-start-screen').style.display  = (hasDeck && !testSessionActive) ? 'flex' : 'none';
+  document.getElementById('test-area').style.display          = (hasDeck && testSessionActive) ? '' : 'none';
+  document.getElementById('stats-bar').style.display          = (hasDeck && testSessionActive) ? '' : 'none';
+  document.getElementById('test-shuffle-wrap').style.display  = (hasDeck && testSessionActive) ? 'flex' : 'none';
+  if (hasDeck && !testSessionActive) {
+    document.getElementById('test-start-deck').textContent = activeDeckName;
+    const fmt = currentFormat === 'mc' ? 'multiple choice' : 'typing';
+    document.getElementById('test-start-hint').textContent = activeDeck.length + ' cards · ' + fmt;
+  }
+}
+
+function beginTest() {
+  testSessionActive = true;
+  stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
+  sessionLog = [];
+  currentIndex = 0;
+  updateTestView();
+  initTestCard();
+  updateStats();
+}
+
 // MODE SWITCHING
 // ══════════════════════════════════════════
 function setMode(mode) {
@@ -3772,20 +3862,23 @@ function setMode(mode) {
   if (currentMode === 'test' && mode !== 'test' && sessionLog.length > 0) saveSession();
 
   currentMode = mode;
+  testSessionActive = false;
   document.getElementById('pill-study').classList.toggle('active', mode === 'study');
   document.getElementById('pill-test').classList.toggle('active', mode === 'test');
 
   document.getElementById('study-view').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
   document.getElementById('card-controls').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
-  document.getElementById('test-view').classList.toggle('active', mode === 'test' && activeDeck.length > 0);
+  document.getElementById('test-view').classList.toggle('active', mode === 'test');
   renderContextStrip();
   updatePrefsVisibility();
 
-  if (mode === 'test' && activeDeck.length > 0) {
-    stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
-    sessionLog = [];
-    currentIndex = 0;
-    initTestCard();
+  if (mode === 'test') {
+    // Auto-open sidebar so user can select a deck
+    if (!sidebarOpen) {
+      sidebarOpen = true;
+      document.getElementById('sidebar').classList.remove('collapsed');
+    }
+    updateTestView();
   }
   if (mode === 'study') {
     renderCard();
@@ -4077,7 +4170,8 @@ function showSessionReport() {
 
 function closeSessionModal() {
   document.getElementById('session-modal').classList.remove('open');
-  setMode('study');
+  testSessionActive = false;
+  updateTestView();
 }
 
 // ══════════════════════════════════════════
@@ -4252,6 +4346,7 @@ function toggleInfoPanel() {
   const panel = document.getElementById('info-panel');
   panel.classList.toggle('open', infoPanelOpen);
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
+  document.getElementById('tutor-bar').style.display = getApiKey() ? '' : 'none';
 
   if (infoPanelOpen && activeDeck.length) {
     renderInfoPanel(activeDeck[currentIndex]);
