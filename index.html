@@ -31,6 +31,9 @@
   --accent-soft: rgba(96,112,255,.08);
   --accent-softer: rgba(96,112,255,.06);
   --accent-border: rgba(96,112,255,.25);
+  --grad-start: #4f7fff;
+  --grad-mid:   #a78bff;
+  --grad-end:   #60c0ff;
   --red:      #e05c6a;
   --green:    #3dba8a;
   --orange:   #e09a4f;
@@ -198,7 +201,7 @@ body.light header {
   font-size: 17px;
   font-weight: 500;
   letter-spacing: .03em;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -359,14 +362,14 @@ body.light .sidebar {
 }
 /* Gradient text for sidebar icons and labels */
 .review-icon {
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-size: 15px;
 }
 .sidebar.collapsed #new-deck-btn {
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -385,7 +388,7 @@ body.light .sidebar {
   transform: scale(1.08);
 }
 .sidebar.collapsed .hsk-level-header > span:first-child {
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -393,7 +396,7 @@ body.light .sidebar {
   font-size: 10px;
 }
 .sidebar.collapsed .deck-name {
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -624,7 +627,7 @@ body.light .info-panel {
   font-size: 52px;
   font-weight: 400;
   line-height: 1.15;
-  background: linear-gradient(135deg, #4f7fff, #a78bff, #60c0ff);
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-mid), var(--grad-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1059,7 +1062,7 @@ body.light .info-panel {
 .deck-item .deck-name {
   flex: 1;
   font-size: 13px;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1068,7 +1071,7 @@ body.light .info-panel {
   white-space: nowrap;
 }
 .deck-item.active .deck-name {
-  background: linear-gradient(135deg, #6070ff 0%, #b09cff 40%, #70d0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1160,7 +1163,7 @@ body.light .info-panel {
   font-family: 'Noto Sans SC', sans-serif;
   font-size: 80px;
   font-weight: 300;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1299,7 +1302,7 @@ body.light .card-face::before {
   font-family: 'Noto Sans SC', sans-serif;
   font-size: 72px;
   font-weight: 400;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1415,7 +1418,7 @@ body.light .card-face::before {
   color: var(--text);
 }
 .light .ctx-hanzi {
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1529,7 +1532,7 @@ body.light .card-face::before {
   font-family: 'Noto Sans SC', sans-serif;
   font-size: 56px;
   font-weight: 400;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 40%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1994,7 +1997,7 @@ body.bg-custom::after { display: none !important; }
 .loading-char {
   font-family: 'Noto Sans SC', sans-serif;
   font-size: 64px;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2035,7 +2038,7 @@ body.bg-custom::after { display: none !important; }
 
 /* Mastered list panel */
 .mastered-list-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
-.mastered-list-hanzi { font-family:'Noto Sans SC',sans-serif; font-size:22px; min-width:40px; background:linear-gradient(135deg,var(--accent) 0%,#a78bff 50%,#60c0ff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.mastered-list-hanzi { font-family:'Noto Sans SC',sans-serif; font-size:22px; min-width:40px; background:linear-gradient(135deg,var(--grad-start) 0%,var(--grad-mid) 50%,var(--grad-end) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .mastered-list-info { flex:1; }
 .mastered-list-pinyin { font-size:12px; color:var(--text2); }
 .mastered-list-english { font-size:12px; color:var(--text3); }
@@ -2110,7 +2113,7 @@ body.bg-custom::after { display: none !important; }
   font-size: 30px;
   font-weight: 600;
   line-height: 1;
-  background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2213,7 +2216,7 @@ body.light .analytics-view .session-row .deck-tag {
 .sr-stat-value { font-size:22px; font-weight:700; }
 .sr-flagged-title { font-size:10px; font-weight:600; letter-spacing:.08em; color:var(--text3); text-transform:uppercase; margin-bottom:8px; }
 .sr-flagged-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); }
-.sr-flagged-hanzi { font-family:'Noto Sans SC',sans-serif; font-size:20px; min-width:36px; background:linear-gradient(135deg,var(--accent) 0%,#a78bff 50%,#60c0ff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.sr-flagged-hanzi { font-family:'Noto Sans SC',sans-serif; font-size:20px; min-width:36px; background:linear-gradient(135deg,var(--grad-start) 0%,var(--grad-mid) 50%,var(--grad-end) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .sr-perfect { text-align:center; color:var(--green); padding:16px; font-size:14px; }
 
 /* Note save feedback */
@@ -3043,6 +3046,9 @@ function applyAccentFromHue(hue) {
       --accent-soft:   hsla(${h}, 90%, 65%, 0.08);
       --accent-softer: hsla(${h}, 90%, 65%, 0.06);
       --accent-border: hsla(${h}, 90%, 65%, 0.25);
+      --grad-start: hsl(${h}, 90%, 65%);
+      --grad-mid:   hsl(${(h+30)%360}, 80%, 74%);
+      --grad-end:   hsl(${(h-30+360)%360}, 95%, 72%);
       --bg:    hsl(${h}, 22%, 4%);
       --bg2:   hsl(${h}, 24%, 8%);
       --bg3:   hsl(${h}, 22%, 11%);
@@ -3214,7 +3220,7 @@ function renderSidebar() {
     const header = document.createElement('div');
     header.className = 'hsk-level-header';
     header.innerHTML = `
-      <span class="sidebar-icon" style="display:none;font-size:10px;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,#4f7fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">HSK${level}</span>
+      <span class="sidebar-icon" style="display:none;font-size:10px;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,var(--grad-start),var(--grad-mid));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">HSK${level}</span>
       <span class="sidebar-full">HSK ${level}</span>
       <span class="sidebar-full" style="display:flex;align-items:center;gap:8px">
         ${count !== null ? `<span class="count">${count}</span>` : '<span class="count" style="font-style:italic">loading…</span>'}
