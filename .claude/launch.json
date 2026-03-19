@@ -4,7 +4,7 @@
     {
       "name": "hanzi-study",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "7777"],
+      "runtimeArgs": ["-m", "http.server", "7777", "--directory", "/home/nim/hanzi-study/.claude/worktrees/infallible-benz"],
       "port": 7777
     }
   ]
