@@ -3023,15 +3023,15 @@ function applyBlobTint() {
   styleEl.textContent = `
     body:not(.light)::after {
       background:
-        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},60%,55%,0.55) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},70%,50%,0.40) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,58%,0.22) 0%, transparent 55%) !important;
+        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},60%,55%,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},70%,50%,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,58%,0.07) 0%, transparent 55%) !important;
     }
     body.light::after {
       background:
-        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},70%,60%,0.13) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},60%,65%,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,70%,0.07) 0%, transparent 55%) !important;
+        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},70%,60%,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},60%,65%,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,70%,0.03) 0%, transparent 55%) !important;
     }`;
   applyAccentFromHue(h);
 }
@@ -3052,28 +3052,38 @@ function applyAccentFromHue(hue) {
       --grad-start: hsl(${h}, 90%, 65%);
       --grad-mid:   hsl(${(h+30)%360}, 80%, 74%);
       --grad-end:   hsl(${(h-30+360)%360}, 95%, 72%);
-      --bg:    hsl(${h}, 22%, 4%);
-      --bg2:   hsl(${h}, 24%, 8%);
-      --bg3:   hsl(${h}, 22%, 11%);
-      --bg4:   hsl(${h}, 20%, 15%);
+      --bg:    hsl(${h}, 8%, 4%);
+      --bg2:   hsl(${h}, 10%, 7%);
+      --bg3:   hsl(${h}, 8%, 10%);
+      --bg4:   hsl(${h}, 8%, 13%);
       --border:  hsla(${h}, 90%, 65%, 0.10);
       --border2: hsla(${h}, 90%, 65%, 0.17);
       --border3: hsla(${h}, 90%, 65%, 0.26);
-      --card-bg: hsla(${h}, 24%, 8%, 0.78);
       --elevation: 0 8px 40px rgba(0,0,0,.5), 0 0 80px hsla(${h},80%,60%,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
       --elevation-hover: 0 12px 50px rgba(0,0,0,.6), 0 0 100px hsla(${h},80%,60%,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .light {
-      --bg:    hsl(${h}, 18%, 95%);
-      --bg2:   hsl(${h}, 12%, 99%);
-      --bg3:   hsl(${h}, 14%, 97%);
-      --bg4:   hsl(${h}, 16%, 92%);
-      --border:  hsla(${h}, 50%, 35%, 0.07);
-      --border2: hsla(${h}, 50%, 35%, 0.10);
-      --border3: hsla(${h}, 50%, 35%, 0.14);
+      --accent:        hsl(${h}, 75%, 42%);
+      --accent2:       hsl(${h}, 70%, 35%);
+      --accent-glow:   hsla(${h}, 75%, 42%, 0.18);
+      --accent-soft:   hsla(${h}, 75%, 42%, 0.10);
+      --accent-border: hsla(${h}, 75%, 42%, 0.30);
+      --grad-start: #111118;
+      --grad-mid:   #111118;
+      --grad-end:   #111118;
+      --bg:    hsl(${h}, 20%, 97%);
+      --bg2:   hsl(${h}, 55%, 96%);
+      --bg3:   hsl(${h}, 50%, 93%);
+      --bg4:   hsl(${h}, 45%, 88%);
+      --border:  hsla(${h}, 60%, 35%, 0.10);
+      --border2: hsla(${h}, 60%, 35%, 0.16);
+      --border3: hsla(${h}, 60%, 35%, 0.22);
     }
-    header { background: hsla(${h}, 22%, 4%, 0.82); }
-    body.light header { background: hsla(${h}, 18%, 95%, 0.82); }
+    .sidebar { background: hsl(${h}, 10%, 7%); }
+    body.light .sidebar { background: hsl(${h}, 55%, 96%); }
+    header { background: hsla(${h}, 8%, 4%, 0.88); }
+    body.light header { background: hsla(${h}, 50%, 95%, 0.88); }
+    /* Card face adapts to theme */
     .card-face {
       border-color: hsla(${h}, 90%, 65%, 0.22);
       background:
@@ -3092,19 +3102,34 @@ function applyAccentFromHue(hue) {
     }
     body.light .card-face {
       background:
-        linear-gradient(165deg, hsla(${h}, 80%, 65%, 0.05) 0%, hsla(${h}, 50%, 82%, 0.04) 50%, hsla(${h}, 70%, 65%, 0.06) 100%),
-        linear-gradient(to bottom, rgba(255,255,255,0.78) 0%, rgba(248,248,255,0.82) 100%);
-      border-color: hsla(${h}, 90%, 65%, 0.18);
+        linear-gradient(165deg, hsla(${h}, 80%, 65%, 0.08) 0%, hsla(${h}, 50%, 82%, 0.05) 50%, hsla(${h}, 70%, 65%, 0.10) 100%),
+        linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(248,248,255,0.95) 100%);
+      border-color: hsla(${h}, 75%, 42%, 0.22);
       box-shadow:
         0 8px 32px rgba(0,0,0,.06),
         inset 0 1px 0 rgba(255,255,255,0.9),
-        inset 0 -1px 0 hsla(${h}, 90%, 65%, 0.06),
-        0 0 0 1px hsla(${h}, 90%, 65%, 0.04);
+        inset 0 -1px 0 hsla(${h}, 75%, 42%, 0.06),
+        0 0 0 1px hsla(${h}, 75%, 42%, 0.06);
     }
     body.light .card-face::before {
       background:
-        radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.5) 0%, transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, hsla(${h}, 90%, 65%, 0.03) 100%);
+        radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.6) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, hsla(${h}, 75%, 42%, 0.04) 100%);
+    }
+    /* Keep gradient on header title + card hanzi in light mode (all other gradient text is black) */
+    body.light .header-title {
+      background: linear-gradient(135deg, hsl(${h}, 85%, 38%) 0%, hsl(${(h+30)%360}, 80%, 46%) 50%, hsl(${(h-30+360)%360}, 85%, 40%) 100%);
+      background-size: 200% 200%;
+      animation: gradShift 8s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    body.light .card-hanzi {
+      background: linear-gradient(135deg, hsl(${h}, 85%, 38%) 0%, hsl(${(h+30)%360}, 80%, 46%) 40%, hsl(${(h-30+360)%360}, 85%, 40%) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
   `;
 }
