@@ -2940,6 +2940,8 @@ function applyBackground() {
     layer.style.filter = appearance.blur ? 'blur(8px)' : '';
   }
   if (appearance.type === 'default') applyBlobTint();
+  else if (appearance.type === 'solid') applyAccentFromHue(hexToHue(appearance.color));
+  else applyAccentFromHue(appearance.blobHue);
   const toSave = { type: appearance.type, color: appearance.color, blur: appearance.blur, blobHue: appearance.blobHue };
   if (appearance.type === 'image' && appearance.image) toSave.image = appearance.image;
   try { localStorage.setItem('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
@@ -2979,8 +2981,7 @@ function toggleBgBlur() {
 
 function resetAppearance() {
   appearance = { type: 'default', color: '#4f7fff', image: null, blur: false, blobHue: 240 };
-  const blobStyleEl = document.getElementById('blob-style');
-  if (blobStyleEl) blobStyleEl.remove();
+  ['blob-style','accent-theme'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();
   localStorage.removeItem('hanzi-appearance');
@@ -3026,6 +3027,45 @@ function applyBlobTint() {
         radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},60%,65%,0.10) 0%, transparent 60%),
         radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,70%,0.07) 0%, transparent 55%) !important;
     }`;
+  applyAccentFromHue(h);
+}
+
+// ── Accent theme: adapt all UI tokens to background hue ───────────────
+function applyAccentFromHue(hue) {
+  const h = ((hue % 360) + 360) % 360;
+  let styleEl = document.getElementById('accent-theme');
+  if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'accent-theme'; document.head.appendChild(styleEl); }
+  styleEl.textContent = `
+    :root {
+      --accent:        hsl(${h}, 90%, 68%);
+      --accent2:       hsl(${h}, 78%, 58%);
+      --accent-glow:   hsla(${h}, 90%, 65%, 0.18);
+      --accent-soft:   hsla(${h}, 90%, 65%, 0.08);
+      --accent-softer: hsla(${h}, 90%, 65%, 0.06);
+      --accent-border: hsla(${h}, 90%, 65%, 0.25);
+      --bg:    hsl(${h}, 22%, 4%);
+      --bg2:   hsl(${h}, 24%, 8%);
+      --bg3:   hsl(${h}, 22%, 11%);
+      --bg4:   hsl(${h}, 20%, 15%);
+      --border:  hsla(${h}, 90%, 65%, 0.10);
+      --border2: hsla(${h}, 90%, 65%, 0.17);
+      --border3: hsla(${h}, 90%, 65%, 0.26);
+      --card-bg: hsla(${h}, 24%, 8%, 0.78);
+      --elevation: 0 8px 40px rgba(0,0,0,.5), 0 0 80px hsla(${h},80%,60%,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+      --elevation-hover: 0 12px 50px rgba(0,0,0,.6), 0 0 100px hsla(${h},80%,60%,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .light {
+      --bg:    hsl(${h}, 18%, 95%);
+      --bg2:   hsl(${h}, 12%, 99%);
+      --bg3:   hsl(${h}, 14%, 97%);
+      --bg4:   hsl(${h}, 16%, 92%);
+      --border:  hsla(${h}, 50%, 35%, 0.07);
+      --border2: hsla(${h}, 50%, 35%, 0.10);
+      --border3: hsla(${h}, 50%, 35%, 0.14);
+    }
+    header { background: hsla(${h}, 22%, 4%, 0.82); }
+    body.light header { background: hsla(${h}, 18%, 95%, 0.82); }
+  `;
 }
 
 function updateBlobTint(hex) {
@@ -5124,7 +5164,8 @@ async function init() {
   // Load appearance
   try {
     const savedApp = JSON.parse(localStorage.getItem('hanzi-appearance') || 'null');
-    if (savedApp) { appearance = { ...appearance, ...savedApp }; applyBackground(); if (appearance.type === 'default') applyBlobTint(); }
+    if (savedApp) { appearance = { ...appearance, ...savedApp }; }
+    applyBackground();
   } catch(e) {}
   syncSettingsUI();
 
