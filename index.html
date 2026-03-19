@@ -104,9 +104,9 @@ body::after {
   inset: -15%;
   z-index: -1;
   background:
-    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(79,80,200,0.30) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(96,60,255,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(60,120,255,0.12) 0%, transparent 55%);
+    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(79,80,200,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(96,60,255,0.40) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(60,120,255,0.22) 0%, transparent 55%);
   filter: blur(60px);
   animation: bgPulse 12s ease-in-out infinite;
   transition: opacity .3s;
@@ -114,9 +114,9 @@ body::after {
 body.light::before { background: #f0f1f3; }
 body.light::after {
   background:
-    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(96,112,255,0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(167,139,255,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(60,180,255,0.05) 0%, transparent 55%);
+    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(96,112,255,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(167,139,255,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(60,180,255,0.07) 0%, transparent 55%);
 }
 @keyframes bgPulse {
   0%,100% { transform: translate(0%, 0%) scale(1); opacity: 1; }
@@ -186,7 +186,7 @@ body.light header {
 }
 .search-pill .search-bar {
   border: 1.5px solid var(--border);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--bg);
 }
 .search-pill .search-bar:focus-within {
@@ -1410,6 +1410,9 @@ body.light .card-face::before {
 .ctx-tile.ctx-mastered { opacity: 0.35; }
 .ctx-tile.ctx-mastered.ctx-current { opacity: 1; }
 .ctx-hanzi {
+  color: var(--text);
+}
+.light .ctx-hanzi {
   background: linear-gradient(135deg, #4f7fff 0%, #a78bff 50%, #60c0ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3011,15 +3014,15 @@ function applyBlobTint() {
   styleEl.textContent = `
     body:not(.light)::after {
       background:
-        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},60%,55%,0.30) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},70%,50%,0.22) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,58%,0.12) 0%, transparent 55%) !important;
+        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},60%,55%,0.55) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},70%,50%,0.40) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,58%,0.22) 0%, transparent 55%) !important;
     }
     body.light::after {
       background:
-        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},70%,60%,0.09) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},60%,65%,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,70%,0.05) 0%, transparent 55%) !important;
+        radial-gradient(ellipse 65% 55% at 18% 14%, hsla(${h},70%,60%,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 60% at 80% 86%, hsla(${(h+20)%360},60%,65%,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 52% 48%, hsla(${(h+40)%360},65%,70%,0.07) 0%, transparent 55%) !important;
     }`;
 }
 
