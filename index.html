@@ -396,10 +396,7 @@ body.light .sidebar {
   font-size: 10px;
 }
 .sidebar.collapsed .deck-name {
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
   max-width: 36px;
   overflow: hidden;
   text-overflow: clip;
@@ -407,6 +404,12 @@ body.light .sidebar {
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
+}
+.light .sidebar.collapsed .deck-name {
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 /* HSK level header in strip: compact centered label */
 .sidebar.collapsed .hsk-level-header {
@@ -3071,6 +3074,38 @@ function applyAccentFromHue(hue) {
     }
     header { background: hsla(${h}, 22%, 4%, 0.82); }
     body.light header { background: hsla(${h}, 18%, 95%, 0.82); }
+    .card-face {
+      border-color: hsla(${h}, 90%, 65%, 0.22);
+      background:
+        linear-gradient(165deg, hsla(${h}, 40%, 35%, 0.12) 0%, hsla(${h}, 30%, 18%, 0.06) 50%, hsla(${h}, 40%, 40%, 0.10) 100%),
+        linear-gradient(to bottom, rgba(16,16,34,0.92) 0%, rgba(10,10,22,0.95) 100%);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -1px 0 rgba(255,255,255,0.03),
+        0 0 0 1px hsla(${h}, 90%, 65%, 0.06);
+    }
+    .card-face::before {
+      background:
+        radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, hsla(${h}, 90%, 65%, 0.04) 100%);
+    }
+    body.light .card-face {
+      background:
+        linear-gradient(165deg, hsla(${h}, 80%, 65%, 0.05) 0%, hsla(${h}, 50%, 82%, 0.04) 50%, hsla(${h}, 70%, 65%, 0.06) 100%),
+        linear-gradient(to bottom, rgba(255,255,255,0.78) 0%, rgba(248,248,255,0.82) 100%);
+      border-color: hsla(${h}, 90%, 65%, 0.18);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,.06),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 hsla(${h}, 90%, 65%, 0.06),
+        0 0 0 1px hsla(${h}, 90%, 65%, 0.04);
+    }
+    body.light .card-face::before {
+      background:
+        radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.5) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, hsla(${h}, 90%, 65%, 0.03) 100%);
+    }
   `;
 }
 
