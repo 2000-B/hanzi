@@ -250,6 +250,8 @@ body.light header {
   border-radius: var(--radius);
   color: var(--text);
   outline: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .search-input::placeholder { color: var(--text3); }
 .search-input:focus { outline: none; }
@@ -5063,6 +5065,9 @@ document.addEventListener('keydown', e => {
     if (infoPanelOpen) toggleInfoPanel();
   }
 });
+
+// Close search when window loses focus (prevents blue-line flicker on OS blur)
+window.addEventListener('blur', () => closeSearch());
 
 // Close search results on click outside
 document.addEventListener('click', e => {
