@@ -5190,34 +5190,11 @@ function renderAnalytics() {
   `;
 }
 
-// ══════════════════════════════════════════
-// SEARCH BAR TOGGLE
-// ══════════════════════════════════════════
-function toggleSearchBar() {
-  const bar = document.getElementById('search-bar');
-  const btn = document.getElementById('btn-search');
-  const isOpen = bar.classList.contains('open');
-  if (isOpen) {
-    closeSearchBar();
-  } else {
-    bar.classList.add('open');
-    btn.style.display = 'none';
-    setTimeout(() => document.getElementById('search-input').focus(), 100);
-  }
-}
-function closeSearchBar() {
-  const bar = document.getElementById('search-bar');
-  bar.classList.remove('open');
-  document.getElementById('btn-search').style.display = '';
-  document.getElementById('search-input').value = '';
-  document.getElementById('search-results').style.display = 'none';
-}
 // Close search when clicking outside
 document.addEventListener('mousedown', e => {
-  const wrap = document.querySelector('.search-btn-wrap');
-  const bar = document.getElementById('search-bar');
-  if (bar.classList.contains('open') && !wrap.contains(e.target)) {
-    closeSearchBar();
+  const wrap = document.getElementById('header-search-wrap');
+  if (wrap && wrap.classList.contains('open') && !wrap.contains(e.target)) {
+    closeSearch();
   }
 });
 
