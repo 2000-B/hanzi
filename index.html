@@ -1478,14 +1478,12 @@ body.light .card-face::before {
   right: 0;
   z-index: 5;
 }
-/* Collapsed: chevron visible, no background */
-.controls-tray-wrap.active:not(.tray-open) {
+/* Always transparent — buttons float */
+.controls-tray-wrap.active {
   background: transparent;
   border-top: none;
 }
 .controls-tray-wrap.tray-open {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
   padding-bottom: 16px;
 }
 .controls-tray-chevron {
