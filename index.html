@@ -472,7 +472,7 @@ body.light .sidebar {
   .sidebar.collapsed .chunk-item { display: none; }
   .sidebar.collapsed .hsk-level { margin: 2px 4px; }
   .sidebar.collapsed .hsk-level-header { padding: 8px 0; justify-content: center; }
-  .sidebar.collapsed .review-deck { padding: 10px 0; margin: 0 4px 6px; justify-content: center; }
+  .sidebar.collapsed .review-deck { padding: 7px 0; margin: 0 4px 6px; justify-content: center; }
   .sidebar.collapsed .sidebar-scroll { padding-top: 8px; }
   .sidebar:not(.collapsed) .sidebar-icon { display: none !important; }
   .sidebar:not(.collapsed) .sidebar-new-icon { display: none !important; }
@@ -915,7 +915,7 @@ body.light .info-panel {
 /* Review deck (top) */
 .review-deck {
   margin: 0 10px 6px;
-  padding: 10px 12px;
+  padding: 6px 12px;
   background: linear-gradient(135deg, var(--accent-soft), rgba(167,139,255,.05));
   border: 1px solid var(--accent-border);
   border-radius: var(--radius-sm);
@@ -1139,6 +1139,8 @@ body.light .info-panel {
 }
 .btn-accent:hover { background: var(--accent2); border-color: var(--accent2); }
 .btn-sm { font-size: 11px; padding: 5px 10px; }
+/* Match new-deck-btn height to review-deck (both ~32px) */
+#new-deck-btn { padding-top: 8px; padding-bottom: 8px; }
 .csv-label {
   font-size: 11px;
   font-weight: 500;
@@ -4231,7 +4233,7 @@ function toggleDiffRatings() {
 // ══════════════════════════════════════════
 function renderContextStrip() {
   const strip = document.getElementById('context-strip');
-  const isVisible = currentMode === 'study' && activeDeck.length > 0 && !listViewActive;
+  const isVisible = currentMode === 'study' && activeDeck.length > 0;
   strip.classList.toggle('active', isVisible);
   if (!isVisible) { strip.innerHTML = ''; return; }
 
