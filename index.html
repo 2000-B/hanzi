@@ -1390,13 +1390,13 @@ body.light .card-face::before {
 .context-strip {
   display: none;
   align-items: center;
+  justify-content: center;
   gap: 3px;
   padding: 10px 0 0;
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  /* Center the visible scroll window over the card column */
   width: 100%;
 }
 .context-strip::-webkit-scrollbar { display: none; }
@@ -2507,7 +2507,7 @@ body.light .analytics-view .session-row .deck-tag {
     <div class="sidebar-scroll" id="sidebar-scroll">
       <!-- Review deck -->
       <div class="review-deck" id="review-deck" onclick="openReviewDeck()">
-        <svg class="sidebar-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none;flex-shrink:0"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 2.5v3.5h-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="sidebar-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none;flex-shrink:0"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 0.5L8 2.5L6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="sidebar-full review-deck-label">⟳ review</span>
         <span class="review-badge empty sidebar-full" id="review-badge">0</span>
       </div>
@@ -4258,20 +4258,12 @@ function renderContextStrip() {
     strip.appendChild(tile);
     if (isCurrent) activeTile = tile;
   }
-  // Scroll active tile to horizontal center.
-  // We add padding = stripWidth/2 on each side so the first and last tiles
-  // can always be scrolled to center (tiles alone are narrower than the strip).
+  // Scroll active tile to horizontal center of the strip.
+  // justify-content:center handles the non-overflow case; scrollIntoView
+  // handles the overflow case (narrow viewports).
   if (activeTile) {
     requestAnimationFrame(() => {
-      const stripWidth = strip.offsetWidth;
-      strip.style.paddingLeft  = (stripWidth / 2) + 'px';
-      strip.style.paddingRight = (stripWidth / 2) + 'px';
-      // Second RAF: read offsetLeft after padding has been applied
-      requestAnimationFrame(() => {
-        const tileLeft  = activeTile.offsetLeft;
-        const tileWidth = activeTile.offsetWidth;
-        strip.scrollLeft = tileLeft - stripWidth / 2 + tileWidth / 2;
-      });
+      activeTile.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' });
     });
   }
 }
