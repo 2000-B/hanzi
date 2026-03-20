@@ -4004,8 +4004,8 @@ function handleAnswer(correct, btn, card) {
     stats.reviewFlagged.add(card.hanzi);
   }
 
-  // Flag slow responses
-  if (elapsed > SLOW_THRESHOLD) {
+  // Flag slow responses (skipped when timer is display-only per spec §6.2)
+  if (elapsed > SLOW_THRESHOLD && !showTimerOnly) {
     cd.reviewFlag = true;
     stats.reviewFlagged.add(card.hanzi);
   }
@@ -4076,7 +4076,8 @@ function submitTyping() {
     flash.style.color = 'var(--red)';
   }
 
-  if (elapsed > SLOW_THRESHOLD) {
+  // Flag slow responses (skipped when timer is display-only per spec §6.2)
+  if (elapsed > SLOW_THRESHOLD && !showTimerOnly) {
     cd.reviewFlag = true;
     stats.reviewFlagged.add(card.hanzi);
   }
@@ -4127,6 +4128,8 @@ function startTimer() {
     else if (pct < 60) bar.style.background = 'var(--orange)';
     if (remaining <= 0) {
       clearInterval(timerInterval);
+      // In display-only mode the timer is purely informational — no penalty (spec §6.2)
+      if (showTimerOnly) return;
       // Auto-fail on timeout
       const card = activeDeck[currentIndex];
       if (card) handleTimeout(card);
