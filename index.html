@@ -569,8 +569,11 @@ body.light .info-panel {
 
 .info-panel-scroll {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 20px 16px;
+}
+.info-panel.open .info-panel-scroll {
+  overflow-y: auto;
 }
 
 /* Tutor input pinned at bottom of info panel */
@@ -1227,6 +1230,8 @@ body.light .empty-sub {
   aspect-ratio: 3 / 4;
   perspective: 800px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 /* When vertical space is tight, relax the aspect ratio */
@@ -2083,15 +2088,42 @@ body.bg-custom::after { display: none !important; }
 .mastered-list-unmaster { font-size:11px; padding:3px 8px; border-radius:var(--radius); border:1px solid var(--border2); background:none; color:var(--text3); cursor:pointer; transition:all .2s; flex-shrink:0; }
 .mastered-list-unmaster:hover { border-color:var(--red); color:var(--red); }
 
-/* List view */
-.list-view { display:none; flex-direction:column; overflow-y:auto; gap:0; padding:8px 0; flex:1; }
-.list-view.active { display:flex; }
-.list-row { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--border); cursor:pointer; }
-.list-row:hover { background:var(--bg3); }
-.list-hanzi { font-size:22px; font-family:'Noto Sans SC',sans-serif; min-width:40px; }
-.list-pinyin { color:var(--text2); font-size:13px; min-width:80px; }
-.list-english { color:var(--text); font-size:13px; flex:1; }
-.list-badges { display:flex; gap:4px; align-items:center; }
+/* Card list overlay — positioned over the card inside .card-scene */
+.list-view {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  flex-direction: column;
+  overflow-y: auto;
+  border-radius: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+}
+.list-view.active { display: flex; }
+/* Blur card content behind the overlay */
+.card-inner.list-blur {
+  filter: blur(6px) brightness(0.4);
+  transition: filter .22s ease;
+  pointer-events: none;
+}
+/* Tabular rows — three fixed columns */
+.list-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 1.8fr 24px;
+  align-items: center;
+  gap: 0;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+}
+.list-row:hover { background: var(--bg3); }
+.list-row.active-row { background: var(--bg3); }
+.list-hanzi { font-size: 19px; font-family: 'Noto Sans SC', sans-serif; }
+.list-pinyin { color:var(--text2); font-size:13px; }
+.list-english { color:var(--text); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.list-badges { display:flex; gap:4px; align-items:center; justify-content:flex-end; }
 .list-mastered { color:var(--green); font-size:11px; }
 .list-review-badge { color:var(--orange); font-size:11px; }
 
@@ -2537,14 +2569,13 @@ body.light .analytics-view .session-row .deck-tag {
               <div class="card-english" id="back-english"></div>
             </div>
           </div>
+          <!-- Card list overlay — sits on top of card-inner -->
+          <div class="list-view" id="list-view"></div>
         </div>
         <button class="side-nav" onclick="nextCard()">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
-
-      <!-- List view -->
-      <div class="list-view" id="list-view"></div>
 
       <!-- Controls tray -->
       <div class="controls-tray-wrap" id="card-controls">
@@ -3596,12 +3627,8 @@ function toggleControlsTray() {
   document.getElementById('card-controls').classList.toggle('tray-open', controlsTrayOpen);
 }
 
-let cardListActive = false;
 function toggleCardList() {
-  cardListActive = !cardListActive;
-  document.getElementById('btn-card-list').classList.toggle('active', cardListActive);
-  // Card list overlay is not yet implemented — fall back to list view for now
-  setListView(cardListActive);
+  setListView(!listViewActive);
 }
 
 // ══════════════════════════════════════════
@@ -4251,7 +4278,9 @@ function renderContextStrip() {
 function setListView(active) {
   listViewActive = active;
   document.getElementById('list-view').classList.toggle('active', active);
-  document.getElementById('study-view').classList.toggle('active', !active && activeDeck.length > 0);
+  document.getElementById('card-inner').classList.toggle('list-blur', active);
+  document.getElementById('btn-card-list').classList.toggle('active', active);
+  // study-view stays shown — card blurs behind overlay when list is active
   renderContextStrip();
   if (active) renderListView();
 }
@@ -4274,10 +4303,9 @@ function renderListView() {
         ${isDue ? '<span class="list-review-badge">⟳</span>' : ''}
       </span>`;
     row.onclick = () => {
-      setListView(false);
       currentIndex = i;
+      setListView(false);
       renderCard();
-      if (!infoPanelOpen) toggleInfoPanel();
     };
     el.appendChild(row);
   });
