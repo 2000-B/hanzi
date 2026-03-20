@@ -2104,6 +2104,7 @@ body.bg-custom::after { display: none !important; }
 /* Blur card content behind the overlay */
 .card-inner.list-blur {
   filter: blur(6px) brightness(0.4);
+  clip-path: inset(0 round 16px);
   transition: filter .22s ease;
   pointer-events: none;
 }
