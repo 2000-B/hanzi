@@ -1610,6 +1610,25 @@ body.light .card-face::before {
   text-align: center;
 }
 
+/* Stats toggle chevron row */
+.stats-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+.stats-toggle.visible { display: flex; }
+.stats-toggle svg {
+  color: var(--text3);
+  transition: transform .2s ease;
+}
+.stats-toggle.collapsed svg { transform: rotate(180deg); }
+
 .stats-bar {
   display: flex;
   align-items: center;
@@ -1620,6 +1639,7 @@ body.light .card-face::before {
   background: var(--bg2);
   flex-shrink: 0;
 }
+.stats-bar.hidden { display: none; }
 .stat {
   display: flex;
   flex-direction: column;
@@ -2098,12 +2118,18 @@ body.bg-custom::after { display: none !important; }
   inset: 0;
   z-index: 2;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   border-radius: 16px;
   background: var(--bg);
   border: 1px solid var(--border2);
 }
 .list-view.active { display: flex; }
+/* Inner scroll container — clipped to the parent's border-radius */
+.list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
 /* Blur card content behind the overlay */
 .card-inner.list-blur {
   filter: blur(6px) brightness(0.4);
@@ -2510,7 +2536,7 @@ body.light .analytics-view .session-row .deck-tag {
     <div class="sidebar-scroll" id="sidebar-scroll">
       <!-- Review deck -->
       <div class="review-deck" id="review-deck" onclick="openReviewDeck()">
-        <svg class="sidebar-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none;flex-shrink:0"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 0.5L8 2.5L6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="sidebar-icon" width="18" height="18" viewBox="0 0 16 16" fill="none" style="display:none;flex-shrink:0"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 0.5L8 2.5L6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="sidebar-full review-deck-label">⟳ review</span>
         <span class="review-badge empty sidebar-full" id="review-badge">0</span>
       </div>
@@ -2638,6 +2664,11 @@ body.light .analytics-view .session-row .deck-tag {
           </div>
         </div>
 
+        <!-- Stats chevron toggle -->
+        <div class="stats-toggle" id="stats-toggle" onclick="toggleStatsBar()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
         <div class="stats-bar" id="stats-bar">
           <div class="stat"><span class="stat-label">correct</span><span class="stat-value green" id="stat-correct">0</span></div>
           <div class="stats-sep"></div>
@@ -2743,6 +2774,7 @@ let showPinyin = true;
 let showTimer = false;
 let showDifficultyRatings = false; // persists in localStorage as 'hanzi-diff-ratings'
 let listViewActive = false;
+let statsBarVisible = true;
 let hideMastered = false;
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
@@ -3572,6 +3604,7 @@ function isCardHidden(card) {
 }
 
 function nextCard() {
+  if (listViewActive) setListView(false);
   if (!activeDeck.length) return;
   let next = (currentIndex + 1) % activeDeck.length;
   if (hideMastered) {
@@ -3589,6 +3622,7 @@ function nextCard() {
 }
 
 function prevCard() {
+  if (listViewActive) setListView(false);
   if (!activeDeck.length) return;
   let prev = (currentIndex - 1 + activeDeck.length) % activeDeck.length;
   if (hideMastered) {
@@ -3864,11 +3898,14 @@ function showToast(msg) {
 // ── Test sub-view management ──────────────────────────────────────────
 function updateTestView() {
   const hasDeck = activeDeck.length > 0;
+  const showTest = hasDeck && testSessionActive;
   document.getElementById('test-no-deck').style.display       = (!hasDeck) ? 'flex' : 'none';
   document.getElementById('test-start-screen').style.display  = (hasDeck && !testSessionActive) ? 'flex' : 'none';
-  document.getElementById('test-area').style.display          = (hasDeck && testSessionActive) ? '' : 'none';
-  document.getElementById('stats-bar').style.display          = (hasDeck && testSessionActive) ? '' : 'none';
-  document.getElementById('test-shuffle-wrap').style.display  = (hasDeck && testSessionActive) ? 'flex' : 'none';
+  document.getElementById('test-area').style.display          = showTest ? '' : 'none';
+  document.getElementById('stats-toggle').classList.toggle('visible', showTest);
+  document.getElementById('stats-toggle').classList.toggle('collapsed', showTest && !statsBarVisible);
+  document.getElementById('stats-bar').style.display          = showTest ? (statsBarVisible ? '' : 'none') : 'none';
+  document.getElementById('test-shuffle-wrap').style.display  = showTest ? 'flex' : 'none';
   if (hasDeck && !testSessionActive) {
     document.getElementById('test-start-deck').textContent = activeDeckName;
     const fmt = currentFormat === 'mc' ? 'multiple choice' : 'typing';
@@ -3876,8 +3913,14 @@ function updateTestView() {
   }
 }
 
+function toggleStatsBar() {
+  statsBarVisible = !statsBarVisible;
+  updateTestView();
+}
+
 function beginTest() {
   testSessionActive = true;
+  statsBarVisible = true; // reset to visible each new session
   stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
   sessionLog = [];
   currentIndex = 0;
@@ -4288,11 +4331,15 @@ function renderListView() {
   const today = new Date().toISOString().slice(0, 10);
   const el = document.getElementById('list-view');
   el.innerHTML = '';
+  const scroll = document.createElement('div');
+  scroll.className = 'list-scroll';
+  el.appendChild(scroll);
+  let activeRow = null;
   activeDeck.forEach((card, i) => {
     const cd = cardData[card.hanzi] || {};
     const isDue = cd.reviewFlag || (cd.mastered && cd.due && cd.due <= today);
     const row = document.createElement('div');
-    row.className = 'list-row';
+    row.className = 'list-row' + (i === currentIndex ? ' active-row' : '');
     row.innerHTML = `
       <span class="list-hanzi">${card.hanzi}</span>
       <span class="list-pinyin">${card.pinyin}</span>
@@ -4306,8 +4353,10 @@ function renderListView() {
       setListView(false);
       renderCard();
     };
-    el.appendChild(row);
+    scroll.appendChild(row);
+    if (i === currentIndex) activeRow = row;
   });
+  if (activeRow) requestAnimationFrame(() => activeRow.scrollIntoView({ block: 'center' }));
 }
 
 // ══════════════════════════════════════════
@@ -5250,7 +5299,7 @@ document.addEventListener('keydown', e => {
   }
 
   if (currentMode === 'study') {
-    if (e.key === ' ') { e.preventDefault(); flipCard(); }
+    if (e.key === ' ') { e.preventDefault(); if (listViewActive) setListView(false); else flipCard(); }
     if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && (e.altKey || e.metaKey || e.ctrlKey)) return;
     if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); prevCard(); }
@@ -5285,6 +5334,11 @@ document.addEventListener('click', e => {
       closeSearch();
     }
   }
+});
+
+// Close list view when clicking outside the card
+document.addEventListener('mousedown', e => {
+  if (listViewActive && !e.target.closest('#card-scene')) setListView(false);
 });
 
 // ══════════════════════════════════════════
