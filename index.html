@@ -92,6 +92,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* GPU-composite rounded elements for smoother edges */
+.sidebar, .info-panel, .card-face, .list-view, .icon-btn, .pill-toggle, .chunk-pill, .context-chip {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
 /* Animated gradient blob background */
 body::before {
   content: '';
@@ -523,49 +528,52 @@ body.light .sidebar {
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  background: var(--bg);
 }
 
 /* Resize handle — built into info panel left edge */
 .pane-divider {
   display: none !important;
 }
-.info-panel.open {
-  width: var(--info-panel-w);
-  min-width: 280px;
-  max-width: 600px;
-  border-left: 3px solid transparent;
-  position: relative;
-  transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), max-width .3s cubic-bezier(.4,0,.2,1), margin .3s ease, border-left-color .15s;
-}
-.info-panel.open .info-panel-scroll,
-.info-panel.open .tutor-bar {
-  cursor: default;
-}
 
-/* Info panel (right) — inline in split-pane, popover styling */
+/* Info panel (right) — overlays split-pane, doesn't push card */
 .info-panel {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
   width: 0;
   min-width: 0;
   max-width: 0;
   overflow: hidden;
   background: #101014;
-  border: 1px solid transparent;
+  border: none;
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 32px rgba(0,0,0,.35);
-  margin: 6px 6px 6px 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), max-width .3s cubic-bezier(.4,0,.2,1), margin .3s ease, border-color .3s ease;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), max-width .3s cubic-bezier(.4,0,.2,1), border-color .3s ease, box-shadow .3s ease, opacity .15s ease;
 }
 .info-panel.open {
   width: var(--info-panel-w);
   min-width: 280px;
   max-width: 600px;
-  border-color: var(--border2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid transparent;
+  pointer-events: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  opacity: 1;
+}
+.info-panel.open .info-panel-scroll,
+.info-panel.open .tutor-bar {
+  cursor: default;
 }
 body.light .info-panel {
   background: var(--bg2);
+}
+body.light .info-panel.open {
   box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
 
@@ -1054,6 +1062,96 @@ body.light .info-panel {
   font-feature-settings: "tnum";
 }
 
+/* Favorite button on chunk items */
+.fav-btn {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 2px;
+  opacity: 0.3;
+  transition: all .15s;
+  line-height: 1;
+}
+.fav-btn:hover { opacity: 0.7; color: var(--amber, #f59e0b); }
+.fav-btn.active { opacity: 1; color: var(--amber, #f59e0b); }
+.chunk-item:hover .fav-btn { opacity: 0.6; }
+.chunk-item:hover .fav-btn.active { opacity: 1; }
+
+/* Context menu */
+.ctx-menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 160px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  padding: 4px 0;
+  font-size: 13px;
+  animation: ctxFadeIn .12s ease;
+}
+body.light .ctx-menu {
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+}
+@keyframes ctxFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.ctx-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  color: var(--text);
+  transition: background .1s;
+}
+.ctx-menu-item:hover { background: var(--accent-soft); }
+.ctx-menu-item svg { flex-shrink: 0; }
+
+/* Info panel expanded (full page) mode */
+.info-panel.expanded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  border-radius: 0;
+  margin: 0;
+  z-index: 40;
+}
+.info-panel.expanded .info-panel-scroll {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+.ip-more-info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+.ip-more-info-btn:hover { background: var(--bg4); color: var(--text); border-color: var(--border3); }
+
+/* Focused study mode (double-click info) */
+.study-area.focused .side-nav { display: none; }
+.study-area.focused { padding-top: 10px; }
+body.focused-mode .context-strip { display: none !important; }
+
 /* Custom deck items */
 .deck-item {
   display: flex;
@@ -1214,9 +1312,9 @@ body.light .empty-sub {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text3);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1225,15 +1323,20 @@ body.light .empty-sub {
   flex-shrink: 0;
 }
 .side-nav:hover {
-  border-color: var(--accent-border);
-  color: var(--accent);
-  background: var(--accent-soft);
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+  background: rgba(255,255,255,0.15);
   transform: scale(1.08);
 }
 .side-nav.nav-back {
-  color: var(--text2);
+  color: #fff;
   border-color: var(--border2);
 }
+body.light .side-nav { color: #222; background: rgba(255,255,255,0.8); border-color: var(--border2); }
+body.light .side-nav:hover { color: #111; background: rgba(255,255,255,0.95); }
+body.light .side-nav.nav-back { color: #222; }
+body.light .controls-tray-chevron { color: #333; }
+body.light .controls-tray-chevron:hover { color: #111; }
 
 /* Card */
 .card-scene {
@@ -1275,9 +1378,7 @@ body.light .empty-sub {
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
   border: 1px solid rgba(96,112,255,0.22);
-  background:
-    linear-gradient(165deg, rgba(60,65,120,0.12) 0%, rgba(30,30,60,0.06) 50%, rgba(80,70,140,0.10) 100%),
-    linear-gradient(to bottom, rgba(16,16,34,0.92) 0%, rgba(10,10,22,0.95) 100%);
+  background: linear-gradient(165deg, rgba(30,30,55,0.97) 0%, rgba(16,16,30,0.98) 50%, rgba(22,20,40,0.97) 100%);
   box-shadow:
     0 8px 32px rgba(0,0,0,.35),
     inset 0 1px 0 rgba(255,255,255,0.12),
@@ -1297,9 +1398,7 @@ body.light .empty-sub {
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  background:
-    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.08) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(96,112,255,0.04) 100%);
+  background: radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 body.light .card-face {
@@ -1331,6 +1430,8 @@ body.light .card-face::before {
   line-height: 1.15;
   text-align: center;
   word-break: keep-all;
+  max-width: 100%;
+  overflow: hidden;
 }
 .card-pinyin {
   font-size: 18px;
@@ -1397,6 +1498,8 @@ body.light .card-face::before {
   color: var(--text);
   text-align: center;
   line-height: 1.4;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* Card bottom controls */
@@ -1473,7 +1576,7 @@ body.light .card-face::before {
 .controls-tray-wrap.active {
   display: flex;
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   left: 0;
   right: 0;
   z-index: 5;
@@ -1495,11 +1598,12 @@ body.light .card-face::before {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text3);
-  transition: color .15s;
+  color: #fff;
+  opacity: 0.7;
+  transition: color .15s, opacity .15s;
   flex-shrink: 0;
 }
-.controls-tray-chevron:hover { color: var(--text2); }
+.controls-tray-chevron:hover { color: #fff; opacity: 1; }
 .controls-tray-chevron svg { transition: transform .22s cubic-bezier(.4,0,.2,1); }
 .controls-tray-wrap.tray-open .controls-tray-chevron svg { transform: rotate(180deg); }
 .controls-tray {
@@ -1519,6 +1623,27 @@ body.light .card-face::before {
   max-height: 60px;
   opacity: 1;
   padding: 10px 0 0;
+}
+/* Controls tray buttons: white text/icons in dark mode */
+.controls-tray .btn {
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.4);
+}
+.controls-tray .btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.35);
+  background: rgba(0,0,0,0.55);
+}
+body.light .controls-tray .btn {
+  color: var(--text);
+  border-color: var(--border2);
+  background: var(--bg3);
+}
+body.light .controls-tray .btn:hover {
+  color: var(--text);
+  background: var(--bg4);
+  border-color: var(--border3);
 }
 
 /* ══════════════════════════════════════════
@@ -2160,9 +2285,9 @@ body.bg-custom::after { display: none !important; }
   border: 1px solid var(--border2);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .18s ease;
+  transition: opacity .15s ease;
 }
-.list-view.active { opacity: 1; pointer-events: auto; }
+.list-view.active { opacity: 1; pointer-events: auto; transition: opacity .12s ease; }
 /* Inner scroll container — clipped to the parent's border-radius */
 .list-scroll {
   flex: 1;
@@ -2171,9 +2296,9 @@ body.bg-custom::after { display: none !important; }
 }
 /* Blur card content behind the overlay */
 .card-inner.list-blur {
-  filter: blur(6px) brightness(0.4);
+  filter: blur(6px) brightness(0.5);
   clip-path: inset(0 round 16px);
-  transition: filter .22s ease;
+  transition: filter .3s ease .05s;
   pointer-events: none;
 }
 /* Tabular rows — three fixed columns */
@@ -2828,6 +2953,51 @@ let cardData = {};            // hanzi -> { correct, wrong, reviewFlag, interval
 const hskChunkSize = {};
 const hskOpen = {};
 
+// Favorited deck chunks — stored as Set of deck name strings, persisted to localStorage
+const favoritedDecks = new Set(JSON.parse(localStorage.getItem('hanziFavorites') || '[]'));
+function saveFavorites() { localStorage.setItem('hanziFavorites', JSON.stringify([...favoritedDecks])); }
+function toggleFavorite(name) { favoritedDecks.has(name) ? favoritedDecks.delete(name) : favoritedDecks.add(name); saveFavorites(); renderSidebar(); }
+
+// ── Context menu ──
+let activeCtxMenu = null;
+function showContextMenu(e, items) {
+  dismissContextMenu();
+  e.preventDefault();
+  const menu = document.createElement('div');
+  menu.className = 'ctx-menu';
+  items.forEach(it => {
+    const row = document.createElement('div');
+    row.className = 'ctx-menu-item';
+    row.innerHTML = it.icon + '<span>' + it.label + '</span>';
+    row.onclick = () => { dismissContextMenu(); it.action(); };
+    menu.appendChild(row);
+  });
+  document.body.appendChild(menu);
+  // Position
+  const mw = menu.offsetWidth, mh = menu.offsetHeight;
+  menu.style.left = Math.min(e.clientX, window.innerWidth - mw - 8) + 'px';
+  menu.style.top = Math.min(e.clientY, window.innerHeight - mh - 8) + 'px';
+  activeCtxMenu = menu;
+  setTimeout(() => document.addEventListener('click', dismissContextMenu, { once: true }), 0);
+}
+function dismissContextMenu() {
+  if (activeCtxMenu) { activeCtxMenu.remove(); activeCtxMenu = null; }
+}
+
+// ── Focused study mode (double-click info icon) ──
+let focusedMode = false;
+function toggleFocusedMode() {
+  focusedMode = !focusedMode;
+  document.body.classList.toggle('focused-mode', focusedMode);
+  const studyArea = document.getElementById('study-view');
+  studyArea.classList.toggle('focused', focusedMode);
+  if (focusedMode) {
+    if (!infoPanelOpen) toggleInfoPanel();
+  } else {
+    // Restore normal layout
+  }
+}
+
 // Test stats (per session)
 let stats = { correct: 0, wrong: 0, streak: 0, times: [], mastered: new Set(), reviewFlagged: new Set() };
 let sessionLog = [];
@@ -3265,19 +3435,15 @@ function applyAccentFromHue(hue) {
     /* Card face adapts to theme */
     .card-face {
       border-color: hsla(${h}, 90%, 65%, 0.22);
-      background:
-        linear-gradient(165deg, hsla(${h}, 40%, 35%, 0.12) 0%, hsla(${h}, 30%, 18%, 0.06) 50%, hsla(${h}, 40%, 40%, 0.10) 100%),
-        linear-gradient(to bottom, rgba(16,16,34,0.92) 0%, rgba(10,10,22,0.95) 100%);
+      background: linear-gradient(165deg, hsla(${h}, 25%, 14%, 0.97) 0%, hsla(${h}, 15%, 8%, 0.98) 50%, hsla(${h}, 20%, 12%, 0.97) 100%);
       box-shadow:
         0 8px 32px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        inset 0 -1px 0 rgba(255,255,255,0.03),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 -1px 0 rgba(255,255,255,0.02),
         0 0 0 1px hsla(${h}, 90%, 65%, 0.06);
     }
     .card-face::before {
-      background:
-        radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.08) 0%, transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, hsla(${h}, 90%, 65%, 0.04) 100%);
+      background: radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.06) 0%, transparent 60%);
     }
     body.light .card-face {
       background:
@@ -3499,11 +3665,18 @@ function renderSidebar() {
 
         const item = document.createElement('div');
         item.className = 'chunk-item' + (name === activeDeckName ? ' active' : '');
-        item.innerHTML = `<span>${chunkNum}/${totalChunks}</span><span class="chunk-count">${cards.length}</span>`;
+        const isFav = favoritedDecks.has(name);
+        item.innerHTML = `<span>${chunkNum}/${totalChunks}</span><span style="display:flex;align-items:center;gap:6px"><span class="chunk-count">${cards.length}</span><button class="fav-btn${isFav ? ' active' : ''}" onclick="event.stopPropagation();toggleFavorite('${name.replace(/'/g, "\\'")}')" title="${isFav ? 'Remove from my decks' : 'Add to my decks'}">★</button></span>`;
         item.onclick = () => {
           decks[name] = cards;
           selectDeck(name);
           if (window.innerWidth <= 480) closeSidebar();
+        };
+        item.oncontextmenu = (e) => {
+          const starIcon = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l2 4 4.5.6-3.2 3.2.8 4.5L8 11.7l-4.1 2.1.8-4.5L1.5 6.1 6 5.5z" stroke="currentColor" stroke-width="1.2" fill="' + (isFav ? 'currentColor' : 'none') + '"/></svg>';
+          showContextMenu(e, [
+            { icon: starIcon, label: isFav ? 'Remove from my decks' : 'Add to my decks', action: () => toggleFavorite(name) }
+          ]);
         };
         wrapper.appendChild(item);
       }
@@ -3512,12 +3685,48 @@ function renderSidebar() {
     list.appendChild(wrapper);
   }
 
-  // Custom decks
+  // Custom decks + favorited HSK chunks
   const customList = document.getElementById('custom-deck-list');
   customList.innerHTML = '';
-  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/));
-  document.getElementById('custom-decks-header').style.display = custom.length > 0 ? '' : 'none';
+  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/) && k !== '⟳ review');
 
+  // Build favorited HSK chunk entries
+  const favEntries = [];
+  for (const favName of favoritedDecks) {
+    const m = favName.match(/^hsk (\d+)/);
+    if (!m) continue;
+    const lvl = parseInt(m[1]);
+    const data = HSK_DATA[lvl];
+    if (!data) continue;
+    const sz = getChunkSize(lvl);
+    const totalChunks = Math.ceil(data.length / sz);
+    const chunkMatch = favName.match(/(\d+)\/(\d+)$/);
+    if (!chunkMatch) continue;
+    const chunkNum = parseInt(chunkMatch[1]);
+    const startIdx = (chunkNum - 1) * sz;
+    const cards = data.slice(startIdx, startIdx + sz);
+    if (cards.length) favEntries.push({ name: favName, cards, label: `HSK${lvl} · ${chunkNum}/${totalChunks}` });
+  }
+
+  document.getElementById('custom-decks-header').style.display = (custom.length > 0 || favEntries.length > 0) ? '' : 'none';
+
+  // Render favorited HSK chunks
+  favEntries.forEach(({ name, cards, label }) => {
+    const item = document.createElement('div');
+    item.className = 'deck-item' + (name === activeDeckName ? ' active' : '');
+    item.innerHTML = `
+      <span class="deck-name">${label}</span>
+      <span class="deck-tag" style="background:var(--accent-soft);color:var(--accent)">★</span>
+    `;
+    item.onclick = () => {
+      decks[name] = cards;
+      selectDeck(name);
+      if (window.innerWidth <= 480) closeSidebar();
+    };
+    customList.appendChild(item);
+  });
+
+  // Render custom decks (CSV, AI-generated)
   custom.forEach(([name, cards]) => {
     const item = document.createElement('div');
     item.className = 'deck-item' + (name === activeDeckName ? ' active' : '');
@@ -3533,6 +3742,11 @@ function renderSidebar() {
     item.ondblclick = (e) => {
       e.stopPropagation();
       startRenameDeck(item, name, cards);
+    };
+    item.oncontextmenu = (e) => {
+      showContextMenu(e, [
+        { icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6.5 2h3M5.5 7v4.5M10.5 7v4.5M4 4.5l.8 8.3a1 1 0 001 .9h4.4a1 1 0 001-.9L12 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>', label: 'Delete deck', action: () => { delete decks[name]; if (activeDeckName === name) { activeDeck = []; activeDeckName = ''; } renderSidebar(); } }
+      ]);
     };
     customList.appendChild(item);
   });
@@ -3620,10 +3834,24 @@ function renderCard() {
   document.getElementById('card-inner').classList.remove('flipped');
   document.querySelectorAll('.side-nav').forEach(b => b.classList.remove('nav-back'));
 
-  document.getElementById('front-hanzi').textContent = card.hanzi;
+  const frontHanzi = document.getElementById('front-hanzi');
+  const backEnglish = document.getElementById('back-english');
+  frontHanzi.textContent = card.hanzi;
   document.getElementById('front-pinyin').textContent = card.pinyin;
   document.getElementById('front-pinyin').classList.toggle('hidden', !showPinyin);
-  document.getElementById('back-english').textContent = card.english;
+  backEnglish.textContent = card.english;
+
+  // Auto-shrink hanzi if too wide for card
+  frontHanzi.style.fontSize = '';
+  const hanziLen = card.hanzi.length;
+  if (hanziLen > 4) frontHanzi.style.fontSize = Math.max(28, Math.round(72 * 3 / hanziLen)) + 'px';
+  else if (hanziLen > 2) frontHanzi.style.fontSize = Math.max(40, Math.round(72 * 2 / hanziLen)) + 'px';
+
+  // Auto-shrink english if too long
+  backEnglish.style.fontSize = '';
+  const engLen = card.english.length;
+  if (engLen > 40) backEnglish.style.fontSize = '16px';
+  else if (engLen > 25) backEnglish.style.fontSize = '20px';
 
   // Note indicator
   const cd = cardData[card.hanzi];
@@ -4504,6 +4732,13 @@ function toggleInfoPanel() {
   }
 }
 
+function toggleInfoExpanded() {
+  const panel = document.getElementById('info-panel');
+  panel.classList.toggle('expanded');
+  // Re-render to update button label
+  if (infoPanelCurrentCard) renderInfoPanel(infoPanelCurrentCard);
+}
+
 function renderInfoPanel(card) {
   if (!card) return;
   infoPanelCurrentCard = card;
@@ -4663,6 +4898,13 @@ function renderInfoPanel(card) {
 
   // ── Tutor messages area ──
   html += `<div id="tutor-messages"></div>`;
+
+  // ── More info button ──
+  const isExpanded = document.getElementById('info-panel').classList.contains('expanded');
+  html += `<button class="ip-more-info-btn" onclick="toggleInfoExpanded()">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="${isExpanded ? 'M4 10l4-4 4 4' : 'M4 6l4 4 4-4'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    ${isExpanded ? 'collapse' : 'more info'}
+  </button>`;
 
   scroll.innerHTML = html;
 }
@@ -5345,6 +5587,45 @@ document.addEventListener('mousedown', e => {
   const wrap = document.getElementById('header-search-wrap');
   if (wrap && wrap.classList.contains('open') && !wrap.contains(e.target)) {
     closeSearch();
+  }
+});
+
+// ══════════════════════════════════════════
+// CLICK OUTSIDE INFO PANEL TO DISMISS
+// ══════════════════════════════════════════
+document.addEventListener('mousedown', e => {
+  if (!infoPanelOpen) return;
+  const panel = document.getElementById('info-panel');
+  const sidebar = document.getElementById('sidebar');
+  const searchWrap = document.querySelector('.search-wrap');
+  const settingsBtn = document.querySelector('[data-tip="settings"]');
+  const btnInfo = document.getElementById('btn-info');
+
+  // Don't dismiss if clicking: info panel, sidebar, search, settings, or info button
+  if (panel.contains(e.target)) return;
+  if (sidebar.contains(e.target)) return;
+  if (searchWrap && searchWrap.contains(e.target)) return;
+  if (settingsBtn && settingsBtn.contains(e.target)) return;
+  if (btnInfo && btnInfo.contains(e.target)) return;
+
+  // Dismiss info panel
+  toggleInfoPanel();
+  // Also exit focused mode if active
+  if (focusedMode) toggleFocusedMode();
+});
+
+// ══════════════════════════════════════════
+// DOUBLE-CLICK INFO ICON → FOCUSED MODE
+// ══════════════════════════════════════════
+document.getElementById('btn-info').addEventListener('dblclick', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!focusedMode) {
+    // Ensure info panel is open
+    if (!infoPanelOpen) toggleInfoPanel();
+    toggleFocusedMode();
+  } else {
+    toggleFocusedMode();
   }
 });
 
