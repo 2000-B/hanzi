@@ -19,8 +19,8 @@
   --bg2:      #0d0d1c;
   --bg3:      #131326;
   --bg4:      #1a1a30;
-  --border:   rgba(96,112,255,0.10);
-  --border2:  rgba(96,112,255,0.17);
+  --border:   rgba(96,112,255,0.14);
+  --border2:  rgba(96,112,255,0.25);
   --border3:  rgba(96,112,255,0.26);
   --text:     #e8e8f0;
   --text2:    #8888a8;
@@ -246,7 +246,8 @@ body.light header {
   color: #fff;
   box-shadow: 0 2px 8px var(--accent-glow);
 }
-.mode-pill-btn:not(.active):hover { color: var(--text2); }
+.mode-pill-btn:not(.active) { color: var(--text2); }
+.mode-pill-btn:not(.active):hover { color: var(--text); }
 
 .search-input {
   width: 100%;
@@ -464,7 +465,7 @@ body.light .sidebar {
     bottom: 0;
     z-index: 50;
   }
-  .split-pane { margin-left: 52px; }
+  .split-pane { margin-left: 64px; }
   .sidebar.collapsed { width: 52px; min-width: 52px; }
   .sidebar.collapsed .sidebar-full { display: none !important; }
   .sidebar.collapsed .sidebar-icon { display: flex !important; }
@@ -523,7 +524,7 @@ body.light .sidebar {
 
 .main-content {
   flex: 1;
-  min-width: 0;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -535,43 +536,43 @@ body.light .sidebar {
   display: none !important;
 }
 
-/* Info panel (right) — overlays split-pane, doesn't push card */
+/* Info panel (right) — flex sibling panel */
 .info-panel {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  bottom: 6px;
   width: 0;
   min-width: 0;
   max-width: 0;
   overflow: hidden;
-  background: #101014;
+  background: rgba(16,16,20,0.85);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: none;
   border-radius: var(--radius-md);
   box-shadow: none;
+  margin: 3px;
   display: flex;
   flex-direction: column;
-  z-index: 10;
   pointer-events: none;
   opacity: 0;
-  transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), max-width .3s cubic-bezier(.4,0,.2,1), border-color .3s ease, box-shadow .3s ease, opacity .15s ease;
+  transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), max-width .3s cubic-bezier(.4,0,.2,1), border-color .3s ease, box-shadow .3s ease, opacity .2s ease, margin .3s ease;
 }
 .info-panel.open {
   width: var(--info-panel-w);
-  min-width: 280px;
+  min-width: 200px;
   max-width: 600px;
   border: 1px solid var(--border2);
-  border-left: 3px solid transparent;
   pointer-events: auto;
   box-shadow: 0 8px 32px rgba(0,0,0,.35);
   opacity: 1;
+  flex-shrink: 1;
 }
 .info-panel.open .info-panel-scroll,
 .info-panel.open .tutor-bar {
   cursor: default;
 }
 body.light .info-panel {
-  background: var(--bg2);
+  background: rgba(255,255,255,0.85);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 body.light .info-panel.open {
   box-shadow: 0 4px 20px rgba(0,0,0,.1);
@@ -1111,11 +1112,7 @@ body.light .ctx-menu {
 
 /* Info panel expanded (full page) mode */
 .info-panel.expanded {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  flex: 1;
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
@@ -1147,10 +1144,95 @@ body.light .ctx-menu {
 }
 .ip-more-info-btn:hover { background: var(--bg4); color: var(--text); border-color: var(--border3); }
 
-/* Focused study mode (double-click info) */
-.study-area.focused .side-nav { display: none; }
-.study-area.focused { padding-top: 10px; }
-body.focused-mode .context-strip { display: none !important; }
+/* ── Workspace tiling system ── */
+.workspace-dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.workspace-dragging .ws-panel:not(.drag-source) {
+  filter: blur(4px);
+  opacity: 0.5;
+  transform: scale(0.96);
+  transition: filter .2s, opacity .2s, transform .2s;
+}
+
+/* Workspace panel shared styles */
+.ws-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 3px;
+  position: relative;
+  transition: transform .25s ease, opacity .25s ease, filter .2s ease;
+}
+
+/* Workspace divider handle */
+.ws-divider {
+  flex-shrink: 0;
+  background: transparent;
+  position: relative;
+  z-index: 5;
+  display: none;
+}
+.ws-divider.visible { display: block; }
+.ws-divider.horizontal {
+  width: 6px;
+  cursor: col-resize;
+  margin: 6px 0;
+}
+.ws-divider.vertical {
+  height: 6px;
+  cursor: row-resize;
+  margin: 0 6px;
+}
+.ws-divider::after {
+  content: '';
+  position: absolute;
+  border-radius: 2px;
+  background: var(--border2);
+  opacity: 0;
+  transition: opacity .2s, background .2s;
+}
+.ws-divider.horizontal::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 32px;
+}
+.ws-divider.vertical::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 3px;
+  width: 32px;
+}
+.ws-divider:hover::after,
+.ws-divider.active::after {
+  opacity: 1;
+  background: var(--accent);
+}
+
+/* Long-press indicator */
+.panel-grab-ready {
+  cursor: grab !important;
+}
+.panel-grabbing {
+  cursor: grabbing !important;
+  z-index: 20;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  opacity: 0.92;
+}
+
+/* Drop target indicator */
+.ws-drop-indicator {
+  position: absolute;
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-md);
+  z-index: 15;
+  pointer-events: none;
+  transition: all .15s ease;
+}
 
 /* Custom deck items */
 .deck-item {
@@ -1295,20 +1377,24 @@ body.light .empty-sub {
   color: rgba(107,114,128,0.7);
 }
 
-/* Study area */
+/* Study area — transparent panel */
 .study-area {
-  flex: 1;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 20px 20px 54px;
   gap: 16px;
   overflow: auto;
+  scrollbar-width: none;
   min-height: 0;
+  background: transparent;
 }
+.study-area::-webkit-scrollbar { display: none; }
 .study-area.active { display: flex; }
 
+/* Side nav arrows — hidden for now, kept for future use */
 .side-nav {
+  display: none;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -1316,7 +1402,6 @@ body.light .empty-sub {
   background: rgba(0,0,0,0.5);
   color: #fff;
   cursor: pointer;
-  display: flex;
   align-items: center;
   justify-content: center;
   transition: border-color .18s ease, color .18s ease, background .18s ease, transform .15s ease;
@@ -1504,6 +1589,39 @@ body.light .card-face::before {
 
 /* Card bottom controls */
 /* Context strip */
+/* Context strip wrapper — handles edge fades */
+.context-strip-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+}
+.context-strip-wrap::before,
+.context-strip-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  z-index: 2;
+  pointer-events: none;
+}
+.context-strip-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg, #0a0a0c), transparent);
+}
+.context-strip-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg, #0a0a0c), transparent);
+}
+/* When bg is transparent (custom bg), use a mask instead */
+body.bg-custom .context-strip-wrap::before,
+body.bg-custom .context-strip-wrap::after {
+  display: none;
+}
+body.bg-custom .context-strip {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 48px, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 48px, black calc(100% - 48px), transparent 100%);
+}
 .context-strip {
   display: none;
   align-items: center;
@@ -2334,16 +2452,48 @@ body.bg-custom::after { display: none !important; }
 /* ══════════════════════════════════════════
    ANALYTICS DASHBOARD
    ══════════════════════════════════════════ */
-.analytics-view {
-  display: none;
+/* Analytics as independent panel */
+.analytics-panel {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  overflow: hidden;
+  display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  padding: 24px;
-  gap: 20px;
-  flex: 1;
+  padding: 0;
+  gap: 0;
   min-height: 0;
+  background: rgba(16,16,20,0.85);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  margin: 3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: width .3s ease, min-width .3s ease, max-width .3s ease, opacity .2s ease, margin .3s ease, padding .3s ease;
 }
-.analytics-view.active { display: flex; }
+.analytics-panel.open {
+  width: 340px;
+  min-width: 200px;
+  max-width: 600px;
+  border: 1px solid var(--border2);
+  pointer-events: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  opacity: 1;
+  padding: 14px;
+  flex-shrink: 1;
+  gap: 12px;
+  overflow-y: auto;
+  margin: 3px;
+}
+body.light .analytics-panel {
+  background: rgba(255,255,255,0.92);
+}
+body.light .analytics-panel.open {
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+}
 
 .dash-header {
   display: flex;
@@ -2352,29 +2502,27 @@ body.bg-custom::after { display: none !important; }
   flex-shrink: 0;
 }
 .dash-title {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
 }
 
 .stat-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
   flex-shrink: 0;
 }
-@media (max-width: 600px) { .stat-cards { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 400px) { .stat-cards { grid-template-columns: 1fr; } }
 
 .stat-card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
   box-shadow: var(--elevation);
 }
 .stat-card-value {
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 600;
   line-height: 1;
   background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
@@ -2383,35 +2531,35 @@ body.bg-custom::after { display: none !important; }
   background-clip: text;
 }
 .stat-card-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text3);
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .dash-card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
   box-shadow: var(--elevation);
 }
 .dash-card-title {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text3);
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
-.dash-chart-wrap { position: relative; height: 180px; }
+.dash-chart-wrap { position: relative; height: 140px; }
 
 .session-table-wrap {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   box-shadow: var(--elevation);
 }
@@ -2420,36 +2568,27 @@ body.bg-custom::after { display: none !important; }
   min-width: 0;
 }
 .session-table-title {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text3);
-  padding: 14px 18px 10px;
+  padding: 10px 12px 8px;
   border-bottom: 1px solid var(--border);
 }
 .session-row {
   display: grid;
-  grid-template-columns: 90px minmax(80px, 1fr) 48px 56px 60px 64px;
-  gap: 8px;
-  padding: 9px 18px;
+  grid-template-columns: 70px minmax(60px, 1fr) 36px 48px;
+  gap: 6px;
+  padding: 7px 12px;
   border-bottom: 1px solid var(--border);
-  font-size: 12px;
+  font-size: 11px;
   align-items: center;
   color: var(--text2);
-  min-width: 420px;
+  min-width: 0;
 }
-@media (max-width: 750px) {
-  .session-row {
-    grid-template-columns: 70px minmax(60px, 1fr) 36px 48px;
-    font-size: 11px;
-    padding: 8px 12px;
-    gap: 6px;
-    min-width: 260px;
-  }
-  .session-row .col-speed,
-  .session-row .col-mastered { display: none; }
-}
+.session-row .col-speed,
+.session-row .col-mastered { display: none; }
 .session-row:last-child { border-bottom: none; }
 .session-row.sh { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); }
 .session-row .acc-val { font-weight: 600; color: var(--green); }
@@ -2491,21 +2630,24 @@ body.light .analytics-view .session-row .deck-tag {
 /* Custom tooltip */
 .app-tooltip {
   position: fixed;
-  background: var(--accent);
+  background: color-mix(in srgb, var(--accent) 75%, transparent);
   color: #fff;
   font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 11px;
   font-weight: 500;
   padding: 4px 9px;
-  border-radius: 6px;
+  border-radius: var(--radius);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translateX(-50%) translateY(-100%);
+  transform: translateX(-50%) translateY(-100%); /* default above; JS overrides for header */
   transition: opacity .15s;
   z-index: 9999;
   letter-spacing: .01em;
-  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
 }
 .app-tooltip.visible { opacity: 1; }
 </style>
@@ -2523,8 +2665,7 @@ body.light .analytics-view .session-row .deck-tag {
   <div class="header-left">
     <div class="header-title">汉字学习</div>
     <div class="mode-pill">
-      <button class="mode-pill-btn active" id="pill-study" onclick="setMode('study')">study</button>
-      <button class="mode-pill-btn" id="pill-test" onclick="setMode('test')">test</button>
+      <button class="mode-pill-btn" id="pill-test" onclick="setMode(currentMode === 'test' ? 'study' : 'test')">test</button>
     </div>
   </div>
 
@@ -2543,8 +2684,14 @@ body.light .analytics-view .session-row .deck-tag {
       </button>
       <div class="search-results" id="search-results"></div>
     </div>
+    <button class="icon-btn" id="btn-study" onclick="setMode('study')" data-tip="study flashcards">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="9" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="4" y="5.5" width="8" height="4" rx=".6" stroke="currentColor" stroke-width="1" opacity=".5"/><path d="M2 6h12" stroke="currentColor" stroke-width="1" opacity=".35"/></svg>
+    </button>
     <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-deck" onclick="toggleDeckPanel()" data-tip="deck list">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="1.5" width="11" height="3" rx=".8" stroke="currentColor" stroke-width="1.2"/><rect x="2.5" y="6.5" width="11" height="3" rx=".8" stroke="currentColor" stroke-width="1.2"/><rect x="2.5" y="11.5" width="11" height="3" rx=".8" stroke="currentColor" stroke-width="1.2"/></svg>
     </button>
     <button class="icon-btn" id="btn-analytics" onclick="showAnalytics()" data-tip="progress dashboard">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
@@ -2570,6 +2717,10 @@ body.light .analytics-view .session-row .deck-tag {
       <div class="settings-toggle-row">
         <span class="settings-toggle-label">show pinyin</span>
         <button class="toggle-switch on" id="pinyin-toggle" onclick="togglePinyin()"></button>
+      </div>
+      <div class="settings-toggle-row">
+        <span class="settings-toggle-label">context strip</span>
+        <button class="toggle-switch on" id="context-strip-toggle" onclick="toggleContextStrip()"></button>
       </div>
     </div>
     <div class="settings-group" id="prefs-format-group">
@@ -2730,11 +2881,11 @@ body.light .analytics-view .session-row .deck-tag {
     </div>
   </aside>
 
-  <!-- Split pane -->
-  <div class="split-pane">
+  <!-- Workspace -->
+  <div class="split-pane" id="workspace">
 
     <!-- Main content area -->
-    <div class="main-content" id="main-content">
+    <div class="main-content ws-panel" id="main-content" data-panel-id="flashcard">
 
       <!-- Empty state -->
       <div class="empty-state" id="empty-view">
@@ -2743,7 +2894,9 @@ body.light .analytics-view .session-row .deck-tag {
       </div>
 
       <!-- Context strip -->
-      <div class="context-strip" id="context-strip"></div>
+      <div class="context-strip-wrap" id="context-strip-wrap">
+        <div class="context-strip" id="context-strip"></div>
+      </div>
 
       <!-- Study view -->
       <div class="study-area" id="study-view">
@@ -2774,7 +2927,7 @@ body.light .analytics-view .session-row .deck-tag {
       <!-- Controls tray -->
       <div class="controls-tray-wrap" id="card-controls">
         <button class="controls-tray-chevron" id="controls-tray-chevron" onclick="toggleControlsTray()" data-tip="controls">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="controls-tray" id="controls-tray">
           <!-- Shuffle -->
@@ -2855,12 +3008,15 @@ body.light .analytics-view .session-row .deck-tag {
 
     </div>
 
-    <!-- Analytics dashboard -->
-    <div class="analytics-view" id="analytics-view">
+    <!-- Draggable divider -->
+    <div class="pane-divider" id="pane-divider" style="display:none"></div>
+
+    <!-- Analytics dashboard panel -->
+    <div class="analytics-panel ws-panel" id="analytics-view" data-panel-id="analytics">
       <div class="dash-header">
         <div class="dash-title">progress dashboard</div>
-        <button class="icon-btn" onclick="closeAnalytics()" data-tip="back to study">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="icon-btn" onclick="closeAnalytics()" data-tip="close dashboard">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
       </div>
       <div class="stat-cards" id="dash-stat-cards"></div>
@@ -2876,11 +3032,8 @@ body.light .analytics-view .session-row .deck-tag {
       </div>
     </div>
 
-    <!-- Draggable divider -->
-    <div class="pane-divider" id="pane-divider" style="display:none"></div>
-
     <!-- Info panel (right) -->
-    <div class="info-panel" id="info-panel">
+    <div class="info-panel ws-panel" id="info-panel" data-panel-id="info">
       <div class="info-panel-scroll" id="info-panel-scroll">
         <div style="padding:20px;text-align:center;color:var(--text3);font-size:13px;white-space:nowrap">
           select a card to view details
@@ -2934,6 +3087,7 @@ let currentMode = 'study';
 let testSessionActive = false;
 let currentFormat = 'mc';
 let showPinyin = true;
+let showContextStrip = true;
 let showTimer = false;
 let showDifficultyRatings = false; // persists in localStorage as 'hanzi-diff-ratings'
 let listViewActive = false;
@@ -2982,20 +3136,6 @@ function showContextMenu(e, items) {
 }
 function dismissContextMenu() {
   if (activeCtxMenu) { activeCtxMenu.remove(); activeCtxMenu = null; }
-}
-
-// ── Focused study mode (double-click info icon) ──
-let focusedMode = false;
-function toggleFocusedMode() {
-  focusedMode = !focusedMode;
-  document.body.classList.toggle('focused-mode', focusedMode);
-  const studyArea = document.getElementById('study-view');
-  studyArea.classList.toggle('focused', focusedMode);
-  if (focusedMode) {
-    if (!infoPanelOpen) toggleInfoPanel();
-  } else {
-    // Restore normal layout
-  }
 }
 
 // Test stats (per session)
@@ -3227,6 +3367,9 @@ function syncSettingsUI() {
   if(blobSwatch) blobSwatch.style.background = blobTintHex;
   const blobPicker = document.getElementById('bg-blob-picker');
   if(blobPicker) blobPicker.value = blobTintHex;
+  // Context strip
+  const csToggle = document.getElementById('context-strip-toggle');
+  if(csToggle) csToggle.classList.toggle('on', showContextStrip);
 }
 
 function updatePrefsVisibility() {
@@ -3502,6 +3645,13 @@ function togglePinyin() {
   syncSettingsUI();
 }
 
+function toggleContextStrip() {
+  showContextStrip = !showContextStrip;
+  localStorage.setItem('hanzi_show_context_strip', showContextStrip);
+  renderContextStrip();
+  syncSettingsUI();
+}
+
 function toggleTimer() {
   showTimer = !showTimer;
   syncSettingsUI();
@@ -3522,6 +3672,8 @@ function setFormat(fmt) {
 // ══════════════════════════════════════════
 let sidebarHoverTimer = null;
 let sidebarInteracted = false;
+
+function toggleDeckPanel() { toggleSidebar(); }
 
 function toggleSidebar() {
   if (window.innerWidth <= 480) {
@@ -3673,6 +3825,7 @@ function renderSidebar() {
           if (window.innerWidth <= 480) closeSidebar();
         };
         item.oncontextmenu = (e) => {
+          sidebarInteracted = true;
           const starIcon = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l2 4 4.5.6-3.2 3.2.8 4.5L8 11.7l-4.1 2.1.8-4.5L1.5 6.1 6 5.5z" stroke="currentColor" stroke-width="1.2" fill="' + (isFav ? 'currentColor' : 'none') + '"/></svg>';
           showContextMenu(e, [
             { icon: starIcon, label: isFav ? 'Remove from my decks' : 'Add to my decks', action: () => toggleFavorite(name) }
@@ -3744,6 +3897,7 @@ function renderSidebar() {
       startRenameDeck(item, name, cards);
     };
     item.oncontextmenu = (e) => {
+      sidebarInteracted = true;
       showContextMenu(e, [
         { icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6.5 2h3M5.5 7v4.5M10.5 7v4.5M4 4.5l.8 8.3a1 1 0 001 .9h4.4a1 1 0 001-.9L12 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>', label: 'Delete deck', action: () => { delete decks[name]; if (activeDeckName === name) { activeDeck = []; activeDeckName = ''; } renderSidebar(); } }
       ]);
@@ -3796,7 +3950,7 @@ function selectDeck(name) {
   if (currentMode === 'test' && sessionLog.length > 0) saveSession();
 
   // Close analytics dashboard if open
-  if (document.getElementById('analytics-view').classList.contains('active')) {
+  if (document.getElementById('analytics-view').classList.contains('open')) {
     closeAnalytics();
   }
 
@@ -4226,8 +4380,8 @@ function setMode(mode) {
 
   currentMode = mode;
   testSessionActive = false;
-  document.getElementById('pill-study').classList.toggle('active', mode === 'study');
-  document.getElementById('pill-test').classList.toggle('active', mode === 'test');
+  const pillTest = document.getElementById('pill-test');
+  if (pillTest) pillTest.classList.toggle('active', mode === 'test');
 
   document.getElementById('study-view').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
   document.getElementById('card-controls').classList.toggle('active', mode === 'study' && activeDeck.length > 0);
@@ -4577,7 +4731,7 @@ function toggleDiffRatings() {
 // ══════════════════════════════════════════
 function renderContextStrip() {
   const strip = document.getElementById('context-strip');
-  const isVisible = currentMode === 'study' && activeDeck.length > 0;
+  const isVisible = showContextStrip && currentMode === 'study' && activeDeck.length > 0;
   strip.classList.toggle('active', isVisible);
   if (!isVisible) { strip.innerHTML = ''; return; }
 
@@ -5136,83 +5290,499 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
-(function initDivider() {
-  const panel = document.getElementById('info-panel');
-  let startX, startW, dragging = false;
-  const EDGE = 8; // px from left edge that triggers resize
+// ══════════════════════════════════════════
+// WORKSPACE MANAGER — tiling panels with dividers, drag-to-reorder, resize
+// ══════════════════════════════════════════
+(function initWorkspace() {
+  const workspace = document.getElementById('workspace');
+  const LONG_PRESS_MS = 250;
+  const DIVIDER_SIZE = 6;
 
-  function isOnEdge(e) {
-    const rect = panel.getBoundingClientRect();
-    return e.clientX >= rect.left - EDGE && e.clientX <= rect.left + EDGE;
+  // ── Panel order state ──
+  // panelOrder stores the DOM order of visible panel IDs
+  let panelOrder = ['flashcard']; // initial: just flashcard
+  let layoutDirection = 'row'; // 'row' or 'column'
+
+  function getPanelEl(id) {
+    return workspace.querySelector(`[data-panel-id="${id}"]`);
   }
 
-  panel.addEventListener('mousedown', function(e) {
-    if (!panel.classList.contains('open') || !isOnEdge(e)) return;
+  function getVisiblePanels() {
+    const els = Array.from(workspace.querySelectorAll('.ws-panel'));
+    return els.filter(el => {
+      if (el.dataset.panelId === 'flashcard') return true;
+      return el.classList.contains('open');
+    });
+  }
+
+  function getVisiblePanelIds() {
+    return getVisiblePanels().map(el => el.dataset.panelId);
+  }
+
+  // ── Rebuild DOM order + dividers ──
+  function rebuildLayout() {
+    // Remove old dividers
+    workspace.querySelectorAll('.ws-divider').forEach(d => d.remove());
+
+    // Get panels in desired order
+    const visibleIds = panelOrder.filter(id => {
+      const el = getPanelEl(id);
+      if (!el) return false;
+      if (id === 'flashcard') return true;
+      return el.classList.contains('open');
+    });
+
+    // Add any visible panels not in panelOrder
+    getVisiblePanelIds().forEach(id => {
+      if (!visibleIds.includes(id)) visibleIds.push(id);
+    });
+
+    // Reorder DOM elements and insert dividers
+    const frag = document.createDocumentFragment();
+    visibleIds.forEach((id, i) => {
+      const el = getPanelEl(id);
+      if (!el) return;
+      frag.appendChild(el);
+      if (i < visibleIds.length - 1) {
+        const div = document.createElement('div');
+        div.className = `ws-divider visible ${layoutDirection === 'row' ? 'horizontal' : 'vertical'}`;
+        div.dataset.leftPanel = id;
+        div.dataset.rightPanel = visibleIds[i + 1];
+        frag.appendChild(div);
+      }
+    });
+
+    // Also append hidden (non-visible) panels so they stay in DOM
+    workspace.querySelectorAll('.ws-panel').forEach(el => {
+      const id = el.dataset.panelId;
+      if (!visibleIds.includes(id)) {
+        frag.appendChild(el);
+      }
+    });
+
+    // Append the hidden pane-divider too
+    const oldDivider = document.getElementById('pane-divider');
+    if (oldDivider) frag.appendChild(oldDivider);
+
+    workspace.appendChild(frag);
+
+    // Update flex direction
+    workspace.style.flexDirection = layoutDirection;
+
+    // Update panelOrder to match
+    panelOrder = visibleIds;
+  }
+
+  // ── Divider drag to resize ──
+  let divDragging = false, divStartPos = 0, divLeftEl = null, divRightEl = null;
+  let divLeftStart = 0, divRightStart = 0;
+
+  workspace.addEventListener('mousedown', function(e) {
+    const divider = e.target.closest('.ws-divider');
+    if (!divider) return;
     e.preventDefault();
-    startX = e.clientX;
-    startW = panel.offsetWidth;
-    dragging = true;
-    panel.style.borderLeftColor = 'var(--accent)';
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
+    divDragging = true;
+    divider.classList.add('active');
+    divLeftEl = getPanelEl(divider.dataset.leftPanel);
+    divRightEl = getPanelEl(divider.dataset.rightPanel);
 
-  // Show resize cursor and border when hovering near edge
-  panel.addEventListener('mousemove', function(e) {
-    if (dragging) return;
-    if (panel.classList.contains('open') && isOnEdge(e)) {
-      panel.style.cursor = 'col-resize';
-      panel.style.borderLeftColor = 'var(--accent)';
+    if (layoutDirection === 'row') {
+      divStartPos = e.clientX;
+      divLeftStart = divLeftEl.offsetWidth;
+      divRightStart = divRightEl.offsetWidth;
     } else {
-      panel.style.cursor = '';
-      if (!dragging) panel.style.borderLeftColor = '';
+      divStartPos = e.clientY;
+      divLeftStart = divLeftEl.offsetHeight;
+      divRightStart = divRightEl.offsetHeight;
     }
-  });
-  panel.addEventListener('mouseleave', function() {
-    if (!dragging) {
-      panel.style.cursor = '';
-      panel.style.borderLeftColor = '';
-    }
+
+    const SNAP_DIST = 12;
+    const onMove = (ev) => {
+      if (!divDragging) return;
+      // Collect snap targets from workspace and other panels
+      const wsRect = workspace.getBoundingClientRect();
+      const snapTargets = layoutDirection === 'row'
+        ? [wsRect.left, wsRect.right, wsRect.left + wsRect.width / 2]
+        : [wsRect.top, wsRect.bottom, wsRect.top + wsRect.height / 2];
+      workspace.querySelectorAll('.ws-panel').forEach(p => {
+        if (p === divLeftEl || p === divRightEl || p.offsetWidth === 0) return;
+        const r = p.getBoundingClientRect();
+        if (layoutDirection === 'row') { snapTargets.push(r.left, r.right); }
+        else { snapTargets.push(r.top, r.bottom); }
+      });
+
+      let mousePos = layoutDirection === 'row' ? ev.clientX : ev.clientY;
+      // Snap the divider position (mouse position) to nearby targets
+      for (const t of snapTargets) {
+        if (Math.abs(mousePos - t) < SNAP_DIST) { mousePos = t; break; }
+      }
+
+      const delta = mousePos - divStartPos;
+      const newLeft = Math.max(120, divLeftStart + delta);
+      const newRight = Math.max(120, divRightStart - delta);
+
+      if (layoutDirection === 'row') {
+        divLeftEl.style.width = newLeft + 'px';
+        divLeftEl.style.flex = 'none';
+        divRightEl.style.width = newRight + 'px';
+        divRightEl.style.flex = 'none';
+      } else {
+        divLeftEl.style.height = newLeft + 'px';
+        divLeftEl.style.flex = 'none';
+        divRightEl.style.height = newRight + 'px';
+        divRightEl.style.flex = 'none';
+      }
+    };
+
+    const onUp = () => {
+      divDragging = false;
+      divider.classList.remove('active');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
   });
 
-  function onMouseMove(e) {
-    if (!dragging) return;
-    const dx = startX - e.clientX;
-    const newW = Math.max(240, Math.min(600, startW + dx));
-    panel.style.width = newW + 'px';
+  // ── Long-press drag to reorder panels ──
+  let longPressTimer = null, dragSource = null, isDragging = false;
+  let dragOriginX = 0, dragOriginY = 0, dragStartX = 0, dragStartY = 0;
+  let dropIndicator = null;
+
+  function createDropIndicator() {
+    if (!dropIndicator) {
+      dropIndicator = document.createElement('div');
+      dropIndicator.className = 'ws-drop-indicator';
+      dropIndicator.style.display = 'none';
+      workspace.appendChild(dropIndicator);
+    }
+    return dropIndicator;
   }
 
-  function onMouseUp() {
-    dragging = false;
-    panel.style.borderLeftColor = '';
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+  function startLongPress(el, e) {
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragOriginX = e.clientX;
+    dragOriginY = e.clientY;
+
+    longPressTimer = setTimeout(() => {
+      isDragging = true;
+      dragSource = el;
+      el.classList.add('panel-grab-ready', 'panel-grabbing', 'drag-source');
+      workspace.classList.add('workspace-dragging');
+      createDropIndicator();
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+    }, LONG_PRESS_MS);
+
+    document.addEventListener('mousemove', onPreDragMove);
+    document.addEventListener('mouseup', cancelLongPress);
   }
 
-  // Touch support
-  panel.addEventListener('touchstart', function(e) {
-    const touch = e.touches[0];
+  function onPreDragMove(e) {
+    if (Math.abs(e.clientX - dragStartX) > 10 || Math.abs(e.clientY - dragStartY) > 10) {
+      cancelLongPress();
+    }
+  }
+
+  function cancelLongPress() {
+    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+    document.removeEventListener('mousemove', onPreDragMove);
+    document.removeEventListener('mouseup', cancelLongPress);
+  }
+
+  function onDragMove(e) {
+    if (!isDragging || !dragSource) return;
+    const dx = e.clientX - dragOriginX;
+    const dy = e.clientY - dragOriginY;
+    dragSource.style.transform = `translate(${dx}px, ${dy}px)`;
+    dragSource.style.transition = 'none';
+
+    // Show drop indicator
+    const indicator = createDropIndicator();
+    const panels = getVisiblePanels().filter(p => p !== dragSource);
+    let bestTarget = null, bestSide = null, bestDist = Infinity;
+
+    panels.forEach(panel => {
+      const rect = panel.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      // Check all four sides
+      const sides = [
+        { side: 'left',   dist: Math.abs(e.clientX - rect.left),   x: rect.left, y: rect.top, w: 4, h: rect.height },
+        { side: 'right',  dist: Math.abs(e.clientX - rect.right),  x: rect.right - 4, y: rect.top, w: 4, h: rect.height },
+        { side: 'top',    dist: Math.abs(e.clientY - rect.top),     x: rect.left, y: rect.top, w: rect.width, h: 4 },
+        { side: 'bottom', dist: Math.abs(e.clientY - rect.bottom),  x: rect.left, y: rect.bottom - 4, w: rect.width, h: 4 },
+      ];
+
+      // Only consider sides where mouse is within panel bounds (extended)
+      sides.forEach(s => {
+        const inX = e.clientX >= rect.left - 40 && e.clientX <= rect.right + 40;
+        const inY = e.clientY >= rect.top - 40 && e.clientY <= rect.bottom + 40;
+        if (inX && inY && s.dist < bestDist && s.dist < 80) {
+          bestDist = s.dist;
+          bestTarget = panel;
+          bestSide = s;
+        }
+      });
+    });
+
+    if (bestTarget && bestSide) {
+      const wsRect = workspace.getBoundingClientRect();
+      indicator.style.display = 'block';
+      indicator.style.left = (bestSide.x - wsRect.left) + 'px';
+      indicator.style.top = (bestSide.y - wsRect.top) + 'px';
+      indicator.style.width = bestSide.w + 'px';
+      indicator.style.height = bestSide.h + 'px';
+      indicator.dataset.targetPanel = bestTarget.dataset.panelId;
+      indicator.dataset.side = bestSide.side;
+    } else {
+      indicator.style.display = 'none';
+    }
+  }
+
+  function onDragEnd(e) {
+    document.removeEventListener('mousemove', onDragMove);
+    document.removeEventListener('mouseup', onDragEnd);
+    document.removeEventListener('mousemove', onPreDragMove);
+    document.removeEventListener('mouseup', cancelLongPress);
+    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+
+    if (isDragging && dragSource) {
+      const indicator = dropIndicator;
+      if (indicator && indicator.style.display !== 'none') {
+        const targetId = indicator.dataset.targetPanel;
+        const side = indicator.dataset.side;
+        const sourceId = dragSource.dataset.panelId;
+
+        if (targetId && sourceId !== targetId) {
+          // Remove source from order
+          panelOrder = panelOrder.filter(id => id !== sourceId);
+          const targetIdx = panelOrder.indexOf(targetId);
+
+          if (side === 'left' || side === 'top') {
+            panelOrder.splice(targetIdx, 0, sourceId);
+          } else {
+            panelOrder.splice(targetIdx + 1, 0, sourceId);
+          }
+
+          // Switch layout direction if dropped on top/bottom
+          if (side === 'top' || side === 'bottom') {
+            layoutDirection = 'column';
+          } else if (side === 'left' || side === 'right') {
+            layoutDirection = 'row';
+          }
+
+          rebuildLayout();
+        }
+      }
+
+      // Animate back
+      dragSource.style.transform = '';
+      dragSource.style.transition = '';
+      dragSource.classList.remove('panel-grab-ready', 'panel-grabbing', 'drag-source');
+      workspace.classList.remove('workspace-dragging');
+
+      if (dropIndicator) {
+        dropIndicator.style.display = 'none';
+      }
+    }
+    isDragging = false;
+    dragSource = null;
+  }
+
+  // ── Attach long-press to all panels ──
+  workspace.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    if (e.target.closest('.ws-divider')) return;
+
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+
+    // Don't start drag from resize edges
     const rect = panel.getBoundingClientRect();
-    if (touch.clientX > rect.left + EDGE) return;
-    startX = touch.clientX;
-    startW = panel.offsetWidth;
-    dragging = true;
-    panel.style.borderLeftColor = 'var(--accent)';
-  }, { passive: true });
+    const EDGE = 10;
+    if (e.clientX <= rect.left + EDGE || e.clientX >= rect.right - EDGE) return;
+    if (e.clientY <= rect.top + EDGE || e.clientY >= rect.bottom - EDGE) return;
 
-  document.addEventListener('touchmove', function(e) {
-    if (!dragging) return;
-    const dx = startX - e.touches[0].clientX;
-    const newW = Math.max(240, Math.min(600, startW + dx));
-    panel.style.width = newW + 'px';
-  }, { passive: true });
+    // Don't interfere with interactive elements
+    if (e.target.closest('button, input, textarea, a, select, .controls-tray')) return;
 
-  document.addEventListener('touchend', function() {
-    if (!dragging) return;
-    dragging = false;
-    panel.style.borderLeftColor = '';
+    // For flashcard panel, also allow long-press on the card itself
+    if (panel.dataset.panelId === 'flashcard') {
+      // Only block controls-tray, buttons, inputs — card-inner is allowed
+      if (e.target.closest('.controls-tray, button, input, textarea, a, select, .list-view')) return;
+    }
+
+    // Need at least 2 visible panels to drag
+    if (getVisiblePanels().length < 2) return;
+
+    startLongPress(panel, e);
   });
+
+  // ── Panel edge resize ──
+  let resizing = false, resizePanel = null, resizeEdge = '', resizeStartX = 0, resizeStartY = 0;
+  let resizeStartW = 0, resizeStartH = 0;
+
+  function getResizeEdge(panel, e) {
+    const rect = panel.getBoundingClientRect();
+    const EDGE = 8;
+    const onLeft = e.clientX >= rect.left - EDGE && e.clientX <= rect.left + EDGE;
+    const onRight = e.clientX >= rect.right - EDGE && e.clientX <= rect.right + EDGE;
+    const onBottom = e.clientY >= rect.bottom - EDGE && e.clientY <= rect.bottom + EDGE;
+    const onTop = e.clientY >= rect.top - EDGE && e.clientY <= rect.top + EDGE;
+    if ((onLeft || onRight) && onBottom) return (onLeft ? 'left' : 'right') + '-bottom';
+    if ((onLeft || onRight) && onTop) return (onLeft ? 'left' : 'right') + '-top';
+    if (onLeft) return 'left';
+    if (onRight) return 'right';
+    if (onBottom) return 'bottom';
+    if (onTop) return 'top';
+    return '';
+  }
+
+  function getCursorForEdge(edge) {
+    if (edge.includes('bottom') && edge.includes('left')) return 'nesw-resize';
+    if (edge.includes('bottom') && edge.includes('right')) return 'nwse-resize';
+    if (edge.includes('top') && edge.includes('left')) return 'nwse-resize';
+    if (edge.includes('top') && edge.includes('right')) return 'nesw-resize';
+    if (edge === 'left' || edge === 'right') return 'col-resize';
+    if (edge === 'bottom' || edge === 'top') return 'row-resize';
+    return '';
+  }
+
+  workspace.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.ws-divider')) return;
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+    const edge = getResizeEdge(panel, e);
+    if (!edge) return;
+    e.preventDefault();
+    resizing = true;
+    resizePanel = panel;
+    resizeEdge = edge;
+    resizeStartX = e.clientX;
+    resizeStartY = e.clientY;
+    resizeStartW = panel.offsetWidth;
+    resizeStartH = panel.offsetHeight;
+
+    const SNAP_DIST = 12; // px threshold for snapping
+
+    function getSnapTargets(excludePanel) {
+      const wsRect = workspace.getBoundingClientRect();
+      const edges = { xs: [wsRect.left, wsRect.right], ys: [wsRect.top, wsRect.bottom] };
+      workspace.querySelectorAll('.ws-panel').forEach(p => {
+        if (p === excludePanel || p.offsetWidth === 0) return;
+        const r = p.getBoundingClientRect();
+        edges.xs.push(r.left, r.right);
+        edges.ys.push(r.top, r.bottom);
+      });
+      return edges;
+    }
+
+    function snapValue(val, targets, threshold) {
+      for (const t of targets) {
+        if (Math.abs(val - t) < threshold) return t;
+      }
+      return val;
+    }
+
+    const onMove = (ev) => {
+      if (!resizing) return;
+      const snapEdges = getSnapTargets(resizePanel);
+      const panelRect = resizePanel.getBoundingClientRect();
+
+      if (resizeEdge.includes('left') || resizeEdge.includes('right')) {
+        const dx = resizeEdge.includes('right') ? (ev.clientX - resizeStartX) : (resizeStartX - ev.clientX);
+        let newW = Math.max(200, resizeStartW + dx);
+        // Compute where the moving edge would be, and snap it
+        if (resizeEdge.includes('right')) {
+          const edgePos = snapValue(panelRect.left + newW, snapEdges.xs, SNAP_DIST);
+          newW = edgePos - panelRect.left;
+        } else {
+          const edgePos = snapValue(panelRect.right - newW, snapEdges.xs, SNAP_DIST);
+          newW = panelRect.right - edgePos;
+        }
+        newW = Math.max(200, newW);
+        resizePanel.style.width = newW + 'px';
+        resizePanel.style.flex = 'none';
+      }
+      if (resizeEdge.includes('bottom') || resizeEdge.includes('top')) {
+        const dy = resizeEdge.includes('top') ? (resizeStartY - ev.clientY) : (ev.clientY - resizeStartY);
+        let newH = Math.max(150, resizeStartH + dy);
+        if (resizeEdge.includes('bottom')) {
+          const edgePos = snapValue(panelRect.top + newH, snapEdges.ys, SNAP_DIST);
+          newH = edgePos - panelRect.top;
+        } else {
+          const edgePos = snapValue(panelRect.bottom - newH, snapEdges.ys, SNAP_DIST);
+          newH = panelRect.bottom - edgePos;
+        }
+        newH = Math.max(150, newH);
+        resizePanel.style.height = newH + 'px';
+        resizePanel.style.maxHeight = newH + 'px';
+      }
+    };
+
+    const onUp = () => {
+      resizing = false;
+      resizePanel = null;
+      resizeEdge = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+
+  // Cursor hint on hover near edges
+  workspace.addEventListener('mousemove', function(e) {
+    if (resizing || isDragging || divDragging) return;
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+    const edge = getResizeEdge(panel, e);
+    panel.style.cursor = getCursorForEdge(edge);
+  });
+
+  // ── Public API for other code to trigger layout rebuild ──
+  window.workspaceRebuild = rebuildLayout;
+  window.workspaceSetDirection = function(dir) {
+    layoutDirection = dir;
+    rebuildLayout();
+  };
+
+  // Watch for panel open/close and rebuild
+  let rebuildScheduled = false;
+  const observer = new MutationObserver((mutations) => {
+    if (rebuildScheduled) return;
+    for (const m of mutations) {
+      if (m.type === 'attributes' && m.attributeName === 'class') {
+        const el = m.target;
+        if (el.classList.contains('ws-panel')) {
+          const id = el.dataset.panelId;
+          if (id === 'flashcard') continue;
+          const isOpen = el.classList.contains('open');
+          if (isOpen && !panelOrder.includes(id)) {
+            panelOrder.push(id);
+          }
+          rebuildScheduled = true;
+          requestAnimationFrame(() => {
+            rebuildScheduled = false;
+            rebuildLayout();
+          });
+        }
+      }
+    }
+  });
+  workspace.querySelectorAll('.ws-panel').forEach(el => {
+    observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Initial build
+  rebuildLayout();
 })();
+
 
 // ══════════════════════════════════════════
 // CSV IMPORT
@@ -5426,38 +5996,18 @@ let _analyticsChart = null;
 
 function showAnalytics() {
   const view = document.getElementById('analytics-view');
-  if (view.classList.contains('active')) { closeAnalytics(); return; }
+  if (view.classList.contains('open')) { closeAnalytics(); return; }
 
   if (currentMode === 'test' && sessionLog.length > 0) saveSession();
 
-  // Hide all other main-content views
-  document.getElementById('study-view').classList.remove('active');
-  document.getElementById('card-controls').classList.remove('active');
-  document.getElementById('test-view').classList.remove('active');
-  document.getElementById('context-strip').classList.remove('active');
-  document.getElementById('empty-view').style.display = 'none';
-  document.getElementById('list-view').classList.remove('active');
-
-  // Temporarily hide info panel to give analytics full width
-  if (infoPanelOpen) {
-    document.getElementById('info-panel').classList.remove('open');
-  }
-
-  view.classList.add('active');
+  view.classList.add('open');
   document.getElementById('btn-analytics').classList.add('active');
   renderAnalytics();
 }
 
 function closeAnalytics() {
-  document.getElementById('analytics-view').classList.remove('active');
+  document.getElementById('analytics-view').classList.remove('open');
   document.getElementById('btn-analytics').classList.remove('active');
-  // Restore info panel if it was open
-  if (infoPanelOpen) {
-    document.getElementById('info-panel').classList.add('open');
-  }
-  // Only show empty state if no deck is loaded
-  document.getElementById('empty-view').style.display = activeDeck.length ? 'none' : '';
-  setMode(currentMode);
 }
 
 function renderAnalytics() {
@@ -5591,45 +6141,6 @@ document.addEventListener('mousedown', e => {
 });
 
 // ══════════════════════════════════════════
-// CLICK OUTSIDE INFO PANEL TO DISMISS
-// ══════════════════════════════════════════
-document.addEventListener('mousedown', e => {
-  if (!infoPanelOpen) return;
-  const panel = document.getElementById('info-panel');
-  const sidebar = document.getElementById('sidebar');
-  const searchWrap = document.querySelector('.search-wrap');
-  const settingsBtn = document.querySelector('[data-tip="settings"]');
-  const btnInfo = document.getElementById('btn-info');
-
-  // Don't dismiss if clicking: info panel, sidebar, search, settings, or info button
-  if (panel.contains(e.target)) return;
-  if (sidebar.contains(e.target)) return;
-  if (searchWrap && searchWrap.contains(e.target)) return;
-  if (settingsBtn && settingsBtn.contains(e.target)) return;
-  if (btnInfo && btnInfo.contains(e.target)) return;
-
-  // Dismiss info panel
-  toggleInfoPanel();
-  // Also exit focused mode if active
-  if (focusedMode) toggleFocusedMode();
-});
-
-// ══════════════════════════════════════════
-// DOUBLE-CLICK INFO ICON → FOCUSED MODE
-// ══════════════════════════════════════════
-document.getElementById('btn-info').addEventListener('dblclick', e => {
-  e.preventDefault();
-  e.stopPropagation();
-  if (!focusedMode) {
-    // Ensure info panel is open
-    if (!infoPanelOpen) toggleInfoPanel();
-    toggleFocusedMode();
-  } else {
-    toggleFocusedMode();
-  }
-});
-
-// ══════════════════════════════════════════
 // KEYBOARD SHORTCUTS
 // ══════════════════════════════════════════
 document.addEventListener('keydown', e => {
@@ -5737,6 +6248,9 @@ async function init() {
   if (localStorage.getItem('hanzi-diff-ratings')) {
     showDifficultyRatings = true;
   }
+  // Load context strip setting
+  const savedCS = localStorage.getItem('hanzi_show_context_strip');
+  if (savedCS !== null) showContextStrip = savedCS === 'true';
   // Load appearance
   try {
     const savedApp = JSON.parse(localStorage.getItem('hanzi-appearance') || 'null');
@@ -5803,8 +6317,15 @@ init();
     clearTimeout(hideTimer);
     tip.textContent = el.dataset.tip;
     const rect = el.getBoundingClientRect();
+    const inHeader = !!el.closest('header');
     tip.style.left = (rect.left + rect.width / 2) + 'px';
-    tip.style.top  = (rect.top - 8) + 'px';
+    if (inHeader) {
+      tip.style.top = (rect.bottom + 8) + 'px';
+      tip.style.transform = 'translateX(-50%)';
+    } else {
+      tip.style.top = (rect.top - 8) + 'px';
+      tip.style.transform = 'translateX(-50%) translateY(-100%)';
+    }
     tip.classList.add('visible');
   });
 

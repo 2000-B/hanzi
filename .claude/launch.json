@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "hanzi-study",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "7777", "--directory", "/home/nim/hanzi-study/.claude/worktrees/infallible-benz"],
-      "port": 7777
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "python3 -m http.server $PORT --directory /home/nim/hanzi-study/.claude/worktrees/infallible-benz"],
+      "port": 7777,
+      "autoPort": true
     }
   ]
 }
