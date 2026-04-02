@@ -21,8 +21,8 @@ const path = require('path');
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
-const INPUT_FILE  = path.join(__dirname, 'hsk-input.json');
-const OUTPUT_FILE = path.join(__dirname, 'hsk-enriched.json');
+const INPUT_FILE  = path.join(__dirname, '..', 'data', 'hsk-input.json');
+const OUTPUT_FILE = path.join(__dirname, '..', 'data', 'hsk-enriched.json');
 const BATCH_SIZE  = 8;    // characters per API call — keep small for quality
 const DELAY_MS    = 800;  // pause between batches to avoid rate limits
 const MODEL       = 'claude-sonnet-4-20250514';

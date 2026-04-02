@@ -23,9 +23,9 @@
 const fs   = require('fs');
 const path = require('path');
 
-const INPUT_FILE    = path.join(__dirname, 'data', 'jlpt-input.json');
-const ENRICHED_FILE = path.join(__dirname, 'data', 'jlpt-enriched.json');
-const OUTPUT_FILE   = path.join(__dirname, 'data', 'jp-dict.json');
+const INPUT_FILE    = path.join(__dirname, '..', 'data', 'jlpt-input.json');
+const ENRICHED_FILE = path.join(__dirname, '..', 'data', 'jlpt-enriched.json');
+const OUTPUT_FILE   = path.join(__dirname, '..', 'data', 'jp-dict.json');
 
 // ── Load sources ──────────────────────────────────────────────────────────────
 
