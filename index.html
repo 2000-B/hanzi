@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>汉字学习 — vocabulary mastery</title>
 <link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link id="font-sc" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ══════════════════════════════════════════
@@ -767,6 +767,21 @@ body.light .info-panel {
   border-left: 3px solid var(--border3);
 }
 
+/* Japanese readings */
+.ip-reading {
+  font-size: 13px;
+  color: var(--text2);
+  padding: 3px 0;
+}
+.ip-reading-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-right: 6px;
+}
+
 /* Example sentences */
 .ip-example {
   padding: 8px 0;
@@ -774,7 +789,7 @@ body.light .info-panel {
 }
 .ip-example:last-child { border-bottom: none; }
 .ip-ex-zh {
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'Noto Sans JP', 'Noto Sans SC', sans-serif;
   font-size: 15px;
   color: var(--text);
   line-height: 1.5;
@@ -2296,7 +2311,7 @@ body.light .analytics-view .session-row .deck-tag {
     <div class="settings-group" id="prefs-study-group">
       <div class="settings-label">study</div>
       <div class="settings-toggle-row">
-        <span class="settings-toggle-label">show pinyin</span>
+        <span class="settings-toggle-label" id="show-reading-label">show pinyin</span>
         <button class="toggle-switch on" id="pinyin-toggle" onclick="togglePinyin()"></button>
       </div>
     </div>
@@ -2372,7 +2387,7 @@ body.light .analytics-view .session-row .deck-tag {
       <div class="fs-section">
         <div class="fs-section-label">study</div>
         <div class="settings-toggle-row">
-          <span class="settings-toggle-label">show pinyin</span>
+          <span class="settings-toggle-label" id="fs-show-reading-label">show pinyin</span>
           <button class="toggle-switch" id="fs-pinyin-toggle" onclick="togglePinyin()"></button>
         </div>
       </div>
@@ -2409,8 +2424,8 @@ body.light .analytics-view .session-row .deck-tag {
       <div class="fs-section">
         <div class="fs-section-label">language</div>
         <div class="settings-pill">
-          <button class="settings-pill-btn active">中文 chinese</button>
-          <button class="settings-pill-btn" disabled title="coming soon">日本語 japanese</button>
+          <button class="settings-pill-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文 chinese</button>
+          <button class="settings-pill-btn" id="lang-ja" onclick="switchLanguage('ja')">日本語 japanese</button>
         </div>
       </div>
     </div>
@@ -2627,6 +2642,53 @@ const HSK1_EMBEDDED = [{"hanzi":"爱","pinyin":"ài","english":"to love / love"}
 const HSK_DATA = { 1: HSK1_EMBEDDED };          // level -> card array
 let CEDICT = {};              // hanzi -> {pinyin, defs, hsk}
 let ENRICHED = {};            // hanzi -> enriched data (character + word level)
+let ENRICHED_JP = {};         // kanji -> enriched data (Japanese)
+
+// ── Language config ──────────────────────────────────────────────────────────
+const LANG_CONFIGS = {
+  zh: {
+    id: 'zh',
+    headerTitle: '汉字学习',
+    pageTitle: '汉字学习 — vocabulary mastery',
+    readingLabel: 'pinyin',
+    characterLabel: 'hanzi',
+    levelSystem: 'HSK',
+    levelPrefix: 'HSK ',
+    levels: [1, 2, 3, 4, 5, 6],
+    ttsLang: 'zh-CN',
+    ttsVoicePrefix: 'zh',
+    storagePrefix: 'hanzi',
+    searchPlaceholder: 'search hanzi, pinyin, english…',
+    tutorSystemPrompt: 'You are a helpful Chinese language tutor. Keep answers concise and focused.',
+    showReadingLabel: 'show pinyin',
+    font: "'Noto Sans SC', sans-serif",
+  },
+  ja: {
+    id: 'ja',
+    headerTitle: '日本語学習',
+    pageTitle: '日本語学習 — vocabulary mastery',
+    readingLabel: 'romaji',
+    characterLabel: 'kanji',
+    levelSystem: 'JLPT',
+    levelPrefix: 'JLPT N',
+    levels: [5, 4, 3, 2, 1],
+    ttsLang: 'ja',
+    ttsVoicePrefix: 'ja',
+    storagePrefix: 'jp',
+    searchPlaceholder: 'search kanji, romaji, english…',
+    tutorSystemPrompt: 'You are a helpful Japanese language tutor. Keep answers concise and focused.',
+    showReadingLabel: 'show romaji',
+    font: "'Noto Sans JP', sans-serif",
+  }
+};
+let currentLang = localStorage.getItem('app-lang') || 'zh';
+function lang() { return LANG_CONFIGS[currentLang]; }
+
+// ── JLPT data ─────────────────────────────────────────────────────────────────
+const JLPT5_EMBEDDED = [{"hanzi":"愛","pinyin":"ai","english":"love","kana":"あい","jlpt":5},{"hanzi":"青","pinyin":"ao","english":"blue","kana":"あお","jlpt":5},{"hanzi":"赤","pinyin":"aka","english":"red","kana":"あか","jlpt":5},{"hanzi":"秋","pinyin":"aki","english":"autumn / fall","kana":"あき","jlpt":5},{"hanzi":"開く","pinyin":"aku","english":"to open / to become vacant","kana":"あく","jlpt":5},{"hanzi":"あそこ","pinyin":"asoko","english":"over there","kana":"あそこ","jlpt":5},{"hanzi":"遊ぶ","pinyin":"asobu","english":"to play","kana":"あそぶ","jlpt":5},{"hanzi":"暖かい","pinyin":"atatakai","english":"warm","kana":"あたたかい","jlpt":5},{"hanzi":"新しい","pinyin":"atarashii","english":"new","kana":"あたらしい","jlpt":5},{"hanzi":"頭","pinyin":"atama","english":"head","kana":"あたま","jlpt":5},{"hanzi":"後","pinyin":"ato","english":"after / later","kana":"あと","jlpt":5},{"hanzi":"厚い","pinyin":"atsui","english":"thick / heavy","kana":"あつい","jlpt":5},{"hanzi":"暑い","pinyin":"atsui","english":"hot (weather)","kana":"あつい","jlpt":5},{"hanzi":"集まる","pinyin":"atsumaru","english":"to gather / to assemble","kana":"あつまる","jlpt":5},{"hanzi":"歩く","pinyin":"aruku","english":"to walk","kana":"あるく","jlpt":5},{"hanzi":"洗う","pinyin":"arau","english":"to wash","kana":"あらう","jlpt":5},{"hanzi":"いえ","pinyin":"ie","english":"no","kana":"いえ","jlpt":5},{"hanzi":"家","pinyin":"ie","english":"house / home","kana":"いえ","jlpt":5},{"hanzi":"医者","pinyin":"isha","english":"doctor","kana":"いしゃ","jlpt":5},{"hanzi":"椅子","pinyin":"isu","english":"chair","kana":"いす","jlpt":5},{"hanzi":"忙しい","pinyin":"isogashii","english":"busy","kana":"いそがしい","jlpt":5},{"hanzi":"一緒","pinyin":"issho","english":"together","kana":"いっしょ","jlpt":5},{"hanzi":"いつ","pinyin":"itsu","english":"when","kana":"いつ","jlpt":5},{"hanzi":"五つ","pinyin":"itsutsu","english":"five","kana":"いつつ","jlpt":5},{"hanzi":"言う","pinyin":"iu","english":"to say","kana":"いう","jlpt":5},{"hanzi":"嫌","pinyin":"iya","english":"unpleasant / disagreeable","kana":"いや","jlpt":5},{"hanzi":"上","pinyin":"ue","english":"above / up / top","kana":"うえ","jlpt":5},{"hanzi":"後ろ","pinyin":"ushiro","english":"behind / back","kana":"うしろ","jlpt":5},{"hanzi":"薄い","pinyin":"usui","english":"thin / weak","kana":"うすい","jlpt":5},{"hanzi":"歌","pinyin":"uta","english":"song","kana":"うた","jlpt":5},{"hanzi":"歌う","pinyin":"utau","english":"to sing","kana":"うたう","jlpt":5},{"hanzi":"生まれる","pinyin":"umareru","english":"to be born","kana":"うまれる","jlpt":5},{"hanzi":"海","pinyin":"umi","english":"sea / ocean","kana":"うみ","jlpt":5},{"hanzi":"売る","pinyin":"uru","english":"to sell","kana":"うる","jlpt":5},{"hanzi":"運転","pinyin":"unten","english":"driving / operation","kana":"うんてん","jlpt":5},{"hanzi":"絵","pinyin":"e","english":"picture / painting","kana":"え","jlpt":5},{"hanzi":"英語","pinyin":"eigo","english":"English language","kana":"えいご","jlpt":5},{"hanzi":"映画","pinyin":"eiga","english":"movie / film","kana":"えいが","jlpt":5},{"hanzi":"駅","pinyin":"eki","english":"station","kana":"えき","jlpt":5},{"hanzi":"鉛筆","pinyin":"enpitsu","english":"pencil","kana":"えんぴつ","jlpt":5},{"hanzi":"お母さん","pinyin":"okaasan","english":"mother","kana":"おかあさん","jlpt":5},{"hanzi":"お金","pinyin":"okane","english":"money","kana":"おかね","jlpt":5},{"hanzi":"起きる","pinyin":"okiru","english":"to wake up / to get up","kana":"おきる","jlpt":5},{"hanzi":"置く","pinyin":"oku","english":"to put / to place","kana":"おく","jlpt":5},{"hanzi":"奥さん","pinyin":"okusan","english":"wife (someone else's)","kana":"おくさん","jlpt":5},{"hanzi":"遅い","pinyin":"osoi","english":"slow / late","kana":"おそい","jlpt":5},{"hanzi":"教える","pinyin":"oshieru","english":"to teach / to tell","kana":"おしえる","jlpt":5},{"hanzi":"押す","pinyin":"osu","english":"to push / to press","kana":"おす","jlpt":5},{"hanzi":"お茶","pinyin":"ocha","english":"tea","kana":"おちゃ","jlpt":5},{"hanzi":"音","pinyin":"oto","english":"sound","kana":"おと","jlpt":5},{"hanzi":"後で","pinyin":"ato de","english":"later / afterwards","kana":"あとで","jlpt":5},{"hanzi":"危ない","pinyin":"abunai","english":"dangerous","kana":"あぶない","jlpt":5},{"hanzi":"甘い","pinyin":"amai","english":"sweet","kana":"あまい","jlpt":5},{"hanzi":"雨","pinyin":"ame","english":"rain","kana":"あめ","jlpt":5},{"hanzi":"浅い","pinyin":"asai","english":"shallow","kana":"あさい","jlpt":5},{"hanzi":"朝","pinyin":"asa","english":"morning","kana":"あさ","jlpt":5},{"hanzi":"朝御飯","pinyin":"asa gohan","english":"breakfast","kana":"あさごはん","jlpt":5},{"hanzi":"明日","pinyin":"ashita","english":"tomorrow","kana":"あした","jlpt":5},{"hanzi":"足","pinyin":"ashi","english":"foot / leg","kana":"あし","jlpt":5},{"hanzi":"青い","pinyin":"aoi","english":"blue","kana":"あおい","jlpt":5},{"hanzi":"赤い","pinyin":"akai","english":"red","kana":"あかい","jlpt":5},{"hanzi":"開ける","pinyin":"akeru","english":"to open","kana":"あける","jlpt":5},{"hanzi":"上げる","pinyin":"ageru","english":"to give / to raise","kana":"あげる","jlpt":5},{"hanzi":"兄","pinyin":"ani","english":"older brother","kana":"あに","jlpt":5},{"hanzi":"姉","pinyin":"ane","english":"older sister","kana":"あね","jlpt":5},{"hanzi":"案内","pinyin":"annai","english":"guidance / information","kana":"あんない","jlpt":5},{"hanzi":"安心","pinyin":"anshin","english":"relief / peace of mind","kana":"あんしん","jlpt":5},{"hanzi":"いいえ","pinyin":"iie","english":"no","kana":"いいえ","jlpt":5},{"hanzi":"痛い","pinyin":"itai","english":"painful / hurt","kana":"いたい","jlpt":5},{"hanzi":"一番","pinyin":"ichiban","english":"most / number one","kana":"いちばん","jlpt":5},{"hanzi":"いつも","pinyin":"itsumo","english":"always","kana":"いつも","jlpt":5},{"hanzi":"今","pinyin":"ima","english":"now","kana":"いま","jlpt":5},{"hanzi":"意味","pinyin":"imi","english":"meaning","kana":"いみ","jlpt":5},{"hanzi":"妹","pinyin":"imouto","english":"younger sister","kana":"いもうと","jlpt":5},{"hanzi":"色","pinyin":"iro","english":"color","kana":"いろ","jlpt":5},{"hanzi":"入る","pinyin":"hairu","english":"to enter","kana":"はいる","jlpt":5},{"hanzi":"始まる","pinyin":"hajimaru","english":"to begin / to start","kana":"はじまる","jlpt":5},{"hanzi":"初めて","pinyin":"hajimete","english":"for the first time","kana":"はじめて","jlpt":5},{"hanzi":"箸","pinyin":"hashi","english":"chopsticks","kana":"はし","jlpt":5},{"hanzi":"働く","pinyin":"hataraku","english":"to work","kana":"はたらく","jlpt":5},{"hanzi":"二十歳","pinyin":"hatachi","english":"twenty years old","kana":"はたち","jlpt":5},{"hanzi":"花","pinyin":"hana","english":"flower","kana":"はな","jlpt":5},{"hanzi":"話す","pinyin":"hanasu","english":"to speak / to talk","kana":"はなす","jlpt":5},{"hanzi":"母","pinyin":"haha","english":"mother","kana":"はは","jlpt":5},{"hanzi":"早い","pinyin":"hayai","english":"early / fast","kana":"はやい","jlpt":5},{"hanzi":"春","pinyin":"haru","english":"spring","kana":"はる","jlpt":5},{"hanzi":"晴れ","pinyin":"hare","english":"clear weather","kana":"はれ","jlpt":5},{"hanzi":"半分","pinyin":"hanbun","english":"half","kana":"はんぶん","jlpt":5},{"hanzi":"家族","pinyin":"kazoku","english":"family","kana":"かぞく","jlpt":5},{"hanzi":"彼","pinyin":"kare","english":"he / him / boyfriend","kana":"かれ","jlpt":5},{"hanzi":"彼女","pinyin":"kanojo","english":"she / her / girlfriend","kana":"かのじょ","jlpt":5},{"hanzi":"辛い","pinyin":"karai","english":"spicy / hot","kana":"からい","jlpt":5},{"hanzi":"体","pinyin":"karada","english":"body","kana":"からだ","jlpt":5},{"hanzi":"軽い","pinyin":"karui","english":"light / not heavy","kana":"かるい","jlpt":5},{"hanzi":"貸す","pinyin":"kasu","english":"to lend","kana":"かす","jlpt":5},{"hanzi":"風","pinyin":"kaze","english":"wind / cold","kana":"かぜ","jlpt":5},{"hanzi":"着る","pinyin":"kiru","english":"to wear / to put on","kana":"きる","jlpt":5},{"hanzi":"切る","pinyin":"kiru","english":"to cut","kana":"きる","jlpt":5},{"hanzi":"汚い","pinyin":"kitanai","english":"dirty","kana":"きたない","jlpt":5},{"hanzi":"きっと","pinyin":"kitto","english":"surely / certainly","kana":"きっと","jlpt":5},{"hanzi":"今日","pinyin":"kyou","english":"today","kana":"きょう","jlpt":5},{"hanzi":"去年","pinyin":"kyonen","english":"last year","kana":"きょねん","jlpt":5},{"hanzi":"来る","pinyin":"kuru","english":"to come","kana":"くる","jlpt":5},{"hanzi":"車","pinyin":"kuruma","english":"car","kana":"くるま","jlpt":5},{"hanzi":"黒い","pinyin":"kuroi","english":"black","kana":"くろい","jlpt":5},{"hanzi":"薬","pinyin":"kusuri","english":"medicine","kana":"くすり","jlpt":5},{"hanzi":"口","pinyin":"kuchi","english":"mouth","kana":"くち","jlpt":5},{"hanzi":"靴","pinyin":"kutsu","english":"shoes","kana":"くつ","jlpt":5},{"hanzi":"靴下","pinyin":"kutsushita","english":"socks","kana":"くつした","jlpt":5},{"hanzi":"曇り","pinyin":"kumori","english":"cloudy weather","kana":"くもり","jlpt":5},{"hanzi":"国","pinyin":"kuni","english":"country","kana":"くに","jlpt":5},{"hanzi":"空港","pinyin":"kuukou","english":"airport","kana":"くうこう","jlpt":5},{"hanzi":"まだ","pinyin":"mada","english":"still / not yet","kana":"まだ","jlpt":5},{"hanzi":"前","pinyin":"mae","english":"front / before","kana":"まえ","jlpt":5},{"hanzi":"毎朝","pinyin":"maiasa","english":"every morning","kana":"まいあさ","jlpt":5},{"hanzi":"毎晩","pinyin":"maiban","english":"every night","kana":"まいばん","jlpt":5},{"hanzi":"毎日","pinyin":"mainichi","english":"every day","kana":"まいにち","jlpt":5},{"hanzi":"町","pinyin":"machi","english":"town","kana":"まち","jlpt":5},{"hanzi":"窓","pinyin":"mado","english":"window","kana":"まど","jlpt":5},{"hanzi":"丸い","pinyin":"marui","english":"round","kana":"まるい","jlpt":5},{"hanzi":"真っ直ぐ","pinyin":"massugu","english":"straight","kana":"まっすぐ","jlpt":5},{"hanzi":"待つ","pinyin":"matsu","english":"to wait","kana":"まつ","jlpt":5},{"hanzi":"右","pinyin":"migi","english":"right","kana":"みぎ","jlpt":5},{"hanzi":"短い","pinyin":"mijikai","english":"short","kana":"みじかい","jlpt":5},{"hanzi":"耳","pinyin":"mimi","english":"ear","kana":"みみ","jlpt":5},{"hanzi":"皆","pinyin":"minna","english":"everyone","kana":"みんな","jlpt":5},{"hanzi":"水","pinyin":"mizu","english":"water","kana":"みず","jlpt":5},{"hanzi":"道","pinyin":"michi","english":"road / way","kana":"みち","jlpt":5},{"hanzi":"見る","pinyin":"miru","english":"to see / to watch","kana":"みる","jlpt":5},{"hanzi":"店","pinyin":"mise","english":"shop / store","kana":"みせ","jlpt":5},{"hanzi":"見せる","pinyin":"miseru","english":"to show","kana":"みせる","jlpt":5},{"hanzi":"緑","pinyin":"midori","english":"green","kana":"みどり","jlpt":5},{"hanzi":"もう","pinyin":"mou","english":"already / more","kana":"もう","jlpt":5},{"hanzi":"木曜日","pinyin":"mokuyoubi","english":"Thursday","kana":"もくようび","jlpt":5},{"hanzi":"問題","pinyin":"mondai","english":"problem","kana":"もんだい","jlpt":5},{"hanzi":"物","pinyin":"mono","english":"thing / object","kana":"もの","jlpt":5},{"hanzi":"森","pinyin":"mori","english":"forest","kana":"もり","jlpt":5},{"hanzi":"持つ","pinyin":"motsu","english":"to hold / to have","kana":"もつ","jlpt":5},{"hanzi":"速い","pinyin":"hayai","english":"fast / early","kana":"はやい","jlpt":5},{"hanzi":"二十","pinyin":"hatachi","english":"twenty years old","kana":"はたち","jlpt":5},{"hanzi":"鼻","pinyin":"hana","english":"nose","kana":"はな","jlpt":5},{"hanzi":"歯","pinyin":"ha","english":"tooth / teeth","kana":"は","jlpt":5},{"hanzi":"箱","pinyin":"hako","english":"box","kana":"はこ","jlpt":5},{"hanzi":"橋","pinyin":"hashi","english":"bridge","kana":"はし","jlpt":5},{"hanzi":"走る","pinyin":"hashiru","english":"to run","kana":"はしる","jlpt":5},{"hanzi":"恥ずかしい","pinyin":"hazukashii","english":"embarrassing / shy","kana":"はずかしい","jlpt":5},{"hanzi":"八","pinyin":"hachi","english":"eight","kana":"はち","jlpt":5},{"hanzi":"半","pinyin":"han","english":"half","kana":"はん","jlpt":5},{"hanzi":"パン","pinyin":"pan","english":"bread","kana":"パン","jlpt":5},{"hanzi":"晩","pinyin":"ban","english":"evening / night","kana":"ばん","jlpt":5},{"hanzi":"番号","pinyin":"bangou","english":"number","kana":"ばんごう","jlpt":5},{"hanzi":"晩御飯","pinyin":"bangohan","english":"dinner","kana":"ばんごはん","jlpt":5},{"hanzi":"ハンバーガー","pinyin":"hanbaagaa","english":"hamburger","kana":"ハンバーガー","jlpt":5},{"hanzi":"反対","pinyin":"hantai","english":"opposite / against","kana":"はんたい","jlpt":5},{"hanzi":"ピアノ","pinyin":"piano","english":"piano","kana":"ピアノ","jlpt":5},{"hanzi":"東","pinyin":"higashi","english":"east","kana":"ひがし","jlpt":5},{"hanzi":"左","pinyin":"hidari","english":"left","kana":"ひだり","jlpt":5},{"hanzi":"人","pinyin":"hito","english":"person / people","kana":"ひと","jlpt":5},{"hanzi":"一つ","pinyin":"hitotsu","english":"one (thing)","kana":"ひとつ","jlpt":5},{"hanzi":"一人","pinyin":"hitori","english":"one person / alone","kana":"ひとり","jlpt":5},{"hanzi":"暇","pinyin":"hima","english":"free time / leisure","kana":"ひま","jlpt":5},{"hanzi":"百","pinyin":"hyaku","english":"hundred","kana":"ひゃく","jlpt":5},{"hanzi":"病院","pinyin":"byouin","english":"hospital","kana":"びょういん","jlpt":5},{"hanzi":"病気","pinyin":"byouki","english":"illness / disease","kana":"びょうき","jlpt":5},{"hanzi":"昼","pinyin":"hiru","english":"daytime / noon","kana":"ひる","jlpt":5},{"hanzi":"昼御飯","pinyin":"hirugohan","english":"lunch","kana":"ひるごはん","jlpt":5},{"hanzi":"広い","pinyin":"hiroi","english":"wide / spacious","kana":"ひろい","jlpt":5},{"hanzi":"プール","pinyin":"puuru","english":"swimming pool","kana":"プール","jlpt":5},{"hanzi":"フィルム","pinyin":"firumu","english":"film","kana":"フィルム","jlpt":5},{"hanzi":"冬","pinyin":"fuyu","english":"winter","kana":"ふゆ","jlpt":5},{"hanzi":"古い","pinyin":"furui","english":"old","kana":"ふるい","jlpt":5},{"hanzi":"降る","pinyin":"furu","english":"to fall (rain/snow)","kana":"ふる","jlpt":5},{"hanzi":"風呂","pinyin":"furo","english":"bath","kana":"ふろ","jlpt":5},{"hanzi":"文","pinyin":"bun","english":"sentence","kana":"ぶん","jlpt":5},{"hanzi":"分","pinyin":"fun","english":"minute","kana":"ふん","jlpt":5},{"hanzi":"分かる","pinyin":"wakaru","english":"to understand / to know","kana":"わかる","jlpt":5},{"hanzi":"へや","pinyin":"heya","english":"room","kana":"へや","jlpt":5},{"hanzi":"切符","pinyin":"kippu","english":"ticket","kana":"きっぷ","jlpt":5},{"hanzi":"嫌い","pinyin":"kirai","english":"dislike / hate","kana":"きらい","jlpt":5},{"hanzi":"綺麗","pinyin":"kirei","english":"beautiful / clean","kana":"きれい","jlpt":5},{"hanzi":"今度","pinyin":"kondo","english":"this time / next time","kana":"こんど","jlpt":5},{"hanzi":"今晩","pinyin":"konban","english":"tonight / this evening","kana":"こんばん","jlpt":5},{"hanzi":"困る","pinyin":"komaru","english":"to be troubled","kana":"こまる","jlpt":5},{"hanzi":"こちら","pinyin":"kochira","english":"this way / here","kana":"こちら","jlpt":5},{"hanzi":"交差点","pinyin":"kousaten","english":"intersection","kana":"こうさてん","jlpt":5},{"hanzi":"公園","pinyin":"kouen","english":"park","kana":"こうえん","jlpt":5},{"hanzi":"答える","pinyin":"kotaeru","english":"to answer","kana":"こたえる","jlpt":5},{"hanzi":"今年","pinyin":"kotoshi","english":"this year","kana":"ことし","jlpt":5},{"hanzi":"子供","pinyin":"kodomo","english":"child","kana":"こども","jlpt":5},{"hanzi":"声","pinyin":"koe","english":"voice","kana":"こえ","jlpt":5},{"hanzi":"コート","pinyin":"kooto","english":"coat","kana":"コート","jlpt":5},{"hanzi":"コップ","pinyin":"koppu","english":"cup / glass","kana":"コップ","jlpt":5},{"hanzi":"壊れる","pinyin":"kowareru","english":"to break / to be broken","kana":"こわれる","jlpt":5},{"hanzi":"怖い","pinyin":"kowai","english":"scary / frightening","kana":"こわい","jlpt":5},{"hanzi":"果物","pinyin":"kudamono","english":"fruit","kana":"くだもの","jlpt":5},{"hanzi":"曇る","pinyin":"kumoru","english":"to become cloudy","kana":"くもる","jlpt":5},{"hanzi":"クラス","pinyin":"kurasu","english":"class","kana":"クラス","jlpt":5},{"hanzi":"暮れる","pinyin":"kureru","english":"to give (to me)","kana":"くれる","jlpt":5},{"hanzi":"黒","pinyin":"kuro","english":"black","kana":"くろ","jlpt":5},{"hanzi":"苦しい","pinyin":"kurushii","english":"painful / difficult","kana":"くるしい","jlpt":5},{"hanzi":"九","pinyin":"kyuu","english":"nine","kana":"きゅう","jlpt":5},{"hanzi":"急","pinyin":"kyuu","english":"urgent / sudden","kana":"きゅう","jlpt":5},{"hanzi":"牛乳","pinyin":"gyuunyuu","english":"milk","kana":"ぎゅうにゅう","jlpt":5},{"hanzi":"教室","pinyin":"kyoushitsu","english":"classroom","kana":"きょうしつ","jlpt":5},{"hanzi":"兄弟","pinyin":"kyoudai","english":"siblings","kana":"きょうだい","jlpt":5},{"hanzi":"キロ","pinyin":"kiro","english":"kilogram / kilometer","kana":"キロ","jlpt":5},{"hanzi":"消える","pinyin":"kieru","english":"to disappear / to go out","kana":"きえる","jlpt":5},{"hanzi":"聞く","pinyin":"kiku","english":"to listen / to ask","kana":"きく","jlpt":5},{"hanzi":"危険","pinyin":"kiken","english":"danger / dangerous","kana":"きけん","jlpt":5},{"hanzi":"機械","pinyin":"kikai","english":"machine","kana":"きかい","jlpt":5},{"hanzi":"黄色","pinyin":"kiiro","english":"yellow","kana":"きいろ","jlpt":5},{"hanzi":"黄色い","pinyin":"kiiroi","english":"yellow","kana":"きいろい","jlpt":5},{"hanzi":"気分","pinyin":"kibun","english":"feeling / mood","kana":"きぶん","jlpt":5},{"hanzi":"君","pinyin":"kimi","english":"you (informal)","kana":"きみ","jlpt":5},{"hanzi":"決める","pinyin":"kimeru","english":"to decide","kana":"きめる","jlpt":5},{"hanzi":"美術館","pinyin":"bijutsukan","english":"art museum","kana":"びじゅつかん","jlpt":5},{"hanzi":"地図","pinyin":"chizu","english":"map","kana":"ちず","jlpt":5},{"hanzi":"違う","pinyin":"chigau","english":"to differ / to be wrong","kana":"ちがう","jlpt":5},{"hanzi":"近い","pinyin":"chikai","english":"near / close","kana":"ちかい","jlpt":5},{"hanzi":"力","pinyin":"chikara","english":"strength / power","kana":"ちから","jlpt":5},{"hanzi":"小さな","pinyin":"chiisana","english":"small / little","kana":"ちいさな","jlpt":5},{"hanzi":"注意","pinyin":"chuui","english":"attention / caution","kana":"ちゅうい","jlpt":5},{"hanzi":"駐車場","pinyin":"chuushajou","english":"parking lot","kana":"ちゅうしゃじょう","jlpt":5},{"hanzi":"台所","pinyin":"daidokoro","english":"kitchen","kana":"だいどころ","jlpt":5},{"hanzi":"大事","pinyin":"daiji","english":"important / precious","kana":"だいじ","jlpt":5},{"hanzi":"大切","pinyin":"taisetsu","english":"important / precious","kana":"たいせつ","jlpt":5},{"hanzi":"出かける","pinyin":"dekakeru","english":"to go out","kana":"でかける","jlpt":5},{"hanzi":"出来る","pinyin":"dekiru","english":"to be able to / can","kana":"できる","jlpt":5},{"hanzi":"電気","pinyin":"denki","english":"electricity / light","kana":"でんき","jlpt":5},{"hanzi":"電車","pinyin":"densha","english":"train","kana":"でんしゃ","jlpt":5},{"hanzi":"電話","pinyin":"denwa","english":"telephone","kana":"でんわ","jlpt":5},{"hanzi":"どうして","pinyin":"doushite","english":"why / how","kana":"どうして","jlpt":5},{"hanzi":"どうも","pinyin":"doumo","english":"thank you / somehow","kana":"どうも","jlpt":5},{"hanzi":"どちら","pinyin":"dochira","english":"which (of two) / where","kana":"どちら","jlpt":5},{"hanzi":"動物","pinyin":"doubutsu","english":"animal","kana":"どうぶつ","jlpt":5},{"hanzi":"動物園","pinyin":"doubutsuen","english":"zoo","kana":"どうぶつえん","jlpt":5},{"hanzi":"道具","pinyin":"dougu","english":"tool / implement","kana":"どうぐ","jlpt":5},{"hanzi":"えんぴつ","pinyin":"enpitsu","english":"pencil","kana":"えんぴつ","jlpt":5},{"hanzi":"エレベーター","pinyin":"erebeetaa","english":"elevator","kana":"エレベーター","jlpt":5},{"hanzi":"踊る","pinyin":"odoru","english":"to dance","kana":"おどる","jlpt":5},{"hanzi":"降りる","pinyin":"oriru","english":"to get off / to descend","kana":"おりる","jlpt":5},{"hanzi":"泳ぐ","pinyin":"oyogu","english":"to swim","kana":"およぐ","jlpt":5},{"hanzi":"覚える","pinyin":"oboeru","english":"to remember / to learn","kana":"おぼえる","jlpt":5},{"hanzi":"お風呂","pinyin":"ofuro","english":"bath","kana":"おふろ","jlpt":5},{"hanzi":"お湯","pinyin":"oyu","english":"hot water","kana":"おゆ","jlpt":5},{"hanzi":"お祭り","pinyin":"omatsuri","english":"festival","kana":"おまつり","jlpt":5},{"hanzi":"お土産","pinyin":"omiyage","english":"souvenir","kana":"おみやげ","jlpt":5},{"hanzi":"お弁当","pinyin":"obentou","english":"boxed lunch / bento","kana":"おべんとう","jlpt":5},{"hanzi":"お正月","pinyin":"oshougatsu","english":"New Year","kana":"おしょうがつ","jlpt":5},{"hanzi":"お世話","pinyin":"osewa","english":"care / help","kana":"おせわ","jlpt":5},{"hanzi":"お客さん","pinyin":"okyakusan","english":"customer / guest","kana":"おきゃくさん","jlpt":5},{"hanzi":"お疲れ様","pinyin":"otsukaresama","english":"thank you for your hard work","kana":"おつかれさま","jlpt":5},{"hanzi":"お釣り","pinyin":"otsuri","english":"change (money)","kana":"おつり","jlpt":5},{"hanzi":"お邪魔","pinyin":"ojama","english":"intrusion / disturbance","kana":"おじゃま","jlpt":5},{"hanzi":"頑張る","pinyin":"ganbaru","english":"to do one's best / to work hard","kana":"がんばる","jlpt":5},{"hanzi":"ガソリン","pinyin":"gasorin","english":"gasoline","kana":"ガソリン","jlpt":5},{"hanzi":"ガソリンスタンド","pinyin":"gasorin sutando","english":"gas station","kana":"ガソリンスタンド","jlpt":5},{"hanzi":"外国","pinyin":"gaikoku","english":"foreign country","kana":"がいこく","jlpt":5},{"hanzi":"外国人","pinyin":"gaikokujin","english":"foreigner","kana":"がいこくじん","jlpt":5},{"hanzi":"学校","pinyin":"gakkou","english":"school","kana":"がっこう","jlpt":5},{"hanzi":"負ける","pinyin":"makeru","english":"to lose / to be defeated","kana":"まける","jlpt":5},{"hanzi":"回る","pinyin":"mawaru","english":"to turn / to revolve","kana":"まわる","jlpt":5},{"hanzi":"万","pinyin":"man","english":"ten thousand","kana":"まん","jlpt":5},{"hanzi":"万年筆","pinyin":"mannenhitsu","english":"fountain pen","kana":"まんねんひつ","jlpt":5},{"hanzi":"毎月","pinyin":"maitsuki","english":"every month","kana":"まいつき","jlpt":5},{"hanzi":"毎週","pinyin":"maishuu","english":"every week","kana":"まいしゅう","jlpt":5},{"hanzi":"毎年","pinyin":"mainen","english":"every year","kana":"まいねん","jlpt":5},{"hanzi":"迎える","pinyin":"mukaeru","english":"to meet / to greet","kana":"むかえる","jlpt":5},{"hanzi":"向こう","pinyin":"mukou","english":"over there / opposite side","kana":"むこう","jlpt":5},{"hanzi":"難しい","pinyin":"muzukashii","english":"difficult","kana":"むずかしい","jlpt":5},{"hanzi":"息子","pinyin":"musuko","english":"son","kana":"むすこ","jlpt":5},{"hanzi":"娘","pinyin":"musume","english":"daughter","kana":"むすめ","jlpt":5},{"hanzi":"村","pinyin":"mura","english":"village","kana":"むら","jlpt":5},{"hanzi":"紫","pinyin":"murasaki","english":"purple","kana":"むらさき","jlpt":5},{"hanzi":"虫","pinyin":"mushi","english":"insect / bug","kana":"むし","jlpt":5},{"hanzi":"無理","pinyin":"muri","english":"impossible / unreasonable","kana":"むり","jlpt":5},{"hanzi":"向ける","pinyin":"mukeru","english":"to turn toward / to point","kana":"むける","jlpt":5},{"hanzi":"昔","pinyin":"mukashi","english":"old times / long ago","kana":"むかし","jlpt":5},{"hanzi":"胸","pinyin":"mune","english":"chest / breast","kana":"むね","jlpt":5},{"hanzi":"もう一度","pinyin":"mou ichido","english":"once more / again","kana":"もういちど","jlpt":5},{"hanzi":"もうすぐ","pinyin":"mousugu","english":"soon / before long","kana":"もうすぐ","jlpt":5},{"hanzi":"もちろん","pinyin":"mochiron","english":"of course","kana":"もちろん","jlpt":5},{"hanzi":"もっと","pinyin":"motto","english":"more","kana":"もっと","jlpt":5},{"hanzi":"もし","pinyin":"moshi","english":"if","kana":"もし","jlpt":5},{"hanzi":"申します","pinyin":"moushimasu","english":"to be called (humble)","kana":"もうします","jlpt":5},{"hanzi":"戻る","pinyin":"modoru","english":"to return / to go back","kana":"もどる","jlpt":5},{"hanzi":"もらう","pinyin":"morau","english":"to receive","kana":"もらう","jlpt":5},{"hanzi":"門","pinyin":"mon","english":"gate","kana":"もん","jlpt":5},{"hanzi":"文字","pinyin":"moji","english":"letter / character","kana":"もじ","jlpt":5},{"hanzi":"最も","pinyin":"mottomo","english":"most","kana":"もっとも","jlpt":5},{"hanzi":"燃える","pinyin":"moeru","english":"to burn","kana":"もえる","jlpt":5},{"hanzi":"目","pinyin":"me","english":"eye","kana":"め","jlpt":5},{"hanzi":"恵まれる","pinyin":"megumareru","english":"to be blessed","kana":"めぐまれる","jlpt":5},{"hanzi":"珍しい","pinyin":"mezurashii","english":"rare / unusual","kana":"めずらしい","jlpt":5},{"hanzi":"迷惑","pinyin":"meiwaku","english":"trouble / bother","kana":"めいわく","jlpt":5},{"hanzi":"眼鏡","pinyin":"megane","english":"glasses","kana":"めがね","jlpt":5},{"hanzi":"結婚","pinyin":"kekkon","english":"marriage","kana":"けっこん","jlpt":5},{"hanzi":"召し上がる","pinyin":"meshiagaru","english":"to eat / to drink (honorific)","kana":"めしあがる","jlpt":5},{"hanzi":"面倒","pinyin":"mendou","english":"trouble / bother","kana":"めんどう","jlpt":5},{"hanzi":"面白い","pinyin":"omoshiroi","english":"interesting / funny","kana":"おもしろい","jlpt":5},{"hanzi":"のぼる","pinyin":"noboru","english":"to climb / to go up","kana":"のぼる","jlpt":5},{"hanzi":"脱ぐ","pinyin":"nugu","english":"to take off (clothes)","kana":"ぬぐ","jlpt":5},{"hanzi":"温い","pinyin":"nurui","english":"lukewarm / tepid","kana":"ぬるい","jlpt":5},{"hanzi":"寝る","pinyin":"neru","english":"to sleep / to go to bed","kana":"ねる","jlpt":5},{"hanzi":"のど","pinyin":"nodo","english":"throat","kana":"のど","jlpt":5},{"hanzi":"乗る","pinyin":"noru","english":"to ride / to get on","kana":"のる","jlpt":5},{"hanzi":"ペン","pinyin":"pen","english":"pen","kana":"ペン","jlpt":5},{"hanzi":"ラジオ","pinyin":"rajio","english":"radio","kana":"ラジオ","jlpt":5},{"hanzi":"来年","pinyin":"rainen","english":"next year","kana":"らいねん","jlpt":5},{"hanzi":"来週","pinyin":"raishuu","english":"next week","kana":"らいしゅう","jlpt":5},{"hanzi":"レストラン","pinyin":"resutoran","english":"restaurant","kana":"レストラン","jlpt":5},{"hanzi":"料理","pinyin":"ryouri","english":"cooking / cuisine","kana":"りょうり","jlpt":5},{"hanzi":"散歩","pinyin":"sanpo","english":"walk / stroll","kana":"さんぽ","jlpt":5},{"hanzi":"さっき","pinyin":"sakki","english":"a while ago / just now","kana":"さっき","jlpt":5},{"hanzi":"砂糖","pinyin":"satou","english":"sugar","kana":"さとう","jlpt":5},{"hanzi":"先生","pinyin":"sensei","english":"teacher","kana":"せんせい","jlpt":5},{"hanzi":"宿題","pinyin":"shukudai","english":"homework","kana":"しゅくだい","jlpt":5},{"hanzi":"質問","pinyin":"shitsumon","english":"question","kana":"しつもん","jlpt":5},{"hanzi":"写真","pinyin":"shashin","english":"photograph","kana":"しゃしん","jlpt":5},{"hanzi":"知る","pinyin":"shiru","english":"to know","kana":"しる","jlpt":5},{"hanzi":"新聞","pinyin":"shinbun","english":"newspaper","kana":"しんぶん","jlpt":5},{"hanzi":"そば","pinyin":"soba","english":"near / beside","kana":"そば","jlpt":5},{"hanzi":"それから","pinyin":"sore kara","english":"and then / after that","kana":"それから","jlpt":5},{"hanzi":"掃除","pinyin":"souji","english":"cleaning","kana":"そうじ","jlpt":5},{"hanzi":"スポーツ","pinyin":"supootsu","english":"sport","kana":"スポーツ","jlpt":5},{"hanzi":"住む","pinyin":"sumu","english":"to live / to reside","kana":"すむ","jlpt":5},{"hanzi":"座る","pinyin":"suwaru","english":"to sit","kana":"すわる","jlpt":5},{"hanzi":"大学","pinyin":"daigaku","english":"university","kana":"だいがく","jlpt":5},{"hanzi":"たばこ","pinyin":"tabako","english":"cigarette / tobacco","kana":"たばこ","jlpt":5},{"hanzi":"食べ物","pinyin":"tabemono","english":"food","kana":"たべもの","jlpt":5},{"hanzi":"楽しい","pinyin":"tanoshii","english":"enjoyable / fun","kana":"たのしい","jlpt":5},{"hanzi":"手伝う","pinyin":"tetsudau","english":"to help","kana":"てつだう","jlpt":5},{"hanzi":"手紙","pinyin":"tegami","english":"letter","kana":"てがみ","jlpt":5},{"hanzi":"テレビ","pinyin":"terebi","english":"television","kana":"テレビ","jlpt":5},{"hanzi":"時計","pinyin":"tokei","english":"clock / watch","kana":"とけい","jlpt":5},{"hanzi":"友達","pinyin":"tomodachi","english":"friend","kana":"ともだち","jlpt":5},{"hanzi":"とり","pinyin":"tori","english":"bird","kana":"とり","jlpt":5},{"hanzi":"つく","pinyin":"tsuku","english":"to arrive / to reach","kana":"つく","jlpt":5},{"hanzi":"つける","pinyin":"tsukeru","english":"to turn on / to attach","kana":"つける","jlpt":5},{"hanzi":"疲れる","pinyin":"tsukareru","english":"to get tired","kana":"つかれる","jlpt":5},{"hanzi":"うた","pinyin":"uta","english":"song","kana":"うた","jlpt":5},{"hanzi":"うち","pinyin":"uchi","english":"home / house / inside","kana":"うち","jlpt":5},{"hanzi":"うしろ","pinyin":"ushiro","english":"behind / back","kana":"うしろ","jlpt":5},{"hanzi":"寒い","pinyin":"samui","english":"cold (weather/air)","kana":"さむい","jlpt":5},{"hanzi":"再来年","pinyin":"sarainen","english":"year after next","kana":"さらいねん","jlpt":5},{"hanzi":"騒がしい","pinyin":"sawagashii","english":"noisy / loud","kana":"さわがしい","jlpt":5},{"hanzi":"背","pinyin":"se","english":"height / back","kana":"せ","jlpt":5},{"hanzi":"生徒","pinyin":"seito","english":"student / pupil","kana":"せいと","jlpt":5},{"hanzi":"石鹸","pinyin":"sekken","english":"soap","kana":"せっけん","jlpt":5},{"hanzi":"背中","pinyin":"senaka","english":"back (of body)","kana":"せなか","jlpt":5},{"hanzi":"先輩","pinyin":"senpai","english":"senior / upperclassman","kana":"せんぱい","jlpt":5},{"hanzi":"試験","pinyin":"shiken","english":"exam / test","kana":"しけん","jlpt":5},{"hanzi":"島","pinyin":"shima","english":"island","kana":"しま","jlpt":5},{"hanzi":"閉まる","pinyin":"shimaru","english":"to close / to shut","kana":"しまる","jlpt":5},{"hanzi":"閉める","pinyin":"shimeru","english":"to close / to shut","kana":"しめる","jlpt":5},{"hanzi":"親切","pinyin":"shinsetsu","english":"kind / kindness","kana":"しんせつ","jlpt":5},{"hanzi":"心配","pinyin":"shinpai","english":"worry / anxiety","kana":"しんぱい","jlpt":5},{"hanzi":"塩","pinyin":"shio","english":"salt","kana":"しお","jlpt":5},{"hanzi":"塩辛い","pinyin":"shiokarai","english":"salty","kana":"しおからい","jlpt":5},{"hanzi":"趣味","pinyin":"shumi","english":"hobby / interest","kana":"しゅみ","jlpt":5},{"hanzi":"醤油","pinyin":"shouyu","english":"soy sauce","kana":"しょうゆ","jlpt":5},{"hanzi":"祖父","pinyin":"sofu","english":"grandfather","kana":"そふ","jlpt":5},{"hanzi":"祖母","pinyin":"sobo","english":"grandmother","kana":"そぼ","jlpt":5},{"hanzi":"空","pinyin":"sora","english":"sky","kana":"そら","jlpt":5},{"hanzi":"それでは","pinyin":"sore dewa","english":"well then / in that case","kana":"それでは","jlpt":5},{"hanzi":"相談","pinyin":"soudan","english":"consultation / discussion","kana":"そうだん","jlpt":5},{"hanzi":"最近","pinyin":"saikin","english":"recently / lately","kana":"さいきん","jlpt":5},{"hanzi":"魚","pinyin":"sakana","english":"fish","kana":"さかな","jlpt":5},{"hanzi":"下がる","pinyin":"sagaru","english":"to go down / to fall","kana":"さがる","jlpt":5},{"hanzi":"下げる","pinyin":"sageru","english":"to lower / to hang","kana":"さげる","jlpt":5},{"hanzi":"咲く","pinyin":"saku","english":"to bloom / to blossom","kana":"さく","jlpt":5},{"hanzi":"桜","pinyin":"sakura","english":"cherry blossom","kana":"さくら","jlpt":5},{"hanzi":"作文","pinyin":"sakubun","english":"composition / essay","kana":"さくぶん","jlpt":5},{"hanzi":"差す","pinyin":"sasu","english":"to hold up (umbrella)","kana":"さす","jlpt":5},{"hanzi":"雑誌","pinyin":"zasshi","english":"magazine","kana":"ざっし","jlpt":5},{"hanzi":"残念","pinyin":"zannen","english":"regrettable / disappointing","kana":"ざんねん","jlpt":5},{"hanzi":"涼しい","pinyin":"suzushii","english":"cool (temperature)","kana":"すずしい","jlpt":5},{"hanzi":"少し","pinyin":"sukoshi","english":"a little / few","kana":"すこし","jlpt":5},{"hanzi":"素晴らしい","pinyin":"subarashii","english":"wonderful / splendid","kana":"すばらしい","jlpt":5},{"hanzi":"姿","pinyin":"sugata","english":"figure / appearance","kana":"すがた","jlpt":5},{"hanzi":"相撲","pinyin":"sumou","english":"sumo wrestling","kana":"すもう","jlpt":5},{"hanzi":"滑る","pinyin":"suberu","english":"to slip / to slide","kana":"すべる","jlpt":5},{"hanzi":"過ぎる","pinyin":"sugiru","english":"to pass / to exceed","kana":"すぎる","jlpt":5},{"hanzi":"吸う","pinyin":"suu","english":"to smoke / to inhale","kana":"すう","jlpt":5},{"hanzi":"数学","pinyin":"suugaku","english":"mathematics","kana":"すうがく","jlpt":5},{"hanzi":"習う","pinyin":"narau","english":"to learn","kana":"ならう","jlpt":5},{"hanzi":"鳴く","pinyin":"naku","english":"to cry / to sing (animals)","kana":"なく","jlpt":5},{"hanzi":"夏","pinyin":"natsu","english":"summer","kana":"なつ","jlpt":5},{"hanzi":"夏休み","pinyin":"natsu yasumi","english":"summer vacation","kana":"なつやすみ","jlpt":5},{"hanzi":"何","pinyin":"nani","english":"what","kana":"なに","jlpt":5},{"hanzi":"何か","pinyin":"nanika","english":"something","kana":"なにか","jlpt":5},{"hanzi":"七","pinyin":"nana","english":"seven","kana":"なな","jlpt":5},{"hanzi":"七つ","pinyin":"nanatsu","english":"seven (things)","kana":"ななつ","jlpt":5},{"hanzi":"名前","pinyin":"namae","english":"name","kana":"なまえ","jlpt":5},{"hanzi":"並ぶ","pinyin":"narabu","english":"to line up","kana":"ならぶ","jlpt":5},{"hanzi":"なる","pinyin":"naru","english":"to become","kana":"なる","jlpt":5},{"hanzi":"投げる","pinyin":"nageru","english":"to throw","kana":"なげる","jlpt":5},{"hanzi":"長い","pinyin":"nagai","english":"long","kana":"ながい","jlpt":5},{"hanzi":"中","pinyin":"naka","english":"inside / middle","kana":"なか","jlpt":5},{"hanzi":"泣く","pinyin":"naku","english":"to cry / to weep","kana":"なく","jlpt":5},{"hanzi":"亡くす","pinyin":"nakusu","english":"to lose","kana":"なくす","jlpt":5},{"hanzi":"無くなる","pinyin":"nakunaru","english":"to disappear / to run out","kana":"なくなる","jlpt":5},{"hanzi":"肉","pinyin":"niku","english":"meat","kana":"にく","jlpt":5},{"hanzi":"西","pinyin":"nishi","english":"west","kana":"にし","jlpt":5},{"hanzi":"二","pinyin":"ni","english":"two","kana":"に","jlpt":5},{"hanzi":"二十","pinyin":"nijuu","english":"twenty","kana":"にじゅう","jlpt":5},{"hanzi":"二つ","pinyin":"futatsu","english":"two (things)","kana":"ふたつ","jlpt":5},{"hanzi":"荷物","pinyin":"nimotsu","english":"luggage / baggage","kana":"にもつ","jlpt":5},{"hanzi":"人気","pinyin":"ninki","english":"popularity","kana":"にんき","jlpt":5},{"hanzi":"日本","pinyin":"nihon","english":"Japan","kana":"にほん","jlpt":5},{"hanzi":"日本人","pinyin":"nihonjin","english":"Japanese person","kana":"にほんじん","jlpt":5},{"hanzi":"日本語","pinyin":"nihongo","english":"Japanese language","kana":"にほんご","jlpt":5},{"hanzi":"庭","pinyin":"niwa","english":"garden","kana":"にわ","jlpt":5},{"hanzi":"鶏","pinyin":"niwatori","english":"chicken","kana":"にわとり","jlpt":5},{"hanzi":"ニュース","pinyin":"nyuusu","english":"news","kana":"ニュース","jlpt":5},{"hanzi":"ノート","pinyin":"nooto","english":"notebook","kana":"ノート","jlpt":5},{"hanzi":"登る","pinyin":"noboru","english":"to climb","kana":"のぼる","jlpt":5},{"hanzi":"喉","pinyin":"nodo","english":"throat","kana":"のど","jlpt":5},{"hanzi":"喉が渇く","pinyin":"nodo ga kawaku","english":"to be thirsty","kana":"のどがかわく","jlpt":5},{"hanzi":"乗り物","pinyin":"norimono","english":"vehicle","kana":"のりもの","jlpt":5},{"hanzi":"残る","pinyin":"nokoru","english":"to remain","kana":"のこる","jlpt":5},{"hanzi":"残す","pinyin":"nokosu","english":"to leave behind","kana":"のこす","jlpt":5},{"hanzi":"飲み物","pinyin":"nomimono","english":"drink / beverage","kana":"のみもの","jlpt":5},{"hanzi":"飲む","pinyin":"nomu","english":"to drink","kana":"のむ","jlpt":5},{"hanzi":"ノック","pinyin":"nokku","english":"knock","kana":"ノック","jlpt":5},{"hanzi":"ノックする","pinyin":"nokku suru","english":"to knock","kana":"ノックする","jlpt":5},{"hanzi":"のんびり","pinyin":"nonbiri","english":"leisurely / relaxed","kana":"のんびり","jlpt":5},{"hanzi":"お","pinyin":"o","english":"honorific prefix","kana":"お","jlpt":5},{"hanzi":"美味しい","pinyin":"oishii","english":"delicious","kana":"おいしい","jlpt":5},{"hanzi":"お疲れ","pinyin":"otsukare","english":"tired / exhausted","kana":"おつかれ","jlpt":5},{"hanzi":"お手洗い","pinyin":"otearai","english":"restroom / toilet","kana":"おてあらい","jlpt":5},{"hanzi":"お米","pinyin":"okome","english":"rice (uncooked)","kana":"おこめ","jlpt":5},{"hanzi":"重い","pinyin":"omoi","english":"heavy","kana":"おもい","jlpt":5},{"hanzi":"終わる","pinyin":"owaru","english":"to end / to finish","kana":"おわる","jlpt":5},{"hanzi":"ペット","pinyin":"petto","english":"pet","kana":"ペット","jlpt":5},{"hanzi":"プレゼント","pinyin":"purezento","english":"present / gift","kana":"プレゼント","jlpt":5},{"hanzi":"来月","pinyin":"raigetsu","english":"next month","kana":"らいげつ","jlpt":5},{"hanzi":"リンゴ","pinyin":"ringo","english":"apple","kana":"リンゴ","jlpt":5},{"hanzi":"両親","pinyin":"ryoushin","english":"parents","kana":"りょうしん","jlpt":5},{"hanzi":"旅行","pinyin":"ryokou","english":"travel / trip","kana":"りょこう","jlpt":5},{"hanzi":"留学生","pinyin":"ryuugakusei","english":"exchange student","kana":"りゅうがくせい","jlpt":5},{"hanzi":"寂しい","pinyin":"sabishii","english":"lonely","kana":"さびしい","jlpt":5},{"hanzi":"先程","pinyin":"sakihodo","english":"a little while ago","kana":"さきほど","jlpt":5},{"hanzi":"酒","pinyin":"sake","english":"alcohol / sake","kana":"さけ","jlpt":5},{"hanzi":"最初","pinyin":"saisho","english":"first / beginning","kana":"さいしょ","jlpt":5},{"hanzi":"最後","pinyin":"saigo","english":"last / end","kana":"さいご","jlpt":5},{"hanzi":"しかし","pinyin":"shikashi","english":"however / but","kana":"しかし","jlpt":5},{"hanzi":"白い","pinyin":"shiroi","english":"white","kana":"しろい","jlpt":5},{"hanzi":"静か","pinyin":"shizuka","english":"quiet / peaceful","kana":"しずか","jlpt":5},{"hanzi":"出張","pinyin":"shutchou","english":"business trip","kana":"しゅっちょう","jlpt":5},{"hanzi":"小説","pinyin":"shousetsu","english":"novel","kana":"しょうせつ","jlpt":5},{"hanzi":"紹介","pinyin":"shoukai","english":"introduction","kana":"しょうかい","jlpt":5},{"hanzi":"三日","pinyin":"mikka","english":"three days / third day of month","kana":"みっか","jlpt":5},{"hanzi":"三つ","pinyin":"mittsu","english":"three (things)","kana":"みっつ","jlpt":5},{"hanzi":"皆","pinyin":"mina","english":"everyone / all","kana":"みな","jlpt":5},{"hanzi":"南","pinyin":"minami","english":"south","kana":"みなみ","jlpt":5},{"hanzi":"貰う","pinyin":"morau","english":"to receive / to get","kana":"もらう","jlpt":5},{"hanzi":"六日","pinyin":"muika","english":"six days / sixth day of month","kana":"むいか","jlpt":5},{"hanzi":"六つ","pinyin":"muttsu","english":"six (things)","kana":"むっつ","jlpt":5},{"hanzi":"向く","pinyin":"muku","english":"to face / to turn toward","kana":"むく","jlpt":5},{"hanzi":"無駄","pinyin":"muda","english":"waste / useless","kana":"むだ","jlpt":5},{"hanzi":"昨日","pinyin":"kinou","english":"yesterday","kana":"きのう","jlpt":5},{"hanzi":"毎年","pinyin":"maitoshi","english":"every year","kana":"まいとし","jlpt":5},{"hanzi":"サラダ","pinyin":"sarada","english":"salad","kana":"サラダ","jlpt":5},{"hanzi":"さる","pinyin":"saru","english":"monkey","kana":"さる","jlpt":5},{"hanzi":"三","pinyin":"san","english":"three","kana":"さん","jlpt":5},{"hanzi":"四","pinyin":"shi","english":"four","kana":"し","jlpt":5},{"hanzi":"下","pinyin":"shita","english":"under / below","kana":"した","jlpt":5},{"hanzi":"シャツ","pinyin":"shatsu","english":"shirt","kana":"シャツ","jlpt":5},{"hanzi":"シャワー","pinyin":"shawaa","english":"shower","kana":"シャワー","jlpt":5},{"hanzi":"食堂","pinyin":"shokudou","english":"cafeteria / dining hall","kana":"しょくどう","jlpt":5},{"hanzi":"白","pinyin":"shiro","english":"white","kana":"しろ","jlpt":5},{"hanzi":"すぐ","pinyin":"sugu","english":"soon / immediately","kana":"すぐ","jlpt":5},{"hanzi":"スリッパ","pinyin":"surippa","english":"slippers","kana":"スリッパ","jlpt":5},{"hanzi":"背が高い","pinyin":"se ga takai","english":"tall","kana":"せがたかい","jlpt":5},{"hanzi":"セーター","pinyin":"seetaa","english":"sweater","kana":"セーター","jlpt":5},{"hanzi":"狭い","pinyin":"semai","english":"narrow / small","kana":"せまい","jlpt":5},{"hanzi":"先週","pinyin":"senshuu","english":"last week","kana":"せんしゅう","jlpt":5},{"hanzi":"洗濯","pinyin":"sentaku","english":"laundry / washing","kana":"せんたく","jlpt":5},{"hanzi":"そして","pinyin":"soshite","english":"and / and then","kana":"そして","jlpt":5},{"hanzi":"外","pinyin":"soto","english":"outside","kana":"そと","jlpt":5},{"hanzi":"その","pinyin":"sono","english":"that","kana":"その","jlpt":5},{"hanzi":"それ","pinyin":"sore","english":"that","kana":"それ","jlpt":5},{"hanzi":"それで","pinyin":"sore de","english":"so / therefore","kana":"それで","jlpt":5},{"hanzi":"すると","pinyin":"suru to","english":"then / thereupon","kana":"すると","jlpt":5},{"hanzi":"好き","pinyin":"suki","english":"like / love","kana":"すき","jlpt":5}];
+const JLPT_DATA = { 5: JLPT5_EMBEDDED };
+const jlptChunkSize = {};
+const jlptOpen = {};
 
 const decks = {};             // name -> card array (all decks: HSK chunks + custom)
 let activeDeckName = null;
@@ -2701,6 +2763,9 @@ async function loadAllData() {
   loadJSON('data/hsk-enriched.json').then(data => {
     if (data) ENRICHED = data;
   });
+  loadJSON('data/jlpt-enriched.json').then(data => {
+    if (data) ENRICHED_JP = data;
+  });
 }
 
 // ══════════════════════════════════════════
@@ -2708,13 +2773,13 @@ async function loadAllData() {
 // ══════════════════════════════════════════
 function saveProgress() {
   try {
-    const data = JSON.parse(localStorage.getItem('hanzi-progress') || '{}');
+    const data = JSON.parse(localStorage.getItem(lang().storagePrefix + '-progress') || '{}');
     data.cardData = cardData;
     data.customDecks = {};
     for (const [name, cards] of Object.entries(decks)) {
       if (!name.match(/^hsk \d/)) data.customDecks[name] = cards;
     }
-    localStorage.setItem('hanzi-progress', JSON.stringify(data));
+    localStorage.setItem(lang().storagePrefix + '-progress', JSON.stringify(data));
   } catch (e) {
     console.error('Failed to save progress:', e);
     // §16.5: localStorage full or corrupted
@@ -2727,7 +2792,7 @@ function saveProgress() {
 function saveSession() {
   if (!sessionLog.length) return;
   try {
-    const data = JSON.parse(localStorage.getItem('hanzi-progress') || '{}');
+    const data = JSON.parse(localStorage.getItem(lang().storagePrefix + '-progress') || '{}');
     if (!data.sessions) data.sessions = {};
     if (!data.sessions[activeDeckName]) data.sessions[activeDeckName] = [];
     const total = stats.correct + stats.wrong;
@@ -2741,7 +2806,7 @@ function saveSession() {
       cardsAnswered: total,
       flagged: stats.reviewFlagged.size
     });
-    localStorage.setItem('hanzi-progress', JSON.stringify(data));
+    localStorage.setItem(lang().storagePrefix + '-progress', JSON.stringify(data));
   } catch (e) {
     console.error('Failed to save session:', e);
   }
@@ -2749,7 +2814,7 @@ function saveSession() {
 
 function loadProgress() {
   try {
-    const raw = localStorage.getItem('hanzi-progress');
+    const raw = localStorage.getItem(lang().storagePrefix + '-progress');
     if (!raw) return;
     const data = JSON.parse(raw);
     if (data.cardData) cardData = data.cardData;
@@ -2762,14 +2827,14 @@ function loadProgress() {
 // §10.1: Export/Import
 function exportProgress() {
   try {
-    const progress = localStorage.getItem('hanzi-progress') || '{}';
-    const tutor = localStorage.getItem('hanzi-tutor-history') || '[]';
-    const exportData = { progress: JSON.parse(progress), tutorHistory: JSON.parse(tutor) };
+    const progress = localStorage.getItem(lang().storagePrefix + '-progress') || '{}';
+    const tutor = localStorage.getItem(lang().storagePrefix + '-tutor-history') || '[]';
+    const exportData = { language: currentLang, progress: JSON.parse(progress), tutorHistory: JSON.parse(tutor) };
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `hanzi-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `${lang().storagePrefix}-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   } catch (e) {
@@ -2787,14 +2852,14 @@ function importProgress(input) {
       const data = JSON.parse(reader.result);
       // Support both old format (raw progress) and new format (with tutorHistory)
       if (data.progress) {
-        localStorage.setItem('hanzi-progress', JSON.stringify(data.progress));
+        localStorage.setItem(lang().storagePrefix + '-progress', JSON.stringify(data.progress));
         if (data.tutorHistory) {
-          localStorage.setItem('hanzi-tutor-history', JSON.stringify(data.tutorHistory));
+          localStorage.setItem(lang().storagePrefix + '-tutor-history', JSON.stringify(data.tutorHistory));
           loadTutorHistory();
         }
       } else {
         // Legacy format: the whole file is the progress object
-        localStorage.setItem('hanzi-progress', reader.result);
+        localStorage.setItem(lang().storagePrefix + '-progress', reader.result);
       }
       loadProgress();
       renderSidebar();
@@ -3150,16 +3215,26 @@ document.addEventListener('click', (e) => {
   }
 });
 
-function getChunkSize(level) { return hskChunkSize[level] || 20; }
+function getChunkSize(level) {
+  return currentLang === 'ja' ? (jlptChunkSize[level] || 20) : (hskChunkSize[level] || 20);
+}
 
 function renderSidebar() {
   const list = document.getElementById('hsk-list');
   list.innerHTML = '';
 
-  for (let level = 1; level <= 6; level++) {
-    const data = HSK_DATA[level];
+  const isJapanese = currentLang === 'ja';
+  const dataSource = isJapanese ? JLPT_DATA : HSK_DATA;
+  const openState  = isJapanese ? jlptOpen   : hskOpen;
+  const chunkSizes = isJapanese ? jlptChunkSize : hskChunkSize;
+  const levels     = lang().levels;
+  const prefix     = lang().levelPrefix;   // 'HSK ' or 'JLPT N'
+  const deckPrefix = isJapanese ? 'jlpt' : 'hsk';
+
+  for (const level of levels) {
+    const data = dataSource[level];
     const loaded = !!data;
-    const isOpen = hskOpen[level];
+    const isOpen = openState[level];
     const count = loaded ? data.length : null;
 
     const wrapper = document.createElement('div');
@@ -3168,22 +3243,23 @@ function renderSidebar() {
     // Header
     const header = document.createElement('div');
     header.className = 'hsk-level-header';
+    const shortLabel = isJapanese ? `N${level}` : `HSK${level}`;
     header.innerHTML = `
-      <span class="sidebar-icon" style="display:none;font-size:10px;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,#4f7fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">HSK${level}</span>
-      <span class="sidebar-full">HSK ${level}</span>
+      <span class="sidebar-icon" style="display:none;font-size:10px;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,#4f7fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${shortLabel}</span>
+      <span class="sidebar-full">${prefix}${level}</span>
       <span class="sidebar-full" style="display:flex;align-items:center;gap:8px">
         ${count !== null ? `<span class="count">${count}</span>` : '<span class="count" style="font-style:italic">loading…</span>'}
         <svg class="chevron" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
     `;
     header.onclick = () => {
-      hskOpen[level] = !hskOpen[level];
+      openState[level] = !openState[level];
       renderSidebar();
     };
     wrapper.appendChild(header);
 
     if (loaded && isOpen) {
-      const sz = getChunkSize(level);
+      const sz = chunkSizes[level] || 20;
       const totalChunks = Math.ceil(data.length / sz);
 
       // Chunk size pills
@@ -3194,7 +3270,7 @@ function renderSidebar() {
           <span class="chunk-size-label">chunk</span>
           <div class="chunk-pills">
             ${[10, 15, 20, 30, 50].map(n =>
-              `<button class="chunk-pill${sz === n ? ' active' : ''}" onclick="event.stopPropagation();hskChunkSize[${level}]=${n};renderSidebar()">${n}</button>`
+              `<button class="chunk-pill${sz === n ? ' active' : ''}" onclick="event.stopPropagation();${isJapanese?'jlptChunkSize':'hskChunkSize'}[${level}]=${n};renderSidebar()">${n}</button>`
             ).join('')}
           </div>
         </div>
@@ -3204,7 +3280,7 @@ function renderSidebar() {
       // Chunk items
       for (let i = 0; i < data.length; i += sz) {
         const chunkNum = Math.floor(i / sz) + 1;
-        const name = `hsk ${level} · ${chunkNum}/${totalChunks}`;
+        const name = `${deckPrefix} ${level} · ${chunkNum}/${totalChunks}`;
         const cards = data.slice(i, i + sz);
 
         const item = document.createElement('div');
@@ -3225,7 +3301,7 @@ function renderSidebar() {
   // Custom decks
   const customList = document.getElementById('custom-deck-list');
   customList.innerHTML = '';
-  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/));
+  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/) && !k.match(/^jlpt \d/));
   document.getElementById('custom-decks-header').style.display = custom.length > 0 ? '' : 'none';
 
   custom.forEach(([name, cards]) => {
@@ -4087,8 +4163,14 @@ function normalizePinyin(s) {
 
 function buildSearchIndex() {
   searchIndex = [];
-  for (const [level, cards] of Object.entries(HSK_DATA)) {
-    if (cards) cards.forEach(c => searchIndex.push({ card: c, deckName: 'HSK ' + level }));
+  if (currentLang === 'ja') {
+    for (const [level, cards] of Object.entries(JLPT_DATA)) {
+      if (cards) cards.forEach(c => searchIndex.push({ card: c, deckName: 'JLPT N' + level }));
+    }
+  } else {
+    for (const [level, cards] of Object.entries(HSK_DATA)) {
+      if (cards) cards.forEach(c => searchIndex.push({ card: c, deckName: 'HSK ' + level }));
+    }
   }
   for (const [name, cards] of Object.entries(decks)) {
     if (name !== '⟳ review') cards.forEach(c => searchIndex.push({ card: c, deckName: name }));
@@ -4105,12 +4187,14 @@ function navigateToSearchResult(card, deckName) {
     return;
   }
 
-  // HSK deck names are like "HSK 1" — look up the card directly in HSK_DATA
-  // to find which chunk it belongs to, then load that chunk
+  // Level deck names: "HSK 1" or "JLPT N5"
   const hskMatch = deckName.match(/^HSK (\d+)$/);
-  if (hskMatch) {
-    const level = parseInt(hskMatch[1]);
-    const data = HSK_DATA[level];
+  const jlptMatch = deckName.match(/^JLPT N(\d+)$/);
+  const levelMatch = hskMatch || jlptMatch;
+  if (levelMatch) {
+    const level = parseInt(levelMatch[1]);
+    const data = hskMatch ? HSK_DATA[level] : JLPT_DATA[level];
+    const deckPrefix = hskMatch ? 'hsk' : 'jlpt';
     if (!data) return;
     const sz = getChunkSize(level);
     const totalChunks = Math.ceil(data.length / sz);
@@ -4118,7 +4202,7 @@ function navigateToSearchResult(card, deckName) {
     if (cardPos < 0) return;
     const chunkIdx = Math.floor(cardPos / sz);
     const chunkNum = chunkIdx + 1;
-    const name = `hsk ${level} · ${chunkNum}/${totalChunks}`;
+    const name = `${deckPrefix} ${level} · ${chunkNum}/${totalChunks}`;
     decks[name] = data.slice(chunkIdx * sz, (chunkIdx + 1) * sz);
     selectDeck(name);
   } else {
@@ -4148,13 +4232,20 @@ function toggleInfoPanel() {
   }
 }
 
+function getEnriched() { return currentLang === 'ja' ? ENRICHED_JP : ENRICHED; }
+function getDict()     { return currentLang === 'ja' ? ENRICHED_JP : CEDICT; }
+
 function renderInfoPanel(card) {
   if (!card) return;
   infoPanelCurrentCard = card;
   const scroll = document.getElementById('info-panel-scroll');
 
-  const entry = CEDICT[card.hanzi] || null;
-  const enriched = ENRICHED[card.hanzi] || null;
+  const enrichedSource = getEnriched();
+  const dictSource = getDict();
+  const isJapanese = currentLang === 'ja';
+
+  const entry   = isJapanese ? (enrichedSource[card.hanzi] || null) : (CEDICT[card.hanzi] || null);
+  const enriched = enrichedSource[card.hanzi] || null;
   const isMultiChar = card.hanzi.length > 1;
   const cd = cardData[card.hanzi] || {};
 
@@ -4178,14 +4269,24 @@ function renderInfoPanel(card) {
     </div>
     <div class="ip-english">${card.english}</div>
     <div class="ip-badges">
-      ${entry && entry.hsk ? `<span class="ip-badge hsk">HSK ${entry.hsk}</span>` : ''}
+      ${isJapanese && enriched && enriched.jlpt ? `<span class="ip-badge hsk">JLPT N${enriched.jlpt}</span>` : ''}
+      ${!isJapanese && entry && entry.hsk ? `<span class="ip-badge hsk">HSK ${entry.hsk}</span>` : ''}
       ${enriched && enriched.strokeCount ? `<span class="ip-badge">${enriched.strokeCount} strokes</span>` : ''}
       ${enriched && enriched.radical ? `<span class="ip-badge">radical: ${enriched.radical}</span>` : ''}
     </div>
   </div>`;
 
-  // ── CEDICT Definitions ──
-  if (entry && entry.defs) {
+  // ── Readings (Japanese only) ──
+  if (isJapanese && enriched && (enriched.onyomi || enriched.kunyomi)) {
+    html += `<div class="ip-section">
+      <div class="ip-section-title">readings</div>
+      ${enriched.onyomi ? `<div class="ip-reading"><span class="ip-reading-label">on'yomi</span> ${enriched.onyomi}</div>` : ''}
+      ${enriched.kunyomi ? `<div class="ip-reading"><span class="ip-reading-label">kun'yomi</span> ${enriched.kunyomi}</div>` : ''}
+    </div>`;
+  }
+
+  // ── Definitions ──
+  if (!isJapanese && entry && entry.defs) {
     html += `<div class="ip-section">
       <div class="ip-section-title">definitions</div>
       <div class="ip-defs">${entry.defs.join(' · ')}</div>
@@ -4226,7 +4327,7 @@ function renderInfoPanel(card) {
       html += `<div class="ip-section">
         <div class="ip-section-title">character breakdown</div>`;
       for (const charHanzi of enriched.characters) {
-        const charData = ENRICHED[charHanzi];
+        const charData = enrichedSource[charHanzi];
         if (charData) {
           html += `<details style="margin-bottom:8px">
             <summary style="cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:20px;color:var(--text);padding:6px 0">
@@ -4264,10 +4365,10 @@ function renderInfoPanel(card) {
         <div class="ip-section-title">examples</div>
         ${enriched.examples.map(ex => `
           <div class="ip-example">
-            <div class="ip-ex-zh">${ex.zh}</div>
-            <div class="ip-ex-pinyin">${ex.pinyin}</div>
+            <div class="ip-ex-zh">${isJapanese ? ex.ja : ex.zh}</div>
+            <div class="ip-ex-pinyin">${isJapanese ? ex.romaji : ex.pinyin}</div>
             <div class="ip-ex-en">${ex.en}</div>
-            ${ex.level ? `<span class="ip-ex-level">HSK ${ex.level}</span>` : ''}
+            ${ex.level ? `<span class="ip-ex-level">${lang().levelPrefix}${ex.level}</span>` : ''}
           </div>
         `).join('')}
       </div>`;
@@ -4323,15 +4424,21 @@ function navigateToChar(hanzi) {
     if (found) { card = found; break; }
   }
   if (!card) {
-    for (const [, cards] of Object.entries(HSK_DATA)) {
+    const dataSource = currentLang === 'ja' ? JLPT_DATA : HSK_DATA;
+    for (const [, cards] of Object.entries(dataSource)) {
       if (!cards) continue;
       const found = cards.find(c => c.hanzi === hanzi);
       if (found) { card = found; break; }
     }
   }
   if (!card) {
-    const ce = CEDICT[hanzi];
-    card = { hanzi, pinyin: ce ? ce.pinyin : '?', english: ce ? ce.defs.join(' / ') : 'unknown' };
+    if (currentLang === 'ja') {
+      const e = ENRICHED_JP[hanzi];
+      card = { hanzi, pinyin: e ? e.romaji : '?', english: e ? e.english : 'unknown' };
+    } else {
+      const ce = CEDICT[hanzi];
+      card = { hanzi, pinyin: ce ? ce.pinyin : '?', english: ce ? ce.defs.join(' / ') : 'unknown' };
+    }
   }
   renderInfoPanel(card);
 }
@@ -4347,11 +4454,10 @@ function speakHanzi(text) {
   if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'zh-CN';
+  utt.lang = lang().ttsLang;
   utt.rate = 0.85;
-  // Try to find a Chinese voice
   const voices = speechSynthesis.getVoices();
-  const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+  const zhVoice = voices.find(v => v.lang.startsWith(lang().ttsVoicePrefix));
   if (zhVoice) utt.voice = zhVoice;
   speechSynthesis.speak(utt);
 }
@@ -4445,7 +4551,7 @@ let tutorHistory = [];
 
 function loadTutorHistory() {
   try {
-    const raw = localStorage.getItem('hanzi-tutor-history');
+    const raw = localStorage.getItem(lang().storagePrefix + '-tutor-history');
     if (raw) tutorHistory = JSON.parse(raw);
   } catch (e) { tutorHistory = []; }
 }
@@ -4454,7 +4560,7 @@ function saveTutorHistory() {
   try {
     // Keep last 100 messages to avoid storage bloat
     const toSave = tutorHistory.slice(-100);
-    localStorage.setItem('hanzi-tutor-history', JSON.stringify(toSave));
+    localStorage.setItem(lang().storagePrefix + '-tutor-history', JSON.stringify(toSave));
   } catch (e) {
     console.warn('Failed to save tutor history:', e);
   }
@@ -4513,7 +4619,7 @@ function sendTutorMsg() {
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 800,
-      system: `You are a helpful Chinese language tutor. Keep answers concise and focused. ${context}`,
+      system: `${lang().tutorSystemPrompt} ${context}`,
       messages: apiMessages
     })
   }).then(r => r.json()).then(data => {
@@ -4763,18 +4869,32 @@ document.getElementById('search-input').addEventListener('input', function () {
     card.english.toLowerCase().includes(q.toLowerCase())
   ).slice(0, 8);
 
-  // Search full CEDICT dictionary for additional results
+  // Search dictionary for additional results (CEDICT for Chinese, ENRICHED_JP for Japanese)
   const deckHanzi = new Set(deckMatches.map(m => m.card.hanzi));
   const cedictMatches = [];
-  for (const [hanzi, entry] of Object.entries(CEDICT)) {
-    if (deckHanzi.has(hanzi)) continue; // already in deck results
-    const defs = entry.defs ? entry.defs.join(' ') : '';
-    const pin = entry.pinyin || '';
-    if (hanzi.includes(q) ||
-        normalizePinyin(pin).includes(qNorm) ||
-        defs.toLowerCase().includes(q.toLowerCase())) {
-      cedictMatches.push({ card: { hanzi, pinyin: pin, english: defs }, deckName: 'CEDICT' });
-      if (cedictMatches.length >= 6) break;
+  if (currentLang === 'ja') {
+    for (const [hanzi, entry] of Object.entries(ENRICHED_JP)) {
+      if (deckHanzi.has(hanzi)) continue;
+      const defs = entry.english || '';
+      const pin = entry.romaji || '';
+      if (hanzi.includes(q) ||
+          pin.toLowerCase().includes(q.toLowerCase()) ||
+          defs.toLowerCase().includes(q.toLowerCase())) {
+        cedictMatches.push({ card: { hanzi, pinyin: pin, english: defs, kana: entry.kana }, deckName: 'CEDICT' });
+        if (cedictMatches.length >= 6) break;
+      }
+    }
+  } else {
+    for (const [hanzi, entry] of Object.entries(CEDICT)) {
+      if (deckHanzi.has(hanzi)) continue; // already in deck results
+      const defs = entry.defs ? entry.defs.join(' ') : '';
+      const pin = entry.pinyin || '';
+      if (hanzi.includes(q) ||
+          normalizePinyin(pin).includes(qNorm) ||
+          defs.toLowerCase().includes(q.toLowerCase())) {
+        cedictMatches.push({ card: { hanzi, pinyin: pin, english: defs }, deckName: 'CEDICT' });
+        if (cedictMatches.length >= 6) break;
+      }
     }
   }
 
@@ -4784,7 +4904,7 @@ document.getElementById('search-input').addEventListener('input', function () {
   allMatches.forEach(({ card, deckName }) => {
     const item = document.createElement('div');
     item.className = 'search-result-item';
-    const deckLabel = deckName === 'CEDICT' ? '词典' : deckName;
+    const deckLabel = deckName === 'CEDICT' ? (currentLang === 'ja' ? '辞書' : '词典') : deckName;
     item.innerHTML = `<span class="search-result-hanzi">${card.hanzi}</span>
       <span class="search-result-text">
         <div class="search-result-pinyin">${card.pinyin}</div>
@@ -4866,7 +4986,7 @@ function renderAnalytics() {
   // ── Load session data ──
   let allSessions = [];
   try {
-    const raw = localStorage.getItem('hanzi-progress');
+    const raw = localStorage.getItem(lang().storagePrefix + '-progress');
     if (raw) {
       const data = JSON.parse(raw);
       if (data.sessions) {
@@ -5099,6 +5219,67 @@ document.addEventListener('click', e => {
 })();
 
 // ══════════════════════════════════════════
+// LANGUAGE SWITCHING
+// ══════════════════════════════════════════
+function applyLangUI() {
+  const cfg = lang();
+  // Header + page title
+  document.querySelector('.header-title').textContent = cfg.headerTitle;
+  document.title = cfg.pageTitle;
+  // Search placeholder
+  const si = document.getElementById('search-input');
+  if (si) si.placeholder = cfg.searchPlaceholder;
+  // "Show pinyin/romaji" labels
+  ['show-reading-label', 'fs-show-reading-label'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = cfg.showReadingLabel;
+  });
+  // Language pill active state
+  document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+  document.getElementById('lang-ja').classList.toggle('active', currentLang === 'ja');
+  // Noto Sans JP — load on first Japanese switch
+  if (currentLang === 'ja' && !document.getElementById('font-jp')) {
+    const link = document.createElement('link');
+    link.id = 'font-jp';
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&display=swap';
+    document.head.appendChild(link);
+  }
+}
+
+function switchLanguage(langId) {
+  if (currentLang === langId) return;
+  currentLang = langId;
+  localStorage.setItem('app-lang', langId);
+
+  // Clear active deck
+  activeDeckName = null;
+  activeDeck = [];
+  currentIndex = 0;
+  Object.keys(decks).forEach(k => {
+    if (k.match(/^hsk \d/) || k.match(/^jlpt \d/)) delete decks[k];
+  });
+
+  // Reload progress for new language
+  cardData = {};
+  loadProgress();
+  loadTutorHistory();
+
+  applyLangUI();
+  renderSidebar();
+  buildSearchIndex();
+
+  // Reset card display
+  const emptyView = document.getElementById('empty-view');
+  if (emptyView) emptyView.style.display = '';
+  const cardView = document.getElementById('card-view');
+  if (cardView) cardView.style.display = 'none';
+  if (infoPanelOpen) {
+    document.getElementById('info-panel').innerHTML = '';
+  }
+}
+
+// ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 async function init() {
@@ -5119,6 +5300,9 @@ async function init() {
     if (savedApp) { appearance = { ...appearance, ...savedApp }; applyBackground(); if (appearance.type === 'default') applyBlobTint(); }
   } catch(e) {}
   syncSettingsUI();
+
+  // Apply language-specific UI
+  applyLangUI();
 
   // Load progress from localStorage
   loadProgress();
