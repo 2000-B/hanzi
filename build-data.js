@@ -8,6 +8,10 @@
  *   export ANTHROPIC_API_KEY=sk-ant-...
  *   node build-data.js
  *
+ * Options:
+ *   --validate-only   Skip API calls, just validate existing output file
+ *   --force <hanzi>   Re-enrich a specific entry even if it already exists
+ *
  * Re-run safe: already-enriched entries are skipped automatically.
  * If the script is interrupted, just re-run — it picks up where it left off.
  */
@@ -43,10 +47,6 @@ function saveOutput(data) {
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
-function stripDiacritics(str) {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
 // ── Prompt ────────────────────────────────────────────────────────────────────
 
 function buildPrompt(batch) {
@@ -54,15 +54,23 @@ function buildPrompt(batch) {
     `- hanzi: "${c.hanzi}", pinyin: "${c.pinyin}", english: "${c.english}", hsk: ${c.hsk}`
   ).join('\n');
 
-  return `You are a Chinese language data expert. For each item below, return a JSON array with one enriched entry per item.
+  return `You are a Chinese language data expert specialising in simplified Chinese (简体字).
 
-Rules:
+CRITICAL: All characters below are SIMPLIFIED CHINESE. You must:
+- Decompose only the components visible in the SIMPLIFIED form of each character.
+- Do NOT describe components from the traditional (繁体字) form that were removed or replaced during simplification.
+- For example: 爱 (simplified) should NOT list 心 as a component — 心 was present in the traditional 愛 but is absent from the simplified form. The bottom of simplified 爱 is 友, not 心+夊.
+- Similarly: 车 is a single-component simplification (not 車's components), 学 does not contain 臼, 书 does not contain the traditional 書's inner structure, etc.
+- When in doubt about a simplified character's structure, describe what is visually present in the simplified glyph as written today — not its historical or traditional composition.
+
+Additional rules:
 - Multi-character words (e.g. 你好, 电话) are treated as a single unit. Do NOT decompose them into individual characters for the components field — instead describe the word-level composition and meaning as a whole.
 - Single characters get full component decomposition (radical + other components).
-- Etymology should be factual and concise (2–4 sentences). No invented stories.
-- Example sentences must be natural, graded (level 1 = very simple, level 2 = slightly more complex), and accurate.
-- sameRadical: list up to 6 other common characters sharing the same primary radical. Empty array [] for multi-char words.
-- Stroke count: for multi-character words, give total stroke count across all characters combined.
+- Radical: use the standard radical under which the SIMPLIFIED character is indexed in modern dictionaries (e.g. 新华字典). This may differ from the traditional radical.
+- Stroke count: count strokes in the SIMPLIFIED form. For multi-character words, give total stroke count across all characters combined.
+- Etymology should be factual and concise (2–4 sentences). You may reference the traditional form's history, but clearly distinguish it from the simplified form. For example: "The traditional form 愛 included 心 (heart) in the middle, but the simplified 爱 replaced the lower portion with 友 (friend)."
+- Example sentences must be natural, graded (level 1 = very simple, level 2 = slightly more complex), and accurate. Use simplified characters throughout.
+- sameRadical: list up to 6 other common simplified characters sharing the same primary radical. Empty array [] for multi-char words.
 - Return ONLY the JSON array. No markdown, no explanation, no preamble.
 
 Schema for each entry:
@@ -74,9 +82,9 @@ Schema for each entry:
   "components": [
     { "char": "string", "role": "semantic|phonetic|both|word-component", "meaning": "string", "note": "string" }
   ],
-  "radical": "string (primary radical, or first character's radical for multi-char words)",
+  "radical": "string (primary radical in simplified form)",
   "strokeCount": number,
-  "etymology": "string (2–4 sentences, factual)",
+  "etymology": "string (2–4 sentences, factual, distinguish simplified vs traditional where relevant)",
   "examples": [
     { "zh": "string", "pinyin": "string", "en": "string", "level": 1 or 2 }
   ],
@@ -85,6 +93,91 @@ Schema for each entry:
 
 Items to enrich:
 ${items}`;
+}
+
+// ── Validation ────────────────────────────────────────────────────────────────
+
+// Characters whose simplified form lost components present in traditional.
+// If these traditional-only components appear in the output, it's a red flag.
+const TRADITIONAL_TRAPS = {
+  '爱': { bad: ['心', '夊'], note: 'simplified 爱 has 友 at bottom, not 心+夊 (traditional 愛)' },
+  '车': { bad: ['車'],       note: 'simplified 车 is a single unit, not decomposed like 車' },
+  '学': { bad: ['臼'],       note: 'simplified 学 does not contain 臼 (traditional 學 does)' },
+  '书': { bad: ['聿'],       note: 'simplified 书 is compact, not like traditional 書' },
+  '东': { bad: ['束'],       note: 'simplified 东 is not 東' },
+  '马': { bad: ['馬'],       note: 'simplified 马 is a single unit' },
+  '鱼': { bad: ['魚'],       note: 'simplified 鱼 — do not use traditional 魚 components' },
+  '鸟': { bad: ['鳥'],       note: 'simplified 鸟 — do not use traditional 鳥 components' },
+  '长': { bad: ['镸'],       note: 'simplified 长 is compact' },
+  '门': { bad: ['門'],       note: 'simplified 门 is a single unit' },
+  '见': { bad: ['見'],       note: 'simplified 见' },
+  '贝': { bad: ['貝'],       note: 'simplified 贝' },
+  '开': { bad: ['開'],       note: 'simplified 开' },
+  '关': { bad: ['關'],       note: 'simplified 关' },
+};
+
+function validateEntry(entry) {
+  const warnings = [];
+
+  // Basic schema checks
+  if (!entry.hanzi) warnings.push('missing hanzi');
+  if (!entry.pinyin) warnings.push('missing pinyin');
+  if (!entry.components || !Array.isArray(entry.components)) warnings.push('missing or invalid components');
+  if (typeof entry.strokeCount !== 'number' || entry.strokeCount < 1) warnings.push(`suspicious strokeCount: ${entry.strokeCount}`);
+  if (!entry.etymology) warnings.push('missing etymology');
+  if (!entry.examples || entry.examples.length < 2) warnings.push(`only ${entry.examples?.length || 0} examples (want 2+)`);
+
+  // Traditional component trap detection
+  const hanzi = entry.hanzi;
+  if (TRADITIONAL_TRAPS[hanzi] && entry.components) {
+    const trap = TRADITIONAL_TRAPS[hanzi];
+    for (const comp of entry.components) {
+      if (trap.bad.includes(comp.char)) {
+        warnings.push(`⚠ TRADITIONAL LEAK: component "${comp.char}" — ${trap.note}`);
+      }
+    }
+  }
+
+  // Check etymology for traditional form descriptions applied to simplified
+  if (entry.etymology && entry.hanzi.length === 1) {
+    // Flag if etymology mentions components not in the components list
+    // (rough heuristic — catches obvious cases)
+    const compChars = (entry.components || []).map(c => c.char);
+    if (TRADITIONAL_TRAPS[hanzi]) {
+      for (const bad of TRADITIONAL_TRAPS[hanzi].bad) {
+        if (entry.etymology.includes(bad) && !entry.etymology.includes('traditional') && !entry.etymology.includes('繁体')) {
+          warnings.push(`⚠ Etymology mentions "${bad}" without noting it's from the traditional form`);
+        }
+      }
+    }
+  }
+
+  return warnings;
+}
+
+function runValidation(output) {
+  console.log('\n── Validation Report ──────────────────────');
+  let totalWarnings = 0;
+
+  for (const [hanzi, entry] of Object.entries(output)) {
+    const warnings = validateEntry(entry);
+    if (warnings.length > 0) {
+      console.log(`\n  ${hanzi} (${entry.pinyin || '?'}):`);
+      for (const w of warnings) {
+        console.log(`    - ${w}`);
+      }
+      totalWarnings += warnings.length;
+    }
+  }
+
+  if (totalWarnings === 0) {
+    console.log('  ✅ No issues found.');
+  } else {
+    console.log(`\n  ⚠ ${totalWarnings} warning(s) across ${Object.keys(output).length} entries.`);
+    console.log('  Use --force <hanzi> to re-enrich specific entries.');
+  }
+  console.log('──────────────────────────────────────────\n');
+  return totalWarnings;
 }
 
 // ── API call ──────────────────────────────────────────────────────────────────
@@ -126,12 +219,32 @@ async function enrichBatch(batch, apiKey) {
     throw new Error(`Expected array, got ${typeof parsed} for batch starting with "${batch[0].hanzi}"`);
   }
 
+  // Validate each entry immediately
+  for (const entry of parsed) {
+    const warnings = validateEntry(entry);
+    if (warnings.length > 0) {
+      console.warn(`\n    ⚠ ${entry.hanzi}: ${warnings.join('; ')}`);
+    }
+  }
+
   return parsed;
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
+  const args = process.argv.slice(2);
+  const validateOnly = args.includes('--validate-only');
+  const forceIdx = args.indexOf('--force');
+  const forceHanzi = forceIdx !== -1 ? args[forceIdx + 1] : null;
+
+  if (validateOnly) {
+    const output = loadOutput();
+    console.log(`Loaded ${Object.keys(output).length} entries from ${OUTPUT_FILE}`);
+    runValidation(output);
+    return;
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.error('❌  ANTHROPIC_API_KEY environment variable not set.');
@@ -147,10 +260,21 @@ async function main() {
   const input = JSON.parse(fs.readFileSync(INPUT_FILE, 'utf8'));
   const output = loadOutput();
 
+  // If --force is specified, delete that entry so it gets re-processed
+  if (forceHanzi) {
+    if (output[forceHanzi]) {
+      delete output[forceHanzi];
+      saveOutput(output);
+      console.log(`🔄  Cleared "${forceHanzi}" — will re-enrich.`);
+    } else {
+      console.log(`ℹ  "${forceHanzi}" not in output file — will be processed normally.`);
+    }
+  }
+
   const todo = input.filter(c => !output[c.hanzi]);
   const done = input.length - todo.length;
 
-  console.log(`\n汉字 Data Pipeline`);
+  console.log(`\n汉字 Data Pipeline (simplified Chinese)`);
   console.log(`──────────────────────────────`);
   console.log(`Total entries : ${input.length}`);
   console.log(`Already done  : ${done}`);
@@ -160,7 +284,8 @@ async function main() {
   console.log(`──────────────────────────────\n`);
 
   if (todo.length === 0) {
-    console.log('✅  All entries already enriched. Run review-data.js to inspect.');
+    console.log('✅  All entries already enriched.');
+    runValidation(output);
     return;
   }
 
@@ -194,7 +319,6 @@ async function main() {
       console.log(`✗ ERROR`);
       console.error(`   ${err.message}`);
       console.error(`   Skipping batch and continuing...`);
-      // Don't save failed batch — these chars will be retried on next run
     }
 
     // Pause between batches (skip after last)
@@ -209,9 +333,10 @@ async function main() {
 
   if (errors > 0) {
     console.log(`\n⚠  ${errors} batch(es) failed. Re-run the script to retry them.`);
-  } else {
-    console.log(`\n✅  All done. Next step: node build-review.js`);
   }
+
+  // Always run validation at the end
+  runValidation(output);
 }
 
 main().catch(err => {
