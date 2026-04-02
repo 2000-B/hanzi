@@ -2,15 +2,15 @@
 
 ## Spec Documents
 
-- **`hanzi-app-spec-v5_3.md`** — Full project spec. The source of truth for all features, layout, persistence, edge cases, and implementation order.
+- **`docs/hanzi-app-spec-v5_3.md`** — Full project spec. The source of truth for all features, layout, persistence, edge cases, and implementation order.
 - **`DESIGN.md`** — Visual design direction. Light mode is the primary design target.
-- **`modularization-spec.md`** — Plan to split `index.html` (~4,580 lines) into separate CSS + JS files. Pure extraction, no logic changes. **Do this before adding new features.**
-- **`user-profiles-spec.md`** — Multi-user profile system. localStorage partitioning via prefixed keys, auto-migration, profile picker UI. **Do this after modularization.**
-- **`workspace-reimplementation-plan.md`** — Workspace tiling system (shelved). Preserved for future reference. Do not implement unless explicitly requested.
+- **`docs/modularization-spec.md`** — Plan to split `index.html` (~4,580 lines) into separate CSS + JS files. Pure extraction, no logic changes. **Do this before adding new features.**
+- **`docs/user-profiles-spec.md`** — Multi-user profile system. localStorage partitioning via prefixed keys, auto-migration, profile picker UI. **Do this after modularization.**
+- **`docs/workspace-reimplementation-plan.md`** — Workspace tiling system (shelved). Preserved for future reference. Do not implement unless explicitly requested.
 
 ## Work Tracking
 
-- **`work-ticket-log.md`** — Running log of requested changes, decisions, and status. Add a dated entry for any significant change request or implementation.
+- **`docs/work-ticket-log.md`** — Running log of requested changes, decisions, and status. Add a dated entry for any significant change request or implementation.
 
 ## Current Architecture
 
