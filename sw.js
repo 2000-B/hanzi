@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hanzi-v5.14';
+const CACHE_NAME = 'hanzi-v5.15';
 const ASSETS = [
   '/',
   '/index.html',
@@ -11,6 +11,8 @@ const ASSETS = [
   '/data/hsk6.json',
   '/data/cedict.json',
   '/data/hsk-enriched.json',
+  '/data/jlpt-enriched.json',
+  '/data/jp-dict.json',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'
 ];
