@@ -627,6 +627,12 @@ body.light .info-panel {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.ip-kana {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 18px;
+  color: var(--text2);
+  margin-top: 2px;
+}
 .ip-pinyin {
   font-size: 16px;
   color: var(--text2);
@@ -693,6 +699,40 @@ body.light .info-panel {
   font-size: 8px;
 }
 .ip-section-title .collapse-arrow.collapsed { transform: rotate(-90deg); }
+
+/* Contextual help */
+.ip-help-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: none;
+  color: var(--text3);
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color .15s, color .15s;
+}
+.ip-help-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ip-help-box {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text2);
+  background: var(--bg3);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  border-left: 2px solid var(--accent-border);
+  display: none;
+}
+.ip-help-box.open { display: block; }
 
 /* Word-level gloss */
 .ip-literal {
@@ -4235,9 +4275,33 @@ function toggleInfoPanel() {
 function getEnriched() { return currentLang === 'ja' ? ENRICHED_JP : ENRICHED; }
 function getDict()     { return currentLang === 'ja' ? ENRICHED_JP : CEDICT; }
 
+// ── Contextual help tooltips ──
+const IP_HELP = {
+  components: {
+    zh: 'Characters are built from smaller parts called radicals and components. Semantic components hint at meaning; phonetic components hint at pronunciation. Recognising them speeds up memorisation.',
+    ja: 'Kanji are built from smaller parts called radicals and components. Semantic components hint at meaning; phonetic components hint at pronunciation. Many components are shared between Chinese and Japanese.',
+  },
+  etymology: {
+    zh: 'Etymology traces how a character\'s meaning and form evolved over time. Understanding the origin — even briefly — creates a memorable hook that makes the character stick.',
+    ja: 'Etymology traces how a character\'s meaning and form evolved. Japanese kanji were adopted from Chinese, so the history often covers both the original Chinese form and how usage shifted in Japanese.',
+  },
+  readings: {
+    ja: 'Japanese kanji have two reading types. On\'yomi (音読み) are the Chinese-derived pronunciations — used mostly in compound words. Kun\'yomi (訓読み) are the native Japanese pronunciations — used mostly for standalone words and verb/adjective stems.',
+  },
+};
+
+let _helpCounter = 0;
+function ipHelpBtn(section) {
+  const text = IP_HELP[section]?.[currentLang] || IP_HELP[section]?.zh;
+  if (!text) return '';
+  const id = 'ip-help-' + (++_helpCounter);
+  return `<button class="ip-help-btn" onclick="(function(b){var box=document.getElementById('${id}');box.classList.toggle('open');b.style.color=box.classList.contains('open')?'var(--accent)':''})(this)" aria-label="explain ${section}">?</button><div class="ip-help-box" id="${id}">${text}</div>`;
+}
+
 function renderInfoPanel(card) {
   if (!card) return;
   infoPanelCurrentCard = card;
+  _helpCounter = 0; // reset so IDs are stable across re-renders
   const scroll = document.getElementById('info-panel-scroll');
 
   const enrichedSource = getEnriched();
@@ -4262,6 +4326,7 @@ function renderInfoPanel(card) {
   // ── Header ──
   html += `<div class="ip-header">
     <div class="ip-hanzi">${card.hanzi}</div>
+    ${isJapanese && card.kana && card.kana !== card.hanzi ? `<div class="ip-kana">${card.kana}</div>` : ''}
     <div class="ip-pinyin">${card.pinyin}
       <button class="ip-audio-btn" onclick="speakHanzi('${card.hanzi}')" data-tip="listen">
         <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 5.5h2l3-3v11l-3-3H3a1 1 0 01-1-1v-3a1 1 0 011-1z" fill="currentColor"/><path d="M11 4.5a5 5 0 010 7M9 6.5a2.5 2.5 0 010 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
@@ -4279,7 +4344,7 @@ function renderInfoPanel(card) {
   // ── Readings (Japanese only) ──
   if (isJapanese && enriched && (enriched.onyomi || enriched.kunyomi)) {
     html += `<div class="ip-section">
-      <div class="ip-section-title">readings</div>
+      <div class="ip-section-title">readings ${ipHelpBtn('readings')}</div>
       ${enriched.onyomi ? `<div class="ip-reading"><span class="ip-reading-label">on'yomi</span> ${enriched.onyomi}</div>` : ''}
       ${enriched.kunyomi ? `<div class="ip-reading"><span class="ip-reading-label">kun'yomi</span> ${enriched.kunyomi}</div>` : ''}
     </div>`;
@@ -4308,7 +4373,7 @@ function renderInfoPanel(card) {
     // Components
     if (enriched.components && enriched.components.length > 0) {
       html += `<div class="ip-section">
-        <div class="ip-section-title">components</div>
+        <div class="ip-section-title">components ${ipHelpBtn('components')}</div>
         ${enriched.components.map(c => `
           <div class="ip-component">
             <div class="ip-comp-char" onclick="navigateToChar('${c.char}')" data-tip="look up ${c.char}">${c.char}</div>
@@ -4354,7 +4419,7 @@ function renderInfoPanel(card) {
     // Etymology (single characters, or word-level if no per-char breakdown)
     if (enriched.etymology && !isMultiChar) {
       html += `<div class="ip-section">
-        <div class="ip-section-title">etymology</div>
+        <div class="ip-section-title">etymology ${ipHelpBtn('etymology')}</div>
         <div class="ip-etymology">${enriched.etymology}</div>
       </div>`;
     }
@@ -5269,13 +5334,13 @@ function switchLanguage(langId) {
   renderSidebar();
   buildSearchIndex();
 
-  // Reset card display
-  const emptyView = document.getElementById('empty-view');
-  if (emptyView) emptyView.style.display = '';
-  const cardView = document.getElementById('card-view');
-  if (cardView) cardView.style.display = 'none';
+  // Reset card display to empty state
+  document.getElementById('empty-view').style.display = '';
+  document.getElementById('study-view').classList.remove('active');
+  document.getElementById('card-controls').classList.remove('active');
+  document.body.classList.remove('deck-active');
   if (infoPanelOpen) {
-    document.getElementById('info-panel').innerHTML = '';
+    document.getElementById('info-panel-scroll').innerHTML = '';
   }
 }
 
