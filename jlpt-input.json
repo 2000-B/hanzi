@@ -1,0 +1,3404 @@
+[
+  {
+    "kanji": "愛",
+    "kana": "あい",
+    "romaji": "ai",
+    "english": "love",
+    "jlpt": 5
+  },
+  {
+    "kanji": "青",
+    "kana": "あお",
+    "romaji": "ao",
+    "english": "blue",
+    "jlpt": 5
+  },
+  {
+    "kanji": "赤",
+    "kana": "あか",
+    "romaji": "aka",
+    "english": "red",
+    "jlpt": 5
+  },
+  {
+    "kanji": "秋",
+    "kana": "あき",
+    "romaji": "aki",
+    "english": "autumn / fall",
+    "jlpt": 5
+  },
+  {
+    "kanji": "開く",
+    "kana": "あく",
+    "romaji": "aku",
+    "english": "to open / to become vacant",
+    "jlpt": 5
+  },
+  {
+    "kanji": "あそこ",
+    "kana": "あそこ",
+    "romaji": "asoko",
+    "english": "over there",
+    "jlpt": 5
+  },
+  {
+    "kanji": "遊ぶ",
+    "kana": "あそぶ",
+    "romaji": "asobu",
+    "english": "to play",
+    "jlpt": 5
+  },
+  {
+    "kanji": "暖かい",
+    "kana": "あたたかい",
+    "romaji": "atatakai",
+    "english": "warm",
+    "jlpt": 5
+  },
+  {
+    "kanji": "新しい",
+    "kana": "あたらしい",
+    "romaji": "atarashii",
+    "english": "new",
+    "jlpt": 5
+  },
+  {
+    "kanji": "頭",
+    "kana": "あたま",
+    "romaji": "atama",
+    "english": "head",
+    "jlpt": 5
+  },
+  {
+    "kanji": "後",
+    "kana": "あと",
+    "romaji": "ato",
+    "english": "after / later",
+    "jlpt": 5
+  },
+  {
+    "kanji": "厚い",
+    "kana": "あつい",
+    "romaji": "atsui",
+    "english": "thick / heavy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "暑い",
+    "kana": "あつい",
+    "romaji": "atsui",
+    "english": "hot (weather)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "集まる",
+    "kana": "あつまる",
+    "romaji": "atsumaru",
+    "english": "to gather / to assemble",
+    "jlpt": 5
+  },
+  {
+    "kanji": "歩く",
+    "kana": "あるく",
+    "romaji": "aruku",
+    "english": "to walk",
+    "jlpt": 5
+  },
+  {
+    "kanji": "洗う",
+    "kana": "あらう",
+    "romaji": "arau",
+    "english": "to wash",
+    "jlpt": 5
+  },
+  {
+    "kanji": "いえ",
+    "kana": "いえ",
+    "romaji": "ie",
+    "english": "no",
+    "jlpt": 5
+  },
+  {
+    "kanji": "家",
+    "kana": "いえ",
+    "romaji": "ie",
+    "english": "house / home",
+    "jlpt": 5
+  },
+  {
+    "kanji": "医者",
+    "kana": "いしゃ",
+    "romaji": "isha",
+    "english": "doctor",
+    "jlpt": 5
+  },
+  {
+    "kanji": "椅子",
+    "kana": "いす",
+    "romaji": "isu",
+    "english": "chair",
+    "jlpt": 5
+  },
+  {
+    "kanji": "忙しい",
+    "kana": "いそがしい",
+    "romaji": "isogashii",
+    "english": "busy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "一緒",
+    "kana": "いっしょ",
+    "romaji": "issho",
+    "english": "together",
+    "jlpt": 5
+  },
+  {
+    "kanji": "いつ",
+    "kana": "いつ",
+    "romaji": "itsu",
+    "english": "when",
+    "jlpt": 5
+  },
+  {
+    "kanji": "五つ",
+    "kana": "いつつ",
+    "romaji": "itsutsu",
+    "english": "five",
+    "jlpt": 5
+  },
+  {
+    "kanji": "言う",
+    "kana": "いう",
+    "romaji": "iu",
+    "english": "to say",
+    "jlpt": 5
+  },
+  {
+    "kanji": "嫌",
+    "kana": "いや",
+    "romaji": "iya",
+    "english": "unpleasant / disagreeable",
+    "jlpt": 5
+  },
+  {
+    "kanji": "上",
+    "kana": "うえ",
+    "romaji": "ue",
+    "english": "above / up / top",
+    "jlpt": 5
+  },
+  {
+    "kanji": "後ろ",
+    "kana": "うしろ",
+    "romaji": "ushiro",
+    "english": "behind / back",
+    "jlpt": 5
+  },
+  {
+    "kanji": "薄い",
+    "kana": "うすい",
+    "romaji": "usui",
+    "english": "thin / weak",
+    "jlpt": 5
+  },
+  {
+    "kanji": "歌",
+    "kana": "うた",
+    "romaji": "uta",
+    "english": "song",
+    "jlpt": 5
+  },
+  {
+    "kanji": "歌う",
+    "kana": "うたう",
+    "romaji": "utau",
+    "english": "to sing",
+    "jlpt": 5
+  },
+  {
+    "kanji": "生まれる",
+    "kana": "うまれる",
+    "romaji": "umareru",
+    "english": "to be born",
+    "jlpt": 5
+  },
+  {
+    "kanji": "海",
+    "kana": "うみ",
+    "romaji": "umi",
+    "english": "sea / ocean",
+    "jlpt": 5
+  },
+  {
+    "kanji": "売る",
+    "kana": "うる",
+    "romaji": "uru",
+    "english": "to sell",
+    "jlpt": 5
+  },
+  {
+    "kanji": "運転",
+    "kana": "うんてん",
+    "romaji": "unten",
+    "english": "driving / operation",
+    "jlpt": 5
+  },
+  {
+    "kanji": "絵",
+    "kana": "え",
+    "romaji": "e",
+    "english": "picture / painting",
+    "jlpt": 5
+  },
+  {
+    "kanji": "英語",
+    "kana": "えいご",
+    "romaji": "eigo",
+    "english": "English language",
+    "jlpt": 5
+  },
+  {
+    "kanji": "映画",
+    "kana": "えいが",
+    "romaji": "eiga",
+    "english": "movie / film",
+    "jlpt": 5
+  },
+  {
+    "kanji": "駅",
+    "kana": "えき",
+    "romaji": "eki",
+    "english": "station",
+    "jlpt": 5
+  },
+  {
+    "kanji": "鉛筆",
+    "kana": "えんぴつ",
+    "romaji": "enpitsu",
+    "english": "pencil",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お母さん",
+    "kana": "おかあさん",
+    "romaji": "okaasan",
+    "english": "mother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お金",
+    "kana": "おかね",
+    "romaji": "okane",
+    "english": "money",
+    "jlpt": 5
+  },
+  {
+    "kanji": "起きる",
+    "kana": "おきる",
+    "romaji": "okiru",
+    "english": "to wake up / to get up",
+    "jlpt": 5
+  },
+  {
+    "kanji": "置く",
+    "kana": "おく",
+    "romaji": "oku",
+    "english": "to put / to place",
+    "jlpt": 5
+  },
+  {
+    "kanji": "奥さん",
+    "kana": "おくさん",
+    "romaji": "okusan",
+    "english": "wife (someone else's)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "遅い",
+    "kana": "おそい",
+    "romaji": "osoi",
+    "english": "slow / late",
+    "jlpt": 5
+  },
+  {
+    "kanji": "教える",
+    "kana": "おしえる",
+    "romaji": "oshieru",
+    "english": "to teach / to tell",
+    "jlpt": 5
+  },
+  {
+    "kanji": "押す",
+    "kana": "おす",
+    "romaji": "osu",
+    "english": "to push / to press",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お茶",
+    "kana": "おちゃ",
+    "romaji": "ocha",
+    "english": "tea",
+    "jlpt": 5
+  },
+  {
+    "kanji": "音",
+    "kana": "おと",
+    "romaji": "oto",
+    "english": "sound",
+    "jlpt": 5
+  },
+  {
+    "kanji": "後で",
+    "kana": "あとで",
+    "romaji": "ato de",
+    "english": "later / afterwards",
+    "jlpt": 5
+  },
+  {
+    "kanji": "危ない",
+    "kana": "あぶない",
+    "romaji": "abunai",
+    "english": "dangerous",
+    "jlpt": 5
+  },
+  {
+    "kanji": "甘い",
+    "kana": "あまい",
+    "romaji": "amai",
+    "english": "sweet",
+    "jlpt": 5
+  },
+  {
+    "kanji": "雨",
+    "kana": "あめ",
+    "romaji": "ame",
+    "english": "rain",
+    "jlpt": 5
+  },
+  {
+    "kanji": "浅い",
+    "kana": "あさい",
+    "romaji": "asai",
+    "english": "shallow",
+    "jlpt": 5
+  },
+  {
+    "kanji": "朝",
+    "kana": "あさ",
+    "romaji": "asa",
+    "english": "morning",
+    "jlpt": 5
+  },
+  {
+    "kanji": "朝御飯",
+    "kana": "あさごはん",
+    "romaji": "asa gohan",
+    "english": "breakfast",
+    "jlpt": 5
+  },
+  {
+    "kanji": "明日",
+    "kana": "あした",
+    "romaji": "ashita",
+    "english": "tomorrow",
+    "jlpt": 5
+  },
+  {
+    "kanji": "足",
+    "kana": "あし",
+    "romaji": "ashi",
+    "english": "foot / leg",
+    "jlpt": 5
+  },
+  {
+    "kanji": "青い",
+    "kana": "あおい",
+    "romaji": "aoi",
+    "english": "blue",
+    "jlpt": 5
+  },
+  {
+    "kanji": "赤い",
+    "kana": "あかい",
+    "romaji": "akai",
+    "english": "red",
+    "jlpt": 5
+  },
+  {
+    "kanji": "開ける",
+    "kana": "あける",
+    "romaji": "akeru",
+    "english": "to open",
+    "jlpt": 5
+  },
+  {
+    "kanji": "上げる",
+    "kana": "あげる",
+    "romaji": "ageru",
+    "english": "to give / to raise",
+    "jlpt": 5
+  },
+  {
+    "kanji": "兄",
+    "kana": "あに",
+    "romaji": "ani",
+    "english": "older brother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "姉",
+    "kana": "あね",
+    "romaji": "ane",
+    "english": "older sister",
+    "jlpt": 5
+  },
+  {
+    "kanji": "案内",
+    "kana": "あんない",
+    "romaji": "annai",
+    "english": "guidance / information",
+    "jlpt": 5
+  },
+  {
+    "kanji": "安心",
+    "kana": "あんしん",
+    "romaji": "anshin",
+    "english": "relief / peace of mind",
+    "jlpt": 5
+  },
+  {
+    "kanji": "いいえ",
+    "kana": "いいえ",
+    "romaji": "iie",
+    "english": "no",
+    "jlpt": 5
+  },
+  {
+    "kanji": "痛い",
+    "kana": "いたい",
+    "romaji": "itai",
+    "english": "painful / hurt",
+    "jlpt": 5
+  },
+  {
+    "kanji": "一番",
+    "kana": "いちばん",
+    "romaji": "ichiban",
+    "english": "most / number one",
+    "jlpt": 5
+  },
+  {
+    "kanji": "いつも",
+    "kana": "いつも",
+    "romaji": "itsumo",
+    "english": "always",
+    "jlpt": 5
+  },
+  {
+    "kanji": "今",
+    "kana": "いま",
+    "romaji": "ima",
+    "english": "now",
+    "jlpt": 5
+  },
+  {
+    "kanji": "意味",
+    "kana": "いみ",
+    "romaji": "imi",
+    "english": "meaning",
+    "jlpt": 5
+  },
+  {
+    "kanji": "妹",
+    "kana": "いもうと",
+    "romaji": "imouto",
+    "english": "younger sister",
+    "jlpt": 5
+  },
+  {
+    "kanji": "色",
+    "kana": "いろ",
+    "romaji": "iro",
+    "english": "color",
+    "jlpt": 5
+  },
+  {
+    "kanji": "入る",
+    "kana": "はいる",
+    "romaji": "hairu",
+    "english": "to enter",
+    "jlpt": 5
+  },
+  {
+    "kanji": "始まる",
+    "kana": "はじまる",
+    "romaji": "hajimaru",
+    "english": "to begin / to start",
+    "jlpt": 5
+  },
+  {
+    "kanji": "初めて",
+    "kana": "はじめて",
+    "romaji": "hajimete",
+    "english": "for the first time",
+    "jlpt": 5
+  },
+  {
+    "kanji": "箸",
+    "kana": "はし",
+    "romaji": "hashi",
+    "english": "chopsticks",
+    "jlpt": 5
+  },
+  {
+    "kanji": "働く",
+    "kana": "はたらく",
+    "romaji": "hataraku",
+    "english": "to work",
+    "jlpt": 5
+  },
+  {
+    "kanji": "二十歳",
+    "kana": "はたち",
+    "romaji": "hatachi",
+    "english": "twenty years old",
+    "jlpt": 5
+  },
+  {
+    "kanji": "花",
+    "kana": "はな",
+    "romaji": "hana",
+    "english": "flower",
+    "jlpt": 5
+  },
+  {
+    "kanji": "話す",
+    "kana": "はなす",
+    "romaji": "hanasu",
+    "english": "to speak / to talk",
+    "jlpt": 5
+  },
+  {
+    "kanji": "母",
+    "kana": "はは",
+    "romaji": "haha",
+    "english": "mother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "早い",
+    "kana": "はやい",
+    "romaji": "hayai",
+    "english": "early / fast",
+    "jlpt": 5
+  },
+  {
+    "kanji": "春",
+    "kana": "はる",
+    "romaji": "haru",
+    "english": "spring",
+    "jlpt": 5
+  },
+  {
+    "kanji": "晴れ",
+    "kana": "はれ",
+    "romaji": "hare",
+    "english": "clear weather",
+    "jlpt": 5
+  },
+  {
+    "kanji": "半分",
+    "kana": "はんぶん",
+    "romaji": "hanbun",
+    "english": "half",
+    "jlpt": 5
+  },
+  {
+    "kanji": "家族",
+    "kana": "かぞく",
+    "romaji": "kazoku",
+    "english": "family",
+    "jlpt": 5
+  },
+  {
+    "kanji": "彼",
+    "kana": "かれ",
+    "romaji": "kare",
+    "english": "he / him / boyfriend",
+    "jlpt": 5
+  },
+  {
+    "kanji": "彼女",
+    "kana": "かのじょ",
+    "romaji": "kanojo",
+    "english": "she / her / girlfriend",
+    "jlpt": 5
+  },
+  {
+    "kanji": "辛い",
+    "kana": "からい",
+    "romaji": "karai",
+    "english": "spicy / hot",
+    "jlpt": 5
+  },
+  {
+    "kanji": "体",
+    "kana": "からだ",
+    "romaji": "karada",
+    "english": "body",
+    "jlpt": 5
+  },
+  {
+    "kanji": "軽い",
+    "kana": "かるい",
+    "romaji": "karui",
+    "english": "light / not heavy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "貸す",
+    "kana": "かす",
+    "romaji": "kasu",
+    "english": "to lend",
+    "jlpt": 5
+  },
+  {
+    "kanji": "風",
+    "kana": "かぜ",
+    "romaji": "kaze",
+    "english": "wind / cold",
+    "jlpt": 5
+  },
+  {
+    "kanji": "着る",
+    "kana": "きる",
+    "romaji": "kiru",
+    "english": "to wear / to put on",
+    "jlpt": 5
+  },
+  {
+    "kanji": "切る",
+    "kana": "きる",
+    "romaji": "kiru",
+    "english": "to cut",
+    "jlpt": 5
+  },
+  {
+    "kanji": "汚い",
+    "kana": "きたない",
+    "romaji": "kitanai",
+    "english": "dirty",
+    "jlpt": 5
+  },
+  {
+    "kanji": "きっと",
+    "kana": "きっと",
+    "romaji": "kitto",
+    "english": "surely / certainly",
+    "jlpt": 5
+  },
+  {
+    "kanji": "今日",
+    "kana": "きょう",
+    "romaji": "kyou",
+    "english": "today",
+    "jlpt": 5
+  },
+  {
+    "kanji": "去年",
+    "kana": "きょねん",
+    "romaji": "kyonen",
+    "english": "last year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "来る",
+    "kana": "くる",
+    "romaji": "kuru",
+    "english": "to come",
+    "jlpt": 5
+  },
+  {
+    "kanji": "車",
+    "kana": "くるま",
+    "romaji": "kuruma",
+    "english": "car",
+    "jlpt": 5
+  },
+  {
+    "kanji": "黒い",
+    "kana": "くろい",
+    "romaji": "kuroi",
+    "english": "black",
+    "jlpt": 5
+  },
+  {
+    "kanji": "薬",
+    "kana": "くすり",
+    "romaji": "kusuri",
+    "english": "medicine",
+    "jlpt": 5
+  },
+  {
+    "kanji": "口",
+    "kana": "くち",
+    "romaji": "kuchi",
+    "english": "mouth",
+    "jlpt": 5
+  },
+  {
+    "kanji": "靴",
+    "kana": "くつ",
+    "romaji": "kutsu",
+    "english": "shoes",
+    "jlpt": 5
+  },
+  {
+    "kanji": "靴下",
+    "kana": "くつした",
+    "romaji": "kutsushita",
+    "english": "socks",
+    "jlpt": 5
+  },
+  {
+    "kanji": "曇り",
+    "kana": "くもり",
+    "romaji": "kumori",
+    "english": "cloudy weather",
+    "jlpt": 5
+  },
+  {
+    "kanji": "国",
+    "kana": "くに",
+    "romaji": "kuni",
+    "english": "country",
+    "jlpt": 5
+  },
+  {
+    "kanji": "空港",
+    "kana": "くうこう",
+    "romaji": "kuukou",
+    "english": "airport",
+    "jlpt": 5
+  },
+  {
+    "kanji": "まだ",
+    "kana": "まだ",
+    "romaji": "mada",
+    "english": "still / not yet",
+    "jlpt": 5
+  },
+  {
+    "kanji": "前",
+    "kana": "まえ",
+    "romaji": "mae",
+    "english": "front / before",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎朝",
+    "kana": "まいあさ",
+    "romaji": "maiasa",
+    "english": "every morning",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎晩",
+    "kana": "まいばん",
+    "romaji": "maiban",
+    "english": "every night",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎日",
+    "kana": "まいにち",
+    "romaji": "mainichi",
+    "english": "every day",
+    "jlpt": 5
+  },
+  {
+    "kanji": "町",
+    "kana": "まち",
+    "romaji": "machi",
+    "english": "town",
+    "jlpt": 5
+  },
+  {
+    "kanji": "窓",
+    "kana": "まど",
+    "romaji": "mado",
+    "english": "window",
+    "jlpt": 5
+  },
+  {
+    "kanji": "丸い",
+    "kana": "まるい",
+    "romaji": "marui",
+    "english": "round",
+    "jlpt": 5
+  },
+  {
+    "kanji": "真っ直ぐ",
+    "kana": "まっすぐ",
+    "romaji": "massugu",
+    "english": "straight",
+    "jlpt": 5
+  },
+  {
+    "kanji": "待つ",
+    "kana": "まつ",
+    "romaji": "matsu",
+    "english": "to wait",
+    "jlpt": 5
+  },
+  {
+    "kanji": "右",
+    "kana": "みぎ",
+    "romaji": "migi",
+    "english": "right",
+    "jlpt": 5
+  },
+  {
+    "kanji": "短い",
+    "kana": "みじかい",
+    "romaji": "mijikai",
+    "english": "short",
+    "jlpt": 5
+  },
+  {
+    "kanji": "耳",
+    "kana": "みみ",
+    "romaji": "mimi",
+    "english": "ear",
+    "jlpt": 5
+  },
+  {
+    "kanji": "皆",
+    "kana": "みんな",
+    "romaji": "minna",
+    "english": "everyone",
+    "jlpt": 5
+  },
+  {
+    "kanji": "水",
+    "kana": "みず",
+    "romaji": "mizu",
+    "english": "water",
+    "jlpt": 5
+  },
+  {
+    "kanji": "道",
+    "kana": "みち",
+    "romaji": "michi",
+    "english": "road / way",
+    "jlpt": 5
+  },
+  {
+    "kanji": "見る",
+    "kana": "みる",
+    "romaji": "miru",
+    "english": "to see / to watch",
+    "jlpt": 5
+  },
+  {
+    "kanji": "店",
+    "kana": "みせ",
+    "romaji": "mise",
+    "english": "shop / store",
+    "jlpt": 5
+  },
+  {
+    "kanji": "見せる",
+    "kana": "みせる",
+    "romaji": "miseru",
+    "english": "to show",
+    "jlpt": 5
+  },
+  {
+    "kanji": "緑",
+    "kana": "みどり",
+    "romaji": "midori",
+    "english": "green",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もう",
+    "kana": "もう",
+    "romaji": "mou",
+    "english": "already / more",
+    "jlpt": 5
+  },
+  {
+    "kanji": "木曜日",
+    "kana": "もくようび",
+    "romaji": "mokuyoubi",
+    "english": "Thursday",
+    "jlpt": 5
+  },
+  {
+    "kanji": "問題",
+    "kana": "もんだい",
+    "romaji": "mondai",
+    "english": "problem",
+    "jlpt": 5
+  },
+  {
+    "kanji": "物",
+    "kana": "もの",
+    "romaji": "mono",
+    "english": "thing / object",
+    "jlpt": 5
+  },
+  {
+    "kanji": "森",
+    "kana": "もり",
+    "romaji": "mori",
+    "english": "forest",
+    "jlpt": 5
+  },
+  {
+    "kanji": "持つ",
+    "kana": "もつ",
+    "romaji": "motsu",
+    "english": "to hold / to have",
+    "jlpt": 5
+  },
+  {
+    "kanji": "速い",
+    "kana": "はやい",
+    "romaji": "hayai",
+    "english": "fast / early",
+    "jlpt": 5
+  },
+  {
+    "kanji": "二十",
+    "kana": "はたち",
+    "romaji": "hatachi",
+    "english": "twenty years old",
+    "jlpt": 5
+  },
+  {
+    "kanji": "鼻",
+    "kana": "はな",
+    "romaji": "hana",
+    "english": "nose",
+    "jlpt": 5
+  },
+  {
+    "kanji": "歯",
+    "kana": "は",
+    "romaji": "ha",
+    "english": "tooth / teeth",
+    "jlpt": 5
+  },
+  {
+    "kanji": "箱",
+    "kana": "はこ",
+    "romaji": "hako",
+    "english": "box",
+    "jlpt": 5
+  },
+  {
+    "kanji": "橋",
+    "kana": "はし",
+    "romaji": "hashi",
+    "english": "bridge",
+    "jlpt": 5
+  },
+  {
+    "kanji": "走る",
+    "kana": "はしる",
+    "romaji": "hashiru",
+    "english": "to run",
+    "jlpt": 5
+  },
+  {
+    "kanji": "恥ずかしい",
+    "kana": "はずかしい",
+    "romaji": "hazukashii",
+    "english": "embarrassing / shy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "八",
+    "kana": "はち",
+    "romaji": "hachi",
+    "english": "eight",
+    "jlpt": 5
+  },
+  {
+    "kanji": "半",
+    "kana": "はん",
+    "romaji": "han",
+    "english": "half",
+    "jlpt": 5
+  },
+  {
+    "kanji": "パン",
+    "kana": "パン",
+    "romaji": "pan",
+    "english": "bread",
+    "jlpt": 5
+  },
+  {
+    "kanji": "晩",
+    "kana": "ばん",
+    "romaji": "ban",
+    "english": "evening / night",
+    "jlpt": 5
+  },
+  {
+    "kanji": "番号",
+    "kana": "ばんごう",
+    "romaji": "bangou",
+    "english": "number",
+    "jlpt": 5
+  },
+  {
+    "kanji": "晩御飯",
+    "kana": "ばんごはん",
+    "romaji": "bangohan",
+    "english": "dinner",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ハンバーガー",
+    "kana": "ハンバーガー",
+    "romaji": "hanbaagaa",
+    "english": "hamburger",
+    "jlpt": 5
+  },
+  {
+    "kanji": "反対",
+    "kana": "はんたい",
+    "romaji": "hantai",
+    "english": "opposite / against",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ピアノ",
+    "kana": "ピアノ",
+    "romaji": "piano",
+    "english": "piano",
+    "jlpt": 5
+  },
+  {
+    "kanji": "東",
+    "kana": "ひがし",
+    "romaji": "higashi",
+    "english": "east",
+    "jlpt": 5
+  },
+  {
+    "kanji": "左",
+    "kana": "ひだり",
+    "romaji": "hidari",
+    "english": "left",
+    "jlpt": 5
+  },
+  {
+    "kanji": "人",
+    "kana": "ひと",
+    "romaji": "hito",
+    "english": "person / people",
+    "jlpt": 5
+  },
+  {
+    "kanji": "一つ",
+    "kana": "ひとつ",
+    "romaji": "hitotsu",
+    "english": "one (thing)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "一人",
+    "kana": "ひとり",
+    "romaji": "hitori",
+    "english": "one person / alone",
+    "jlpt": 5
+  },
+  {
+    "kanji": "暇",
+    "kana": "ひま",
+    "romaji": "hima",
+    "english": "free time / leisure",
+    "jlpt": 5
+  },
+  {
+    "kanji": "百",
+    "kana": "ひゃく",
+    "romaji": "hyaku",
+    "english": "hundred",
+    "jlpt": 5
+  },
+  {
+    "kanji": "病院",
+    "kana": "びょういん",
+    "romaji": "byouin",
+    "english": "hospital",
+    "jlpt": 5
+  },
+  {
+    "kanji": "病気",
+    "kana": "びょうき",
+    "romaji": "byouki",
+    "english": "illness / disease",
+    "jlpt": 5
+  },
+  {
+    "kanji": "昼",
+    "kana": "ひる",
+    "romaji": "hiru",
+    "english": "daytime / noon",
+    "jlpt": 5
+  },
+  {
+    "kanji": "昼御飯",
+    "kana": "ひるごはん",
+    "romaji": "hirugohan",
+    "english": "lunch",
+    "jlpt": 5
+  },
+  {
+    "kanji": "広い",
+    "kana": "ひろい",
+    "romaji": "hiroi",
+    "english": "wide / spacious",
+    "jlpt": 5
+  },
+  {
+    "kanji": "プール",
+    "kana": "プール",
+    "romaji": "puuru",
+    "english": "swimming pool",
+    "jlpt": 5
+  },
+  {
+    "kanji": "フィルム",
+    "kana": "フィルム",
+    "romaji": "firumu",
+    "english": "film",
+    "jlpt": 5
+  },
+  {
+    "kanji": "冬",
+    "kana": "ふゆ",
+    "romaji": "fuyu",
+    "english": "winter",
+    "jlpt": 5
+  },
+  {
+    "kanji": "古い",
+    "kana": "ふるい",
+    "romaji": "furui",
+    "english": "old",
+    "jlpt": 5
+  },
+  {
+    "kanji": "降る",
+    "kana": "ふる",
+    "romaji": "furu",
+    "english": "to fall (rain/snow)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "風呂",
+    "kana": "ふろ",
+    "romaji": "furo",
+    "english": "bath",
+    "jlpt": 5
+  },
+  {
+    "kanji": "文",
+    "kana": "ぶん",
+    "romaji": "bun",
+    "english": "sentence",
+    "jlpt": 5
+  },
+  {
+    "kanji": "分",
+    "kana": "ふん",
+    "romaji": "fun",
+    "english": "minute",
+    "jlpt": 5
+  },
+  {
+    "kanji": "分かる",
+    "kana": "わかる",
+    "romaji": "wakaru",
+    "english": "to understand / to know",
+    "jlpt": 5
+  },
+  {
+    "kanji": "へや",
+    "kana": "へや",
+    "romaji": "heya",
+    "english": "room",
+    "jlpt": 5
+  },
+  {
+    "kanji": "切符",
+    "kana": "きっぷ",
+    "romaji": "kippu",
+    "english": "ticket",
+    "jlpt": 5
+  },
+  {
+    "kanji": "嫌い",
+    "kana": "きらい",
+    "romaji": "kirai",
+    "english": "dislike / hate",
+    "jlpt": 5
+  },
+  {
+    "kanji": "綺麗",
+    "kana": "きれい",
+    "romaji": "kirei",
+    "english": "beautiful / clean",
+    "jlpt": 5
+  },
+  {
+    "kanji": "今度",
+    "kana": "こんど",
+    "romaji": "kondo",
+    "english": "this time / next time",
+    "jlpt": 5
+  },
+  {
+    "kanji": "今晩",
+    "kana": "こんばん",
+    "romaji": "konban",
+    "english": "tonight / this evening",
+    "jlpt": 5
+  },
+  {
+    "kanji": "困る",
+    "kana": "こまる",
+    "romaji": "komaru",
+    "english": "to be troubled",
+    "jlpt": 5
+  },
+  {
+    "kanji": "こちら",
+    "kana": "こちら",
+    "romaji": "kochira",
+    "english": "this way / here",
+    "jlpt": 5
+  },
+  {
+    "kanji": "交差点",
+    "kana": "こうさてん",
+    "romaji": "kousaten",
+    "english": "intersection",
+    "jlpt": 5
+  },
+  {
+    "kanji": "公園",
+    "kana": "こうえん",
+    "romaji": "kouen",
+    "english": "park",
+    "jlpt": 5
+  },
+  {
+    "kanji": "答える",
+    "kana": "こたえる",
+    "romaji": "kotaeru",
+    "english": "to answer",
+    "jlpt": 5
+  },
+  {
+    "kanji": "今年",
+    "kana": "ことし",
+    "romaji": "kotoshi",
+    "english": "this year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "子供",
+    "kana": "こども",
+    "romaji": "kodomo",
+    "english": "child",
+    "jlpt": 5
+  },
+  {
+    "kanji": "声",
+    "kana": "こえ",
+    "romaji": "koe",
+    "english": "voice",
+    "jlpt": 5
+  },
+  {
+    "kanji": "コート",
+    "kana": "コート",
+    "romaji": "kooto",
+    "english": "coat",
+    "jlpt": 5
+  },
+  {
+    "kanji": "コップ",
+    "kana": "コップ",
+    "romaji": "koppu",
+    "english": "cup / glass",
+    "jlpt": 5
+  },
+  {
+    "kanji": "壊れる",
+    "kana": "こわれる",
+    "romaji": "kowareru",
+    "english": "to break / to be broken",
+    "jlpt": 5
+  },
+  {
+    "kanji": "怖い",
+    "kana": "こわい",
+    "romaji": "kowai",
+    "english": "scary / frightening",
+    "jlpt": 5
+  },
+  {
+    "kanji": "果物",
+    "kana": "くだもの",
+    "romaji": "kudamono",
+    "english": "fruit",
+    "jlpt": 5
+  },
+  {
+    "kanji": "曇る",
+    "kana": "くもる",
+    "romaji": "kumoru",
+    "english": "to become cloudy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "クラス",
+    "kana": "クラス",
+    "romaji": "kurasu",
+    "english": "class",
+    "jlpt": 5
+  },
+  {
+    "kanji": "暮れる",
+    "kana": "くれる",
+    "romaji": "kureru",
+    "english": "to give (to me)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "黒",
+    "kana": "くろ",
+    "romaji": "kuro",
+    "english": "black",
+    "jlpt": 5
+  },
+  {
+    "kanji": "苦しい",
+    "kana": "くるしい",
+    "romaji": "kurushii",
+    "english": "painful / difficult",
+    "jlpt": 5
+  },
+  {
+    "kanji": "九",
+    "kana": "きゅう",
+    "romaji": "kyuu",
+    "english": "nine",
+    "jlpt": 5
+  },
+  {
+    "kanji": "急",
+    "kana": "きゅう",
+    "romaji": "kyuu",
+    "english": "urgent / sudden",
+    "jlpt": 5
+  },
+  {
+    "kanji": "牛乳",
+    "kana": "ぎゅうにゅう",
+    "romaji": "gyuunyuu",
+    "english": "milk",
+    "jlpt": 5
+  },
+  {
+    "kanji": "教室",
+    "kana": "きょうしつ",
+    "romaji": "kyoushitsu",
+    "english": "classroom",
+    "jlpt": 5
+  },
+  {
+    "kanji": "兄弟",
+    "kana": "きょうだい",
+    "romaji": "kyoudai",
+    "english": "siblings",
+    "jlpt": 5
+  },
+  {
+    "kanji": "キロ",
+    "kana": "キロ",
+    "romaji": "kiro",
+    "english": "kilogram / kilometer",
+    "jlpt": 5
+  },
+  {
+    "kanji": "消える",
+    "kana": "きえる",
+    "romaji": "kieru",
+    "english": "to disappear / to go out",
+    "jlpt": 5
+  },
+  {
+    "kanji": "聞く",
+    "kana": "きく",
+    "romaji": "kiku",
+    "english": "to listen / to ask",
+    "jlpt": 5
+  },
+  {
+    "kanji": "危険",
+    "kana": "きけん",
+    "romaji": "kiken",
+    "english": "danger / dangerous",
+    "jlpt": 5
+  },
+  {
+    "kanji": "機械",
+    "kana": "きかい",
+    "romaji": "kikai",
+    "english": "machine",
+    "jlpt": 5
+  },
+  {
+    "kanji": "黄色",
+    "kana": "きいろ",
+    "romaji": "kiiro",
+    "english": "yellow",
+    "jlpt": 5
+  },
+  {
+    "kanji": "黄色い",
+    "kana": "きいろい",
+    "romaji": "kiiroi",
+    "english": "yellow",
+    "jlpt": 5
+  },
+  {
+    "kanji": "気分",
+    "kana": "きぶん",
+    "romaji": "kibun",
+    "english": "feeling / mood",
+    "jlpt": 5
+  },
+  {
+    "kanji": "君",
+    "kana": "きみ",
+    "romaji": "kimi",
+    "english": "you (informal)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "決める",
+    "kana": "きめる",
+    "romaji": "kimeru",
+    "english": "to decide",
+    "jlpt": 5
+  },
+  {
+    "kanji": "美術館",
+    "kana": "びじゅつかん",
+    "romaji": "bijutsukan",
+    "english": "art museum",
+    "jlpt": 5
+  },
+  {
+    "kanji": "地図",
+    "kana": "ちず",
+    "romaji": "chizu",
+    "english": "map",
+    "jlpt": 5
+  },
+  {
+    "kanji": "違う",
+    "kana": "ちがう",
+    "romaji": "chigau",
+    "english": "to differ / to be wrong",
+    "jlpt": 5
+  },
+  {
+    "kanji": "近い",
+    "kana": "ちかい",
+    "romaji": "chikai",
+    "english": "near / close",
+    "jlpt": 5
+  },
+  {
+    "kanji": "力",
+    "kana": "ちから",
+    "romaji": "chikara",
+    "english": "strength / power",
+    "jlpt": 5
+  },
+  {
+    "kanji": "小さな",
+    "kana": "ちいさな",
+    "romaji": "chiisana",
+    "english": "small / little",
+    "jlpt": 5
+  },
+  {
+    "kanji": "注意",
+    "kana": "ちゅうい",
+    "romaji": "chuui",
+    "english": "attention / caution",
+    "jlpt": 5
+  },
+  {
+    "kanji": "駐車場",
+    "kana": "ちゅうしゃじょう",
+    "romaji": "chuushajou",
+    "english": "parking lot",
+    "jlpt": 5
+  },
+  {
+    "kanji": "台所",
+    "kana": "だいどころ",
+    "romaji": "daidokoro",
+    "english": "kitchen",
+    "jlpt": 5
+  },
+  {
+    "kanji": "大事",
+    "kana": "だいじ",
+    "romaji": "daiji",
+    "english": "important / precious",
+    "jlpt": 5
+  },
+  {
+    "kanji": "大切",
+    "kana": "たいせつ",
+    "romaji": "taisetsu",
+    "english": "important / precious",
+    "jlpt": 5
+  },
+  {
+    "kanji": "出かける",
+    "kana": "でかける",
+    "romaji": "dekakeru",
+    "english": "to go out",
+    "jlpt": 5
+  },
+  {
+    "kanji": "出来る",
+    "kana": "できる",
+    "romaji": "dekiru",
+    "english": "to be able to / can",
+    "jlpt": 5
+  },
+  {
+    "kanji": "電気",
+    "kana": "でんき",
+    "romaji": "denki",
+    "english": "electricity / light",
+    "jlpt": 5
+  },
+  {
+    "kanji": "電車",
+    "kana": "でんしゃ",
+    "romaji": "densha",
+    "english": "train",
+    "jlpt": 5
+  },
+  {
+    "kanji": "電話",
+    "kana": "でんわ",
+    "romaji": "denwa",
+    "english": "telephone",
+    "jlpt": 5
+  },
+  {
+    "kanji": "どうして",
+    "kana": "どうして",
+    "romaji": "doushite",
+    "english": "why / how",
+    "jlpt": 5
+  },
+  {
+    "kanji": "どうも",
+    "kana": "どうも",
+    "romaji": "doumo",
+    "english": "thank you / somehow",
+    "jlpt": 5
+  },
+  {
+    "kanji": "どちら",
+    "kana": "どちら",
+    "romaji": "dochira",
+    "english": "which (of two) / where",
+    "jlpt": 5
+  },
+  {
+    "kanji": "動物",
+    "kana": "どうぶつ",
+    "romaji": "doubutsu",
+    "english": "animal",
+    "jlpt": 5
+  },
+  {
+    "kanji": "動物園",
+    "kana": "どうぶつえん",
+    "romaji": "doubutsuen",
+    "english": "zoo",
+    "jlpt": 5
+  },
+  {
+    "kanji": "道具",
+    "kana": "どうぐ",
+    "romaji": "dougu",
+    "english": "tool / implement",
+    "jlpt": 5
+  },
+  {
+    "kanji": "えんぴつ",
+    "kana": "えんぴつ",
+    "romaji": "enpitsu",
+    "english": "pencil",
+    "jlpt": 5
+  },
+  {
+    "kanji": "エレベーター",
+    "kana": "エレベーター",
+    "romaji": "erebeetaa",
+    "english": "elevator",
+    "jlpt": 5
+  },
+  {
+    "kanji": "踊る",
+    "kana": "おどる",
+    "romaji": "odoru",
+    "english": "to dance",
+    "jlpt": 5
+  },
+  {
+    "kanji": "降りる",
+    "kana": "おりる",
+    "romaji": "oriru",
+    "english": "to get off / to descend",
+    "jlpt": 5
+  },
+  {
+    "kanji": "泳ぐ",
+    "kana": "およぐ",
+    "romaji": "oyogu",
+    "english": "to swim",
+    "jlpt": 5
+  },
+  {
+    "kanji": "覚える",
+    "kana": "おぼえる",
+    "romaji": "oboeru",
+    "english": "to remember / to learn",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お風呂",
+    "kana": "おふろ",
+    "romaji": "ofuro",
+    "english": "bath",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お湯",
+    "kana": "おゆ",
+    "romaji": "oyu",
+    "english": "hot water",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お祭り",
+    "kana": "おまつり",
+    "romaji": "omatsuri",
+    "english": "festival",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お土産",
+    "kana": "おみやげ",
+    "romaji": "omiyage",
+    "english": "souvenir",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お弁当",
+    "kana": "おべんとう",
+    "romaji": "obentou",
+    "english": "boxed lunch / bento",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お正月",
+    "kana": "おしょうがつ",
+    "romaji": "oshougatsu",
+    "english": "New Year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お世話",
+    "kana": "おせわ",
+    "romaji": "osewa",
+    "english": "care / help",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お客さん",
+    "kana": "おきゃくさん",
+    "romaji": "okyakusan",
+    "english": "customer / guest",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お疲れ様",
+    "kana": "おつかれさま",
+    "romaji": "otsukaresama",
+    "english": "thank you for your hard work",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お釣り",
+    "kana": "おつり",
+    "romaji": "otsuri",
+    "english": "change (money)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お邪魔",
+    "kana": "おじゃま",
+    "romaji": "ojama",
+    "english": "intrusion / disturbance",
+    "jlpt": 5
+  },
+  {
+    "kanji": "頑張る",
+    "kana": "がんばる",
+    "romaji": "ganbaru",
+    "english": "to do one's best / to work hard",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ガソリン",
+    "kana": "ガソリン",
+    "romaji": "gasorin",
+    "english": "gasoline",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ガソリンスタンド",
+    "kana": "ガソリンスタンド",
+    "romaji": "gasorin sutando",
+    "english": "gas station",
+    "jlpt": 5
+  },
+  {
+    "kanji": "外国",
+    "kana": "がいこく",
+    "romaji": "gaikoku",
+    "english": "foreign country",
+    "jlpt": 5
+  },
+  {
+    "kanji": "外国人",
+    "kana": "がいこくじん",
+    "romaji": "gaikokujin",
+    "english": "foreigner",
+    "jlpt": 5
+  },
+  {
+    "kanji": "学校",
+    "kana": "がっこう",
+    "romaji": "gakkou",
+    "english": "school",
+    "jlpt": 5
+  },
+  {
+    "kanji": "負ける",
+    "kana": "まける",
+    "romaji": "makeru",
+    "english": "to lose / to be defeated",
+    "jlpt": 5
+  },
+  {
+    "kanji": "回る",
+    "kana": "まわる",
+    "romaji": "mawaru",
+    "english": "to turn / to revolve",
+    "jlpt": 5
+  },
+  {
+    "kanji": "万",
+    "kana": "まん",
+    "romaji": "man",
+    "english": "ten thousand",
+    "jlpt": 5
+  },
+  {
+    "kanji": "万年筆",
+    "kana": "まんねんひつ",
+    "romaji": "mannenhitsu",
+    "english": "fountain pen",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎月",
+    "kana": "まいつき",
+    "romaji": "maitsuki",
+    "english": "every month",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎週",
+    "kana": "まいしゅう",
+    "romaji": "maishuu",
+    "english": "every week",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎年",
+    "kana": "まいねん",
+    "romaji": "mainen",
+    "english": "every year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "迎える",
+    "kana": "むかえる",
+    "romaji": "mukaeru",
+    "english": "to meet / to greet",
+    "jlpt": 5
+  },
+  {
+    "kanji": "向こう",
+    "kana": "むこう",
+    "romaji": "mukou",
+    "english": "over there / opposite side",
+    "jlpt": 5
+  },
+  {
+    "kanji": "難しい",
+    "kana": "むずかしい",
+    "romaji": "muzukashii",
+    "english": "difficult",
+    "jlpt": 5
+  },
+  {
+    "kanji": "息子",
+    "kana": "むすこ",
+    "romaji": "musuko",
+    "english": "son",
+    "jlpt": 5
+  },
+  {
+    "kanji": "娘",
+    "kana": "むすめ",
+    "romaji": "musume",
+    "english": "daughter",
+    "jlpt": 5
+  },
+  {
+    "kanji": "村",
+    "kana": "むら",
+    "romaji": "mura",
+    "english": "village",
+    "jlpt": 5
+  },
+  {
+    "kanji": "紫",
+    "kana": "むらさき",
+    "romaji": "murasaki",
+    "english": "purple",
+    "jlpt": 5
+  },
+  {
+    "kanji": "虫",
+    "kana": "むし",
+    "romaji": "mushi",
+    "english": "insect / bug",
+    "jlpt": 5
+  },
+  {
+    "kanji": "無理",
+    "kana": "むり",
+    "romaji": "muri",
+    "english": "impossible / unreasonable",
+    "jlpt": 5
+  },
+  {
+    "kanji": "向ける",
+    "kana": "むける",
+    "romaji": "mukeru",
+    "english": "to turn toward / to point",
+    "jlpt": 5
+  },
+  {
+    "kanji": "昔",
+    "kana": "むかし",
+    "romaji": "mukashi",
+    "english": "old times / long ago",
+    "jlpt": 5
+  },
+  {
+    "kanji": "胸",
+    "kana": "むね",
+    "romaji": "mune",
+    "english": "chest / breast",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もう一度",
+    "kana": "もういちど",
+    "romaji": "mou ichido",
+    "english": "once more / again",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もうすぐ",
+    "kana": "もうすぐ",
+    "romaji": "mousugu",
+    "english": "soon / before long",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もちろん",
+    "kana": "もちろん",
+    "romaji": "mochiron",
+    "english": "of course",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もっと",
+    "kana": "もっと",
+    "romaji": "motto",
+    "english": "more",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もし",
+    "kana": "もし",
+    "romaji": "moshi",
+    "english": "if",
+    "jlpt": 5
+  },
+  {
+    "kanji": "申します",
+    "kana": "もうします",
+    "romaji": "moushimasu",
+    "english": "to be called (humble)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "戻る",
+    "kana": "もどる",
+    "romaji": "modoru",
+    "english": "to return / to go back",
+    "jlpt": 5
+  },
+  {
+    "kanji": "もらう",
+    "kana": "もらう",
+    "romaji": "morau",
+    "english": "to receive",
+    "jlpt": 5
+  },
+  {
+    "kanji": "門",
+    "kana": "もん",
+    "romaji": "mon",
+    "english": "gate",
+    "jlpt": 5
+  },
+  {
+    "kanji": "文字",
+    "kana": "もじ",
+    "romaji": "moji",
+    "english": "letter / character",
+    "jlpt": 5
+  },
+  {
+    "kanji": "最も",
+    "kana": "もっとも",
+    "romaji": "mottomo",
+    "english": "most",
+    "jlpt": 5
+  },
+  {
+    "kanji": "燃える",
+    "kana": "もえる",
+    "romaji": "moeru",
+    "english": "to burn",
+    "jlpt": 5
+  },
+  {
+    "kanji": "目",
+    "kana": "め",
+    "romaji": "me",
+    "english": "eye",
+    "jlpt": 5
+  },
+  {
+    "kanji": "恵まれる",
+    "kana": "めぐまれる",
+    "romaji": "megumareru",
+    "english": "to be blessed",
+    "jlpt": 5
+  },
+  {
+    "kanji": "珍しい",
+    "kana": "めずらしい",
+    "romaji": "mezurashii",
+    "english": "rare / unusual",
+    "jlpt": 5
+  },
+  {
+    "kanji": "迷惑",
+    "kana": "めいわく",
+    "romaji": "meiwaku",
+    "english": "trouble / bother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "眼鏡",
+    "kana": "めがね",
+    "romaji": "megane",
+    "english": "glasses",
+    "jlpt": 5
+  },
+  {
+    "kanji": "結婚",
+    "kana": "けっこん",
+    "romaji": "kekkon",
+    "english": "marriage",
+    "jlpt": 5
+  },
+  {
+    "kanji": "召し上がる",
+    "kana": "めしあがる",
+    "romaji": "meshiagaru",
+    "english": "to eat / to drink (honorific)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "面倒",
+    "kana": "めんどう",
+    "romaji": "mendou",
+    "english": "trouble / bother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "面白い",
+    "kana": "おもしろい",
+    "romaji": "omoshiroi",
+    "english": "interesting / funny",
+    "jlpt": 5
+  },
+  {
+    "kanji": "のぼる",
+    "kana": "のぼる",
+    "romaji": "noboru",
+    "english": "to climb / to go up",
+    "jlpt": 5
+  },
+  {
+    "kanji": "脱ぐ",
+    "kana": "ぬぐ",
+    "romaji": "nugu",
+    "english": "to take off (clothes)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "温い",
+    "kana": "ぬるい",
+    "romaji": "nurui",
+    "english": "lukewarm / tepid",
+    "jlpt": 5
+  },
+  {
+    "kanji": "寝る",
+    "kana": "ねる",
+    "romaji": "neru",
+    "english": "to sleep / to go to bed",
+    "jlpt": 5
+  },
+  {
+    "kanji": "のど",
+    "kana": "のど",
+    "romaji": "nodo",
+    "english": "throat",
+    "jlpt": 5
+  },
+  {
+    "kanji": "乗る",
+    "kana": "のる",
+    "romaji": "noru",
+    "english": "to ride / to get on",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ペン",
+    "kana": "ペン",
+    "romaji": "pen",
+    "english": "pen",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ラジオ",
+    "kana": "ラジオ",
+    "romaji": "rajio",
+    "english": "radio",
+    "jlpt": 5
+  },
+  {
+    "kanji": "来年",
+    "kana": "らいねん",
+    "romaji": "rainen",
+    "english": "next year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "来週",
+    "kana": "らいしゅう",
+    "romaji": "raishuu",
+    "english": "next week",
+    "jlpt": 5
+  },
+  {
+    "kanji": "レストラン",
+    "kana": "レストラン",
+    "romaji": "resutoran",
+    "english": "restaurant",
+    "jlpt": 5
+  },
+  {
+    "kanji": "料理",
+    "kana": "りょうり",
+    "romaji": "ryouri",
+    "english": "cooking / cuisine",
+    "jlpt": 5
+  },
+  {
+    "kanji": "散歩",
+    "kana": "さんぽ",
+    "romaji": "sanpo",
+    "english": "walk / stroll",
+    "jlpt": 5
+  },
+  {
+    "kanji": "さっき",
+    "kana": "さっき",
+    "romaji": "sakki",
+    "english": "a while ago / just now",
+    "jlpt": 5
+  },
+  {
+    "kanji": "砂糖",
+    "kana": "さとう",
+    "romaji": "satou",
+    "english": "sugar",
+    "jlpt": 5
+  },
+  {
+    "kanji": "先生",
+    "kana": "せんせい",
+    "romaji": "sensei",
+    "english": "teacher",
+    "jlpt": 5
+  },
+  {
+    "kanji": "宿題",
+    "kana": "しゅくだい",
+    "romaji": "shukudai",
+    "english": "homework",
+    "jlpt": 5
+  },
+  {
+    "kanji": "質問",
+    "kana": "しつもん",
+    "romaji": "shitsumon",
+    "english": "question",
+    "jlpt": 5
+  },
+  {
+    "kanji": "写真",
+    "kana": "しゃしん",
+    "romaji": "shashin",
+    "english": "photograph",
+    "jlpt": 5
+  },
+  {
+    "kanji": "知る",
+    "kana": "しる",
+    "romaji": "shiru",
+    "english": "to know",
+    "jlpt": 5
+  },
+  {
+    "kanji": "新聞",
+    "kana": "しんぶん",
+    "romaji": "shinbun",
+    "english": "newspaper",
+    "jlpt": 5
+  },
+  {
+    "kanji": "そば",
+    "kana": "そば",
+    "romaji": "soba",
+    "english": "near / beside",
+    "jlpt": 5
+  },
+  {
+    "kanji": "それから",
+    "kana": "それから",
+    "romaji": "sore kara",
+    "english": "and then / after that",
+    "jlpt": 5
+  },
+  {
+    "kanji": "掃除",
+    "kana": "そうじ",
+    "romaji": "souji",
+    "english": "cleaning",
+    "jlpt": 5
+  },
+  {
+    "kanji": "スポーツ",
+    "kana": "スポーツ",
+    "romaji": "supootsu",
+    "english": "sport",
+    "jlpt": 5
+  },
+  {
+    "kanji": "住む",
+    "kana": "すむ",
+    "romaji": "sumu",
+    "english": "to live / to reside",
+    "jlpt": 5
+  },
+  {
+    "kanji": "座る",
+    "kana": "すわる",
+    "romaji": "suwaru",
+    "english": "to sit",
+    "jlpt": 5
+  },
+  {
+    "kanji": "大学",
+    "kana": "だいがく",
+    "romaji": "daigaku",
+    "english": "university",
+    "jlpt": 5
+  },
+  {
+    "kanji": "たばこ",
+    "kana": "たばこ",
+    "romaji": "tabako",
+    "english": "cigarette / tobacco",
+    "jlpt": 5
+  },
+  {
+    "kanji": "食べ物",
+    "kana": "たべもの",
+    "romaji": "tabemono",
+    "english": "food",
+    "jlpt": 5
+  },
+  {
+    "kanji": "楽しい",
+    "kana": "たのしい",
+    "romaji": "tanoshii",
+    "english": "enjoyable / fun",
+    "jlpt": 5
+  },
+  {
+    "kanji": "手伝う",
+    "kana": "てつだう",
+    "romaji": "tetsudau",
+    "english": "to help",
+    "jlpt": 5
+  },
+  {
+    "kanji": "手紙",
+    "kana": "てがみ",
+    "romaji": "tegami",
+    "english": "letter",
+    "jlpt": 5
+  },
+  {
+    "kanji": "テレビ",
+    "kana": "テレビ",
+    "romaji": "terebi",
+    "english": "television",
+    "jlpt": 5
+  },
+  {
+    "kanji": "時計",
+    "kana": "とけい",
+    "romaji": "tokei",
+    "english": "clock / watch",
+    "jlpt": 5
+  },
+  {
+    "kanji": "友達",
+    "kana": "ともだち",
+    "romaji": "tomodachi",
+    "english": "friend",
+    "jlpt": 5
+  },
+  {
+    "kanji": "とり",
+    "kana": "とり",
+    "romaji": "tori",
+    "english": "bird",
+    "jlpt": 5
+  },
+  {
+    "kanji": "つく",
+    "kana": "つく",
+    "romaji": "tsuku",
+    "english": "to arrive / to reach",
+    "jlpt": 5
+  },
+  {
+    "kanji": "つける",
+    "kana": "つける",
+    "romaji": "tsukeru",
+    "english": "to turn on / to attach",
+    "jlpt": 5
+  },
+  {
+    "kanji": "疲れる",
+    "kana": "つかれる",
+    "romaji": "tsukareru",
+    "english": "to get tired",
+    "jlpt": 5
+  },
+  {
+    "kanji": "うた",
+    "kana": "うた",
+    "romaji": "uta",
+    "english": "song",
+    "jlpt": 5
+  },
+  {
+    "kanji": "うち",
+    "kana": "うち",
+    "romaji": "uchi",
+    "english": "home / house / inside",
+    "jlpt": 5
+  },
+  {
+    "kanji": "うしろ",
+    "kana": "うしろ",
+    "romaji": "ushiro",
+    "english": "behind / back",
+    "jlpt": 5
+  },
+  {
+    "kanji": "寒い",
+    "kana": "さむい",
+    "romaji": "samui",
+    "english": "cold (weather/air)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "再来年",
+    "kana": "さらいねん",
+    "romaji": "sarainen",
+    "english": "year after next",
+    "jlpt": 5
+  },
+  {
+    "kanji": "騒がしい",
+    "kana": "さわがしい",
+    "romaji": "sawagashii",
+    "english": "noisy / loud",
+    "jlpt": 5
+  },
+  {
+    "kanji": "背",
+    "kana": "せ",
+    "romaji": "se",
+    "english": "height / back",
+    "jlpt": 5
+  },
+  {
+    "kanji": "生徒",
+    "kana": "せいと",
+    "romaji": "seito",
+    "english": "student / pupil",
+    "jlpt": 5
+  },
+  {
+    "kanji": "石鹸",
+    "kana": "せっけん",
+    "romaji": "sekken",
+    "english": "soap",
+    "jlpt": 5
+  },
+  {
+    "kanji": "背中",
+    "kana": "せなか",
+    "romaji": "senaka",
+    "english": "back (of body)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "先輩",
+    "kana": "せんぱい",
+    "romaji": "senpai",
+    "english": "senior / upperclassman",
+    "jlpt": 5
+  },
+  {
+    "kanji": "試験",
+    "kana": "しけん",
+    "romaji": "shiken",
+    "english": "exam / test",
+    "jlpt": 5
+  },
+  {
+    "kanji": "島",
+    "kana": "しま",
+    "romaji": "shima",
+    "english": "island",
+    "jlpt": 5
+  },
+  {
+    "kanji": "閉まる",
+    "kana": "しまる",
+    "romaji": "shimaru",
+    "english": "to close / to shut",
+    "jlpt": 5
+  },
+  {
+    "kanji": "閉める",
+    "kana": "しめる",
+    "romaji": "shimeru",
+    "english": "to close / to shut",
+    "jlpt": 5
+  },
+  {
+    "kanji": "親切",
+    "kana": "しんせつ",
+    "romaji": "shinsetsu",
+    "english": "kind / kindness",
+    "jlpt": 5
+  },
+  {
+    "kanji": "心配",
+    "kana": "しんぱい",
+    "romaji": "shinpai",
+    "english": "worry / anxiety",
+    "jlpt": 5
+  },
+  {
+    "kanji": "塩",
+    "kana": "しお",
+    "romaji": "shio",
+    "english": "salt",
+    "jlpt": 5
+  },
+  {
+    "kanji": "塩辛い",
+    "kana": "しおからい",
+    "romaji": "shiokarai",
+    "english": "salty",
+    "jlpt": 5
+  },
+  {
+    "kanji": "趣味",
+    "kana": "しゅみ",
+    "romaji": "shumi",
+    "english": "hobby / interest",
+    "jlpt": 5
+  },
+  {
+    "kanji": "醤油",
+    "kana": "しょうゆ",
+    "romaji": "shouyu",
+    "english": "soy sauce",
+    "jlpt": 5
+  },
+  {
+    "kanji": "祖父",
+    "kana": "そふ",
+    "romaji": "sofu",
+    "english": "grandfather",
+    "jlpt": 5
+  },
+  {
+    "kanji": "祖母",
+    "kana": "そぼ",
+    "romaji": "sobo",
+    "english": "grandmother",
+    "jlpt": 5
+  },
+  {
+    "kanji": "空",
+    "kana": "そら",
+    "romaji": "sora",
+    "english": "sky",
+    "jlpt": 5
+  },
+  {
+    "kanji": "それでは",
+    "kana": "それでは",
+    "romaji": "sore dewa",
+    "english": "well then / in that case",
+    "jlpt": 5
+  },
+  {
+    "kanji": "相談",
+    "kana": "そうだん",
+    "romaji": "soudan",
+    "english": "consultation / discussion",
+    "jlpt": 5
+  },
+  {
+    "kanji": "最近",
+    "kana": "さいきん",
+    "romaji": "saikin",
+    "english": "recently / lately",
+    "jlpt": 5
+  },
+  {
+    "kanji": "魚",
+    "kana": "さかな",
+    "romaji": "sakana",
+    "english": "fish",
+    "jlpt": 5
+  },
+  {
+    "kanji": "下がる",
+    "kana": "さがる",
+    "romaji": "sagaru",
+    "english": "to go down / to fall",
+    "jlpt": 5
+  },
+  {
+    "kanji": "下げる",
+    "kana": "さげる",
+    "romaji": "sageru",
+    "english": "to lower / to hang",
+    "jlpt": 5
+  },
+  {
+    "kanji": "咲く",
+    "kana": "さく",
+    "romaji": "saku",
+    "english": "to bloom / to blossom",
+    "jlpt": 5
+  },
+  {
+    "kanji": "桜",
+    "kana": "さくら",
+    "romaji": "sakura",
+    "english": "cherry blossom",
+    "jlpt": 5
+  },
+  {
+    "kanji": "作文",
+    "kana": "さくぶん",
+    "romaji": "sakubun",
+    "english": "composition / essay",
+    "jlpt": 5
+  },
+  {
+    "kanji": "差す",
+    "kana": "さす",
+    "romaji": "sasu",
+    "english": "to hold up (umbrella)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "雑誌",
+    "kana": "ざっし",
+    "romaji": "zasshi",
+    "english": "magazine",
+    "jlpt": 5
+  },
+  {
+    "kanji": "残念",
+    "kana": "ざんねん",
+    "romaji": "zannen",
+    "english": "regrettable / disappointing",
+    "jlpt": 5
+  },
+  {
+    "kanji": "涼しい",
+    "kana": "すずしい",
+    "romaji": "suzushii",
+    "english": "cool (temperature)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "少し",
+    "kana": "すこし",
+    "romaji": "sukoshi",
+    "english": "a little / few",
+    "jlpt": 5
+  },
+  {
+    "kanji": "素晴らしい",
+    "kana": "すばらしい",
+    "romaji": "subarashii",
+    "english": "wonderful / splendid",
+    "jlpt": 5
+  },
+  {
+    "kanji": "姿",
+    "kana": "すがた",
+    "romaji": "sugata",
+    "english": "figure / appearance",
+    "jlpt": 5
+  },
+  {
+    "kanji": "相撲",
+    "kana": "すもう",
+    "romaji": "sumou",
+    "english": "sumo wrestling",
+    "jlpt": 5
+  },
+  {
+    "kanji": "滑る",
+    "kana": "すべる",
+    "romaji": "suberu",
+    "english": "to slip / to slide",
+    "jlpt": 5
+  },
+  {
+    "kanji": "過ぎる",
+    "kana": "すぎる",
+    "romaji": "sugiru",
+    "english": "to pass / to exceed",
+    "jlpt": 5
+  },
+  {
+    "kanji": "吸う",
+    "kana": "すう",
+    "romaji": "suu",
+    "english": "to smoke / to inhale",
+    "jlpt": 5
+  },
+  {
+    "kanji": "数学",
+    "kana": "すうがく",
+    "romaji": "suugaku",
+    "english": "mathematics",
+    "jlpt": 5
+  },
+  {
+    "kanji": "習う",
+    "kana": "ならう",
+    "romaji": "narau",
+    "english": "to learn",
+    "jlpt": 5
+  },
+  {
+    "kanji": "鳴く",
+    "kana": "なく",
+    "romaji": "naku",
+    "english": "to cry / to sing (animals)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "夏",
+    "kana": "なつ",
+    "romaji": "natsu",
+    "english": "summer",
+    "jlpt": 5
+  },
+  {
+    "kanji": "夏休み",
+    "kana": "なつやすみ",
+    "romaji": "natsu yasumi",
+    "english": "summer vacation",
+    "jlpt": 5
+  },
+  {
+    "kanji": "何",
+    "kana": "なに",
+    "romaji": "nani",
+    "english": "what",
+    "jlpt": 5
+  },
+  {
+    "kanji": "何か",
+    "kana": "なにか",
+    "romaji": "nanika",
+    "english": "something",
+    "jlpt": 5
+  },
+  {
+    "kanji": "七",
+    "kana": "なな",
+    "romaji": "nana",
+    "english": "seven",
+    "jlpt": 5
+  },
+  {
+    "kanji": "七つ",
+    "kana": "ななつ",
+    "romaji": "nanatsu",
+    "english": "seven (things)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "名前",
+    "kana": "なまえ",
+    "romaji": "namae",
+    "english": "name",
+    "jlpt": 5
+  },
+  {
+    "kanji": "並ぶ",
+    "kana": "ならぶ",
+    "romaji": "narabu",
+    "english": "to line up",
+    "jlpt": 5
+  },
+  {
+    "kanji": "なる",
+    "kana": "なる",
+    "romaji": "naru",
+    "english": "to become",
+    "jlpt": 5
+  },
+  {
+    "kanji": "投げる",
+    "kana": "なげる",
+    "romaji": "nageru",
+    "english": "to throw",
+    "jlpt": 5
+  },
+  {
+    "kanji": "長い",
+    "kana": "ながい",
+    "romaji": "nagai",
+    "english": "long",
+    "jlpt": 5
+  },
+  {
+    "kanji": "中",
+    "kana": "なか",
+    "romaji": "naka",
+    "english": "inside / middle",
+    "jlpt": 5
+  },
+  {
+    "kanji": "泣く",
+    "kana": "なく",
+    "romaji": "naku",
+    "english": "to cry / to weep",
+    "jlpt": 5
+  },
+  {
+    "kanji": "亡くす",
+    "kana": "なくす",
+    "romaji": "nakusu",
+    "english": "to lose",
+    "jlpt": 5
+  },
+  {
+    "kanji": "無くなる",
+    "kana": "なくなる",
+    "romaji": "nakunaru",
+    "english": "to disappear / to run out",
+    "jlpt": 5
+  },
+  {
+    "kanji": "肉",
+    "kana": "にく",
+    "romaji": "niku",
+    "english": "meat",
+    "jlpt": 5
+  },
+  {
+    "kanji": "西",
+    "kana": "にし",
+    "romaji": "nishi",
+    "english": "west",
+    "jlpt": 5
+  },
+  {
+    "kanji": "二",
+    "kana": "に",
+    "romaji": "ni",
+    "english": "two",
+    "jlpt": 5
+  },
+  {
+    "kanji": "二十",
+    "kana": "にじゅう",
+    "romaji": "nijuu",
+    "english": "twenty",
+    "jlpt": 5
+  },
+  {
+    "kanji": "二つ",
+    "kana": "ふたつ",
+    "romaji": "futatsu",
+    "english": "two (things)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "荷物",
+    "kana": "にもつ",
+    "romaji": "nimotsu",
+    "english": "luggage / baggage",
+    "jlpt": 5
+  },
+  {
+    "kanji": "人気",
+    "kana": "にんき",
+    "romaji": "ninki",
+    "english": "popularity",
+    "jlpt": 5
+  },
+  {
+    "kanji": "日本",
+    "kana": "にほん",
+    "romaji": "nihon",
+    "english": "Japan",
+    "jlpt": 5
+  },
+  {
+    "kanji": "日本人",
+    "kana": "にほんじん",
+    "romaji": "nihonjin",
+    "english": "Japanese person",
+    "jlpt": 5
+  },
+  {
+    "kanji": "日本語",
+    "kana": "にほんご",
+    "romaji": "nihongo",
+    "english": "Japanese language",
+    "jlpt": 5
+  },
+  {
+    "kanji": "庭",
+    "kana": "にわ",
+    "romaji": "niwa",
+    "english": "garden",
+    "jlpt": 5
+  },
+  {
+    "kanji": "鶏",
+    "kana": "にわとり",
+    "romaji": "niwatori",
+    "english": "chicken",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ニュース",
+    "kana": "ニュース",
+    "romaji": "nyuusu",
+    "english": "news",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ノート",
+    "kana": "ノート",
+    "romaji": "nooto",
+    "english": "notebook",
+    "jlpt": 5
+  },
+  {
+    "kanji": "登る",
+    "kana": "のぼる",
+    "romaji": "noboru",
+    "english": "to climb",
+    "jlpt": 5
+  },
+  {
+    "kanji": "喉",
+    "kana": "のど",
+    "romaji": "nodo",
+    "english": "throat",
+    "jlpt": 5
+  },
+  {
+    "kanji": "喉が渇く",
+    "kana": "のどがかわく",
+    "romaji": "nodo ga kawaku",
+    "english": "to be thirsty",
+    "jlpt": 5
+  },
+  {
+    "kanji": "乗り物",
+    "kana": "のりもの",
+    "romaji": "norimono",
+    "english": "vehicle",
+    "jlpt": 5
+  },
+  {
+    "kanji": "残る",
+    "kana": "のこる",
+    "romaji": "nokoru",
+    "english": "to remain",
+    "jlpt": 5
+  },
+  {
+    "kanji": "残す",
+    "kana": "のこす",
+    "romaji": "nokosu",
+    "english": "to leave behind",
+    "jlpt": 5
+  },
+  {
+    "kanji": "飲み物",
+    "kana": "のみもの",
+    "romaji": "nomimono",
+    "english": "drink / beverage",
+    "jlpt": 5
+  },
+  {
+    "kanji": "飲む",
+    "kana": "のむ",
+    "romaji": "nomu",
+    "english": "to drink",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ノック",
+    "kana": "ノック",
+    "romaji": "nokku",
+    "english": "knock",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ノックする",
+    "kana": "ノックする",
+    "romaji": "nokku suru",
+    "english": "to knock",
+    "jlpt": 5
+  },
+  {
+    "kanji": "のんびり",
+    "kana": "のんびり",
+    "romaji": "nonbiri",
+    "english": "leisurely / relaxed",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お",
+    "kana": "お",
+    "romaji": "o",
+    "english": "honorific prefix",
+    "jlpt": 5
+  },
+  {
+    "kanji": "美味しい",
+    "kana": "おいしい",
+    "romaji": "oishii",
+    "english": "delicious",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お疲れ",
+    "kana": "おつかれ",
+    "romaji": "otsukare",
+    "english": "tired / exhausted",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お手洗い",
+    "kana": "おてあらい",
+    "romaji": "otearai",
+    "english": "restroom / toilet",
+    "jlpt": 5
+  },
+  {
+    "kanji": "お米",
+    "kana": "おこめ",
+    "romaji": "okome",
+    "english": "rice (uncooked)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "重い",
+    "kana": "おもい",
+    "romaji": "omoi",
+    "english": "heavy",
+    "jlpt": 5
+  },
+  {
+    "kanji": "終わる",
+    "kana": "おわる",
+    "romaji": "owaru",
+    "english": "to end / to finish",
+    "jlpt": 5
+  },
+  {
+    "kanji": "ペット",
+    "kana": "ペット",
+    "romaji": "petto",
+    "english": "pet",
+    "jlpt": 5
+  },
+  {
+    "kanji": "プレゼント",
+    "kana": "プレゼント",
+    "romaji": "purezento",
+    "english": "present / gift",
+    "jlpt": 5
+  },
+  {
+    "kanji": "来月",
+    "kana": "らいげつ",
+    "romaji": "raigetsu",
+    "english": "next month",
+    "jlpt": 5
+  },
+  {
+    "kanji": "リンゴ",
+    "kana": "リンゴ",
+    "romaji": "ringo",
+    "english": "apple",
+    "jlpt": 5
+  },
+  {
+    "kanji": "両親",
+    "kana": "りょうしん",
+    "romaji": "ryoushin",
+    "english": "parents",
+    "jlpt": 5
+  },
+  {
+    "kanji": "旅行",
+    "kana": "りょこう",
+    "romaji": "ryokou",
+    "english": "travel / trip",
+    "jlpt": 5
+  },
+  {
+    "kanji": "留学生",
+    "kana": "りゅうがくせい",
+    "romaji": "ryuugakusei",
+    "english": "exchange student",
+    "jlpt": 5
+  },
+  {
+    "kanji": "寂しい",
+    "kana": "さびしい",
+    "romaji": "sabishii",
+    "english": "lonely",
+    "jlpt": 5
+  },
+  {
+    "kanji": "先程",
+    "kana": "さきほど",
+    "romaji": "sakihodo",
+    "english": "a little while ago",
+    "jlpt": 5
+  },
+  {
+    "kanji": "酒",
+    "kana": "さけ",
+    "romaji": "sake",
+    "english": "alcohol / sake",
+    "jlpt": 5
+  },
+  {
+    "kanji": "最初",
+    "kana": "さいしょ",
+    "romaji": "saisho",
+    "english": "first / beginning",
+    "jlpt": 5
+  },
+  {
+    "kanji": "最後",
+    "kana": "さいご",
+    "romaji": "saigo",
+    "english": "last / end",
+    "jlpt": 5
+  },
+  {
+    "kanji": "しかし",
+    "kana": "しかし",
+    "romaji": "shikashi",
+    "english": "however / but",
+    "jlpt": 5
+  },
+  {
+    "kanji": "白い",
+    "kana": "しろい",
+    "romaji": "shiroi",
+    "english": "white",
+    "jlpt": 5
+  },
+  {
+    "kanji": "静か",
+    "kana": "しずか",
+    "romaji": "shizuka",
+    "english": "quiet / peaceful",
+    "jlpt": 5
+  },
+  {
+    "kanji": "出張",
+    "kana": "しゅっちょう",
+    "romaji": "shutchou",
+    "english": "business trip",
+    "jlpt": 5
+  },
+  {
+    "kanji": "小説",
+    "kana": "しょうせつ",
+    "romaji": "shousetsu",
+    "english": "novel",
+    "jlpt": 5
+  },
+  {
+    "kanji": "紹介",
+    "kana": "しょうかい",
+    "romaji": "shoukai",
+    "english": "introduction",
+    "jlpt": 5
+  },
+  {
+    "kanji": "三日",
+    "kana": "みっか",
+    "romaji": "mikka",
+    "english": "three days / third day of month",
+    "jlpt": 5
+  },
+  {
+    "kanji": "三つ",
+    "kana": "みっつ",
+    "romaji": "mittsu",
+    "english": "three (things)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "皆",
+    "kana": "みな",
+    "romaji": "mina",
+    "english": "everyone / all",
+    "jlpt": 5
+  },
+  {
+    "kanji": "南",
+    "kana": "みなみ",
+    "romaji": "minami",
+    "english": "south",
+    "jlpt": 5
+  },
+  {
+    "kanji": "貰う",
+    "kana": "もらう",
+    "romaji": "morau",
+    "english": "to receive / to get",
+    "jlpt": 5
+  },
+  {
+    "kanji": "六日",
+    "kana": "むいか",
+    "romaji": "muika",
+    "english": "six days / sixth day of month",
+    "jlpt": 5
+  },
+  {
+    "kanji": "六つ",
+    "kana": "むっつ",
+    "romaji": "muttsu",
+    "english": "six (things)",
+    "jlpt": 5
+  },
+  {
+    "kanji": "向く",
+    "kana": "むく",
+    "romaji": "muku",
+    "english": "to face / to turn toward",
+    "jlpt": 5
+  },
+  {
+    "kanji": "無駄",
+    "kana": "むだ",
+    "romaji": "muda",
+    "english": "waste / useless",
+    "jlpt": 5
+  },
+  {
+    "kanji": "昨日",
+    "kana": "きのう",
+    "romaji": "kinou",
+    "english": "yesterday",
+    "jlpt": 5
+  },
+  {
+    "kanji": "毎年",
+    "kana": "まいとし",
+    "romaji": "maitoshi",
+    "english": "every year",
+    "jlpt": 5
+  },
+  {
+    "kanji": "サラダ",
+    "kana": "サラダ",
+    "romaji": "sarada",
+    "english": "salad",
+    "jlpt": 5
+  },
+  {
+    "kanji": "さる",
+    "kana": "さる",
+    "romaji": "saru",
+    "english": "monkey",
+    "jlpt": 5
+  },
+  {
+    "kanji": "三",
+    "kana": "さん",
+    "romaji": "san",
+    "english": "three",
+    "jlpt": 5
+  },
+  {
+    "kanji": "四",
+    "kana": "し",
+    "romaji": "shi",
+    "english": "four",
+    "jlpt": 5
+  },
+  {
+    "kanji": "下",
+    "kana": "した",
+    "romaji": "shita",
+    "english": "under / below",
+    "jlpt": 5
+  },
+  {
+    "kanji": "シャツ",
+    "kana": "シャツ",
+    "romaji": "shatsu",
+    "english": "shirt",
+    "jlpt": 5
+  },
+  {
+    "kanji": "シャワー",
+    "kana": "シャワー",
+    "romaji": "shawaa",
+    "english": "shower",
+    "jlpt": 5
+  },
+  {
+    "kanji": "食堂",
+    "kana": "しょくどう",
+    "romaji": "shokudou",
+    "english": "cafeteria / dining hall",
+    "jlpt": 5
+  },
+  {
+    "kanji": "白",
+    "kana": "しろ",
+    "romaji": "shiro",
+    "english": "white",
+    "jlpt": 5
+  },
+  {
+    "kanji": "すぐ",
+    "kana": "すぐ",
+    "romaji": "sugu",
+    "english": "soon / immediately",
+    "jlpt": 5
+  },
+  {
+    "kanji": "スリッパ",
+    "kana": "スリッパ",
+    "romaji": "surippa",
+    "english": "slippers",
+    "jlpt": 5
+  },
+  {
+    "kanji": "背が高い",
+    "kana": "せがたかい",
+    "romaji": "se ga takai",
+    "english": "tall",
+    "jlpt": 5
+  },
+  {
+    "kanji": "セーター",
+    "kana": "セーター",
+    "romaji": "seetaa",
+    "english": "sweater",
+    "jlpt": 5
+  },
+  {
+    "kanji": "狭い",
+    "kana": "せまい",
+    "romaji": "semai",
+    "english": "narrow / small",
+    "jlpt": 5
+  },
+  {
+    "kanji": "先週",
+    "kana": "せんしゅう",
+    "romaji": "senshuu",
+    "english": "last week",
+    "jlpt": 5
+  },
+  {
+    "kanji": "洗濯",
+    "kana": "せんたく",
+    "romaji": "sentaku",
+    "english": "laundry / washing",
+    "jlpt": 5
+  },
+  {
+    "kanji": "そして",
+    "kana": "そして",
+    "romaji": "soshite",
+    "english": "and / and then",
+    "jlpt": 5
+  },
+  {
+    "kanji": "外",
+    "kana": "そと",
+    "romaji": "soto",
+    "english": "outside",
+    "jlpt": 5
+  },
+  {
+    "kanji": "その",
+    "kana": "その",
+    "romaji": "sono",
+    "english": "that",
+    "jlpt": 5
+  },
+  {
+    "kanji": "それ",
+    "kana": "それ",
+    "romaji": "sore",
+    "english": "that",
+    "jlpt": 5
+  },
+  {
+    "kanji": "それで",
+    "kana": "それで",
+    "romaji": "sore de",
+    "english": "so / therefore",
+    "jlpt": 5
+  },
+  {
+    "kanji": "すると",
+    "kana": "すると",
+    "romaji": "suru to",
+    "english": "then / thereupon",
+    "jlpt": 5
+  },
+  {
+    "kanji": "好き",
+    "kana": "すき",
+    "romaji": "suki",
+    "english": "like / love",
+    "jlpt": 5
+  }
+]
