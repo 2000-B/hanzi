@@ -2683,6 +2683,7 @@ const HSK_DATA = { 1: HSK1_EMBEDDED };          // level -> card array
 let CEDICT = {};              // hanzi -> {pinyin, defs, hsk}
 let ENRICHED = {};            // hanzi -> enriched data (character + word level)
 let ENRICHED_JP = {};         // kanji -> enriched data (Japanese)
+let JP_DICT = {};             // kanji -> {kana, defs, jlpt, romaji} — compact dictionary
 
 // ── Language config ──────────────────────────────────────────────────────────
 const LANG_CONFIGS = {
@@ -2805,6 +2806,9 @@ async function loadAllData() {
   });
   loadJSON('data/jlpt-enriched.json').then(data => {
     if (data) ENRICHED_JP = data;
+  });
+  loadJSON('data/jp-dict.json').then(data => {
+    if (data) JP_DICT = data;
   });
 }
 
@@ -4273,7 +4277,7 @@ function toggleInfoPanel() {
 }
 
 function getEnriched() { return currentLang === 'ja' ? ENRICHED_JP : ENRICHED; }
-function getDict()     { return currentLang === 'ja' ? ENRICHED_JP : CEDICT; }
+function getDict()     { return currentLang === 'ja' ? JP_DICT : CEDICT; }
 
 // ── Contextual help tooltips ──
 const IP_HELP = {
@@ -4308,7 +4312,7 @@ function renderInfoPanel(card) {
   const dictSource = getDict();
   const isJapanese = currentLang === 'ja';
 
-  const entry   = isJapanese ? (enrichedSource[card.hanzi] || null) : (CEDICT[card.hanzi] || null);
+  const entry   = isJapanese ? (JP_DICT[card.hanzi] || null) : (CEDICT[card.hanzi] || null);
   const enriched = enrichedSource[card.hanzi] || null;
   const isMultiChar = card.hanzi.length > 1;
   const cd = cardData[card.hanzi] || {};
@@ -4351,7 +4355,7 @@ function renderInfoPanel(card) {
   }
 
   // ── Definitions ──
-  if (!isJapanese && entry && entry.defs) {
+  if (entry && entry.defs && entry.defs.length > 0) {
     html += `<div class="ip-section">
       <div class="ip-section-title">definitions</div>
       <div class="ip-defs">${entry.defs.join(' · ')}</div>
@@ -4498,8 +4502,8 @@ function navigateToChar(hanzi) {
   }
   if (!card) {
     if (currentLang === 'ja') {
-      const e = ENRICHED_JP[hanzi];
-      card = { hanzi, pinyin: e ? e.romaji : '?', english: e ? e.english : 'unknown' };
+      const e = JP_DICT[hanzi] || ENRICHED_JP[hanzi];
+      card = { hanzi, pinyin: e ? (e.romaji || '') : '?', english: e ? (e.defs ? e.defs.join(' / ') : (e.english || 'unknown')) : 'unknown', kana: e ? e.kana : '' };
     } else {
       const ce = CEDICT[hanzi];
       card = { hanzi, pinyin: ce ? ce.pinyin : '?', english: ce ? ce.defs.join(' / ') : 'unknown' };
@@ -4938,11 +4942,12 @@ document.getElementById('search-input').addEventListener('input', function () {
   const deckHanzi = new Set(deckMatches.map(m => m.card.hanzi));
   const cedictMatches = [];
   if (currentLang === 'ja') {
-    for (const [hanzi, entry] of Object.entries(ENRICHED_JP)) {
+    for (const [hanzi, entry] of Object.entries(JP_DICT)) {
       if (deckHanzi.has(hanzi)) continue;
-      const defs = entry.english || '';
+      const defs = entry.defs ? entry.defs.join(' / ') : '';
       const pin = entry.romaji || '';
       if (hanzi.includes(q) ||
+          (entry.kana || '').includes(q) ||
           pin.toLowerCase().includes(q.toLowerCase()) ||
           defs.toLowerCase().includes(q.toLowerCase())) {
         cedictMatches.push({ card: { hanzi, pinyin: pin, english: defs, kana: entry.kana }, deckName: 'CEDICT' });
