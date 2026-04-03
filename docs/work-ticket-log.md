@@ -4,6 +4,40 @@
 
 ---
 
+## 2026-04-03 20:30 — Colour scheme + tiling restoration + caching fix — COMPLETE
+
+**Status:** Done. Cache bumped to `hanzi-v6.15`.
+
+### Colour scheme overhaul
+- Gradient tokens: blue-purple-cyan → warm amber-orange (`#ffb347 / #f07b25 / #e04838`)
+- Accent: blue `#6070ff` → teal-green `#10b981 / #0d9488` (matches DESIGN.md)
+- Dark mode borders: blue-tinted `rgba(96,112,255,…)` → neutral `rgba(255,255,255,…)`
+- Dark mode bg blobs: blue-purple → warm amber-orange
+- Light mode bg blobs: removed (`opacity: 0`) — solid `#f0f1f3`
+- Card face (light mode): `background: #ffffff`, neutral shadow, no blue tints
+- All hardcoded `rgba(96,112,255,…)` values removed from card face, `::before`, deck items, rating buttons
+- App now defaults to light mode; explicit `dark` save overrides
+- Review deck icon: `filter: brightness(0) invert(1)` in dark mode → white
+- Collapsed HSK labels: `.hsk-label-icon` CSS class using gradient vars (was hardcoded hex)
+
+### Accent override fix
+- Root cause: `applyAccentFromHue()` was injecting `<style id="accent-theme">` on every load, overriding all CSS token vars with `blobHue: 240` (blue) from saved appearance
+- Fix: in default background mode, `applyAccentFromHue()` is no longer called; CSS vars define colours directly; stale `accent-theme` element removed on switch back to default
+- Default `blobHue` changed from `240` → `25` (orange/amber); default `color` `#4f7fff` → `#10b981`
+
+### Tiling workspace restored from `claude/infallible-benz` branch
+- `id="workspace"` added to `.split-pane`; `ws-panel` class added to `#info-panel`
+- CSS: `.ws-panel` shared styles (border/radius/margin/transition); `.workspace-dragging` blur effect; `.ws-divider` handle with accent highlight; `.ws-drop-indicator` dashed drop zone
+- `workspace.js`: full `_initTiling()` — `rebuildLayout()`, divider resize (snap-to-edge), long-press drag-to-reorder (250ms), panel edge resize (8px hotzone), MutationObserver for open/close, public API
+
+### Caching fix
+- Root cause: `?v=x.x` query params on `<script>`/`<link>` tags conflicted with SW ASSETS list (bare paths). CDN and HTTP cache treated them as different URLs; SW never served JS/CSS from cache.
+- Fix: removed all `?v=` params from `index.html`. SW `CACHE_NAME` version is the sole cache-bust mechanism. Bump `CACHE_NAME` in `sw.js` → old caches deleted on activate → fresh fetch on install.
+- Old `hanzi-v6.1` cache in preview cleared programmatically via preview eval tools.
+- Stale saved appearance (`blobHue: 240`) cleared from localStorage to allow new defaults.
+
+---
+
 ## 2026-04-03 17:45 — v5.3 Phase: UI Dimming + Context Strip Toggle — COMPLETE
 
 **Status:** Done. Cache bumped to `hanzi-v6.12`.
