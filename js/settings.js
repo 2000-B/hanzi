@@ -21,7 +21,7 @@ function closeSearch() {
 window.addEventListener('blur', () => closeSearch());
 
 // Appearance state
-let appearance = { type: 'default', color: '#4f7fff', image: null, blur: false, blobHue: 240 };
+let appearance = { type: 'default', color: '#10b981', image: null, blur: false, blobHue: 25 };
 let showTimerOnly = false;
 
 function syncSettingsUI() {
@@ -119,8 +119,11 @@ function applyBackground() {
     layer.style.filter = appearance.blur ? 'blur(8px)' : '';
   }
   if (appearance.type === 'default') {
+    // Let CSS variables define accent + gradient; only tint the blobs
     applyBlobTint();
-    applyAccentFromHue(appearance.blobHue);
+    // Remove any stale accent override from a previous custom background
+    const stale = document.getElementById('accent-theme');
+    if (stale) stale.remove();
   } else if (appearance.type === 'solid') {
     applyAccentFromHue(hexToHue(appearance.color));
   } else {
@@ -176,7 +179,7 @@ function toggleBgBlur() {
 }
 
 function resetAppearance() {
-  appearance = { type: 'default', color: '#4f7fff', image: null, blur: false, blobHue: 240 };
+  appearance = { type: 'default', color: '#10b981', image: null, blur: false, blobHue: 25 };
   ['blob-style', 'accent-theme'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();
