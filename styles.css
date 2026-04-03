@@ -1112,12 +1112,14 @@ body.light .info-panel {
    SIDEBAR CONTENT
    ══════════════════════════════════════════ */
 
-/* Review deck (top) — gold/amber gradient to match deck set colors */
+/* Review deck (top) — adapts to the active background's grad vars */
 .review-deck {
   margin: 0 10px 6px;
   padding: 10px 12px;
-  background: linear-gradient(135deg, rgba(255,179,71,.10), rgba(240,123,37,.05));
-  border: 1px solid rgba(255,179,71,.32);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--grad-start) 12%, transparent),
+    color-mix(in srgb, var(--grad-end) 6%, transparent));
+  border: 1px solid color-mix(in srgb, var(--grad-start) 28%, transparent);
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
@@ -1125,7 +1127,25 @@ body.light .info-panel {
   justify-content: space-between;
   transition: all .2s;
 }
-.review-deck:hover { border-color: rgba(255,179,71,.55); background: linear-gradient(135deg, rgba(255,179,71,.16), rgba(240,123,37,.10)); }
+.review-deck:hover {
+  border-color: color-mix(in srgb, var(--grad-start) 50%, transparent);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--grad-start) 18%, transparent),
+    color-mix(in srgb, var(--grad-end) 10%, transparent));
+}
+/* Dark mode: reduce saturation so the amber doesn't blaze against the dark bg */
+body:not(.light) .review-deck {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--grad-start) 7%, transparent),
+    color-mix(in srgb, var(--grad-end) 3%, transparent));
+  border-color: color-mix(in srgb, var(--grad-start) 16%, transparent);
+}
+body:not(.light) .review-deck:hover {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--grad-start) 12%, transparent),
+    color-mix(in srgb, var(--grad-end) 6%, transparent));
+  border-color: color-mix(in srgb, var(--grad-start) 30%, transparent);
+}
 /* Review deck icon — invert to white in dark mode, natural in light */
 .review-deck img { filter: brightness(0) invert(1); opacity: 0.75; }
 body.light .review-deck img { filter: none; opacity: 0.55; }
@@ -1141,7 +1161,7 @@ body.light .review-deck img { filter: none; opacity: 0.55; }
   font-size: 11px;
   font-weight: 600;
   color: var(--grad-mid);
-  background: rgba(255,179,71,.14);
+  background: color-mix(in srgb, var(--grad-start) 14%, transparent);
   border-radius: var(--radius);
   padding: 2px 8px;
   font-feature-settings: "tnum";

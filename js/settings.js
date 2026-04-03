@@ -21,7 +21,7 @@ function closeSearch() {
 window.addEventListener('blur', () => closeSearch());
 
 // Appearance state
-let appearance = { type: 'default', color: '#10b981', image: null, blur: false, blobHue: 25 };
+let appearance = { type: 'default', color: '#ffb347', image: null, blur: false, blobHue: 25 };
 let showTimerOnly = false;
 
 function syncSettingsUI() {
@@ -179,7 +179,7 @@ function toggleBgBlur() {
 }
 
 function resetAppearance() {
-  appearance = { type: 'default', color: '#10b981', image: null, blur: false, blobHue: 25 };
+  appearance = { type: 'default', color: '#ffb347', image: null, blur: false, blobHue: 25 };
   ['blob-style', 'accent-theme'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();

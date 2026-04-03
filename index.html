@@ -139,15 +139,15 @@
           <input type="file" id="bg-image-input" accept="image/*" style="display:none" onchange="loadBgImage(this)">
         </div>
         <div class="color-preview-row" id="bg-blob-tint-row">
-          <span class="settings-toggle-label">blob tint</span>
-          <div class="color-swatch" id="bg-blob-swatch" style="background:#4f50c8">
-            <input type="color" id="bg-blob-picker" value="#4f50c8" oninput="updateBlobTint(this.value)">
+          <span class="settings-toggle-label">accent color</span>
+          <div class="color-swatch" id="bg-blob-swatch" style="background:#ffb347">
+            <input type="color" id="bg-blob-picker" value="#ffb347" oninput="updateBlobTint(this.value)">
           </div>
         </div>
         <div class="color-preview-row" id="bg-color-row" style="display:none">
           <span class="settings-toggle-label">color</span>
-          <div class="color-swatch" id="bg-color-swatch" style="background:#4f7fff">
-            <input type="color" id="bg-color-picker" value="#4f7fff" oninput="updateBgColor(this.value)">
+          <div class="color-swatch" id="bg-color-swatch" style="background:#ffb347">
+            <input type="color" id="bg-color-picker" value="#ffb347" oninput="updateBgColor(this.value)">
           </div>
         </div>
         <div class="settings-toggle-row" id="bg-blur-row" style="display:none">
@@ -314,11 +314,8 @@
             <!-- Card list overlay — sits on top of card-inner -->
             <div class="list-view" id="list-view"></div>
           </div>
-          <!-- Controls tray — chevron sits just below card, tray slides down on open -->
+          <!-- Controls tray — buttons slide out from under card, chevron stays pinned below -->
           <div class="controls-tray-wrap" id="card-controls">
-            <button class="controls-tray-chevron" id="controls-tray-chevron" onclick="toggleControlsTray()" tabindex="-1" data-tip="controls">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
             <div class="controls-tray" id="controls-tray">
               <!-- Shuffle -->
               <button class="btn btn-sm" onclick="shuffleDeck()" data-tip="shuffle">
@@ -333,6 +330,10 @@
               <!-- Undo -->
               <button class="btn btn-sm btn-undo" id="btn-undo" onclick="undoMastered()">undo</button>
             </div>
+            <!-- Chevron pinned below buttons at all times; ∧ closed (points toward card), ∨ open (rotated 180°) -->
+            <button class="controls-tray-chevron" id="controls-tray-chevron" onclick="toggleControlsTray()" tabindex="-1" data-tip="controls">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
         </div>
         <button class="side-nav" onclick="nextCard()">
