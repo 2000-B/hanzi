@@ -310,8 +310,8 @@ function hueToHex(hue) {
 }
 
 function getSecondaryHue(primaryHue) {
-  // Split-complement: 150° away gives nice contrast; amber (25°) → ~175° (teal)
-  return (primaryHue + 150) % 360;
+  // Analogous: accent stays in the same warm family as the gradient
+  return primaryHue;
 }
 
 function applyThemeColors() {
