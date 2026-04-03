@@ -939,7 +939,7 @@ body.light .info-panel {
   text-transform: uppercase;
   margin-bottom: 2px;
 }
-.ip-comp-role.semantic { color: var(--green); }
+.ip-comp-role.semantic { color: var(--accent); }
 .ip-comp-role.phonetic { color: var(--orange); }
 .ip-comp-role.both { color: var(--accent); }
 .ip-comp-meaning {
@@ -2326,7 +2326,7 @@ body.bg-custom::after { display: none !important; }
 .rating-btn.again { background:#e05c6a22; color:var(--red); border:1px solid var(--red); }
 .rating-btn.hard  { background:#e09a4f22; color:var(--orange); border:1px solid var(--orange); }
 .rating-btn.good  { background:#3dba8a22; color:var(--green); border:1px solid var(--green); }
-.rating-btn.easy  { background:rgba(16,185,129,0.12); color:var(--accent); border:1px solid var(--accent); }
+.rating-btn.easy  { background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent); }
 .rating-btn:hover { opacity:0.8; }
 
 /* View toggle pill */
