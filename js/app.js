@@ -21,7 +21,14 @@ async function init() {
   // Load appearance (per-profile)
   try {
     const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');
-    if (savedApp) { appearance = { ...appearance, ...savedApp }; }
+    if (savedApp) {
+      // Migrate old type names
+      if (savedApp.type === 'default') savedApp.type = 'theme';
+      if (savedApp.type === 'solid') savedApp.type = 'color';
+      // Migrate old blobHue → primaryHue
+      if (savedApp.blobHue != null && savedApp.primaryHue == null) savedApp.primaryHue = savedApp.blobHue;
+      appearance = { ...appearance, ...savedApp };
+    }
   } catch(e) {}
   applyBackground();
   syncSettingsUI();

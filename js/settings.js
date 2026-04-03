@@ -21,7 +21,15 @@ function closeSearch() {
 window.addEventListener('blur', () => closeSearch());
 
 // Appearance state
-let appearance = { type: 'default', color: '#ffb347', image: null, blur: false, blobHue: 25 };
+let appearance = {
+  type: 'theme',             // 'theme' | 'color' | 'image'
+  primaryHue: 25,            // hue for gradient elements (--grad-start/mid/end) and blobs
+  complementSecondary: true, // if true, auto-compute secondary from primary
+  secondaryHue: null,        // manual secondary hue; null means use getSecondaryHue(primaryHue)
+  color: '#ffb347',          // solid background color (for type='color')
+  image: null,
+  blur: false
+};
 let showTimerOnly = false;
 
 function syncSettingsUI() {
@@ -44,26 +52,51 @@ function syncSettingsUI() {
   ['timer-only-row','fs-timer-only-row'].forEach(id => { const el=document.getElementById(id); if(el){ el.style.opacity=showTimer?'1':'.4'; el.style.pointerEvents=showTimer?'':'none'; }});
   // Diff ratings
   ['diff-ratings-toggle','fs-diff-ratings-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showDifficultyRatings); });
-  // Background
-  ['default','solid','image'].forEach(t => { const el=document.getElementById('bg-opt-'+t); if(el) el.classList.toggle('active',appearance.type===t); });
+  // Background type pills
+  ['theme','color','image'].forEach(t => { const el=document.getElementById('bg-opt-'+t); if(el) el.classList.toggle('active',appearance.type===t); });
+  // Show/hide rows based on type
+  const isTheme = appearance.type === 'theme';
+  const isColor = appearance.type === 'color';
+  const isImage = appearance.type === 'image';
+  const primaryRow = document.getElementById('bg-primary-row');
+  if(primaryRow) primaryRow.style.display = isTheme ? '' : 'none';
+  const secondaryRow = document.getElementById('bg-secondary-row');
+  if(secondaryRow) secondaryRow.style.display = isTheme ? '' : 'none';
   const colorRow = document.getElementById('bg-color-row');
-  if(colorRow) colorRow.style.display = appearance.type==='solid' ? '' : 'none';
+  if(colorRow) colorRow.style.display = isColor ? '' : 'none';
   const blurRow = document.getElementById('bg-blur-row');
-  if(blurRow) blurRow.style.display = appearance.type==='image' ? '' : 'none';
+  if(blurRow) blurRow.style.display = isImage ? '' : 'none';
   const blurToggle = document.getElementById('bg-blur-toggle');
   if(blurToggle) blurToggle.classList.toggle('on', appearance.blur);
-  const swatch = document.getElementById('bg-color-swatch');
-  if(swatch) swatch.style.background = appearance.color;
-  const picker = document.getElementById('bg-color-picker');
-  if(picker) picker.value = appearance.color;
-  // Blob tint — only shown when using default background
-  const blobTintRow = document.getElementById('bg-blob-tint-row');
-  if(blobTintRow) blobTintRow.style.display = appearance.type==='default' ? '' : 'none';
-  const blobTintHex = hueToHex(appearance.blobHue);
-  const blobSwatch = document.getElementById('bg-blob-swatch');
-  if(blobSwatch) blobSwatch.style.background = blobTintHex;
-  const blobPicker = document.getElementById('bg-blob-picker');
-  if(blobPicker) blobPicker.value = blobTintHex;
+  // Background color swatch
+  const bgColorSwatch = document.getElementById('bg-color-swatch');
+  if(bgColorSwatch) bgColorSwatch.style.background = appearance.color;
+  const bgColorPicker = document.getElementById('bg-color-picker');
+  if(bgColorPicker) bgColorPicker.value = appearance.color;
+  // Primary swatch
+  const primaryHex = hueToHex(appearance.primaryHue);
+  const primarySwatch = document.getElementById('bg-primary-swatch');
+  if(primarySwatch) primarySwatch.style.background = primaryHex;
+  const primaryPicker = document.getElementById('bg-primary-picker');
+  if(primaryPicker) primaryPicker.value = primaryHex;
+  // Secondary swatch — complement or manual
+  const secHue = appearance.complementSecondary
+    ? getSecondaryHue(appearance.primaryHue)
+    : (appearance.secondaryHue != null ? appearance.secondaryHue : getSecondaryHue(appearance.primaryHue));
+  const secHex = hueToHex(secHue);
+  const secSwatch = document.getElementById('bg-secondary-swatch');
+  if(secSwatch) {
+    secSwatch.style.background = secHex;
+    secSwatch.style.opacity = appearance.complementSecondary ? '0.38' : '1';
+    secSwatch.style.pointerEvents = appearance.complementSecondary ? 'none' : 'auto';
+    secSwatch.style.cursor = appearance.complementSecondary ? 'default' : 'pointer';
+  }
+  const secPicker = document.getElementById('bg-secondary-picker');
+  if(secPicker) { secPicker.value = secHex; secPicker.disabled = appearance.complementSecondary; }
+  const complementCb = document.getElementById('complement-checkbox');
+  if(complementCb) complementCb.checked = appearance.complementSecondary;
+  const secondaryLabel = document.getElementById('secondary-color-label');
+  if(secondaryLabel) secondaryLabel.querySelector('span').textContent = appearance.complementSecondary ? 'complement primary' : 'secondary color';
 }
 
 function updatePrefsVisibility() {
@@ -103,12 +136,12 @@ function closeFullSettings() {
 function applyBackground() {
   const layer = document.getElementById('bg-layer');
   if (!layer) return;
-  document.body.classList.toggle('bg-custom', appearance.type !== 'default');
-  if (appearance.type === 'default') {
+  document.body.classList.toggle('bg-custom', appearance.type !== 'theme');
+  if (appearance.type === 'theme') {
     layer.style.background = '';
     layer.style.backgroundImage = '';
     layer.style.filter = '';
-  } else if (appearance.type === 'solid') {
+  } else if (appearance.type === 'color') {
     layer.style.background = appearance.color;
     layer.style.backgroundImage = '';
     layer.style.filter = '';
@@ -118,21 +151,14 @@ function applyBackground() {
     layer.style.backgroundPosition = 'center';
     layer.style.filter = appearance.blur ? 'blur(8px)' : '';
   }
-  if (appearance.type === 'default') {
-    // Let CSS variables define accent + gradient; only tint the blobs
-    applyBlobTint();
-    // Remove any stale accent override from a previous custom background
-    const stale = document.getElementById('accent-theme');
-    if (stale) stale.remove();
-  } else if (appearance.type === 'solid') {
-    applyAccentFromHue(hexToHue(appearance.color));
-  } else {
-    applyAccentFromHue(appearance.blobHue);
-  }
-  // Always persist image so switching back restores it without re-picking
-  const toSave = { type: appearance.type, color: appearance.color, blur: appearance.blur, blobHue: appearance.blobHue };
-  if (appearance.image) toSave.image = appearance.image;
-  try { setProfileData('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
+  // Always apply theme colors (primary gradient + secondary accent)
+  applyThemeColors();
+  // Blob tint follows primary hue (only visible in 'theme' dark mode)
+  applyBlobTint();
+  // Remove any stale legacy accent-theme override
+  const stale = document.getElementById('accent-theme');
+  if (stale) stale.remove();
+  saveAppearance();
 }
 
 function setBackground(type) {
@@ -179,8 +205,8 @@ function toggleBgBlur() {
 }
 
 function resetAppearance() {
-  appearance = { type: 'default', color: '#ffb347', image: null, blur: false, blobHue: 25 };
-  ['blob-style', 'accent-theme'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
+  appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false };
+  ['blob-style', 'accent-theme', 'theme-colors'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();
   removeProfileData('hanzi-appearance');
@@ -283,8 +309,63 @@ function hueToHex(hue) {
   return '#'+[r+m,g+m,b+m].map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('');
 }
 
+function getSecondaryHue(primaryHue) {
+  // Split-complement: 150° away gives nice contrast; amber (25°) → ~175° (teal)
+  return (primaryHue + 150) % 360;
+}
+
+function applyThemeColors() {
+  const p = appearance.primaryHue;
+  const s = appearance.complementSecondary
+    ? getSecondaryHue(p)
+    : (appearance.secondaryHue != null ? appearance.secondaryHue : getSecondaryHue(p));
+  let styleEl = document.getElementById('theme-colors');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'theme-colors';
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent = `
+    :root {
+      --grad-start: hsl(${p}, 85%, 63%);
+      --grad-mid:   hsl(${(p+25)%360}, 78%, 70%);
+      --grad-end:   hsl(${(p-25+360)%360}, 90%, 68%);
+      --accent:        hsl(${s}, 72%, 56%);
+      --accent2:       hsl(${s}, 68%, 48%);
+      --accent-glow:   hsla(${s}, 72%, 56%, 0.18);
+      --accent-soft:   hsla(${s}, 72%, 56%, 0.08);
+      --accent-softer: hsla(${s}, 72%, 56%, 0.06);
+      --accent-border: hsla(${s}, 72%, 56%, 0.25);
+    }
+    .light {
+      --grad-start: hsl(${p}, 80%, 43%);
+      --grad-mid:   hsl(${(p+25)%360}, 74%, 50%);
+      --grad-end:   hsl(${(p-25+360)%360}, 85%, 47%);
+      --accent:        hsl(${s}, 65%, 40%);
+      --accent2:       hsl(${s}, 60%, 33%);
+      --accent-glow:   hsla(${s}, 65%, 40%, 0.18);
+      --accent-soft:   hsla(${s}, 65%, 40%, 0.10);
+      --accent-softer: hsla(${s}, 65%, 40%, 0.05);
+      --accent-border: hsla(${s}, 65%, 40%, 0.30);
+    }
+  `;
+}
+
+function saveAppearance() {
+  const toSave = {
+    type: appearance.type,
+    primaryHue: appearance.primaryHue,
+    complementSecondary: appearance.complementSecondary,
+    secondaryHue: appearance.secondaryHue,
+    color: appearance.color,
+    blur: appearance.blur
+  };
+  if (appearance.image) toSave.image = appearance.image;
+  try { setProfileData('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
+}
+
 function applyBlobTint() {
-  const h = appearance.blobHue;
+  const h = appearance.primaryHue;
   let styleEl = document.getElementById('blob-style');
   if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'blob-style'; document.head.appendChild(styleEl); }
   styleEl.textContent = `
@@ -302,14 +383,26 @@ function applyBlobTint() {
     }`;
 }
 
-function updateBlobTint(hex) {
-  appearance.blobHue = hexToHue(hex);
-  const swatch = document.getElementById('bg-blob-swatch');
-  if(swatch) swatch.style.background = hex;
+function updatePrimaryColor(hex) {
+  appearance.primaryHue = hexToHue(hex);
+  if (appearance.complementSecondary) syncSettingsUI(); // auto-update secondary swatch
+  applyThemeColors();
   applyBlobTint();
-  const toSave = { type: appearance.type, color: appearance.color, blur: appearance.blur, blobHue: appearance.blobHue };
-  if(appearance.type==='image' && appearance.image) toSave.image = appearance.image;
-  try { setProfileData('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
+  saveAppearance();
+}
+
+function updateSecondaryColor(hex) {
+  appearance.secondaryHue = hexToHue(hex);
+  applyThemeColors();
+  saveAppearance();
+}
+
+function toggleComplementSecondary() {
+  appearance.complementSecondary = !appearance.complementSecondary;
+  if (appearance.complementSecondary) appearance.secondaryHue = null;
+  syncSettingsUI();
+  applyThemeColors();
+  saveAppearance();
 }
 
 function toggleTheme() {

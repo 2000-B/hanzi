@@ -132,24 +132,37 @@
           <button class="toggle-switch" id="fs-theme-toggle" onclick="toggleTheme()"></button>
         </div>
         <div class="fs-section-label" style="margin-top:4px">background</div>
-        <div class="bg-picker">
-          <button class="bg-option active" id="bg-opt-default" onclick="setBackground('default')">default</button>
-          <button class="bg-option" id="bg-opt-solid" onclick="setBackground('solid')">solid color</button>
-          <button class="bg-option" id="bg-opt-image" onclick="document.getElementById('bg-image-input').click()">custom image</button>
+        <div class="bg-picker" style="margin-top:6px">
+          <button class="bg-option active" id="bg-opt-theme" onclick="setBackground('theme')">theme</button>
+          <button class="bg-option" id="bg-opt-color" onclick="setBackground('color')">background color</button>
+          <button class="bg-option" id="bg-opt-image" onclick="selectBgImage()">image</button>
           <input type="file" id="bg-image-input" accept="image/*" style="display:none" onchange="loadBgImage(this)">
         </div>
-        <div class="color-preview-row" id="bg-blob-tint-row">
-          <span class="settings-toggle-label">accent color</span>
-          <div class="color-swatch" id="bg-blob-swatch" style="background:#ffb347">
-            <input type="color" id="bg-blob-picker" value="#ffb347" oninput="updateBlobTint(this.value)">
+        <!-- theme: primary color -->
+        <div class="color-preview-row" id="bg-primary-row">
+          <span class="settings-toggle-label">primary color</span>
+          <div class="color-swatch" id="bg-primary-swatch" style="background:#ffb347">
+            <input type="color" id="bg-primary-picker" value="#ffb347" oninput="updatePrimaryColor(this.value)">
           </div>
         </div>
+        <!-- theme: secondary color with complement toggle -->
+        <div class="color-preview-row" id="bg-secondary-row">
+          <label class="settings-toggle-label" id="secondary-color-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none">
+            <input type="checkbox" id="complement-checkbox" checked onchange="toggleComplementSecondary()" style="cursor:pointer;accent-color:var(--accent)">
+            <span>complement primary</span>
+          </label>
+          <div class="color-swatch" id="bg-secondary-swatch" style="background:#10b981;opacity:0.38;pointer-events:none;cursor:default;transition:opacity .2s,box-shadow .2s">
+            <input type="color" id="bg-secondary-picker" value="#10b981" oninput="updateSecondaryColor(this.value)" disabled>
+          </div>
+        </div>
+        <!-- background color type: single color picker -->
         <div class="color-preview-row" id="bg-color-row" style="display:none">
           <span class="settings-toggle-label">color</span>
           <div class="color-swatch" id="bg-color-swatch" style="background:#ffb347">
             <input type="color" id="bg-color-picker" value="#ffb347" oninput="updateBgColor(this.value)">
           </div>
         </div>
+        <!-- image type: blur toggle -->
         <div class="settings-toggle-row" id="bg-blur-row" style="display:none">
           <span class="settings-toggle-label">blur</span>
           <button class="toggle-switch" id="bg-blur-toggle" onclick="toggleBgBlur()"></button>
