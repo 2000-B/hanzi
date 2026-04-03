@@ -1430,12 +1430,13 @@ body.light .empty-sub {
 }
 .study-area.active { display: flex; }
 
-/* Vertical column holding card + tray so tray sits just below the card bottom edge */
+/* Vertical column: card only. Tray is absolutely positioned below so card never moves. */
 .card-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+  position: relative;
 }
 
 .side-nav {
@@ -1677,24 +1678,25 @@ body.light .ctx-hanzi {
 }
 .ip-back-btn:hover { color: var(--accent); }
 
-/* Controls tray — lives in .card-column, sits just below card bottom edge.
-   Chevron is visible; tray slides DOWN on open.
-   ORIGINAL (absolute-at-bottom) preserved below for rollback:
-     position: absolute; bottom: 10px; left: 0; right: 0; z-index: 5;
-     .tray-open { padding-bottom: 16px; }
-     .controls-tray-wrap.tray-open .controls-tray-chevron svg { transform: rotate(180deg); } */
+/* Controls tray — absolutely positioned below .card-column so card never shifts.
+   Chevron (∨ closed, ∧ open) stays pinned; buttons slide out between card and chevron.
+   ORIGINAL (absolute-at-panel-bottom) preserved for rollback:
+     position: absolute; bottom: 10px; left: 0; right: 0; */
 .controls-tray-wrap {
   display: none;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0;
-  width: 100%;
 }
 .controls-tray-wrap.active {
   display: flex;
-  position: relative;
+  position: absolute;
+  top: 100%;          /* flush with card-column bottom edge */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 5;
   background: transparent;
+  width: 100%;
+  max-width: 480px;
 }
 .controls-tray-wrap.tray-open {
   padding-bottom: 0;
