@@ -1,0 +1,232 @@
+// CONTEXT STRIP
+// ══════════════════════════════════════════
+function renderContextStrip() {
+  const strip = document.getElementById('context-strip');
+  const isVisible = currentMode === 'study' && activeDeck.length > 0 && showContextStrip;
+  strip.classList.toggle('active', isVisible);
+  if (!isVisible) { strip.innerHTML = ''; return; }
+
+  const HALF = 6;
+  const total = activeDeck.length;
+  const strip_size = Math.min(HALF * 2 + 1, total);
+  const indices = [];
+
+  if (total <= HALF * 2 + 1) {
+    for (let i = 0; i < total; i++) indices.push(i);
+  } else {
+    for (let offset = -HALF; offset <= HALF; offset++) {
+      indices.push((currentIndex + offset + total) % total);
+    }
+  }
+
+  strip.innerHTML = '';
+  let activeTile = null;
+  for (const idx of indices) {
+    const card = activeDeck[idx];
+    const cd = cardData[card.hanzi] || {};
+    const isCurrent = idx === currentIndex;
+    const tile = document.createElement('button');
+    tile.className = 'ctx-tile' + (isCurrent ? ' ctx-current' : '') + (cd.mastered ? ' ctx-mastered' : '');
+    tile.innerHTML = `<span class="ctx-hanzi">${card.hanzi}</span>`;
+    tile.title = `${card.pinyin} — ${card.english}`;
+    tile.onclick = () => { currentIndex = idx; renderCard(); };
+    strip.appendChild(tile);
+    if (isCurrent) activeTile = tile;
+  }
+  // Scroll active tile to horizontal center.
+  // We add padding = stripWidth/2 on each side so the first and last tiles
+  // can always be scrolled to center (tiles alone are narrower than the strip).
+  if (activeTile) {
+    requestAnimationFrame(() => {
+      activeTile.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' });
+    });
+  }
+}
+
+function setListView(active) {
+  listViewActive = active;
+  document.getElementById('list-view').classList.toggle('active', active);
+  const btn = document.getElementById('btn-card-list');
+  btn.classList.toggle('active', active);
+  btn.blur();
+  if (active) renderListView();
+}
+
+function renderListView() {
+  const today = new Date().toISOString().slice(0, 10);
+  const el = document.getElementById('list-view');
+  el.innerHTML = '';
+  const scroll = document.createElement('div');
+  scroll.className = 'list-scroll';
+  el.appendChild(scroll);
+  let activeRow = null;
+  activeDeck.forEach((card, i) => {
+    const cd = cardData[card.hanzi] || {};
+    const isDue = cd.reviewFlag || (cd.mastered && cd.due && cd.due <= today);
+    const row = document.createElement('div');
+    row.className = 'list-row' + (i === currentIndex ? ' active-row' : '');
+    row.innerHTML = `
+      <span class="list-hanzi">${card.hanzi}</span>
+      <span class="list-pinyin">${card.pinyin}</span>
+      <span class="list-english">${card.english}</span>
+      <span class="list-badges">
+        ${cd.mastered ? '<span class="list-mastered">✓</span>' : ''}
+        ${isDue ? '<span class="list-review-badge">⟳</span>' : ''}
+      </span>`;
+    row.onclick = () => {
+      currentIndex = i;
+      setListView(false);
+      renderCard();
+    };
+    scroll.appendChild(row);
+    if (i === currentIndex) activeRow = row;
+  });
+  if (activeRow) requestAnimationFrame(() => activeRow.scrollIntoView({ block: 'center' }));
+}
+
+// ══════════════════════════════════════════
+
+// KEYBOARD SHORTCUTS
+// ══════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  // Don't intercept when typing in inputs
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    if (e.key === '/' && e.target !== document.getElementById('search-input')) {
+      // Allow / to focus search even from other inputs
+    } else if (e.key === 'Escape' && e.target === document.getElementById('search-input')) {
+      closeSearchBar();
+      return;
+    } else {
+      return;
+    }
+  }
+
+  if (e.key === '/' || (e.metaKey && e.key === 'k')) {
+    e.preventDefault();
+    const wrap = document.getElementById('header-search-wrap');
+    if (!wrap.classList.contains('open')) toggleSearch();
+    else document.getElementById('search-input').focus();
+    return;
+  }
+
+  if (currentMode === 'study') {
+    if (e.key === ' ') { e.preventDefault(); if (listViewActive) setListView(false); else flipCard(); }
+    if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && (e.altKey || e.metaKey || e.ctrlKey)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevCard(); }
+  }
+
+  if (currentMode === 'test') {
+    if (e.key === ' ' && document.getElementById('next-test-btn').style.display !== 'none') {
+      e.preventDefault();
+      nextTestCard();
+    }
+  }
+
+  if (e.key === 'Escape') {
+    closeSettings();
+    closeSearch();
+    searchSelectedIdx = -1;
+    if (infoPanelOpen) toggleInfoPanel();
+  }
+});
+
+// Close search results on click outside
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('header-search-wrap');
+  if (!wrap.contains(e.target)) {
+    document.getElementById('search-results').style.display = 'none';
+    searchSelectedIdx = -1;
+    // Close the pill if click outside and results are empty
+    if (document.getElementById('search-input').value === '') {
+      closeSearch();
+    }
+  }
+});
+
+// ══════════════════════════════════════════
+// SWIPE GESTURES (mobile)
+// ══════════════════════════════════════════
+(function initSwipe() {
+  let touchStartX = 0, touchStartY = 0;
+  const main = document.getElementById('main-content');
+
+  main.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  main.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return; // too short or vertical
+
+    if (currentMode === 'study') {
+      if (dx < -50) nextCard();
+      if (dx > 50) prevCard();
+    }
+  }, { passive: true });
+})();
+
+// ══════════════════════════════════════════
+// LANGUAGE SWITCHING
+// ══════════════════════════════════════════
+function applyLangUI() {
+  const cfg = lang();
+  // Header + page title
+  document.querySelector('.header-title').textContent = cfg.headerTitle;
+  document.title = cfg.pageTitle;
+  // Search placeholder
+  const si = document.getElementById('search-input');
+  if (si) si.placeholder = cfg.searchPlaceholder;
+  // "Show pinyin/romaji" labels
+  ['show-reading-label', 'fs-show-reading-label'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = cfg.showReadingLabel;
+  });
+  // Language pill active state
+  document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+  document.getElementById('lang-ja').classList.toggle('active', currentLang === 'ja');
+  // Noto Sans JP — load on first Japanese switch
+  if (currentLang === 'ja' && !document.getElementById('font-jp')) {
+    const link = document.createElement('link');
+    link.id = 'font-jp';
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&display=swap';
+    document.head.appendChild(link);
+  }
+}
+
+function switchLanguage(langId) {
+  if (currentLang === langId) return;
+  currentLang = langId;
+  localStorage.setItem('app-lang', langId);
+
+  // Clear active deck
+  activeDeckName = null;
+  activeDeck = [];
+  currentIndex = 0;
+  Object.keys(decks).forEach(k => {
+    if (k.match(/^hsk \d/) || k.match(/^jlpt \d/)) delete decks[k];
+  });
+
+  // Reload progress for new language
+  cardData = {};
+  loadProgress();
+  loadTutorHistory();
+
+  applyLangUI();
+  renderSidebar();
+  buildSearchIndex();
+
+  // Reset card display to empty state
+  document.getElementById('empty-view').style.display = '';
+  document.getElementById('study-view').classList.remove('active');
+  document.getElementById('card-controls').classList.remove('active');
+  document.body.classList.remove('deck-active');
+  if (infoPanelOpen) {
+    document.getElementById('info-panel-scroll').innerHTML = '';
+  }
+}
+
+// ══════════════════════════════════════════

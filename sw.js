@@ -1,7 +1,22 @@
-const CACHE_NAME = 'hanzi-v5.15';
+const CACHE_NAME = 'hanzi-v6.13';
 const ASSETS = [
   '/',
   '/index.html',
+  '/styles.css',
+  '/js/state.js',
+  '/js/data.js',
+  '/js/persistence.js',
+  '/js/settings.js',
+  '/js/sidebar.js',
+  '/js/deck.js',
+  '/js/study.js',
+  '/js/test.js',
+  '/js/info-panel.js',
+  '/js/search.js',
+  '/js/extras.js',
+  '/js/analytics.js',
+  '/js/events.js',
+  '/js/app.js',
   '/manifest.json',
   '/data/hsk1.json',
   '/data/hsk2.json',
@@ -31,12 +46,12 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activate: clean old caches
+// Activate: clean old caches and take control immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
   self.clients.claim();
 });
