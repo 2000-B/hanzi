@@ -10,8 +10,8 @@
   --border2:  rgba(255,255,255,0.16);
   --border3:  rgba(255,255,255,0.20);
   --text:     #e8e8f0;
-  --text2:    #8888a8;
-  --text3:    #4a4a68;
+  --text2:    #9898bc;
+  --text3:    #62628e;
   --accent:   #10b981;
   --accent2:  #0d9488;
   --accent-glow: rgba(16,185,129,0.20);
@@ -44,8 +44,8 @@
   --border2:  rgba(0,0,0,0.09);
   --border3:  rgba(0,0,0,0.13);
   --text:     #111118;
-  --text2:    #6b7280;
-  --text3:    #9ca3af;
+  --text2:    #4b5568;
+  --text3:    #6b7280;
   --accent:   #10b981;
   --accent2:  #0d9488;
   --accent-glow: rgba(16,185,129,0.15);
@@ -700,7 +700,7 @@ body.light .sidebar.collapsed .deck-name {
   border: 1px solid var(--border2);
   border-radius: var(--radius-md);
   box-shadow: 0 8px 32px rgba(0,0,0,.35);
-  margin: 6px 6px 6px 0;
+  margin: 6px 6px 6px 3px;
   flex-direction: column;
   position: relative;
   width: var(--info-panel-w);
@@ -898,7 +898,7 @@ body.light .info-panel {
   font-style: italic;
   line-height: 1.5;
   padding: 10px 12px;
-  background: linear-gradient(135deg, rgba(79,127,255,.06), rgba(167,139,255,.04));
+  background: var(--bg3);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   margin-bottom: 6px;
@@ -1112,12 +1112,12 @@ body.light .info-panel {
    SIDEBAR CONTENT
    ══════════════════════════════════════════ */
 
-/* Review deck (top) */
+/* Review deck (top) — gold/amber gradient to match deck set colors */
 .review-deck {
   margin: 0 10px 6px;
   padding: 10px 12px;
-  background: linear-gradient(135deg, var(--accent-soft), rgba(167,139,255,.05));
-  border: 1px solid var(--accent-border);
+  background: linear-gradient(135deg, rgba(255,179,71,.10), rgba(240,123,37,.05));
+  border: 1px solid rgba(255,179,71,.32);
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
@@ -1125,7 +1125,7 @@ body.light .info-panel {
   justify-content: space-between;
   transition: all .2s;
 }
-.review-deck:hover { border-color: var(--accent); background: linear-gradient(135deg, var(--accent-glow), rgba(16,185,129,.06)); }
+.review-deck:hover { border-color: rgba(255,179,71,.55); background: linear-gradient(135deg, rgba(255,179,71,.16), rgba(240,123,37,.10)); }
 /* Review deck icon — invert to white in dark mode, natural in light */
 .review-deck img { filter: brightness(0) invert(1); opacity: 0.75; }
 body.light .review-deck img { filter: none; opacity: 0.55; }
@@ -1140,8 +1140,8 @@ body.light .review-deck img { filter: none; opacity: 0.55; }
 .review-badge {
   font-size: 11px;
   font-weight: 600;
-  color: var(--accent);
-  background: var(--accent-glow);
+  color: var(--grad-mid);
+  background: rgba(255,179,71,.14);
   border-radius: var(--radius);
   padding: 2px 8px;
   font-feature-settings: "tnum";
@@ -1403,12 +1403,20 @@ body.light .empty-sub {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px 54px;
+  padding: 20px;
   gap: 16px;
   overflow: auto;
   min-height: 0;
 }
 .study-area.active { display: flex; }
+
+/* Vertical column holding card + tray so tray sits just below the card bottom edge */
+.card-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
 
 .side-nav {
   width: 36px;
@@ -1470,13 +1478,8 @@ body.light .side-nav.nav-back { color: #222; }
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.10);
-  background:
-    linear-gradient(165deg, rgba(60,65,80,0.10) 0%, rgba(20,20,30,0.04) 50%, rgba(50,45,60,0.08) 100%),
-    linear-gradient(to bottom, rgba(16,16,34,0.92) 0%, rgba(10,10,22,0.95) 100%);
-  box-shadow:
-    0 8px 32px rgba(0,0,0,.35),
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 rgba(255,255,255,0.03);
+  background: rgba(13,13,26,0.92);
+  box-shadow: 0 8px 32px rgba(0,0,0,.40);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1485,15 +1488,13 @@ body.light .side-nav.nav-back { color: #222; }
   gap: 8px;
   overflow: hidden;
 }
-/* Glass sheen overlay */
+/* Sheen overlay — hidden in dark mode, subtle in light mode */
 .card-face::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  background:
-    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.07) 0%, transparent 60%),
-    linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+  background: none;
   pointer-events: none;
 }
 body.light .card-face {
@@ -1505,8 +1506,7 @@ body.light .card-face {
     inset 0 1px 0 rgba(255,255,255,1);
 }
 body.light .card-face::before {
-  background:
-    radial-gradient(ellipse 80% 50% at 30% 10%, rgba(255,255,255,0.6) 0%, transparent 60%);
+  background: none;
 }
 .card-back { transform: rotateY(180deg); }
 
@@ -1657,24 +1657,27 @@ body.light .ctx-hanzi {
 }
 .ip-back-btn:hover { color: var(--accent); }
 
-/* Controls tray */
+/* Controls tray — lives in .card-column, sits just below card bottom edge.
+   Chevron is visible; tray slides DOWN on open.
+   ORIGINAL (absolute-at-bottom) preserved below for rollback:
+     position: absolute; bottom: 10px; left: 0; right: 0; z-index: 5;
+     .tray-open { padding-bottom: 16px; }
+     .controls-tray-wrap.tray-open .controls-tray-chevron svg { transform: rotate(180deg); } */
 .controls-tray-wrap {
   display: none;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+  width: 100%;
 }
 .controls-tray-wrap.active {
   display: flex;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 5;
   background: transparent;
 }
 .controls-tray-wrap.tray-open {
-  padding-bottom: 16px;
+  padding-bottom: 0;
 }
 .controls-tray-chevron {
   width: 36px;
@@ -1713,7 +1716,7 @@ body.light .controls-tray-chevron:hover { color: #111; opacity: 1; }
 .controls-tray-wrap.tray-open .controls-tray {
   max-height: 60px;
   opacity: 1;
-  padding: 10px 0 0;
+  padding: 8px 0 4px;
 }
 /* Dark glass buttons in dark mode */
 .controls-tray .btn {
