@@ -566,11 +566,86 @@ body.light .sidebar.collapsed .deck-name {
   position: relative;
   flex: 1;
   min-width: 200px;
-  /* No flex/width transitions — panels snap open/closed */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin: 3px;
+  transition: transform .25s ease, opacity .25s ease, filter .2s ease;
 }
 .ws-panel:not(.open) {
   display: none !important;
   pointer-events: none;
+}
+
+/* ── Tiling: drag-to-reorder ── */
+.workspace-dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.workspace-dragging .ws-panel:not(.drag-source) {
+  filter: blur(3px);
+  opacity: 0.45;
+  transform: scale(0.97);
+}
+.drag-source {
+  cursor: grabbing !important;
+  z-index: 20;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  opacity: 0.92;
+}
+.panel-grab-ready { cursor: grab !important; }
+
+/* ── Tiling: divider handle ── */
+.ws-divider {
+  flex-shrink: 0;
+  background: transparent;
+  position: relative;
+  z-index: 5;
+  display: none;
+}
+.ws-divider.visible { display: block; }
+.ws-divider.horizontal {
+  width: 6px;
+  cursor: col-resize;
+  margin: 6px 0;
+}
+.ws-divider.vertical {
+  height: 6px;
+  cursor: row-resize;
+  margin: 0 6px;
+}
+.ws-divider::after {
+  content: '';
+  position: absolute;
+  border-radius: 2px;
+  background: var(--border2);
+  opacity: 0;
+  transition: opacity .2s, background .2s;
+}
+.ws-divider.horizontal::after {
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px; height: 32px;
+}
+.ws-divider.vertical::after {
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  height: 3px; width: 32px;
+}
+.ws-divider:hover::after,
+.ws-divider.active::after {
+  opacity: 1;
+  background: var(--accent);
+}
+
+/* ── Tiling: drop indicator ── */
+.ws-drop-indicator {
+  position: absolute;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-md);
+  z-index: 15;
+  pointer-events: none;
+  transition: all .12s ease;
 }
 
 /* Per-panel fullscreen */

@@ -157,6 +157,390 @@ function initWorkspace() {
     const toggle = document.getElementById('snap-grid-toggle');
     if (toggle) toggle.classList.toggle('on', wsSnapEnabled);
   }
+  _initTiling();
+}
+
+// ── Tiling system ─────────────────────────
+function _initTiling() {
+  const workspace = document.getElementById('workspace');
+  if (!workspace) return;
+  const LONG_PRESS_MS = 250;
+
+  // Panel order state — visible panel IDs in display order
+  let panelOrder = ['flashcard'];
+  let layoutDirection = 'row';
+
+  function getPanelEl(id) {
+    return workspace.querySelector(`[data-panel-id="${id}"]`);
+  }
+
+  function getVisiblePanels() {
+    return Array.from(workspace.querySelectorAll('.ws-panel')).filter(el => {
+      if (el.dataset.panelId === 'flashcard') return true;
+      return el.classList.contains('open');
+    });
+  }
+
+  // ── Rebuild DOM order + insert dividers ──
+  function rebuildLayout() {
+    workspace.querySelectorAll('.ws-divider').forEach(d => d.remove());
+
+    const visibleIds = panelOrder.filter(id => {
+      const el = getPanelEl(id);
+      if (!el) return false;
+      if (id === 'flashcard') return true;
+      return el.classList.contains('open');
+    });
+
+    // Add visible panels not yet in panelOrder
+    getVisiblePanels().map(el => el.dataset.panelId).forEach(id => {
+      if (!visibleIds.includes(id)) visibleIds.push(id);
+    });
+
+    const frag = document.createDocumentFragment();
+    visibleIds.forEach((id, i) => {
+      const el = getPanelEl(id);
+      if (!el) return;
+      frag.appendChild(el);
+      if (i < visibleIds.length - 1) {
+        const div = document.createElement('div');
+        div.className = `ws-divider visible ${layoutDirection === 'row' ? 'horizontal' : 'vertical'}`;
+        div.dataset.leftPanel = id;
+        div.dataset.rightPanel = visibleIds[i + 1];
+        frag.appendChild(div);
+      }
+    });
+
+    // Keep non-visible panels in DOM but hidden
+    workspace.querySelectorAll('.ws-panel').forEach(el => {
+      if (!visibleIds.includes(el.dataset.panelId)) frag.appendChild(el);
+    });
+
+    workspace.appendChild(frag);
+    workspace.style.flexDirection = layoutDirection;
+    panelOrder = visibleIds;
+  }
+
+  // ── Divider drag to resize ──
+  let divDragging = false, divStartPos = 0, divLeftEl = null, divRightEl = null;
+  let divLeftStart = 0, divRightStart = 0;
+
+  workspace.addEventListener('mousedown', function(e) {
+    const divider = e.target.closest('.ws-divider');
+    if (!divider) return;
+    e.preventDefault();
+    divDragging = true;
+    divider.classList.add('active');
+    divLeftEl = getPanelEl(divider.dataset.leftPanel);
+    divRightEl = getPanelEl(divider.dataset.rightPanel);
+
+    const isRow = layoutDirection === 'row';
+    divStartPos = isRow ? e.clientX : e.clientY;
+    divLeftStart = isRow ? divLeftEl.offsetWidth : divLeftEl.offsetHeight;
+    divRightStart = isRow ? divRightEl.offsetWidth : divRightEl.offsetHeight;
+
+    const SNAP_DIST = 12;
+    const onMove = (ev) => {
+      if (!divDragging) return;
+      const wsRect = workspace.getBoundingClientRect();
+      const snapTargets = isRow
+        ? [wsRect.left, wsRect.right, wsRect.left + wsRect.width / 2]
+        : [wsRect.top, wsRect.bottom, wsRect.top + wsRect.height / 2];
+      workspace.querySelectorAll('.ws-panel').forEach(p => {
+        if (p === divLeftEl || p === divRightEl || p.offsetWidth === 0) return;
+        const r = p.getBoundingClientRect();
+        if (isRow) { snapTargets.push(r.left, r.right); }
+        else { snapTargets.push(r.top, r.bottom); }
+      });
+
+      let mousePos = isRow ? ev.clientX : ev.clientY;
+      for (const t of snapTargets) {
+        if (Math.abs(mousePos - t) < SNAP_DIST) { mousePos = t; break; }
+      }
+
+      const delta = mousePos - divStartPos;
+      const newLeft = Math.max(200, divLeftStart + delta);
+      const newRight = Math.max(200, divRightStart - delta);
+      if (isRow) {
+        divLeftEl.style.width = newLeft + 'px'; divLeftEl.style.flex = 'none';
+        divRightEl.style.width = newRight + 'px'; divRightEl.style.flex = 'none';
+      } else {
+        divLeftEl.style.height = newLeft + 'px'; divLeftEl.style.flex = 'none';
+        divRightEl.style.height = newRight + 'px'; divRightEl.style.flex = 'none';
+      }
+    };
+    const onUp = () => {
+      divDragging = false;
+      divider.classList.remove('active');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+
+  // ── Long-press drag to reorder panels ──
+  let longPressTimer = null, dragSource = null, isDragging = false;
+  let dragOriginX = 0, dragOriginY = 0, dragStartX = 0, dragStartY = 0;
+  let dropIndicator = null;
+
+  function createDropIndicator() {
+    if (!dropIndicator) {
+      dropIndicator = document.createElement('div');
+      dropIndicator.className = 'ws-drop-indicator';
+      dropIndicator.style.display = 'none';
+      workspace.appendChild(dropIndicator);
+    }
+    return dropIndicator;
+  }
+
+  function startLongPress(el, e) {
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragOriginX = e.clientX; dragOriginY = e.clientY;
+    longPressTimer = setTimeout(() => {
+      isDragging = true;
+      dragSource = el;
+      el.classList.add('panel-grab-ready', 'drag-source');
+      workspace.classList.add('workspace-dragging');
+      createDropIndicator();
+      document.addEventListener('mousemove', onDragMove);
+      document.addEventListener('mouseup', onDragEnd);
+    }, LONG_PRESS_MS);
+    document.addEventListener('mousemove', onPreDragMove);
+    document.addEventListener('mouseup', cancelLongPress);
+  }
+
+  function onPreDragMove(e) {
+    if (Math.abs(e.clientX - dragStartX) > 10 || Math.abs(e.clientY - dragStartY) > 10) {
+      cancelLongPress();
+    }
+  }
+
+  function cancelLongPress() {
+    clearTimeout(longPressTimer); longPressTimer = null;
+    document.removeEventListener('mousemove', onPreDragMove);
+    document.removeEventListener('mouseup', cancelLongPress);
+  }
+
+  function onDragMove(e) {
+    if (!isDragging || !dragSource) return;
+    const dx = e.clientX - dragOriginX;
+    const dy = e.clientY - dragOriginY;
+    dragSource.style.transform = `translate(${dx}px, ${dy}px)`;
+    dragSource.style.transition = 'none';
+
+    const indicator = createDropIndicator();
+    const panels = getVisiblePanels().filter(p => p !== dragSource);
+    let bestTarget = null, bestSide = null, bestDist = Infinity;
+
+    panels.forEach(panel => {
+      const rect = panel.getBoundingClientRect();
+      const sides = [
+        { side: 'left',   dist: Math.abs(e.clientX - rect.left),   x: rect.left,      y: rect.top,       w: 4,          h: rect.height },
+        { side: 'right',  dist: Math.abs(e.clientX - rect.right),  x: rect.right - 4, y: rect.top,       w: 4,          h: rect.height },
+        { side: 'top',    dist: Math.abs(e.clientY - rect.top),     x: rect.left,      y: rect.top,       w: rect.width, h: 4           },
+        { side: 'bottom', dist: Math.abs(e.clientY - rect.bottom),  x: rect.left,      y: rect.bottom - 4,w: rect.width, h: 4           },
+      ];
+      sides.forEach(s => {
+        const inX = e.clientX >= rect.left - 40 && e.clientX <= rect.right + 40;
+        const inY = e.clientY >= rect.top - 40 && e.clientY <= rect.bottom + 40;
+        if (inX && inY && s.dist < bestDist && s.dist < 80) {
+          bestDist = s.dist; bestTarget = panel; bestSide = s;
+        }
+      });
+    });
+
+    if (bestTarget && bestSide) {
+      const wsRect = workspace.getBoundingClientRect();
+      indicator.style.display = 'block';
+      indicator.style.left = (bestSide.x - wsRect.left) + 'px';
+      indicator.style.top  = (bestSide.y - wsRect.top) + 'px';
+      indicator.style.width  = bestSide.w + 'px';
+      indicator.style.height = bestSide.h + 'px';
+      indicator.dataset.targetPanel = bestTarget.dataset.panelId;
+      indicator.dataset.side = bestSide.side;
+    } else {
+      indicator.style.display = 'none';
+    }
+  }
+
+  function onDragEnd() {
+    document.removeEventListener('mousemove', onDragMove);
+    document.removeEventListener('mouseup', onDragEnd);
+    document.removeEventListener('mousemove', onPreDragMove);
+    document.removeEventListener('mouseup', cancelLongPress);
+    clearTimeout(longPressTimer); longPressTimer = null;
+
+    if (isDragging && dragSource) {
+      const indicator = dropIndicator;
+      if (indicator && indicator.style.display !== 'none') {
+        const targetId = indicator.dataset.targetPanel;
+        const side = indicator.dataset.side;
+        const sourceId = dragSource.dataset.panelId;
+        if (targetId && sourceId !== targetId) {
+          panelOrder = panelOrder.filter(id => id !== sourceId);
+          const targetIdx = panelOrder.indexOf(targetId);
+          if (side === 'left' || side === 'top') panelOrder.splice(targetIdx, 0, sourceId);
+          else panelOrder.splice(targetIdx + 1, 0, sourceId);
+          if (side === 'top' || side === 'bottom') layoutDirection = 'column';
+          else layoutDirection = 'row';
+          rebuildLayout();
+        }
+      }
+      dragSource.style.transform = '';
+      dragSource.style.transition = '';
+      dragSource.classList.remove('panel-grab-ready', 'drag-source');
+      workspace.classList.remove('workspace-dragging');
+      if (dropIndicator) dropIndicator.style.display = 'none';
+    }
+    isDragging = false;
+    dragSource = null;
+  }
+
+  // ── Attach long-press to all panels ──
+  workspace.addEventListener('mousedown', function(e) {
+    if (e.button !== 0) return;
+    if (e.target.closest('.ws-divider')) return;
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+
+    // Avoid drag from resize hotzone edges
+    const rect = panel.getBoundingClientRect();
+    const EDGE = 10;
+    if (e.clientX <= rect.left + EDGE || e.clientX >= rect.right - EDGE) return;
+    if (e.clientY <= rect.top + EDGE || e.clientY >= rect.bottom - EDGE) return;
+
+    // Don't interfere with interactive elements
+    if (e.target.closest('button, input, textarea, a, select, .controls-tray, .list-view')) return;
+
+    // Need at least 2 visible panels to drag
+    if (getVisiblePanels().length < 2) return;
+
+    startLongPress(panel, e);
+  });
+
+  // ── Panel edge resize ──
+  let resizing = false, resizePanel = null, resizeEdge = '';
+  let resizeStartX = 0, resizeStartY = 0, resizeStartW = 0, resizeStartH = 0;
+
+  function getResizeEdge(panel, e) {
+    const rect = panel.getBoundingClientRect();
+    const E = 8;
+    const onL = e.clientX >= rect.left - E && e.clientX <= rect.left + E;
+    const onR = e.clientX >= rect.right - E && e.clientX <= rect.right + E;
+    const onB = e.clientY >= rect.bottom - E && e.clientY <= rect.bottom + E;
+    const onT = e.clientY >= rect.top - E && e.clientY <= rect.top + E;
+    if ((onL || onR) && onB) return (onL ? 'left' : 'right') + '-bottom';
+    if ((onL || onR) && onT) return (onL ? 'left' : 'right') + '-top';
+    if (onL) return 'left'; if (onR) return 'right';
+    if (onB) return 'bottom'; if (onT) return 'top';
+    return '';
+  }
+
+  function getCursorForEdge(edge) {
+    if (edge.includes('bottom') && edge.includes('left'))  return 'nesw-resize';
+    if (edge.includes('bottom') && edge.includes('right')) return 'nwse-resize';
+    if (edge.includes('top') && edge.includes('left'))     return 'nwse-resize';
+    if (edge.includes('top') && edge.includes('right'))    return 'nesw-resize';
+    if (edge === 'left' || edge === 'right') return 'col-resize';
+    if (edge === 'bottom' || edge === 'top') return 'row-resize';
+    return '';
+  }
+
+  workspace.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.ws-divider')) return;
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+    const edge = getResizeEdge(panel, e);
+    if (!edge) return;
+    e.preventDefault();
+    resizing = true; resizePanel = panel; resizeEdge = edge;
+    resizeStartX = e.clientX; resizeStartY = e.clientY;
+    resizeStartW = panel.offsetWidth; resizeStartH = panel.offsetHeight;
+
+    const SNAP_DIST = 12;
+    function getSnapTargets(exclude) {
+      const wsRect = workspace.getBoundingClientRect();
+      const t = { xs: [wsRect.left, wsRect.right], ys: [wsRect.top, wsRect.bottom] };
+      workspace.querySelectorAll('.ws-panel').forEach(p => {
+        if (p === exclude || p.offsetWidth === 0) return;
+        const r = p.getBoundingClientRect();
+        t.xs.push(r.left, r.right); t.ys.push(r.top, r.bottom);
+      });
+      return t;
+    }
+    function snap(val, targets) {
+      for (const t of targets) { if (Math.abs(val - t) < SNAP_DIST) return t; }
+      return val;
+    }
+
+    const onMove = (ev) => {
+      if (!resizing) return;
+      const snapEdges = getSnapTargets(resizePanel);
+      const panelRect = resizePanel.getBoundingClientRect();
+      if (resizeEdge.includes('left') || resizeEdge.includes('right')) {
+        const dx = resizeEdge.includes('right') ? (ev.clientX - resizeStartX) : (resizeStartX - ev.clientX);
+        let newW = Math.max(200, resizeStartW + dx);
+        if (resizeEdge.includes('right')) newW = snap(panelRect.left + newW, snapEdges.xs) - panelRect.left;
+        else newW = panelRect.right - snap(panelRect.right - newW, snapEdges.xs);
+        resizePanel.style.width = Math.max(200, newW) + 'px';
+        resizePanel.style.flex = 'none';
+      }
+      if (resizeEdge.includes('bottom') || resizeEdge.includes('top')) {
+        const dy = resizeEdge.includes('top') ? (resizeStartY - ev.clientY) : (ev.clientY - resizeStartY);
+        let newH = Math.max(150, resizeStartH + dy);
+        if (resizeEdge.includes('bottom')) newH = snap(panelRect.top + newH, snapEdges.ys) - panelRect.top;
+        else newH = panelRect.bottom - snap(panelRect.bottom - newH, snapEdges.ys);
+        resizePanel.style.height = Math.max(150, newH) + 'px';
+        resizePanel.style.flex = 'none';
+      }
+    };
+    const onUp = () => {
+      resizing = false; resizePanel = null; resizeEdge = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+
+  // Cursor hint on hover near panel edges
+  workspace.addEventListener('mousemove', function(e) {
+    if (resizing || isDragging || divDragging) return;
+    const panel = e.target.closest('.ws-panel');
+    if (!panel) return;
+    const edge = getResizeEdge(panel, e);
+    panel.style.cursor = getCursorForEdge(edge);
+  });
+
+  // Watch for panel open/close and rebuild layout
+  let rebuildScheduled = false;
+  const observer = new MutationObserver((mutations) => {
+    if (rebuildScheduled) return;
+    for (const m of mutations) {
+      if (m.type === 'attributes' && m.attributeName === 'class') {
+        const el = m.target;
+        if (el.classList.contains('ws-panel') && el.dataset.panelId !== 'flashcard') {
+          const isOpen = el.classList.contains('open');
+          if (isOpen && !panelOrder.includes(el.dataset.panelId)) {
+            panelOrder.push(el.dataset.panelId);
+          }
+          rebuildScheduled = true;
+          requestAnimationFrame(() => { rebuildScheduled = false; rebuildLayout(); });
+        }
+      }
+    }
+  });
+  workspace.querySelectorAll('.ws-panel').forEach(el => {
+    observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Public API
+  window.workspaceRebuild = rebuildLayout;
+  window.workspaceSetDirection = function(dir) { layoutDirection = dir; rebuildLayout(); };
+
+  // Initial build
+  rebuildLayout();
 }
 
 // ══════════════════════════════════════════
