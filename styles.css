@@ -348,12 +348,17 @@ body.light .sidebar {
 .sidebar.collapsed .review-badge {
   display: none;
 }
-/* Gradient text for sidebar icons and labels */
+/* Gradient text for sidebar icons and labels — dark mode only; light mode uses plain text */
 .hsk-label-icon {
   background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+body.light .hsk-label-icon {
+  background: none;
+  -webkit-text-fill-color: var(--text2);
+  color: var(--text2);
 }
 .review-icon {
   background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
