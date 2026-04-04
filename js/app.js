@@ -27,6 +27,8 @@ async function init() {
       if (savedApp.type === 'solid') savedApp.type = 'color';
       // Migrate old blobHue → primaryHue
       if (savedApp.blobHue != null && savedApp.primaryHue == null) savedApp.primaryHue = savedApp.blobHue;
+      // Guard against accidentally saved hue=0 (red) when default amber (25) was intended
+      if (savedApp.primaryHue === 0 && savedApp.type === 'theme') savedApp.primaryHue = 25;
       appearance = { ...appearance, ...savedApp };
     }
   } catch(e) {}

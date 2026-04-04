@@ -12,12 +12,12 @@
   --text:     #e8e8f0;
   --text2:    #9898bc;
   --text3:    #62628e;
-  --accent:   #f59e0b;
-  --accent2:  #d97706;
-  --accent-glow: rgba(245,158,11,0.20);
-  --accent-soft: rgba(245,158,11,.10);
-  --accent-softer: rgba(245,158,11,.06);
-  --accent-border: rgba(245,158,11,.30);
+  --accent:   #f5a623;
+  --accent2:  #e8920a;
+  --accent-glow: rgba(245,166,35,0.20);
+  --accent-soft: rgba(245,166,35,.10);
+  --accent-softer: rgba(245,166,35,.06);
+  --accent-border: rgba(245,166,35,.30);
   --grad-start: #ffb347;
   --grad-mid:   #f07b25;
   --grad-end:   #e04838;
@@ -46,12 +46,12 @@
   --text:     #111118;
   --text2:    #4b5568;
   --text3:    #6b7280;
-  --accent:   #d97706;
-  --accent2:  #b45309;
-  --accent-glow: rgba(217,119,6,0.15);
-  --accent-soft: rgba(217,119,6,.08);
-  --accent-softer: rgba(217,119,6,.05);
-  --accent-border: rgba(217,119,6,.25);
+  --accent:   #e8920a;
+  --accent2:  #c97a06;
+  --accent-glow: rgba(232,146,10,0.15);
+  --accent-soft: rgba(232,146,10,.08);
+  --accent-softer: rgba(232,146,10,.05);
+  --accent-border: rgba(232,146,10,.25);
   --red:      #f87171;
   --green:    #34d399;
   --orange:   #fbbf24;
@@ -139,7 +139,7 @@ header {
   z-index: 100;
 }
 body.light header {
-  background: rgba(244,245,248,0.80);
+  background: color-mix(in srgb, var(--accent-softer) 50%, rgba(244,245,248,0.82));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -320,7 +320,7 @@ body.light header {
   z-index: 50;
 }
 body.light .sidebar {
-  background: var(--bg2);
+  background: color-mix(in srgb, var(--accent-softer) 40%, var(--bg2));
   box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
 .sidebar.collapsed {
@@ -400,10 +400,9 @@ body.light .sidebar {
   white-space: nowrap;
 }
 body.light .sidebar.collapsed .deck-name {
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+  background: none;
 }
 /* HSK level header in strip: compact centered label */
 .sidebar.collapsed .hsk-level-header {
@@ -712,7 +711,7 @@ body.light .sidebar.collapsed .deck-name {
   display: flex;
 }
 body.light .info-panel {
-  background: var(--bg2);
+  background: color-mix(in srgb, var(--accent-softer) 40%, var(--bg2));
   box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
 
@@ -920,6 +919,10 @@ body.light .info-panel {
   border-radius: var(--radius-sm);
   margin-bottom: 6px;
   transition: all .2s;
+}
+body.light .ip-component {
+  background: color-mix(in srgb, var(--accent-softer) 60%, var(--bg3));
+  border-color: var(--accent-border);
 }
 .ip-component:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
 .ip-comp-char {
@@ -1292,19 +1295,22 @@ body.light .review-deck img { filter: none; opacity: 0.55; }
 .deck-item .deck-name {
   flex: 1;
   font-size: 13px;
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+body.light .deck-item .deck-name {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
 .deck-item.active .deck-name {
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
+  -webkit-text-fill-color: var(--accent);
+}
+body.light .deck-item.active .deck-name {
+  color: var(--accent);
+  -webkit-text-fill-color: var(--accent);
 }
 .deck-tag {
   font-size: 9px;
@@ -1656,11 +1662,9 @@ body.bg-custom .context-strip {
   color: var(--text);
 }
 body.light .ctx-hanzi {
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+  background: none;
 }
 
 /* Info panel back button */
