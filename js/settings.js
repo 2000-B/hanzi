@@ -316,9 +316,11 @@ function getSecondaryHue(primaryHue) {
 
 function applyThemeColors() {
   const p = appearance.primaryHue;
-  const s = appearance.complementSecondary
-    ? getSecondaryHue(p)
-    : (appearance.secondaryHue != null ? appearance.secondaryHue : getSecondaryHue(p));
+  // Gradient stays within the same hue family — no red.
+  // Mid shifts slightly warmer (+15°), end shifts slightly cooler (+10°).
+  const midHue = (p + 15) % 360;
+  const endHue = (p + 10) % 360;
+  // Accent derives from the primary hue — one color family everywhere.
   let styleEl = document.getElementById('theme-colors');
   if (!styleEl) {
     styleEl = document.createElement('style');
@@ -327,26 +329,26 @@ function applyThemeColors() {
   }
   styleEl.textContent = `
     :root {
-      --grad-start: hsl(${p}, 85%, 63%);
-      --grad-mid:   hsl(${(p+25)%360}, 78%, 70%);
-      --grad-end:   hsl(${(p-25+360)%360}, 90%, 68%);
-      --accent:        hsl(${s}, 72%, 56%);
-      --accent2:       hsl(${s}, 68%, 48%);
-      --accent-glow:   hsla(${s}, 72%, 56%, 0.18);
-      --accent-soft:   hsla(${s}, 72%, 56%, 0.08);
-      --accent-softer: hsla(${s}, 72%, 56%, 0.06);
-      --accent-border: hsla(${s}, 72%, 56%, 0.25);
+      --grad-start: hsl(${p}, 85%, 64%);
+      --grad-mid:   hsl(${midHue}, 80%, 70%);
+      --grad-end:   hsl(${endHue}, 78%, 55%);
+      --accent:        hsl(${p}, 75%, 55%);
+      --accent2:       hsl(${p}, 70%, 48%);
+      --accent-glow:   hsla(${p}, 75%, 55%, 0.20);
+      --accent-soft:   hsla(${p}, 75%, 55%, 0.10);
+      --accent-softer: hsla(${p}, 75%, 55%, 0.06);
+      --accent-border: hsla(${p}, 75%, 55%, 0.28);
     }
     .light {
-      --grad-start: hsl(${p}, 80%, 43%);
-      --grad-mid:   hsl(${(p+25)%360}, 74%, 50%);
-      --grad-end:   hsl(${(p-25+360)%360}, 85%, 47%);
-      --accent:        hsl(${s}, 65%, 40%);
-      --accent2:       hsl(${s}, 60%, 33%);
-      --accent-glow:   hsla(${s}, 65%, 40%, 0.18);
-      --accent-soft:   hsla(${s}, 65%, 40%, 0.10);
-      --accent-softer: hsla(${s}, 65%, 40%, 0.05);
-      --accent-border: hsla(${s}, 65%, 40%, 0.30);
+      --grad-start: hsl(${p}, 82%, 52%);
+      --grad-mid:   hsl(${midHue}, 78%, 48%);
+      --grad-end:   hsl(${endHue}, 72%, 42%);
+      --accent:        hsl(${p}, 72%, 52%);
+      --accent2:       hsl(${p}, 68%, 45%);
+      --accent-glow:   hsla(${p}, 72%, 52%, 0.18);
+      --accent-soft:   hsla(${p}, 72%, 52%, 0.10);
+      --accent-softer: hsla(${p}, 72%, 52%, 0.05);
+      --accent-border: hsla(${p}, 72%, 52%, 0.28);
     }
   `;
 }

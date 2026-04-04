@@ -4,6 +4,79 @@
 
 ---
 
+## 2026-04-04 — UI/UX Redesign — IN PROGRESS
+
+**Status:** Planning complete. Implementation starting.
+
+**Context:** Comprehensive UI/UX audit identified structural problems, visual inconsistencies, and overengineered features. The goal is an interface that would score high marks from an expert web designer — clean, consistent, purposeful.
+
+### Phase 1: Color Fix (highest visual impact)
+- [ ] Fix `applyThemeColors()` light-mode HSL values — current 40% lightness reads as muddy brown, needs ~55-60% for gold
+- [ ] Remove red from gradient end — keep amber-gold monochrome family
+- [ ] Solid accent colors should pull from the lighter/golden end of the spectrum
+
+### Phase 2: Header Cleanup
+- [ ] Remove profile button from header → move into settings
+- [ ] Remove analytics button from header → kill analytics panel entirely
+- [ ] Remove test pill from header → move into deck panel or card area
+- [ ] Move card counter onto flashcard face (top-right corner)
+- [ ] Final header: `汉字学习 ........... 🔍 📚 ⓘ ⚙` (4 action buttons)
+
+### Phase 3: Kill Collapsed Sidebar
+- [ ] Remove collapsed sidebar state — panel is open or closed
+- [ ] Deck button in header toggles full panel open/closed
+- [ ] Clean slide-in/out animation (no translucency flash, no rubber-banding)
+- [ ] All chunks collapse when panel closes
+- [ ] Card reclaims the ~52px that the collapsed strip was using
+
+### Phase 4: Card & Study Area
+- [ ] Remove nav arrow buttons
+- [ ] Make card responsive — fill available space, not fixed 340px
+- [ ] Consistent 6px gap between all panels, header, and edges
+- [ ] Context strip: either part of header or part of card area, not floating between
+- [ ] Controls tray: "Hide" text → eye-slash icon
+
+### Phase 5: Info Panel Restructure
+- [ ] User note moved to top of panel
+- [ ] "More info" expandable section for etymology, examples, tutor button
+- [ ] Tutor bar becomes a button → opens chat overlay
+- [ ] Double-click header button or hover corner icon for panel fullscreen
+
+### Phase 6: Deck Panel Improvements
+- [ ] Review deck as distinct pinned card at top, badge on header button when closed
+- [ ] Chunk size controls hidden → right-click context menu on decks
+- [ ] Thin gradient progress bar on each deck/chunk row (mastery %)
+- [ ] "+ new deck" visually quiet (small, not full-width button)
+- [ ] Favoriting and pin via right-click menu
+
+### Phase 7: Settings Redesign
+- [ ] Replace color picker with curated swatch palette (8-10 presets + optional custom)
+- [ ] Kill primary/secondary color split
+- [ ] Kill image background option
+- [ ] Profile management moved here from header
+- [ ] Analytics summary (if kept) moved here
+- [ ] Hierarchy: Appearance (hero) → Study+Test → API Key+Data (bottom)
+
+### Phase 8: Kill Analytics Panel
+- [ ] Remove analytics view, header button, and toggle logic
+- [ ] Distribute useful stats into deck panel progress bars + badges
+- [ ] Remove Chart.js from CDN dep and service worker cache list
+
+### Phase 9: Animation Polish
+- [ ] Deck panel: clean CSS slide, no translucency artifacts
+- [ ] Deck names: consistent spacing between collapsed/expanded states (eliminated by killing collapsed state)
+- [ ] Escape key closes any open panel/overlay
+
+### Design Principles (from interview)
+- The character is the hero — everything else recedes
+- One hue family, derived consistently everywhere
+- Frosted glass on panels, not on everything
+- Power-user features (chunk size, context menu) hidden but accessible
+- Mobile: not primary target but should not break
+- Color accents constrained to 1-2 areas per view (progress bars, active states)
+
+---
+
 ## 2026-04-03 20:30 — Colour scheme + tiling restoration + caching fix — COMPLETE
 
 **Status:** Done. Cache bumped to `hanzi-v6.15`.
