@@ -382,12 +382,13 @@ body.light .sidebar {
   transform: scale(1.08);
 }
 .sidebar.collapsed .hsk-level-header > span:first-child {
-  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 40%, var(--grad-end) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   font-weight: 600;
   font-size: 10px;
+}
+body.light .sidebar.collapsed .hsk-level-header > span:first-child {
+  color: var(--text2);
+  -webkit-text-fill-color: var(--text2);
+  background: none;
 }
 .sidebar.collapsed .deck-name {
   color: var(--text);
