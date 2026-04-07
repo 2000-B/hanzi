@@ -178,8 +178,6 @@ function switchProfile(id) {
   // Re-render
   renderSidebar();
   renderCard();
-  const av = document.getElementById('analytics-view');
-  if (av && av.classList.contains('open')) renderAnalytics();
   syncSettingsUI();
 
   closeProfilePicker();
@@ -261,10 +259,10 @@ function closeProfilePicker() {
 }
 
 function _updateProfilePill() {
-  // Pill is now an icon-only button; update the data-tip to show active profile name
-  const pill = document.getElementById('profile-pill');
   const active = getActiveProfile();
-  if (pill && active) pill.setAttribute('data-tip', active.name);
+  // Update settings panel profile name
+  const nameEl = document.getElementById('settings-profile-name');
+  if (nameEl && active) nameEl.textContent = active.name;
 }
 
 function _escHtml(s) {

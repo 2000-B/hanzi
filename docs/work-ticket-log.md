@@ -4,9 +4,71 @@
 
 ---
 
-## 2026-04-04 — UI/UX Redesign — IN PROGRESS
+## 2026-04-07 — UI/UX Redesign Phase 2: Polish, Multi-provider AI, Dark/Light Mode Overhaul — COMPLETE
 
-**Status:** Planning complete. Implementation starting.
+**Status:** Done. Cache bumped to `hanzi-v6.50`. All changes committed and pushed.
+
+**Context:** Continuation of the comprehensive UI/UX redesign. This session addressed visual polish, interaction bugs, theming overhaul, and multi-provider AI support.
+
+### Workspace & Panels
+- [x] Restored full tiling system (`_initTiling` with dividers, drag reorder, edge resize, MutationObserver) that was accidentally over-deleted in a prior session
+- [x] Fixed panels scrolling off screen — `.split-pane` overflow changed from `auto` to `hidden`
+- [x] Fixed flashcard 4px internal scroll — `.study-area` overflow changed from `auto` to `hidden`
+- [x] Double-click info button now toggles fullscreen (click-delay pattern, 250ms threshold)
+
+### Card Flip Z-Order
+- [x] Card now passes in front of tray buttons during flip animation
+- [x] `.card-column` → `transform-style: preserve-3d` (shared 3D space)
+- [x] `.controls-tray-wrap.active` → `translateZ(-1px)` pushes tray behind card in 3D depth
+
+### Controls Tray
+- [x] Chevron more visible (opacity 0.85, pill background, margin-top 6px)
+- [x] Chevron returns to naked look when tray is open
+- [x] Tray buttons lighter — match card face appearance instead of dark bg3
+
+### Sidebar Fixes
+- [x] Fixed sidebar closing on favorite/unfavorite toggle — context menu clicks now excluded from "click outside" handler
+- [x] Chunk favorites cleared when chunk size changes (since chunk numbers no longer map to same cards) — toast notification informs user
+- [x] Added `_setChunkSize()` helper used by both HSK and JLPT context menus
+
+### Review Deck Redesign
+- [x] Replaced PNG icon with inline SVG refresh icon
+- [x] Three visual states: empty (subdued), has-cards (gradient CTA), active (solid accent)
+- [x] Permanent sidebar fixture
+
+### Dark Mode Overhaul
+- [x] Frosted glass surfaces throughout — sidebar, info-panel, settings, search, context menu, modals all use `rgba(14,14,22,0.90)` + `backdrop-filter: blur(20px)`
+- [x] Refined design tokens: text3 `#62628e`→`#6e6e8a`, text2 `#9898bc`→`#a0a0ba`, card-bg opacity 0.78→0.82, adjusted borders/elevations
+- [x] Animated blob gradient now visible through all frosted panels
+
+### Light Mode Overhaul
+- [x] Warmer tones: bg `#f0f1f3`→`#f2f3f5`, text2 `#6b7280`→`#5e6672`
+- [x] Subtle blob tint visible (opacity 0→0.5 on `body.light::after`)
+- [x] Better border definition (`--border2` opacity 0.09→0.11)
+- [x] More opaque panels (sidebar/info-panel 70%→78%)
+- [x] Frosted glass modal override for light mode
+
+### Multi-Provider AI Support
+- [x] `AI_PROVIDERS` object in `persistence.js` with Anthropic, OpenAI, Google configurations
+- [x] `detectProvider(key)` auto-detects from prefix: `sk-ant-`→Anthropic, `sk-`→OpenAI, `AIza`→Google
+- [x] `callAI(opts)` unified async function — drop-in replacement for direct Anthropic fetch
+- [x] Updated `aiDeepDive()`, `sendTutorMsg()`, and `generateDeck()` to use `callAI()`
+- [x] Info tooltip on API KEY field shows supported providers and key prefixes
+
+### API Info Tooltip Fix
+- [x] Tooltip was clipping behind `.full-settings` panel (`overflow: auto`) when positioned centered
+- [x] Changed from `left: 50%; transform: translateX(-50%)` to `left: 0` — extends right instead of centering
+
+### Other
+- [x] Removed Chart.js from service worker cache (analytics panel killed)
+- [x] Removed `js/analytics.js` from SW asset list
+- [x] Hardcoded `rgba(232,146,10,0.12)` in ip-component changed to `var(--accent-border)` for theme hue adaptation
+
+---
+
+## 2026-04-04 — UI/UX Redesign Phase 1 — COMPLETE
+
+**Status:** Phase 1 implemented. See 2026-04-07 entry for Phase 2.
 
 **Context:** Comprehensive UI/UX audit identified structural problems, visual inconsistencies, and overengineered features. The goal is an interface that would score high marks from an expert web designer — clean, consistent, purposeful.
 

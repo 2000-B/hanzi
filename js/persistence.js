@@ -124,4 +124,89 @@ function getApiKey() {
   return getProfileData('hanzi-api-key') || '';
 }
 
+// ── Multi-provider AI abstraction ──
+const AI_PROVIDERS = {
+  anthropic: {
+    name: 'Anthropic',
+    prefix: 'sk-ant-',
+    model: 'claude-sonnet-4-20250514',
+    call: async (key, model, messages, system, maxTokens) => {
+      const body = { model, max_tokens: maxTokens, messages };
+      if (system) body.system = system;
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error?.message || `HTTP ${r.status}`); }
+      const data = await r.json();
+      return data.content?.[0]?.text || '';
+    }
+  },
+  openai: {
+    name: 'OpenAI',
+    prefix: 'sk-',
+    model: 'gpt-4o-mini',
+    call: async (key, model, messages, system, maxTokens) => {
+      const msgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
+      const r = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: msgs })
+      });
+      if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error?.message || `HTTP ${r.status}`); }
+      const data = await r.json();
+      return data.choices?.[0]?.message?.content || '';
+    }
+  },
+  google: {
+    name: 'Google',
+    prefix: 'AIza',
+    model: 'gemini-2.0-flash',
+    call: async (key, model, messages, system, maxTokens) => {
+      const contents = messages.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+      const body = { contents, generationConfig: { maxOutputTokens: maxTokens } };
+      if (system) body.systemInstruction = { parts: [{ text: system }] };
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error?.message || `HTTP ${r.status}`); }
+      const data = await r.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    }
+  }
+};
+
+function detectProvider(key) {
+  if (!key) return null;
+  if (key.startsWith('sk-ant-')) return 'anthropic';
+  if (key.startsWith('AIza')) return 'google';
+  if (key.startsWith('sk-')) return 'openai';
+  return 'anthropic'; // default fallback
+}
+
+/**
+ * Unified AI call. Auto-detects provider from API key prefix.
+ * @param {Object} opts - { messages, system?, maxTokens? }
+ * @returns {Promise<string>} The response text
+ */
+async function callAI(opts) {
+  const key = getApiKey();
+  if (!key) throw new Error('No API key set');
+  const providerId = detectProvider(key);
+  const provider = AI_PROVIDERS[providerId];
+  const model = provider.model;
+  return provider.call(key, model, opts.messages, opts.system || null, opts.maxTokens || 1000);
+}
+
 // ══════════════════════════════════════════

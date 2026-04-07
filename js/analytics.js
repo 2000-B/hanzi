@@ -7,14 +7,16 @@ function showAnalytics() {
   if (view.classList.contains('open')) { closeAnalytics(); return; }
   if (currentMode === 'test' && sessionLog.length > 0) saveSession();
   view.classList.add('open');
-  document.getElementById('btn-analytics').classList.add('active');
+  const btn = document.getElementById('btn-analytics');
+  if (btn) btn.classList.add('active');
   // Render after panel transition starts so chart gets correct dimensions
   requestAnimationFrame(() => renderAnalytics());
 }
 
 function closeAnalytics() {
   document.getElementById('analytics-view').classList.remove('open');
-  document.getElementById('btn-analytics').classList.remove('active');
+  const btn = document.getElementById('btn-analytics');
+  if (btn) btn.classList.remove('active');
 }
 
 function renderAnalytics() {

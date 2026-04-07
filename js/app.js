@@ -45,27 +45,15 @@ async function init() {
   // Load all data from JSON files
   await loadAllData();
 
-  // Render sidebar
+  // Load favorites and render sidebar
+  loadFavorites();
   renderSidebar();
 
   // Build search index
   buildSearchIndex();
 
-  // Sidebar hover expand (desktop only)
-  const sidebarEl = document.getElementById('sidebar');
-  sidebarEl.addEventListener('mouseenter', expandSidebarOnHover);
-  sidebarEl.addEventListener('mouseleave', scheduleSidebarCollapse);
-
-  // Mark sidebar interaction on any click inside (except toggle button)
-  sidebarEl.addEventListener('click', () => {
-    if (window.innerWidth > 480) sidebarInteracted = true;
-  });
-
-  // Start collapsed on desktop
-  if (window.innerWidth > 480) {
-    sidebarOpen = false;
-    sidebarEl.classList.add('collapsed');
-  }
+  // Sidebar starts closed — toggled via header deck button
+  sidebarOpen = false;
 
   // Inject per-panel fullscreen buttons
   ensureFullscreenBtns();

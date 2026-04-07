@@ -380,7 +380,7 @@ When a deck is active (cards loaded in main content), all UI panels except the *
 | Key | Contents |
 |-----|----------|
 | `hanzi-progress` | `{ cardData, customDecks, sessions }`. cardData tracks per-card stats, SM-2 fields, and user notes. customDecks stores AI/CSV decks. sessions stores per-deck history. |
-| `hanzi-api-key` | Anthropic API key string (`sk-ant-...`). Used only for AI fallback features. |
+| `hanzi-api-key` | AI provider API key string. Auto-detected from prefix: `sk-ant-` (Anthropic), `sk-` (OpenAI), `AIza` (Google). Used only for AI fallback features. |
 | `hanzi-tutor-history` | Array of tutor chat messages. Each message: `{ role, content, card, time }`. Capped at 100 messages. Included in export/import. |
 | `hanzi-appearance` | `{ backgroundType, backgroundData, backgroundBlur, accentHue, accentSat, chunkSize }`. Stores custom background image (data URL), blur preference, derived accent color, and last-used chunk size. See §12.2. |
 
@@ -398,14 +398,22 @@ Full Settings includes **Export Progress** and **Import Progress** buttons.
 
 ## 11. AI API Integration
 
-All AI calls go to `https://api.anthropic.com/v1/messages` directly from the browser. API key required. The `anthropic-dangerous-direct-browser-access: true` header is required and intentional.
+AI features support multiple providers via a unified abstraction layer in `persistence.js`. The provider is auto-detected from the API key prefix — no manual provider selector needed.
+
+| Provider | Key prefix | Model | Endpoint |
+|----------|-----------|-------|----------|
+| Anthropic | `sk-ant-` | claude-sonnet-4-20250514 | `api.anthropic.com/v1/messages` |
+| OpenAI | `sk-` | gpt-4o-mini | `api.openai.com/v1/chat/completions` |
+| Google AI | `AIza` | gemini-2.0-flash | `generativelanguage.googleapis.com/v1beta` |
+
+All AI calls use the unified `callAI({ messages, system?, maxTokens? })` function. An ⓘ info tooltip next to the API KEY field in Full Settings shows supported providers and key prefixes.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| AI deck generator | ✓ done | Topic → 15–20 card JSON array. Model: claude-sonnet-4-20250514. |
+| AI deck generator | ✓ done | Topic → 15–20 card JSON array. Uses `callAI()`. |
 | AI dictionary | ✓ done | Returns {definitions, examples, notes}. Shown in info panel. |
-| AI deep dive fallback | ✓ done | Components + etymology + literal meaning for chars/words not in embedded set. |
-| AI tutor | ✓ done | Context-aware chat pinned to bottom of info panel. Streamed reply. |
+| AI deep dive fallback | ✓ done | Components + etymology + literal meaning for chars/words not in embedded set. Uses `callAI()`. |
+| AI tutor | ✓ done | Context-aware chat pinned to bottom of info panel. Uses `callAI()`. |
 
 ---
 
@@ -459,7 +467,7 @@ A centered modal overlay (larger than the preferences popover, with grouped sect
 - *(divider: "test mode")*
 
 **API Key**
-- API key input (password field, `sk-ant-…`)
+- API key input (password field, `paste any API key…`) with ⓘ info tooltip showing supported providers
 
 **Data**
 - Export progress button
@@ -632,8 +640,7 @@ Japanese is a planned extension, targeted for 3–6 months after Chinese v2 is s
 - **Static PWA:** The app is a Progressive Web App hosted on a free static host (e.g. GitHub Pages or Netlify). No backend, no server logic, no build step required for development. App code (HTML, CSS, JS) lives in index.html. All HSK data (levels 1–6) and enriched character/word data are separate static JSON files loaded via fetch() and cached by the service worker for offline use. This keeps the app shell lightweight and data independently updatable.
 - **Deployment:** Static files pushed to GitHub Pages or Netlify. No CI/CD required — drag-and-drop upload or git push. The hosted URL is the app's permanent address and the origin for all stored data.
 - **localStorage:** Tied to origin. With a stable hosted URL, storage is reliable across sessions. Export/import (§10.1) available as manual backup for device migration or cache clears. New `hanzi-appearance` key stores background and accent preferences.
-- **No backend:** AI calls go directly to `api.anthropic.com`. Browser CORS header required.
-- **Chart.js:** Loaded from cdnjs on first visit, cached by service worker for offline use thereafter.
+- **No backend:** AI calls go directly to provider APIs (Anthropic, OpenAI, or Google). Provider auto-detected from key prefix. Browser CORS headers required.
 - **TTS:** Web Speech API (SpeechSynthesis). Available in all modern browsers; Mandarin quality varies by OS. Used as audio fallback when pre-recorded files are unavailable.
 - **Canvas for color extraction:** The accent adaptation system uses an offscreen `<canvas>` to sample average color from uploaded background images. No external library required.
 

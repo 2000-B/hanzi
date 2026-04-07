@@ -50,7 +50,7 @@ async function generateDeck() {
   if (!topic) return;
   const key = getApiKey();
   if (!key) {
-    alert('Please enter your Anthropic API key in Settings to use AI features.');
+    alert('Please add an API key in Settings to use AI features.\nSupported: Anthropic, OpenAI, or Google AI.');
     return;
   }
 
@@ -59,26 +59,14 @@ async function generateDeck() {
   btn.disabled = true;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{
-          role: 'user',
-          content: `Generate a Chinese vocabulary deck of 15-20 words about "${topic}". Return ONLY a JSON array, no markdown, no explanation. Each item: {"hanzi":"...","pinyin":"...","english":"..."}`
-        }]
-      })
+    const text = await callAI({
+      maxTokens: 2000,
+      messages: [{
+        role: 'user',
+        content: `Generate a Chinese vocabulary deck of 15-20 words about "${topic}". Return ONLY a JSON array, no markdown, no explanation. Each item: {"hanzi":"...","pinyin":"...","english":"..."}`
+      }]
     });
 
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '';
     const cards = JSON.parse(text.replace(/```json?|```/g, '').trim());
 
     if (!Array.isArray(cards) || cards.length === 0) throw new Error('Invalid response');

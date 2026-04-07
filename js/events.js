@@ -124,10 +124,20 @@ document.addEventListener('keydown', e => {
   }
 
   if (e.key === 'Escape') {
-    closeSettings();
-    closeSearch();
-    searchSelectedIdx = -1;
-    if (infoPanelOpen) toggleInfoPanel();
+    // Close topmost overlay first, in priority order
+    const tutorOverlay = document.getElementById('tutor-overlay');
+    if (tutorOverlay && tutorOverlay.classList.contains('open')) { closeTutorOverlay(); return; }
+    const fullSettings = document.getElementById('full-settings-modal');
+    if (fullSettings && fullSettings.classList.contains('open')) { closeFullSettings(); return; }
+    const profilePicker = document.getElementById('profile-picker-overlay');
+    if (profilePicker && profilePicker.classList.contains('open')) { closeProfilePicker(); return; }
+    const settingsOverlay = document.getElementById('settings-overlay');
+    if (settingsOverlay && settingsOverlay.classList.contains('open')) { closeSettings(); return; }
+    const masteredModal = document.getElementById('mastered-list-modal');
+    if (masteredModal && masteredModal.classList.contains('open')) { toggleMasteredList(); return; }
+    if (document.getElementById('header-search-wrap').classList.contains('open')) { closeSearch(); searchSelectedIdx = -1; return; }
+    if (sidebarOpen) { closeSidebar(); return; }
+    if (infoPanelOpen) { toggleInfoPanel(); return; }
   }
 });
 
@@ -143,6 +153,29 @@ document.addEventListener('click', e => {
     }
   }
 });
+
+// ══════════════════════════════════════════
+// HEADER BUTTON: info — single-click toggle, double-click fullscreen
+// ══════════════════════════════════════════
+(function() {
+  const btn = document.getElementById('btn-info');
+  if (!btn) return;
+  let clickTimer = null;
+  btn.addEventListener('click', e => {
+    if (clickTimer) {
+      // Second click within 300ms → treat as dblclick
+      clearTimeout(clickTimer);
+      clickTimer = null;
+      if (!infoPanelOpen) toggleInfoPanel();
+      wsToggleFullscreen('info');
+    } else {
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        toggleInfoPanel();
+      }, 250);
+    }
+  });
+})();
 
 // ══════════════════════════════════════════
 // SWIPE GESTURES (mobile)

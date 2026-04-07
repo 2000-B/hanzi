@@ -4,11 +4,6 @@ function selectDeck(name) {
   // Save session if switching away from test mode
   if (currentMode === 'test' && sessionLog.length > 0) saveSession();
 
-  // Close analytics dashboard if open
-  if (document.getElementById('analytics-view').classList.contains('open')) {
-    closeAnalytics();
-  }
-
   activeDeckName = name;
   activeDeck = [...decks[name]];
   currentIndex = 0;
@@ -62,7 +57,14 @@ function renderCard() {
 
   // Update mastery button label
   const btnMastered = document.getElementById('btn-mastered');
-  if (btnMastered) btnMastered.textContent = (cd && cd.mastered) ? 'Show' : 'Hide';
+  if (btnMastered) {
+    const isMastered = cd && cd.mastered;
+    btnMastered.setAttribute('data-tip', isMastered ? 'show mastered' : 'hide mastered');
+    // Eye icon (open) vs eye-slash (hidden)
+    btnMastered.innerHTML = isMastered
+      ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 13.5l11-11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'
+      : '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/></svg>';
+  }
 
   updateProgress();
 
@@ -125,13 +127,15 @@ function shuffleDeck() {
 }
 
 function updateProgress() {
-  const counter = document.getElementById('prog-counter');
-  if (activeDeck.length) {
-    counter.textContent = `${currentIndex + 1} / ${activeDeck.length}`;
-    counter.style.display = '';
-  } else {
-    counter.textContent = '— / —';
-    counter.style.display = 'none';
+  const counter = document.getElementById('card-counter');
+  if (counter) {
+    if (activeDeck.length) {
+      counter.textContent = `${currentIndex + 1} / ${activeDeck.length}`;
+      counter.style.display = '';
+    } else {
+      counter.textContent = '';
+      counter.style.display = 'none';
+    }
   }
 }
 
@@ -149,7 +153,8 @@ function toggleCardList() {
 function toggleFlashcardPanel() {
   const panel = document.getElementById('main-content');
   const isOpen = panel.classList.toggle('open');
-  document.getElementById('btn-flashcard').classList.toggle('active', isOpen);
+  const btn = document.getElementById('btn-flashcard');
+  if (btn) btn.classList.toggle('active', isOpen);
 }
 
 // ══════════════════════════════════════════

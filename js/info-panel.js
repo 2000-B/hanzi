@@ -88,6 +88,12 @@ function renderInfoPanel(card) {
     </div>
   </div>`;
 
+  // ── User note (always visible, right under header) ──
+  html += `<div class="ip-section ip-note-section">
+    <textarea class="ip-note-area" id="user-note" placeholder="add a personal note, memory hook, or association…" onblur="saveNote()">${cd.note || ''}</textarea>
+    <div class="ip-note-saved" id="ip-note-saved">saved ✓</div>
+  </div>`;
+
   // ── Readings (Japanese only) ──
   if (isJapanese && enriched && (enriched.onyomi || enriched.kunyomi)) {
     html += `<div class="ip-section">
@@ -163,39 +169,55 @@ function renderInfoPanel(card) {
       html += `</div>`;
     }
 
-    // Etymology (single characters, or word-level if no per-char breakdown)
-    if (enriched.etymology && !isMultiChar) {
-      html += `<div class="ip-section">
-        <div class="ip-section-title">etymology ${ipHelpBtn('etymology')}</div>
-        <div class="ip-etymology">${enriched.etymology}</div>
-      </div>`;
-    }
+    // ── "More info" expandable — etymology, examples, related ──
+    const hasEtymology = enriched.etymology && !isMultiChar;
+    const hasExamples = enriched.examples && enriched.examples.length > 0;
+    const hasRelated = enriched.sameRadical && enriched.sameRadical.length > 0;
+    if (hasEtymology || hasExamples || hasRelated || true) {
+      html += `<details class="ip-more-info">
+        <summary class="ip-more-toggle">more info</summary>
+        <div class="ip-more-content">`;
 
-    // Example sentences
-    if (enriched.examples && enriched.examples.length > 0) {
-      html += `<div class="ip-section">
-        <div class="ip-section-title">examples</div>
-        ${enriched.examples.map(ex => `
-          <div class="ip-example">
-            <div class="ip-ex-zh">${isJapanese ? ex.ja : ex.zh}</div>
-            <div class="ip-ex-pinyin">${isJapanese ? ex.romaji : ex.pinyin}</div>
-            <div class="ip-ex-en">${ex.en}</div>
-            ${ex.level ? `<span class="ip-ex-level">${lang().levelPrefix}${ex.level}</span>` : ''}
-          </div>
-        `).join('')}
-      </div>`;
-    }
+      if (hasEtymology) {
+        html += `<div class="ip-section">
+          <div class="ip-section-title">etymology ${ipHelpBtn('etymology')}</div>
+          <div class="ip-etymology">${enriched.etymology}</div>
+        </div>`;
+      }
 
-    // Related characters
-    if (enriched.sameRadical && enriched.sameRadical.length > 0) {
-      html += `<div class="ip-section">
-        <div class="ip-section-title">related (same radical)</div>
-        <div class="ip-related">
-          ${enriched.sameRadical.map(ch => `
-            <div class="ip-related-char" onclick="navigateToChar('${ch}')" data-tip="${ch}">${ch}</div>
+      if (hasExamples) {
+        html += `<div class="ip-section">
+          <div class="ip-section-title">examples</div>
+          ${enriched.examples.map(ex => `
+            <div class="ip-example">
+              <div class="ip-ex-zh">${isJapanese ? ex.ja : ex.zh}</div>
+              <div class="ip-ex-pinyin">${isJapanese ? ex.romaji : ex.pinyin}</div>
+              <div class="ip-ex-en">${ex.en}</div>
+              ${ex.level ? `<span class="ip-ex-level">${lang().levelPrefix}${ex.level}</span>` : ''}
+            </div>
           `).join('')}
-        </div>
+        </div>`;
+      }
+
+      if (hasRelated) {
+        html += `<div class="ip-section">
+          <div class="ip-section-title">related (same radical)</div>
+          <div class="ip-related">
+            ${enriched.sameRadical.map(ch => `
+              <div class="ip-related-char" onclick="navigateToChar('${ch}')" data-tip="${ch}">${ch}</div>
+            `).join('')}
+          </div>
+        </div>`;
+      }
+
+      html += `<div class="ip-section">
+        <button class="btn btn-sm ip-tutor-btn" onclick="openTutorOverlay()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 3h12v8H5l-3 3V3z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          ask about this character
+        </button>
       </div>`;
+
+      html += `</div></details>`;
     }
 
   } else {
@@ -211,12 +233,7 @@ function renderInfoPanel(card) {
     </div>`;
   }
 
-  // ── User note ──
-  html += `<div class="ip-section">
-    <div class="ip-section-title">your note</div>
-    <textarea class="ip-note-area" id="user-note" placeholder="add a personal note, memory hook, or association…" onblur="saveNote()">${cd.note || ''}</textarea>
-    <div class="ip-note-saved" id="ip-note-saved">saved ✓</div>
-  </div>`;
+  // User note is rendered at the top (after header) — not here.
 
   // ── Tutor messages area ──
   html += `<div id="tutor-messages"></div>`;
@@ -279,6 +296,25 @@ if ('speechSynthesis' in window) {
   speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 }
 
+// ── Tutor overlay ──
+function openTutorOverlay() {
+  const overlay = document.getElementById('tutor-overlay');
+  overlay.classList.add('open');
+  const target = document.getElementById('tutor-messages-overlay');
+  if (!getApiKey()) {
+    if (target) target.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:24px">Enter an API key in <b>Settings</b> to use the AI tutor.</div>';
+    return;
+  }
+  // Move tutor messages into overlay
+  const msgs = document.getElementById('tutor-messages');
+  if (msgs && target) target.innerHTML = msgs.innerHTML;
+  setTimeout(() => document.getElementById('tutor-input').focus(), 100);
+}
+
+function closeTutorOverlay() {
+  document.getElementById('tutor-overlay').classList.remove('open');
+}
+
 // ── AI Deep Dive Fallback ──
 async function aiDeepDive(hanzi) {
   const key = getApiKey();
@@ -288,20 +324,11 @@ async function aiDeepDive(hanzi) {
   if (notice) notice.innerHTML = '<span class="ip-loading"></span> generating…';
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{
-          role: 'user',
-          content: `Analyze the Chinese ${hanzi.length > 1 ? 'word' : 'character'} "${hanzi}". Return ONLY valid JSON, no markdown fences, matching this schema:
+    const text = await callAI({
+      maxTokens: 1500,
+      messages: [{
+        role: 'user',
+        content: `Analyze the Chinese ${hanzi.length > 1 ? 'word' : 'character'} "${hanzi}". Return ONLY valid JSON, no markdown fences, matching this schema:
 ${hanzi.length > 1 ? `{
   "word": "${hanzi}",
   "literal": "word-for-word translation",
@@ -317,12 +344,9 @@ ${hanzi.length > 1 ? `{
   "examples": [{"zh": "...", "pinyin": "...", "en": "...", "level": 1}],
   "sameRadical": ["...", "..."]
 }`}`
-        }]
-      })
+      }]
     });
 
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '';
     const parsed = JSON.parse(text.replace(/```json?|```/g, '').trim());
 
     // Cache the result
@@ -379,14 +403,16 @@ function saveTutorHistory() {
 }
 
 function renderTutorHistory() {
-  const container = document.getElementById('tutor-messages');
-  if (!container || !tutorHistory.length) return;
-  // Show last 20 messages in the panel
+  // Render into both the inline area and overlay
+  const containers = [document.getElementById('tutor-messages'), document.getElementById('tutor-messages-overlay')];
+  if (!tutorHistory.length) return;
   const recent = tutorHistory.slice(-20);
-  container.innerHTML = recent.map(m =>
+  const html = recent.map(m =>
     `<div class="tutor-msg ${m.role === 'user' ? 'user' : 'ai'}">${escapeHtml(m.content)}</div>`
   ).join('');
-  container.scrollTop = container.scrollHeight;
+  for (const c of containers) {
+    if (c) { c.innerHTML = html; c.scrollTop = c.scrollHeight; }
+  }
 }
 
 function sendTutorMsg() {
@@ -396,13 +422,14 @@ function sendTutorMsg() {
 
   const key = getApiKey();
   if (!key) {
-    alert('Please enter your Anthropic API key in Settings to use the AI tutor.');
+    alert('Please add an API key in Settings to use the AI tutor.\nSupported: Anthropic, OpenAI, or Google AI.');
     return;
   }
 
   input.value = '';
 
-  const container = document.getElementById('tutor-messages');
+  // Use overlay container if open, else inline
+  const container = document.getElementById('tutor-messages-overlay') || document.getElementById('tutor-messages');
   if (!container) return;
 
   // Add user message
@@ -420,22 +447,11 @@ function sendTutorMsg() {
   // API messages (strip metadata, keep role + content only)
   const apiMessages = tutorHistory.filter(m => m.role === 'user' || m.role === 'assistant').slice(-10).map(m => ({ role: m.role, content: m.content }));
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 800,
-      system: `${lang().tutorSystemPrompt} ${context}`,
-      messages: apiMessages
-    })
-  }).then(r => r.json()).then(data => {
-    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t generate a response.';
+  callAI({
+    maxTokens: 800,
+    system: `${lang().tutorSystemPrompt} ${context}`,
+    messages: apiMessages
+  }).then(reply => {
     tutorHistory.push({ role: 'assistant', content: reply, time: new Date().toISOString() });
     saveTutorHistory();
 

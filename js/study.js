@@ -193,8 +193,31 @@ function getReviewCards() {
 function updateReviewBadge() {
   const count = getReviewCards().length;
   const badge = document.getElementById('review-badge');
-  badge.textContent = count;
-  badge.classList.toggle('empty', count === 0);
+  const deck = document.getElementById('review-deck');
+  if (badge) {
+    badge.textContent = count;
+    badge.classList.toggle('empty', count === 0);
+  }
+  if (deck) {
+    deck.classList.toggle('has-cards', count > 0);
+    deck.classList.toggle('active', activeDeckName === '⟳ review');
+  }
+  // Show badge on header deck button when sidebar is closed
+  let headerBadge = document.getElementById('deck-btn-badge');
+  if (!headerBadge) {
+    const btn = document.getElementById('btn-deck');
+    if (btn) {
+      headerBadge = document.createElement('span');
+      headerBadge.id = 'deck-btn-badge';
+      headerBadge.className = 'header-badge';
+      btn.style.position = 'relative';
+      btn.appendChild(headerBadge);
+    }
+  }
+  if (headerBadge) {
+    headerBadge.textContent = count;
+    headerBadge.style.display = count > 0 ? '' : 'none';
+  }
 }
 
 function openReviewDeck() {
@@ -230,6 +253,13 @@ function setMode(mode) {
   if (currentMode === 'test' && mode !== 'test' && sessionLog.length > 0) saveSession();
 
   currentMode = mode;
+  // Update card mode button
+  const modeBtn = document.getElementById('card-mode-btn');
+  if (modeBtn) {
+    modeBtn.textContent = mode === 'test' ? 'study' : 'test';
+    modeBtn.classList.toggle('active', mode === 'test');
+  }
+  // Legacy pill (may be removed)
   const pillTest = document.getElementById('pill-test');
   if (pillTest) pillTest.classList.toggle('active', mode === 'test');
 
@@ -257,11 +287,8 @@ function setMode(mode) {
     } else {
       _showTestStartScreen();
     }
-    if (window.innerWidth > 480) {
-      sidebarOpen = true;
-      sidebarInteracted = true;
-      document.getElementById('sidebar').classList.remove('collapsed');
-    }
+    // Open sidebar so user can pick a deck
+    if (!sidebarOpen) toggleSidebar();
   }
 
   if (mode === 'study') {

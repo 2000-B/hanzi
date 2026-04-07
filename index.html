@@ -23,16 +23,9 @@
 <header>
   <div class="header-left">
     <div class="header-title">汉字学习</div>
-    <button class="icon-btn" id="profile-pill" onclick="openProfilePicker()" data-tip="profiles">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3.2" stroke="currentColor" stroke-width="1.4"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-    </button>
-    <div class="mode-pill">
-      <button class="mode-pill-btn" id="pill-test" onclick="setMode(currentMode==='test'?'study':'test')">test</button>
-    </div>
   </div>
 
   <div class="header-right">
-    <span class="prog-counter" id="prog-counter">— / —</span>
     <!-- Expandable search: pill grows left from icon -->
     <div class="header-search-wrap" id="header-search-wrap">
       <div class="search-pill" id="search-pill">
@@ -46,14 +39,11 @@
       </button>
       <div class="search-results" id="search-results"></div>
     </div>
-    <button class="icon-btn active" id="btn-flashcard" onclick="toggleFlashcardPanel()" data-tip="flashcard">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 7h13" stroke="currentColor" stroke-width="1.3"/></svg>
+    <button class="icon-btn" id="btn-deck" onclick="toggleSidebar()" data-tip="decks">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="6.5" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="11" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
     </button>
-    <button class="icon-btn" id="btn-info" onclick="toggleInfoPanel()" data-tip="info panel">
+    <button class="icon-btn" id="btn-info" data-tip="info panel · double-click to fullscreen">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
-    </button>
-    <button class="icon-btn" id="btn-analytics" onclick="showAnalytics()" data-tip="progress dashboard">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="9.5" width="3" height="5" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="6.5" y="5.5" width="3" height="9" rx=".6" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="1.5" width="3" height="13" rx=".6" stroke="currentColor" stroke-width="1.3"/></svg>
     </button>
     <button class="icon-btn" id="btn-settings" onclick="toggleSettings()" data-tip="settings">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polygon points="5.5,3.67 6.32,1.72 9.68,1.72 10.5,3.67 12.6,3.4 14.28,6.32 13,8 14.28,9.68 12.6,12.6 10.5,12.33 9.68,14.28 6.32,14.28 5.5,12.33 3.4,12.6 1.72,9.68 3,8 1.72,6.32 3.4,3.4" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/></svg>
@@ -70,6 +60,7 @@
         <span class="settings-toggle-label" id="theme-label">dark mode</span>
         <button class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"></button>
       </div>
+      <div class="swatch-row" id="swatch-row-quick"></div>
     </div>
     <div class="settings-group" id="prefs-study-group">
       <div class="settings-label">study</div>
@@ -105,10 +96,10 @@
       </div>
     </div>
     <div class="settings-group">
-      <div class="settings-label">workspace</div>
+      <div class="settings-label">profile</div>
       <div class="settings-toggle-row">
-        <span class="settings-toggle-label">snap to grid</span>
-        <button class="toggle-switch on" id="snap-grid-toggle" onclick="toggleSnapGrid()"></button>
+        <span class="settings-toggle-label" id="settings-profile-name">default</span>
+        <button class="btn btn-sm" onclick="closeSettings();openProfilePicker()" style="font-size:11px;padding:3px 10px">switch</button>
       </div>
     </div>
     <div class="prefs-footer">
@@ -131,44 +122,13 @@
           <span class="settings-toggle-label" id="fs-theme-label">dark mode</span>
           <button class="toggle-switch" id="fs-theme-toggle" onclick="toggleTheme()"></button>
         </div>
-        <div class="fs-section-label" style="margin-top:4px">background</div>
-        <div class="bg-picker" style="margin-top:6px">
-          <button class="bg-option active" id="bg-opt-theme" onclick="setBackground('theme')">theme</button>
-          <button class="bg-option" id="bg-opt-color" onclick="setBackground('color')">background color</button>
-          <button class="bg-option" id="bg-opt-image" onclick="selectBgImage()">image</button>
-          <input type="file" id="bg-image-input" accept="image/*" style="display:none" onchange="loadBgImage(this)">
-        </div>
-        <!-- theme: primary color -->
-        <div class="color-preview-row" id="bg-primary-row">
-          <span class="settings-toggle-label">primary color</span>
+        <div class="fs-section-label" style="margin-top:8px">accent color</div>
+        <div class="swatch-row" id="swatch-row-full"></div>
+        <div class="color-preview-row" style="margin-top:4px">
+          <span class="settings-toggle-label" style="font-size:11px;color:var(--text3)">custom</span>
           <div class="color-swatch" id="bg-primary-swatch" style="background:#ffb347">
             <input type="color" id="bg-primary-picker" value="#ffb347" oninput="updatePrimaryColor(this.value)">
           </div>
-        </div>
-        <!-- theme: secondary color with complement toggle -->
-        <div class="color-preview-row" id="bg-secondary-row">
-          <label class="settings-toggle-label" id="secondary-color-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none">
-            <input type="checkbox" id="complement-checkbox" checked onchange="toggleComplementSecondary()" style="cursor:pointer;accent-color:var(--accent)">
-            <span>complement primary</span>
-          </label>
-          <div class="color-swatch" id="bg-secondary-swatch" style="background:#f59e0b;opacity:0.38;pointer-events:none;cursor:default;transition:opacity .2s,box-shadow .2s">
-            <input type="color" id="bg-secondary-picker" value="#f59e0b" oninput="updateSecondaryColor(this.value)" disabled>
-          </div>
-        </div>
-        <!-- background color type: single color picker -->
-        <div class="color-preview-row" id="bg-color-row" style="display:none">
-          <span class="settings-toggle-label">color</span>
-          <div class="color-swatch" id="bg-color-swatch" style="background:#ffb347">
-            <input type="color" id="bg-color-picker" value="#ffb347" oninput="updateBgColor(this.value)">
-          </div>
-        </div>
-        <!-- image type: blur toggle -->
-        <div class="settings-toggle-row" id="bg-blur-row" style="display:none">
-          <span class="settings-toggle-label">blur</span>
-          <button class="toggle-switch" id="bg-blur-toggle" onclick="toggleBgBlur()"></button>
-        </div>
-        <div>
-          <button class="btn btn-sm" onclick="resetAppearance()" style="width:100%">reset to default</button>
         </div>
       </div>
       <div class="fs-section">
@@ -198,8 +158,20 @@
         </div>
       </div>
       <div class="fs-section">
-        <div class="fs-section-label">api key</div>
-        <input class="api-key-input" id="api-key-input" type="password" placeholder="sk-ant-…" onchange="saveApiKey()">
+        <div class="fs-section-label" style="display:flex;align-items:center;gap:6px">
+          api key
+          <span class="api-info-tip" id="api-info-tip" tabindex="0">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 7v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".8" fill="currentColor"/></svg>
+            <span class="api-info-tooltip">
+              Works with any major AI provider:<br>
+              <strong>Anthropic</strong> — sk-ant-…<br>
+              <strong>OpenAI</strong> — sk-…<br>
+              <strong>Google AI</strong> — AIza…<br>
+              <span style="opacity:0.6;font-size:11px">Provider is auto-detected from key prefix</span>
+            </span>
+          </span>
+        </div>
+        <input class="api-key-input" id="api-key-input" type="password" placeholder="paste any API key…" onchange="saveApiKey()">
       </div>
       <div class="fs-section">
         <div class="fs-section-label">data</div>
@@ -244,13 +216,6 @@
 <!-- Mobile sidebar backdrop -->
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
 
-<!-- Zoom tray -->
-<div class="ws-zoom-tray" id="ws-zoom-tray">
-  <button class="ws-zoom-btn" onclick="workspaceZoomReset()" data-tip="reset zoom" tabindex="-1">⌂</button>
-  <input type="range" min="50" max="200" value="100" step="5" id="ws-zoom-slider" oninput="workspaceZoom(this.value)" tabindex="-1">
-  <span class="ws-zoom-label" id="ws-zoom-label">100%</span>
-</div>
-
 <!-- App body -->
 <div class="app-body">
 
@@ -259,9 +224,14 @@
     <div class="sidebar-scroll" id="sidebar-scroll">
       <!-- Review deck -->
       <div class="review-deck" id="review-deck" onclick="openReviewDeck()">
-        <img class="sidebar-icon" src="assets/page-reload-icon-31.png" width="16" height="16" style="display:none;flex-shrink:0;opacity:0.75">
-        <span class="sidebar-full review-deck-label"><img src="assets/page-reload-icon-31.png" width="13" height="13" style="vertical-align:middle;margin-right:5px;opacity:0.75">review</span>
-        <span class="review-badge empty sidebar-full" id="review-badge">0</span>
+        <span class="review-deck-label">
+          <svg class="review-icon" width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path d="M1.5 8a6.5 6.5 0 0 1 11.48-4.17M14.5 1.5v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14.5 8A6.5 6.5 0 0 1 3.02 12.17M1.5 14.5v-4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          review
+        </span>
+        <span class="review-badge empty" id="review-badge">0</span>
       </div>
 
       <div class="sidebar-section">hsk decks</div>
@@ -272,12 +242,7 @@
     </div>
 
     <div class="sidebar-bottom">
-      <!-- Collapsed: circular + icon -->
-      <button class="btn btn-sm sidebar-new-icon" onclick="toggleNewDeck()" style="display:none;width:32px;height:32px;padding:0;border-radius:50%;justify-content:center;align-items:center;flex-shrink:0" data-tip="new deck">
-        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      </button>
-      <!-- Expanded: full button -->
-      <button class="btn btn-sm sidebar-full" onclick="toggleNewDeck()" id="new-deck-btn" style="width:100%">
+      <button class="btn btn-sm new-deck-btn" onclick="toggleNewDeck()" id="new-deck-btn">
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         new deck
       </button>
@@ -301,24 +266,21 @@
         <div class="empty-sub">choose from hsk decks · import csv · generate with ai</div>
       </div>
 
-      <!-- Context strip -->
-      <div class="context-strip" id="context-strip"></div>
-
       <!-- Study view -->
       <div class="study-area" id="study-view">
-        <button class="side-nav" onclick="prevCard()">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <!-- card-column: card + tray stacked so tray appears just below the card -->
+        <!-- Context strip — inside study area, above card -->
+        <div class="context-strip" id="context-strip"></div>
         <div class="card-column">
           <div class="card-scene" id="card-scene">
             <div class="card-inner" id="card-inner" onclick="flipCard()">
               <div class="card-face card-front">
                 <span class="card-note-indicator" id="card-note-icon" title="">✏</span>
                 <div class="card-review-flag" id="card-review-flag">review</div>
+                <span class="card-counter" id="card-counter"></span>
+                <button class="card-mode-btn" id="card-mode-btn" onclick="event.stopPropagation();setMode(currentMode==='test'?'study':'test')">test</button>
                 <div class="card-hanzi" id="front-hanzi"></div>
                 <div class="card-pinyin" id="front-pinyin"></div>
-                <div class="card-hint">click to flip · ← → to navigate</div>
+                <div class="card-hint">click to flip · swipe or ← → to navigate</div>
               </div>
               <div class="card-face card-back">
                 <div class="card-english" id="back-english"></div>
@@ -338,20 +300,19 @@
               <button class="btn btn-sm" id="btn-card-list" onclick="toggleCardList()" data-tip="card list">
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 4.5h12M2 8h12M2 11.5h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
               </button>
-              <!-- Hide/Show mastered -->
-              <button class="btn btn-sm" onclick="toggleMastered()" id="btn-mastered">Hide</button>
+              <!-- Hide/Show mastered (eye-slash icon) -->
+              <button class="btn btn-sm" onclick="toggleMastered()" id="btn-mastered" data-tip="hide mastered">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" id="mastered-icon"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </button>
               <!-- Undo -->
               <button class="btn btn-sm btn-undo" id="btn-undo" onclick="undoMastered()">undo</button>
             </div>
-            <!-- Chevron pinned below buttons: ∨ closed, ∧ open (rotated 180°) -->
+            <!-- Chevron pinned below buttons -->
             <button class="controls-tray-chevron" id="controls-tray-chevron" onclick="toggleControlsTray()" tabindex="-1" data-tip="controls">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
         </div>
-        <button class="side-nav" onclick="nextCard()">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
       </div>
 
       <!-- Test view -->
@@ -362,6 +323,12 @@
           <div class="empty-text">select a deck to begin</div>
           <div class="empty-sub">choose from the sidebar on the left</div>
         </div>
+
+        <!-- Exit test mode button -->
+        <button class="test-exit-btn" onclick="setMode('study')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          study
+        </button>
 
         <!-- Start screen (shown before test begins) -->
         <div class="test-start-screen" id="test-start-screen">
@@ -408,27 +375,6 @@
 
     </div>
 
-    <!-- Analytics dashboard (workspace panel) -->
-    <div class="analytics-view ws-panel" id="analytics-view" data-panel-id="analytics">
-      <div class="dash-header">
-        <div class="dash-title">progress dashboard</div>
-        <button class="icon-btn" onclick="showAnalytics()" data-tip="close">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <div class="stat-cards" id="dash-stat-cards"></div>
-      <div class="dash-card">
-        <div class="dash-card-title">accuracy over sessions</div>
-        <div class="dash-chart-wrap"><canvas id="accuracy-chart"></canvas></div>
-      </div>
-      <div class="session-table-wrap">
-        <div class="session-table-title">recent sessions</div>
-        <div class="session-table-inner">
-          <div id="session-history-table"></div>
-        </div>
-      </div>
-    </div>
-
     <!-- Draggable divider -->
     <div class="pane-divider" id="pane-divider" style="display:none"></div>
 
@@ -439,11 +385,21 @@
           select a card to view details
         </div>
       </div>
-      <div class="tutor-bar">
-        <input class="tutor-input" id="tutor-input" placeholder="ask about this character…" onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendTutorMsg()">
-        <button class="btn btn-accent btn-sm" onclick="sendTutorMsg()">
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+      <!-- Tutor chat overlay — opens from "ask about this character" button -->
+      <div class="tutor-overlay" id="tutor-overlay">
+        <div class="tutor-overlay-header">
+          <span class="tutor-overlay-title">tutor</span>
+          <button class="icon-btn" onclick="closeTutorOverlay()" data-tip="close">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="tutor-messages-wrap" id="tutor-messages-overlay"></div>
+        <div class="tutor-input-bar">
+          <input class="tutor-input" id="tutor-input" placeholder="ask about this character…" onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendTutorMsg()">
+          <button class="btn btn-accent btn-sm" onclick="sendTutorMsg()">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -470,7 +426,6 @@
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="js/state.js"></script>
 <script src="js/profiles.js"></script>
 <script src="js/data.js"></script>
@@ -483,7 +438,6 @@
 <script src="js/info-panel.js"></script>
 <script src="js/search.js"></script>
 <script src="js/extras.js"></script>
-<script src="js/analytics.js"></script>
 <script src="js/workspace.js"></script>
 <script src="js/events.js"></script>
 <script src="js/app.js"></script>

@@ -32,6 +32,45 @@ let appearance = {
 };
 let showTimerOnly = false;
 
+// Curated swatch palette — hue values
+const SWATCHES = [
+  { hue: 25,  name: 'amber' },
+  { hue: 12,  name: 'coral' },
+  { hue: 345, name: 'rose' },
+  { hue: 300, name: 'mauve' },
+  { hue: 250, name: 'indigo' },
+  { hue: 210, name: 'ocean' },
+  { hue: 180, name: 'teal' },
+  { hue: 155, name: 'sage' },
+  { hue: 80,  name: 'lime' },
+  { hue: 45,  name: 'gold' },
+];
+
+function renderSwatches() {
+  ['swatch-row-quick', 'swatch-row-full'].forEach(id => {
+    const row = document.getElementById(id);
+    if (!row) return;
+    row.innerHTML = SWATCHES.map(s => {
+      const hex = hueToHex(s.hue);
+      const isActive = Math.abs(appearance.primaryHue - s.hue) < 5 ||
+                       Math.abs(appearance.primaryHue - s.hue) > 355;
+      return `<div class="swatch-dot${isActive ? ' active' : ''}"
+        style="background:${hex}"
+        title="${s.name}"
+        onclick="selectSwatch(${s.hue})"></div>`;
+    }).join('');
+  });
+}
+
+function selectSwatch(hue) {
+  appearance.primaryHue = hue;
+  appearance.type = 'theme';
+  applyThemeColors();
+  applyBlobTint();
+  saveAppearance();
+  syncSettingsUI();
+}
+
 function syncSettingsUI() {
   const isLight = document.body.classList.contains('light');
   // Theme
@@ -52,51 +91,14 @@ function syncSettingsUI() {
   ['timer-only-row','fs-timer-only-row'].forEach(id => { const el=document.getElementById(id); if(el){ el.style.opacity=showTimer?'1':'.4'; el.style.pointerEvents=showTimer?'':'none'; }});
   // Diff ratings
   ['diff-ratings-toggle','fs-diff-ratings-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showDifficultyRatings); });
-  // Background type pills
-  ['theme','color','image'].forEach(t => { const el=document.getElementById('bg-opt-'+t); if(el) el.classList.toggle('active',appearance.type===t); });
-  // Show/hide rows based on type
-  const isTheme = appearance.type === 'theme';
-  const isColor = appearance.type === 'color';
-  const isImage = appearance.type === 'image';
-  const primaryRow = document.getElementById('bg-primary-row');
-  if(primaryRow) primaryRow.style.display = isTheme ? '' : 'none';
-  const secondaryRow = document.getElementById('bg-secondary-row');
-  if(secondaryRow) secondaryRow.style.display = isTheme ? '' : 'none';
-  const colorRow = document.getElementById('bg-color-row');
-  if(colorRow) colorRow.style.display = isColor ? '' : 'none';
-  const blurRow = document.getElementById('bg-blur-row');
-  if(blurRow) blurRow.style.display = isImage ? '' : 'none';
-  const blurToggle = document.getElementById('bg-blur-toggle');
-  if(blurToggle) blurToggle.classList.toggle('on', appearance.blur);
-  // Background color swatch
-  const bgColorSwatch = document.getElementById('bg-color-swatch');
-  if(bgColorSwatch) bgColorSwatch.style.background = appearance.color;
-  const bgColorPicker = document.getElementById('bg-color-picker');
-  if(bgColorPicker) bgColorPicker.value = appearance.color;
-  // Primary swatch
+  // Swatch palette
+  renderSwatches();
+  // Primary color custom picker
   const primaryHex = hueToHex(appearance.primaryHue);
   const primarySwatch = document.getElementById('bg-primary-swatch');
   if(primarySwatch) primarySwatch.style.background = primaryHex;
   const primaryPicker = document.getElementById('bg-primary-picker');
   if(primaryPicker) primaryPicker.value = primaryHex;
-  // Secondary swatch — complement or manual
-  const secHue = appearance.complementSecondary
-    ? getSecondaryHue(appearance.primaryHue)
-    : (appearance.secondaryHue != null ? appearance.secondaryHue : getSecondaryHue(appearance.primaryHue));
-  const secHex = hueToHex(secHue);
-  const secSwatch = document.getElementById('bg-secondary-swatch');
-  if(secSwatch) {
-    secSwatch.style.background = secHex;
-    secSwatch.style.opacity = appearance.complementSecondary ? '0.38' : '1';
-    secSwatch.style.pointerEvents = appearance.complementSecondary ? 'none' : 'auto';
-    secSwatch.style.cursor = appearance.complementSecondary ? 'default' : 'pointer';
-  }
-  const secPicker = document.getElementById('bg-secondary-picker');
-  if(secPicker) { secPicker.value = secHex; secPicker.disabled = appearance.complementSecondary; }
-  const complementCb = document.getElementById('complement-checkbox');
-  if(complementCb) complementCb.checked = appearance.complementSecondary;
-  const secondaryLabel = document.getElementById('secondary-color-label');
-  if(secondaryLabel) secondaryLabel.querySelector('span').textContent = appearance.complementSecondary ? 'complement primary' : 'secondary color';
 }
 
 function updatePrefsVisibility() {
@@ -316,10 +318,10 @@ function getSecondaryHue(primaryHue) {
 
 function applyThemeColors() {
   const p = appearance.primaryHue;
-  // Gradient stays within the same hue family — no red.
-  // Mid shifts slightly warmer (+15°), end shifts slightly cooler (+10°).
-  const midHue = (p + 15) % 360;
-  const endHue = (p + 10) % 360;
+  // Gradient inspired by the "Mmmmm" reference: big lightness/saturation swings
+  // within a tight hue range. Start = deep saturated, mid = lighter/creamier, end = warm.
+  const midHue = (p + 12) % 360;
+  const endHue = (p + 5) % 360;
   // Accent derives from the primary hue — one color family everywhere.
   let styleEl = document.getElementById('theme-colors');
   if (!styleEl) {
@@ -329,9 +331,9 @@ function applyThemeColors() {
   }
   styleEl.textContent = `
     :root {
-      --grad-start: hsl(${p}, 85%, 64%);
-      --grad-mid:   hsl(${midHue}, 80%, 70%);
-      --grad-end:   hsl(${endHue}, 78%, 55%);
+      --grad-start: hsl(${p}, 90%, 62%);
+      --grad-mid:   hsl(${midHue}, 65%, 78%);
+      --grad-end:   hsl(${endHue}, 82%, 56%);
       --accent:        hsl(${p}, 75%, 55%);
       --accent2:       hsl(${p}, 70%, 48%);
       --accent-glow:   hsla(${p}, 75%, 55%, 0.20);
@@ -340,9 +342,9 @@ function applyThemeColors() {
       --accent-border: hsla(${p}, 75%, 55%, 0.28);
     }
     .light {
-      --grad-start: hsl(${p}, 82%, 52%);
-      --grad-mid:   hsl(${midHue}, 78%, 48%);
-      --grad-end:   hsl(${endHue}, 72%, 42%);
+      --grad-start: hsl(${p}, 88%, 48%);
+      --grad-mid:   hsl(${midHue}, 55%, 68%);
+      --grad-end:   hsl(${endHue}, 78%, 42%);
       --accent:        hsl(${p}, 72%, 52%);
       --accent2:       hsl(${p}, 68%, 45%);
       --accent-glow:   hsla(${p}, 72%, 52%, 0.18);
