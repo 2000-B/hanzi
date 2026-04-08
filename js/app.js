@@ -68,6 +68,51 @@ async function init() {
   setTimeout(() => {
     document.getElementById('loading-screen').classList.add('hidden');
   }, 300);
+
+  // First-time welcome — show only for truly new users (no progress, no custom profiles)
+  const profileData = getProfiles();
+  const hasProgress = getProfileData('hanzi-progress') || getProfileData('jp-progress');
+  const isFirstLaunch = !localStorage.getItem('hanzi-welcomed') &&
+    !hasProgress &&
+    profileData.profiles.length <= 1 &&
+    profileData.profiles[0]?.name === 'Default';
+  if (isFirstLaunch) {
+    setTimeout(() => {
+      document.getElementById('welcome-modal').classList.add('open');
+      document.getElementById('welcome-name').focus();
+    }, 500);
+  }
+}
+
+// ── Welcome modal ───────────────────────────────────────────────────────
+function completeWelcome() {
+  const nameInput = document.getElementById('welcome-name');
+  const name = nameInput.value.trim() || 'Default';
+  const isJapanese = document.getElementById('welcome-ja').classList.contains('active');
+  const lang = isJapanese ? 'ja' : 'zh';
+
+  // Rename the default profile (or create one)
+  const data = getProfiles();
+  if (data.profiles.length && data.profiles[0].id === 'default') {
+    data.profiles[0].name = name;
+    saveProfilesIndex(data);
+  } else {
+    const id = createProfile(name);
+    switchProfile(id);
+  }
+
+  // Set language
+  if (lang !== currentLang) {
+    switchLanguage(lang);
+  }
+
+  // Mark welcomed so we don't show again
+  localStorage.setItem('hanzi-welcomed', '1');
+
+  // Close modal + update UI
+  document.getElementById('welcome-modal').classList.remove('open');
+  _updateProfilePill();
+  renderSidebar();
 }
 
 // Register service worker
@@ -98,8 +143,7 @@ init();
     clearTimeout(hideTimer);
     tip.textContent = el.dataset.tip;
     const rect = el.getBoundingClientRect();
-    tip.style.left = (rect.left + rect.width / 2) + 'px';
-    // Flip below when element is near the top of the screen
+    // Position vertically — flip below when near top
     if (rect.top < 80) {
       tip.style.top = (rect.bottom + 8) + 'px';
       tip.style.transform = 'translateX(-50%)';
@@ -107,7 +151,16 @@ init();
       tip.style.top = (rect.top - 8) + 'px';
       tip.style.transform = 'translateX(-50%) translateY(-100%)';
     }
+    // Position horizontally — center on element, then clamp to viewport
+    tip.style.left = '0px';
+    tip.style.visibility = 'hidden';
     tip.classList.add('visible');
+    const tipW = tip.offsetWidth;
+    let left = rect.left + rect.width / 2;
+    if (left + tipW / 2 > window.innerWidth - 8) left = window.innerWidth - 8 - tipW / 2;
+    if (left - tipW / 2 < 8) left = 8 + tipW / 2;
+    tip.style.left = left + 'px';
+    tip.style.visibility = '';
   });
 
   document.addEventListener('mouseout', e => {

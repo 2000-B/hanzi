@@ -6,10 +6,18 @@ function toggleInfoPanel() {
   panel.classList.toggle('open', infoPanelOpen);
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
 
-  if (infoPanelOpen && activeDeck.length) {
-    renderInfoPanel(activeDeck[currentIndex]);
-    renderTutorHistory();
-    _syncTutorBarVisibility();
+  if (infoPanelOpen) {
+    // Restore saved panel width
+    const savedW = getProfileData('hanzi-info-width');
+    if (savedW) {
+      const w = parseInt(savedW, 10);
+      if (w >= 240 && w <= 600) { panel.style.width = w + 'px'; }
+    }
+    if (activeDeck.length) {
+      renderInfoPanel(activeDeck[currentIndex]);
+      renderTutorHistory();
+      _syncTutorBarVisibility();
+    }
   }
 }
 
@@ -521,6 +529,8 @@ function escapeHtml(str) {
   function onMouseUp() {
     dragging = false;
     panel.style.borderLeftColor = '';
+    // Save panel width for next open
+    try { setProfileData('hanzi-info-width', panel.offsetWidth + ''); } catch(e) {}
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   }
@@ -547,6 +557,7 @@ function escapeHtml(str) {
     if (!dragging) return;
     dragging = false;
     panel.style.borderLeftColor = '';
+    try { setProfileData('hanzi-info-width', panel.offsetWidth + ''); } catch(e) {}
   });
 })();
 

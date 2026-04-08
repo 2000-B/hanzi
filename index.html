@@ -23,6 +23,9 @@
 <header>
   <div class="header-left">
     <div class="header-title">汉字学习</div>
+    <button class="icon-btn" id="btn-deck" onclick="toggleSidebar()" data-tip="decks">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="6.5" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="11" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+    </button>
   </div>
 
   <div class="header-right">
@@ -39,9 +42,6 @@
       </button>
       <div class="search-results" id="search-results"></div>
     </div>
-    <button class="icon-btn" id="btn-deck" onclick="toggleSidebar()" data-tip="decks">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="6.5" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="11" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
-    </button>
     <button class="icon-btn" id="btn-info" data-tip="info panel · double-click to fullscreen">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
     </button>
@@ -124,11 +124,9 @@
         </div>
         <div class="fs-section-label" style="margin-top:8px">accent color</div>
         <div class="swatch-row" id="swatch-row-full"></div>
-        <div class="color-preview-row" style="margin-top:4px">
-          <span class="settings-toggle-label" style="font-size:11px;color:var(--text3)">custom</span>
-          <div class="color-swatch" id="bg-primary-swatch" style="background:#ffb347">
-            <input type="color" id="bg-primary-picker" value="#ffb347" oninput="updatePrimaryColor(this.value)">
-          </div>
+        <div class="settings-toggle-row" style="margin-top:4px">
+          <span class="settings-toggle-label">tint ui to accent</span>
+          <button class="toggle-switch" id="fs-match-bg-toggle" onclick="toggleMatchBg()"></button>
         </div>
       </div>
       <div class="fs-section">
@@ -158,6 +156,13 @@
         </div>
       </div>
       <div class="fs-section">
+        <div class="fs-section-label">language</div>
+        <div class="settings-pill">
+          <button class="settings-pill-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文 chinese</button>
+          <button class="settings-pill-btn" id="lang-ja" onclick="switchLanguage('ja')">日本語 japanese</button>
+        </div>
+      </div>
+      <div class="fs-section">
         <div class="fs-section-label" style="display:flex;align-items:center;gap:6px">
           api key
           <span class="api-info-tip" id="api-info-tip" tabindex="0">
@@ -178,13 +183,6 @@
         <div class="settings-btn-row">
           <button class="btn btn-sm" onclick="exportProgress()" style="flex:1">export progress</button>
           <label class="btn btn-sm" style="flex:1;cursor:pointer">import<input type="file" accept=".json" onchange="importProgress(this)" style="display:none"></label>
-        </div>
-      </div>
-      <div class="fs-section">
-        <div class="fs-section-label">language</div>
-        <div class="settings-pill">
-          <button class="settings-pill-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文 chinese</button>
-          <button class="settings-pill-btn" id="lang-ja" onclick="switchLanguage('ja')">日本語 japanese</button>
         </div>
       </div>
     </div>
@@ -425,6 +423,27 @@
   </div>
 </div>
 
+
+<!-- Welcome modal (first launch) -->
+<div class="welcome-overlay" id="welcome-modal">
+  <div class="welcome-modal">
+    <div class="welcome-char">学</div>
+    <div class="welcome-title">welcome to <span id="welcome-app-title">汉字学习</span></div>
+    <div class="welcome-sub">set up your profile to get started</div>
+    <div class="welcome-field">
+      <label class="welcome-label">profile name</label>
+      <input class="gen-input" id="welcome-name" placeholder="your name…" onkeydown="if(event.key==='Enter')completeWelcome()">
+    </div>
+    <div class="welcome-field">
+      <label class="welcome-label">i'm studying</label>
+      <div class="settings-pill">
+        <button class="settings-pill-btn active" id="welcome-zh" onclick="document.getElementById('welcome-zh').classList.add('active');document.getElementById('welcome-ja').classList.remove('active')">中文 chinese</button>
+        <button class="settings-pill-btn" id="welcome-ja" onclick="document.getElementById('welcome-ja').classList.add('active');document.getElementById('welcome-zh').classList.remove('active')">日本語 japanese</button>
+      </div>
+    </div>
+    <button class="btn btn-accent welcome-go" onclick="completeWelcome()">get started →</button>
+  </div>
+</div>
 
 <script src="js/state.js"></script>
 <script src="js/profiles.js"></script>

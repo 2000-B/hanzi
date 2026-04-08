@@ -439,7 +439,7 @@ body.light .hsk-label-icon {
   min-width: 200px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  margin: 3px;
+  margin: 6px;
   transition: transform .25s ease, opacity .25s ease, filter .2s ease;
 }
 .ws-panel:not(.open) {
@@ -532,7 +532,7 @@ body.light .hsk-label-icon {
 .info-panel.open:hover .ws-fullscreen-btn { opacity: 1; }
 .ws-fullscreen {
   position: absolute !important;
-  inset: 0 !important;
+  inset: 6px !important;
   width: auto !important;
   height: auto !important;
   max-width: none !important;
@@ -601,6 +601,7 @@ body.light .info-panel {
   flex: 1;
   overflow-y: auto;
   padding: 20px 16px;
+  border-radius: inherit;
 }
 
 /* Tutor input pinned at bottom of info panel */
@@ -1461,6 +1462,11 @@ body.light .empty-sub {
   width: 100%;
   max-width: 420px;
   transform-style: preserve-3d;
+  transition: margin-bottom .28s cubic-bezier(.4,0,.2,1);
+}
+/* When tray opens, add bottom margin so flex centering shifts card up */
+.card-column:has(.controls-tray-wrap.tray-open) {
+  margin-bottom: 56px;
 }
 
 /* Card — responsive, fills available space */
@@ -1514,13 +1520,13 @@ body.light .empty-sub {
   gap: 8px;
   overflow: hidden;
 }
-/* Sheen overlay — hidden in dark mode, subtle in light mode */
+/* Sheen overlay — subtle gradient in dark mode, none in light mode */
 .card-face::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  background: none;
+  background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
   pointer-events: none;
 }
 body.light .card-face {
@@ -2300,13 +2306,14 @@ body.light .full-settings {
 /* Swatch palette */
 .swatch-row {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   flex-wrap: wrap;
   margin-top: 8px;
 }
+.settings-panel .swatch-row { flex-wrap: nowrap; }
 .swatch-dot {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -2541,6 +2548,84 @@ body.light .ctx-menu {
 @keyframes pulse {
   0%,100% { opacity: .5; transform: scale(.98); }
   50% { opacity: 1; transform: scale(1); }
+}
+
+/* ══════════════════════════════════════════
+   WELCOME MODAL (first launch)
+   ══════════════════════════════════════════ */
+.welcome-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+.welcome-overlay.open { display: flex; }
+.welcome-modal {
+  background: rgba(14,14,22,0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  padding: 32px 36px;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6);
+  animation: welcomeIn .3s ease;
+}
+body.light .welcome-modal {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
+@keyframes welcomeIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.welcome-char {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 48px;
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.welcome-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.welcome-sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+.welcome-field {
+  text-align: left;
+  margin-bottom: 16px;
+}
+.welcome-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+.welcome-go {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Rating buttons */

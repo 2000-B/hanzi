@@ -28,7 +28,9 @@ const path = require('path');
 const DATA_DIR    = path.join(__dirname, '..', 'data');
 const COMBINED    = path.join(__dirname, '..', 'data', 'jlpt-input.json');
 const MODEL       = 'claude-sonnet-4-20250514';
-const DELAY_MS    = 1000;
+const DELAY_MS    = 1500;
+const RATE_LIMIT_WAIT = 35000;
+const MAX_RETRIES = 3;
 
 // ── Level config ──────────────────────────────────────────────────────────────
 // Word counts are approximate targets based on standard JLPT lists.
@@ -105,7 +107,7 @@ Return exactly ${end - offset + 1} entries.`;
 
 // ── API call ──────────────────────────────────────────────────────────────────
 
-async function fetchBatch(level, batchIndex, batchSize, apiKey) {
+async function fetchBatch(level, batchIndex, batchSize, apiKey, retryCount = 0) {
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -119,6 +121,13 @@ async function fetchBatch(level, batchIndex, batchSize, apiKey) {
       messages: [{ role: 'user', content: buildPrompt(level, batchIndex, batchSize) }],
     }),
   });
+
+  if (response.status === 429 && retryCount < MAX_RETRIES) {
+    const waitSec = Math.round(RATE_LIMIT_WAIT / 1000 * (retryCount + 1));
+    process.stdout.write(`rate limited, waiting ${waitSec}s ... `);
+    await sleep(waitSec * 1000);
+    return fetchBatch(level, batchIndex, batchSize, apiKey, retryCount + 1);
+  }
 
   if (!response.ok) {
     const err = await response.text();

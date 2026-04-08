@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-04-07 — UI/UX Redesign Phase 3: Interface Refinements — COMPLETE
+
+**Status:** Done. Cache bumped to `hanzi-v6.52`. 12 UI refinements implemented.
+
+**Context:** Batch of interface polish items requested after Phase 2. Focus on panel behavior, settings cleanup, visual polish, and first-time user experience.
+
+### Panel Behavior
+- [x] **Panel split ratio memory** — info panel width saved on resize (both edge-drag and workspace divider), restored when panel reopens. Persisted per-profile as `hanzi-info-width`.
+- [x] **Fullscreen looks like default state** — `.ws-fullscreen` uses `inset: 6px` with same border-radius, making fullscreen feel like the natural layout.
+- [x] **Fullscreen hides other panels** — entering fullscreen sets `display: none` on sibling panels and dividers; exiting restores them.
+- [x] **Escape restores panels** — workspace.js Escape handler now restores hidden panels/dividers when exiting fullscreen. Uses `stopImmediatePropagation()` to prevent events.js handler from also closing the info panel.
+
+### Settings Restructuring
+- [x] **Removed RGB/custom color picker** — `color-preview-row` with hex input removed from full settings. Curated swatch palette is now the only accent selector.
+- [x] **"Tint UI to accent" toggle** — new `appearance.matchBg` flag. When enabled, calls `applyAccentFromHue()` to tint all bg/border/surface colors to match the accent hue. Toggle in full settings under accent color.
+- [x] **Language section moved up** — language pill now appears above API key and data sections in full settings (was at the very bottom).
+- [x] **Swatch wrapping fix** — `.settings-panel .swatch-row` gets `flex-wrap: nowrap` to prevent orphan swatch wrapping in quick settings. Dot size 22→20px, gap 6→5px.
+
+### Visual Polish
+- [x] **Dark mode card gradient** — `.card-face::before` now has subtle `linear-gradient(165deg, rgba(255,255,255,0.04) … rgba(255,255,255,0.02))` sheen overlay in dark mode.
+- [x] **Tool tray spacing** — `.card-column:has(.controls-tray-wrap.tray-open)` adds `margin-bottom: 56px` with smooth transition, shifting the card up via flex centering when tray opens.
+- [x] **Tooltip viewport clamping** — generic tooltip system now measures tooltip width after render, then clamps `left` position to stay within `8px` of viewport edges.
+
+### First-Time Experience
+- [x] **Welcome modal** — shown on first launch (no progress data + default profile). Prompts for profile name and language selection. Animated entrance, matches app styling. Sets `hanzi-welcomed` flag. Existing users upgrading are not shown the modal (checks for existing progress data).
+
+### Files Modified
+- `index.html` — welcome modal HTML, settings restructuring (removed color picker, moved language, added tint toggle)
+- `styles.css` — welcome modal styles, card gradient sheen, tray spacing with `:has()`, swatch sizing
+- `js/workspace.js` — Escape handler fix (restore panels + stopImmediatePropagation), save info width on divider drag
+- `js/info-panel.js` — save/restore info panel width on resize and open
+- `js/settings.js` — `toggleMatchBg()`, `appearance.matchBg` property, updated `saveAppearance`/`resetAppearance`/`syncSettingsUI`/`applyBackground`/`selectSwatch`
+- `js/app.js` — `completeWelcome()` function, first-launch detection in `init()`
+- `sw.js` — cache version `hanzi-v6.51` → `hanzi-v6.52`
+
+---
+
 ## 2026-04-07 — UI/UX Redesign Phase 2: Polish, Multi-provider AI, Dark/Light Mode Overhaul — COMPLETE
 
 **Status:** Done. Cache bumped to `hanzi-v6.50`. All changes committed and pushed.

@@ -25,6 +25,7 @@ function ensureFullscreenBtns() {
 }
 
 function wsToggleFullscreen(panelId) {
+  const workspace = document.getElementById('workspace');
   const panelEls = {
     flashcard: document.getElementById('main-content'),
     info:      document.getElementById('info-panel'),
@@ -38,6 +39,18 @@ function wsToggleFullscreen(panelId) {
   Object.entries(panelEls).forEach(([id, el]) => {
     if (id !== panelId && el) el.classList.remove('ws-fullscreen');
   });
+
+  // Hide/show other panels and dividers when entering/exiting fullscreen
+  Object.entries(panelEls).forEach(([id, el]) => {
+    if (id !== panelId && el) {
+      el.style.display = isNowFullscreen ? 'none' : '';
+    }
+  });
+  if (workspace) {
+    workspace.querySelectorAll('.ws-divider').forEach(d => {
+      d.style.display = isNowFullscreen ? 'none' : '';
+    });
+  }
 
   // Update button icon: expand ↔ compress
   const compressPath = `<path d="M6 2v4H2M14 6h-4V2M10 14v-4h4M2 10h4v4"
@@ -56,16 +69,30 @@ function wsToggleFullscreen(panelId) {
   });
 }
 
-// Escape exits fullscreen
+// Escape exits fullscreen — also restores hidden panels/dividers
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     const fs = document.querySelector('.ws-fullscreen');
     if (fs) {
+      e.stopImmediatePropagation(); // Prevent events.js handler from also firing
+      const expandPath = `<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"
+          stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
       fs.classList.remove('ws-fullscreen');
       fs.querySelectorAll('.ws-fullscreen-btn svg').forEach(svg => {
-        svg.innerHTML = `<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"
-          stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+        svg.innerHTML = expandPath;
       });
+      // Restore hidden panels and dividers
+      const workspace = document.getElementById('workspace');
+      const panelEls = {
+        flashcard: document.getElementById('main-content'),
+        info:      document.getElementById('info-panel'),
+      };
+      Object.entries(panelEls).forEach(([id, el]) => {
+        if (el) el.style.display = '';
+      });
+      if (workspace) {
+        workspace.querySelectorAll('.ws-divider').forEach(d => d.style.display = '');
+      }
     }
   }
 });
@@ -195,6 +222,11 @@ function _initTiling() {
     const onUp = () => {
       divDragging = false;
       divider.classList.remove('active');
+      // Save info panel width if it was resized
+      const infoPanel = document.getElementById('info-panel');
+      if (infoPanel && (divLeftEl === infoPanel || divRightEl === infoPanel)) {
+        try { setProfileData('hanzi-info-width', infoPanel.offsetWidth + ''); } catch(e) {}
+      }
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
     };

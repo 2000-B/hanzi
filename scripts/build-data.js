@@ -24,7 +24,9 @@ const path = require('path');
 const INPUT_FILE  = path.join(__dirname, '..', 'data', 'hsk-input.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'data', 'hsk-enriched.json');
 const BATCH_SIZE  = 8;    // characters per API call — keep small for quality
-const DELAY_MS    = 800;  // pause between batches to avoid rate limits
+const DELAY_MS    = 1500; // pause between batches
+const RATE_LIMIT_WAIT = 35000; // wait 35s on 429 rate limit
+const MAX_RETRIES = 3;   // retry rate-limited batches
 const MODEL       = 'claude-sonnet-4-20250514';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -182,7 +184,7 @@ function runValidation(output) {
 
 // ── API call ──────────────────────────────────────────────────────────────────
 
-async function enrichBatch(batch, apiKey) {
+async function enrichBatch(batch, apiKey, retryCount = 0) {
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -196,6 +198,13 @@ async function enrichBatch(batch, apiKey) {
       messages: [{ role: 'user', content: buildPrompt(batch) }],
     }),
   });
+
+  if (response.status === 429 && retryCount < MAX_RETRIES) {
+    const waitSec = Math.round(RATE_LIMIT_WAIT / 1000 * (retryCount + 1));
+    process.stdout.write(`rate limited, waiting ${waitSec}s ... `);
+    await sleep(waitSec * 1000);
+    return enrichBatch(batch, apiKey, retryCount + 1);
+  }
 
   if (!response.ok) {
     const err = await response.text();

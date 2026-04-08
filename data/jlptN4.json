@@ -1,0 +1,5228 @@
+[
+  {
+    "kanji": "案内",
+    "kana": "あんない",
+    "romaji": "annai",
+    "english": "guidance / information"
+  },
+  {
+    "kanji": "安全",
+    "kana": "あんぜん",
+    "romaji": "anzen",
+    "english": "safety / security"
+  },
+  {
+    "kanji": "場合",
+    "kana": "ばあい",
+    "romaji": "baai",
+    "english": "case / situation"
+  },
+  {
+    "kanji": "文化",
+    "kana": "ぶんか",
+    "romaji": "bunka",
+    "english": "culture"
+  },
+  {
+    "kanji": "文学",
+    "kana": "ぶんがく",
+    "romaji": "bungaku",
+    "english": "literature"
+  },
+  {
+    "kanji": "打つ",
+    "kana": "うつ",
+    "romaji": "butsu",
+    "english": "to hit / to strike"
+  },
+  {
+    "kanji": "注意",
+    "kana": "ちゅうい",
+    "romaji": "chuui",
+    "english": "attention / caution"
+  },
+  {
+    "kanji": "大学生",
+    "kana": "だいがくせい",
+    "romaji": "daigakusei",
+    "english": "university student"
+  },
+  {
+    "kanji": "台所",
+    "kana": "だいどころ",
+    "romaji": "daidokoro",
+    "english": "kitchen"
+  },
+  {
+    "kanji": "大事",
+    "kana": "だいじ",
+    "romaji": "daiji",
+    "english": "important / serious"
+  },
+  {
+    "kanji": "大切",
+    "kana": "たいせつ",
+    "romaji": "taisetsu",
+    "english": "important / precious"
+  },
+  {
+    "kanji": "電気",
+    "kana": "でんき",
+    "romaji": "denki",
+    "english": "electricity / electric light"
+  },
+  {
+    "kanji": "電報",
+    "kana": "でんぽう",
+    "romaji": "denpou",
+    "english": "telegram"
+  },
+  {
+    "kanji": "遠慮",
+    "kana": "えんりょ",
+    "romaji": "enryo",
+    "english": "reserve / restraint"
+  },
+  {
+    "kanji": "踏む",
+    "kana": "ふむ",
+    "romaji": "fumu",
+    "english": "to step on / to tread"
+  },
+  {
+    "kanji": "不便",
+    "kana": "ふべん",
+    "romaji": "fuben",
+    "english": "inconvenient"
+  },
+  {
+    "kanji": "普通",
+    "kana": "ふつう",
+    "romaji": "futsuu",
+    "english": "ordinary / usual"
+  },
+  {
+    "kanji": "原因",
+    "kana": "げんいん",
+    "romaji": "gen'in",
+    "english": "cause / origin"
+  },
+  {
+    "kanji": "現在",
+    "kana": "げんざい",
+    "romaji": "genzai",
+    "english": "present time / now"
+  },
+  {
+    "kanji": "具合",
+    "kana": "ぐあい",
+    "romaji": "guai",
+    "english": "condition / health"
+  },
+  {
+    "kanji": "羽",
+    "kana": "はね",
+    "romaji": "hane",
+    "english": "feather / wing"
+  },
+  {
+    "kanji": "反対",
+    "kana": "はんたい",
+    "romaji": "hantai",
+    "english": "opposition / opposite"
+  },
+  {
+    "kanji": "始まり",
+    "kana": "はじまり",
+    "romaji": "hajimari",
+    "english": "beginning / start"
+  },
+  {
+    "kanji": "働く",
+    "kana": "はたらく",
+    "romaji": "hataraku",
+    "english": "to work"
+  },
+  {
+    "kanji": "秘密",
+    "kana": "ひみつ",
+    "romaji": "himitsu",
+    "english": "secret"
+  },
+  {
+    "kanji": "一人一人",
+    "kana": "ひとりひとり",
+    "romaji": "hitori hitori",
+    "english": "one by one / each person"
+  },
+  {
+    "kanji": "法律",
+    "kana": "ほうりつ",
+    "romaji": "houritsu",
+    "english": "law"
+  },
+  {
+    "kanji": "翻訳",
+    "kana": "ほんやく",
+    "romaji": "hon'yaku",
+    "english": "translation"
+  },
+  {
+    "kanji": "一度",
+    "kana": "いちど",
+    "romaji": "ichido",
+    "english": "once / one time"
+  },
+  {
+    "kanji": "以外",
+    "kana": "いがい",
+    "romaji": "igai",
+    "english": "except / other than"
+  },
+  {
+    "kanji": "意見",
+    "kana": "いけん",
+    "romaji": "iken",
+    "english": "opinion"
+  },
+  {
+    "kanji": "以内",
+    "kana": "いない",
+    "romaji": "inai",
+    "english": "within / inside"
+  },
+  {
+    "kanji": "印象",
+    "kana": "いんしょう",
+    "romaji": "inshou",
+    "english": "impression"
+  },
+  {
+    "kanji": "以上",
+    "kana": "いじょう",
+    "romaji": "ijou",
+    "english": "more than / above"
+  },
+  {
+    "kanji": "石",
+    "kana": "いし",
+    "romaji": "ishi",
+    "english": "stone / rock"
+  },
+  {
+    "kanji": "泉",
+    "kana": "いずみ",
+    "romaji": "izumi",
+    "english": "spring / fountain"
+  },
+  {
+    "kanji": "自由",
+    "kana": "じゆう",
+    "romaji": "jiyuu",
+    "english": "freedom / liberty"
+  },
+  {
+    "kanji": "上手",
+    "kana": "じょうず",
+    "romaji": "jouzu",
+    "english": "skillful / good at"
+  },
+  {
+    "kanji": "関係",
+    "kana": "かんけい",
+    "romaji": "kankei",
+    "english": "relationship / connection"
+  },
+  {
+    "kanji": "感情",
+    "kana": "かんじょう",
+    "romaji": "kanjou",
+    "english": "emotion / feeling"
+  },
+  {
+    "kanji": "彼女",
+    "kana": "かのじょ",
+    "romaji": "kanojo",
+    "english": "she / her / girlfriend"
+  },
+  {
+    "kanji": "彼ら",
+    "kana": "かれら",
+    "romaji": "karera",
+    "english": "they / them"
+  },
+  {
+    "kanji": "科学",
+    "kana": "かがく",
+    "romaji": "kagaku",
+    "english": "science"
+  },
+  {
+    "kanji": "活動",
+    "kana": "かつどう",
+    "romaji": "katsudou",
+    "english": "activity"
+  },
+  {
+    "kanji": "経験",
+    "kana": "けいけん",
+    "romaji": "keiken",
+    "english": "experience"
+  },
+  {
+    "kanji": "結果",
+    "kana": "けっか",
+    "romaji": "kekka",
+    "english": "result / consequence"
+  },
+  {
+    "kanji": "結婚",
+    "kana": "けっこん",
+    "romaji": "kekkon",
+    "english": "marriage"
+  },
+  {
+    "kanji": "今度",
+    "kana": "こんど",
+    "romaji": "kondo",
+    "english": "this time / next time"
+  },
+  {
+    "kanji": "工場",
+    "kana": "こうじょう",
+    "romaji": "koujou",
+    "english": "factory"
+  },
+  {
+    "kanji": "交通",
+    "kana": "こうつう",
+    "romaji": "koutsuu",
+    "english": "traffic / transportation"
+  },
+  {
+    "kanji": "危ない",
+    "kana": "あぶない",
+    "romaji": "abunai",
+    "english": "dangerous / risky"
+  },
+  {
+    "kanji": "甘い",
+    "kana": "あまい",
+    "romaji": "amai",
+    "english": "sweet"
+  },
+  {
+    "kanji": "案内する",
+    "kana": "あんないする",
+    "romaji": "annai suru",
+    "english": "to guide / to show around"
+  },
+  {
+    "kanji": "文法",
+    "kana": "ぶんぽう",
+    "romaji": "bunpou",
+    "english": "grammar"
+  },
+  {
+    "kanji": "中央",
+    "kana": "ちゅうおう",
+    "romaji": "chuuou",
+    "english": "center / middle"
+  },
+  {
+    "kanji": "注意する",
+    "kana": "ちゅういする",
+    "romaji": "chuui suru",
+    "english": "to be careful / to pay attention"
+  },
+  {
+    "kanji": "駐車場",
+    "kana": "ちゅうしゃじょう",
+    "romaji": "chuushajou",
+    "english": "parking lot"
+  },
+  {
+    "kanji": "大統領",
+    "kana": "だいとうりょう",
+    "romaji": "daitouryou",
+    "english": "president"
+  },
+  {
+    "kanji": "誰でも",
+    "kana": "だれでも",
+    "romaji": "dare demo",
+    "english": "anyone / everyone"
+  },
+  {
+    "kanji": "電池",
+    "kana": "でんち",
+    "romaji": "denchi",
+    "english": "battery"
+  },
+  {
+    "kanji": "動物",
+    "kana": "どうぶつ",
+    "romaji": "doubutsu",
+    "english": "animal"
+  },
+  {
+    "kanji": "道具",
+    "kana": "どうぐ",
+    "romaji": "dougu",
+    "english": "tool / instrument"
+  },
+  {
+    "kanji": "絵",
+    "kana": "え",
+    "romaji": "e",
+    "english": "picture / painting"
+  },
+  {
+    "kanji": "英語",
+    "kana": "えいご",
+    "romaji": "eigo",
+    "english": "English language"
+  },
+  {
+    "kanji": "映画館",
+    "kana": "えいがかん",
+    "romaji": "eigakan",
+    "english": "movie theater"
+  },
+  {
+    "kanji": "駅前",
+    "kana": "えきまえ",
+    "romaji": "ekimae",
+    "english": "in front of station"
+  },
+  {
+    "kanji": "選ぶ",
+    "kana": "えらぶ",
+    "romaji": "erabu",
+    "english": "to choose / to select"
+  },
+  {
+    "kanji": "船",
+    "kana": "ふね",
+    "romaji": "fune",
+    "english": "ship / boat"
+  },
+  {
+    "kanji": "外国人",
+    "kana": "がいこくじん",
+    "romaji": "gaikokujin",
+    "english": "foreigner"
+  },
+  {
+    "kanji": "学期",
+    "kana": "がっき",
+    "romaji": "gakki",
+    "english": "school term / semester"
+  },
+  {
+    "kanji": "楽器",
+    "kana": "がっき",
+    "romaji": "gakki",
+    "english": "musical instrument"
+  },
+  {
+    "kanji": "玄関",
+    "kana": "げんかん",
+    "romaji": "genkan",
+    "english": "entrance / entryway"
+  },
+  {
+    "kanji": "林",
+    "kana": "はやし",
+    "romaji": "hayashi",
+    "english": "woods / forest"
+  },
+  {
+    "kanji": "放送",
+    "kana": "ほうそう",
+    "romaji": "housou",
+    "english": "broadcast"
+  },
+  {
+    "kanji": "本当",
+    "kana": "ほんとう",
+    "romaji": "hontou",
+    "english": "truth / really"
+  },
+  {
+    "kanji": "以下",
+    "kana": "いか",
+    "romaji": "ika",
+    "english": "below / under / following"
+  },
+  {
+    "kanji": "医者",
+    "kana": "いしゃ",
+    "romaji": "isha",
+    "english": "doctor"
+  },
+  {
+    "kanji": "一生懸命",
+    "kana": "いっしょうけんめい",
+    "romaji": "isshoukenmei",
+    "english": "with all one's might / very hard"
+  },
+  {
+    "kanji": "自転車",
+    "kana": "じてんしゃ",
+    "romaji": "jitensha",
+    "english": "bicycle"
+  },
+  {
+    "kanji": "条件",
+    "kana": "じょうけん",
+    "romaji": "jouken",
+    "english": "condition / terms"
+  },
+  {
+    "kanji": "簡単",
+    "kana": "かんたん",
+    "romaji": "kantan",
+    "english": "simple / easy"
+  },
+  {
+    "kanji": "形",
+    "kana": "かたち",
+    "romaji": "katachi",
+    "english": "shape / form"
+  },
+  {
+    "kanji": "硬い",
+    "kana": "かたい",
+    "romaji": "katai",
+    "english": "hard / solid"
+  },
+  {
+    "kanji": "合う",
+    "kana": "あう",
+    "romaji": "au",
+    "english": "to fit / to suit / to match"
+  },
+  {
+    "kanji": "アルバイト",
+    "kana": "アルバイト",
+    "romaji": "arubaito",
+    "english": "part-time job"
+  },
+  {
+    "kanji": "文",
+    "kana": "ぶん",
+    "romaji": "bun",
+    "english": "sentence / text"
+  },
+  {
+    "kanji": "茶碗",
+    "kana": "ちゃわん",
+    "romaji": "chawan",
+    "english": "rice bowl / tea cup"
+  },
+  {
+    "kanji": "電灯",
+    "kana": "でんとう",
+    "romaji": "dentou",
+    "english": "electric light"
+  },
+  {
+    "kanji": "絵葉書",
+    "kana": "えはがき",
+    "romaji": "ehagaki",
+    "english": "picture postcard"
+  },
+  {
+    "kanji": "踊り",
+    "kana": "おどり",
+    "romaji": "odori",
+    "english": "dance"
+  },
+  {
+    "kanji": "踊る",
+    "kana": "おどる",
+    "romaji": "odoru",
+    "english": "to dance"
+  },
+  {
+    "kanji": "覚える",
+    "kana": "おぼえる",
+    "romaji": "oboeru",
+    "english": "to remember / to memorize"
+  },
+  {
+    "kanji": "折る",
+    "kana": "おる",
+    "romaji": "oru",
+    "english": "to fold / to break"
+  },
+  {
+    "kanji": "押し入れ",
+    "kana": "おしいれ",
+    "romaji": "oshiire",
+    "english": "closet / cupboard"
+  },
+  {
+    "kanji": "落とす",
+    "kana": "おとす",
+    "romaji": "otosu",
+    "english": "to drop / to lose"
+  },
+  {
+    "kanji": "音",
+    "kana": "おと",
+    "romaji": "oto",
+    "english": "sound / noise"
+  },
+  {
+    "kanji": "終わり",
+    "kana": "おわり",
+    "romaji": "owari",
+    "english": "end / finish"
+  },
+  {
+    "kanji": "看護師",
+    "kana": "かんごし",
+    "romaji": "kangoshi",
+    "english": "nurse"
+  },
+  {
+    "kanji": "歌手",
+    "kana": "かしゅ",
+    "romaji": "kashu",
+    "english": "singer"
+  },
+  {
+    "kanji": "貸す",
+    "kana": "かす",
+    "romaji": "kasu",
+    "english": "to lend"
+  },
+  {
+    "kanji": "勝つ",
+    "kana": "かつ",
+    "romaji": "katsu",
+    "english": "to win"
+  },
+  {
+    "kanji": "壁",
+    "kana": "かべ",
+    "romaji": "kabe",
+    "english": "wall"
+  },
+  {
+    "kanji": "髪",
+    "kana": "かみ",
+    "romaji": "kami",
+    "english": "hair"
+  },
+  {
+    "kanji": "乾く",
+    "kana": "かわく",
+    "romaji": "kawaku",
+    "english": "to dry / to get dry"
+  },
+  {
+    "kanji": "川",
+    "kana": "かわ",
+    "romaji": "kawa",
+    "english": "river"
+  },
+  {
+    "kanji": "変わる",
+    "kana": "かわる",
+    "romaji": "kawaru",
+    "english": "to change"
+  },
+  {
+    "kanji": "景色",
+    "kana": "けしき",
+    "romaji": "keshiki",
+    "english": "scenery / landscape"
+  },
+  {
+    "kanji": "怪我",
+    "kana": "けが",
+    "romaji": "kega",
+    "english": "injury"
+  },
+  {
+    "kanji": "毛",
+    "kana": "け",
+    "romaji": "ke",
+    "english": "hair / fur"
+  },
+  {
+    "kanji": "今夜",
+    "kana": "こんや",
+    "romaji": "konya",
+    "english": "tonight"
+  },
+  {
+    "kanji": "今晩",
+    "kana": "こんばん",
+    "romaji": "konban",
+    "english": "tonight / this evening"
+  },
+  {
+    "kanji": "混む",
+    "kana": "こむ",
+    "romaji": "komu",
+    "english": "to be crowded"
+  },
+  {
+    "kanji": "困る",
+    "kana": "こまる",
+    "romaji": "komaru",
+    "english": "to be troubled / to have difficulty"
+  },
+  {
+    "kanji": "込む",
+    "kana": "こむ",
+    "romaji": "komu",
+    "english": "to be included / to go into"
+  },
+  {
+    "kanji": "帽子",
+    "kana": "ぼうし",
+    "romaji": "boushi",
+    "english": "hat / cap"
+  },
+  {
+    "kanji": "部長",
+    "kana": "ぶちょう",
+    "romaji": "buchou",
+    "english": "department manager / section chief"
+  },
+  {
+    "kanji": "豚肉",
+    "kana": "ぶたにく",
+    "romaji": "butaniku",
+    "english": "pork"
+  },
+  {
+    "kanji": "物理",
+    "kana": "ぶつり",
+    "romaji": "butsuri",
+    "english": "physics"
+  },
+  {
+    "kanji": "調べる",
+    "kana": "しらべる",
+    "romaji": "shiraberu",
+    "english": "to investigate / to look up"
+  },
+  {
+    "kanji": "地下",
+    "kana": "ちか",
+    "romaji": "chika",
+    "english": "underground / basement"
+  },
+  {
+    "kanji": "地下鉄",
+    "kana": "ちかてつ",
+    "romaji": "chikatetsu",
+    "english": "subway / underground railway"
+  },
+  {
+    "kanji": "違う",
+    "kana": "ちがう",
+    "romaji": "chigau",
+    "english": "to differ / to be wrong"
+  },
+  {
+    "kanji": "地理",
+    "kana": "ちり",
+    "romaji": "chiri",
+    "english": "geography"
+  },
+  {
+    "kanji": "注文",
+    "kana": "ちゅうもん",
+    "romaji": "chuumon",
+    "english": "order / request"
+  },
+  {
+    "kanji": "中学校",
+    "kana": "ちゅうがっこう",
+    "romaji": "chuugakkou",
+    "english": "junior high school / middle school"
+  },
+  {
+    "kanji": "中止",
+    "kana": "ちゅうし",
+    "romaji": "chuushi",
+    "english": "cancellation / suspension"
+  },
+  {
+    "kanji": "説明",
+    "kana": "せつめい",
+    "romaji": "setsumei",
+    "english": "explanation"
+  },
+  {
+    "kanji": "大使館",
+    "kana": "たいしかん",
+    "romaji": "taishikan",
+    "english": "embassy"
+  },
+  {
+    "kanji": "伝統",
+    "kana": "でんとう",
+    "romaji": "dentou",
+    "english": "tradition"
+  },
+  {
+    "kanji": "動物園",
+    "kana": "どうぶつえん",
+    "romaji": "doubutsuen",
+    "english": "zoo"
+  },
+  {
+    "kanji": "泥棒",
+    "kana": "どろぼう",
+    "romaji": "dorobou",
+    "english": "thief / burglar"
+  },
+  {
+    "kanji": "枝",
+    "kana": "えだ",
+    "romaji": "eda",
+    "english": "branch / twig"
+  },
+  {
+    "kanji": "布団",
+    "kana": "ふとん",
+    "romaji": "futon",
+    "english": "futon / Japanese bedding"
+  },
+  {
+    "kanji": "増える",
+    "kana": "ふえる",
+    "romaji": "fueru",
+    "english": "to increase / to multiply"
+  },
+  {
+    "kanji": "深い",
+    "kana": "ふかい",
+    "romaji": "fukai",
+    "english": "deep / profound"
+  },
+  {
+    "kanji": "複雑",
+    "kana": "ふくざつ",
+    "romaji": "fukuzatsu",
+    "english": "complicated / complex"
+  },
+  {
+    "kanji": "復習",
+    "kana": "ふくしゅう",
+    "romaji": "fukushuu",
+    "english": "review / revision"
+  },
+  {
+    "kanji": "不安",
+    "kana": "ふあん",
+    "romaji": "fuan",
+    "english": "anxiety / uneasiness"
+  },
+  {
+    "kanji": "学問",
+    "kana": "がくもん",
+    "romaji": "gakumon",
+    "english": "learning / scholarship"
+  },
+  {
+    "kanji": "我慢",
+    "kana": "がまん",
+    "romaji": "gaman",
+    "english": "patience / endurance"
+  },
+  {
+    "kanji": "頑張る",
+    "kana": "がんばる",
+    "romaji": "ganbaru",
+    "english": "to do one's best / to work hard"
+  },
+  {
+    "kanji": "厳しい",
+    "kana": "きびしい",
+    "romaji": "kibishii",
+    "english": "strict / severe / harsh"
+  },
+  {
+    "kanji": "技術",
+    "kana": "ぎじゅつ",
+    "romaji": "gijutsu",
+    "english": "technology / technique"
+  },
+  {
+    "kanji": "議論",
+    "kana": "ぎろん",
+    "romaji": "giron",
+    "english": "argument / discussion / debate"
+  },
+  {
+    "kanji": "軍隊",
+    "kana": "ぐんたい",
+    "romaji": "guntai",
+    "english": "army / military force"
+  },
+  {
+    "kanji": "運動場",
+    "kana": "うんどうじょう",
+    "romaji": "undoujou",
+    "english": "playground / athletic field"
+  },
+  {
+    "kanji": "本来",
+    "kana": "ほんらい",
+    "romaji": "honrai",
+    "english": "originally / by nature"
+  },
+  {
+    "kanji": "舞台",
+    "kana": "ぶたい",
+    "romaji": "butai",
+    "english": "stage"
+  },
+  {
+    "kanji": "普段",
+    "kana": "ふだん",
+    "romaji": "fudan",
+    "english": "usually / normally"
+  },
+  {
+    "kanji": "豚",
+    "kana": "ぶた",
+    "romaji": "buta",
+    "english": "pig"
+  },
+  {
+    "kanji": "札",
+    "kana": "ふだ",
+    "romaji": "fuda",
+    "english": "card / tag / bill"
+  },
+  {
+    "kanji": "太る",
+    "kana": "ふとる",
+    "romaji": "futoru",
+    "english": "to get fat / to gain weight"
+  },
+  {
+    "kanji": "震える",
+    "kana": "ふるえる",
+    "romaji": "furueru",
+    "english": "to tremble / to shiver"
+  },
+  {
+    "kanji": "古い",
+    "kana": "ふるい",
+    "romaji": "furui",
+    "english": "old / ancient"
+  },
+  {
+    "kanji": "振る",
+    "kana": "ふる",
+    "romaji": "furu",
+    "english": "to wave / to shake"
+  },
+  {
+    "kanji": "風呂",
+    "kana": "ふろ",
+    "romaji": "furo",
+    "english": "bath / bathroom"
+  },
+  {
+    "kanji": "文句",
+    "kana": "もんく",
+    "romaji": "monku",
+    "english": "complaint"
+  },
+  {
+    "kanji": "分析",
+    "kana": "ぶんせき",
+    "romaji": "bunseki",
+    "english": "analysis"
+  },
+  {
+    "kanji": "分野",
+    "kana": "ぶんや",
+    "romaji": "bunya",
+    "english": "field / sphere / domain"
+  },
+  {
+    "kanji": "分離",
+    "kana": "ぶんり",
+    "romaji": "bunri",
+    "english": "separation / division"
+  },
+  {
+    "kanji": "部品",
+    "kana": "ぶひん",
+    "romaji": "buhin",
+    "english": "parts / components"
+  },
+  {
+    "kanji": "武器",
+    "kana": "ぶき",
+    "romaji": "buki",
+    "english": "weapon"
+  },
+  {
+    "kanji": "物価",
+    "kana": "ぶっか",
+    "romaji": "bukka",
+    "english": "prices / cost of living"
+  },
+  {
+    "kanji": "物語",
+    "kana": "ものがたり",
+    "romaji": "monogatari",
+    "english": "story / tale"
+  },
+  {
+    "kanji": "物質",
+    "kana": "ぶっしつ",
+    "romaji": "busshitsu",
+    "english": "substance / matter"
+  },
+  {
+    "kanji": "仏教",
+    "kana": "ぶっきょう",
+    "romaji": "bukkyou",
+    "english": "Buddhism"
+  },
+  {
+    "kanji": "ぶつかる",
+    "kana": "ぶつかる",
+    "romaji": "butsukaru",
+    "english": "to bump into / to collide"
+  },
+  {
+    "kanji": "ぶつける",
+    "kana": "ぶつける",
+    "romaji": "butsukeru",
+    "english": "to hit / to strike against"
+  },
+  {
+    "kanji": "不思議",
+    "kana": "ふしぎ",
+    "romaji": "fushigi",
+    "english": "mysterious / strange"
+  },
+  {
+    "kanji": "不足",
+    "kana": "ふそく",
+    "romaji": "fusoku",
+    "english": "shortage / lack"
+  },
+  {
+    "kanji": "婦人",
+    "kana": "ふじん",
+    "romaji": "fujin",
+    "english": "woman / lady"
+  },
+  {
+    "kanji": "負担",
+    "kana": "ふたん",
+    "romaji": "futan",
+    "english": "burden / responsibility"
+  },
+  {
+    "kanji": "二人",
+    "kana": "ふたり",
+    "romaji": "futari",
+    "english": "two people"
+  },
+  {
+    "kanji": "不正",
+    "kana": "ふせい",
+    "romaji": "fusei",
+    "english": "injustice / unfairness"
+  },
+  {
+    "kanji": "防ぐ",
+    "kana": "ふせぐ",
+    "romaji": "fusegu",
+    "english": "to defend / to prevent"
+  },
+  {
+    "kanji": "不平",
+    "kana": "ふへい",
+    "romaji": "fuhei",
+    "english": "complaint / dissatisfaction"
+  },
+  {
+    "kanji": "復活",
+    "kana": "ふっかつ",
+    "romaji": "fukkatsu",
+    "english": "revival / resurrection"
+  },
+  {
+    "kanji": "服装",
+    "kana": "ふくそう",
+    "romaji": "fukusou",
+    "english": "clothes / outfit"
+  },
+  {
+    "kanji": "袋",
+    "kana": "ふくろ",
+    "romaji": "fukuro",
+    "english": "bag / sack"
+  },
+  {
+    "kanji": "苦しい",
+    "kana": "くるしい",
+    "romaji": "kurushii",
+    "english": "painful / difficult / distressing"
+  },
+  {
+    "kanji": "苦しむ",
+    "kana": "くるしむ",
+    "romaji": "kurushimu",
+    "english": "to suffer / to be in pain"
+  },
+  {
+    "kanji": "薬",
+    "kana": "くすり",
+    "romaji": "kusuri",
+    "english": "medicine / drug"
+  },
+  {
+    "kanji": "靴下",
+    "kana": "くつした",
+    "romaji": "kutsushita",
+    "english": "socks"
+  },
+  {
+    "kanji": "マーク",
+    "kana": "マーク",
+    "romaji": "maaku",
+    "english": "mark / symbol"
+  },
+  {
+    "kanji": "毎月",
+    "kana": "まいつき",
+    "romaji": "maitsuki",
+    "english": "every month"
+  },
+  {
+    "kanji": "毎週",
+    "kana": "まいしゅう",
+    "romaji": "maishuu",
+    "english": "every week"
+  },
+  {
+    "kanji": "負ける",
+    "kana": "まける",
+    "romaji": "makeru",
+    "english": "to lose / to be defeated"
+  },
+  {
+    "kanji": "守る",
+    "kana": "まもる",
+    "romaji": "mamoru",
+    "english": "to protect / to guard / to obey"
+  },
+  {
+    "kanji": "漫画",
+    "kana": "まんが",
+    "romaji": "manga",
+    "english": "comic / manga"
+  },
+  {
+    "kanji": "万",
+    "kana": "まん",
+    "romaji": "man",
+    "english": "ten thousand"
+  },
+  {
+    "kanji": "真ん中",
+    "kana": "まんなか",
+    "romaji": "mannaka",
+    "english": "middle / center"
+  },
+  {
+    "kanji": "丸い",
+    "kana": "まるい",
+    "romaji": "marui",
+    "english": "round / circular"
+  },
+  {
+    "kanji": "マッチ",
+    "kana": "マッチ",
+    "romaji": "matchi",
+    "english": "match"
+  },
+  {
+    "kanji": "待つ",
+    "kana": "まつ",
+    "romaji": "matsu",
+    "english": "to wait"
+  },
+  {
+    "kanji": "祭り",
+    "kana": "まつり",
+    "romaji": "matsuri",
+    "english": "festival"
+  },
+  {
+    "kanji": "迷う",
+    "kana": "まよう",
+    "romaji": "mayou",
+    "english": "to get lost / to be confused"
+  },
+  {
+    "kanji": "めがね",
+    "kana": "めがね",
+    "romaji": "megane",
+    "english": "glasses / eyeglasses"
+  },
+  {
+    "kanji": "珍しい",
+    "kana": "めずらしい",
+    "romaji": "mezurashii",
+    "english": "rare / unusual"
+  },
+  {
+    "kanji": "道",
+    "kana": "みち",
+    "romaji": "michi",
+    "english": "road / path / way"
+  },
+  {
+    "kanji": "見える",
+    "kana": "みえる",
+    "romaji": "mieru",
+    "english": "to be visible / to be seen"
+  },
+  {
+    "kanji": "見つかる",
+    "kana": "みつかる",
+    "romaji": "mitsukaru",
+    "english": "to be found / to be discovered"
+  },
+  {
+    "kanji": "見つける",
+    "kana": "みつける",
+    "romaji": "mitsukeru",
+    "english": "to find / to discover"
+  },
+  {
+    "kanji": "森",
+    "kana": "もり",
+    "romaji": "mori",
+    "english": "forest"
+  },
+  {
+    "kanji": "申し込む",
+    "kana": "もうしこむ",
+    "romaji": "moushikomu",
+    "english": "to apply for / to register"
+  },
+  {
+    "kanji": "向かう",
+    "kana": "むかう",
+    "romaji": "mukau",
+    "english": "to head for / to face"
+  },
+  {
+    "kanji": "昔",
+    "kana": "むかし",
+    "romaji": "mukashi",
+    "english": "old times / long ago"
+  },
+  {
+    "kanji": "迎える",
+    "kana": "むかえる",
+    "romaji": "mukaeru",
+    "english": "to welcome / to meet"
+  },
+  {
+    "kanji": "向こう",
+    "kana": "むこう",
+    "romaji": "mukou",
+    "english": "over there / the other side"
+  },
+  {
+    "kanji": "無理",
+    "kana": "むり",
+    "romaji": "muri",
+    "english": "impossible / unreasonable"
+  },
+  {
+    "kanji": "生まれる",
+    "kana": "うまれる",
+    "romaji": "umareru",
+    "english": "to be born"
+  },
+  {
+    "kanji": "治る",
+    "kana": "なおる",
+    "romaji": "naoru",
+    "english": "to heal / to get well"
+  },
+  {
+    "kanji": "治す",
+    "kana": "なおす",
+    "romaji": "naosu",
+    "english": "to cure / to fix / to repair"
+  },
+  {
+    "kanji": "慣れる",
+    "kana": "なれる",
+    "romaji": "nareru",
+    "english": "to get used to / to become accustomed"
+  },
+  {
+    "kanji": "鳴く",
+    "kana": "なく",
+    "romaji": "naku",
+    "english": "to cry / to chirp (animals)"
+  },
+  {
+    "kanji": "泣く",
+    "kana": "なく",
+    "romaji": "naku",
+    "english": "to cry / to weep"
+  },
+  {
+    "kanji": "投げる",
+    "kana": "なげる",
+    "romaji": "nageru",
+    "english": "to throw"
+  },
+  {
+    "kanji": "内容",
+    "kana": "ないよう",
+    "romaji": "naiyou",
+    "english": "contents / subject matter"
+  },
+  {
+    "kanji": "中身",
+    "kana": "なかみ",
+    "romaji": "nakami",
+    "english": "contents / interior"
+  },
+  {
+    "kanji": "仲間",
+    "kana": "なかま",
+    "romaji": "nakama",
+    "english": "companion / friend"
+  },
+  {
+    "kanji": "眺める",
+    "kana": "ながめる",
+    "romaji": "nagameru",
+    "english": "to gaze at / to look out over"
+  },
+  {
+    "kanji": "流れる",
+    "kana": "ながれる",
+    "romaji": "nagareru",
+    "english": "to flow / to stream"
+  },
+  {
+    "kanji": "流す",
+    "kana": "ながす",
+    "romaji": "nagasu",
+    "english": "to let flow / to wash away"
+  },
+  {
+    "kanji": "長い間",
+    "kana": "ながいあいだ",
+    "romaji": "nagai aida",
+    "english": "for a long time"
+  },
+  {
+    "kanji": "並ぶ",
+    "kana": "ならぶ",
+    "romaji": "narabu",
+    "english": "to line up / to stand in a row"
+  },
+  {
+    "kanji": "並べる",
+    "kana": "ならべる",
+    "romaji": "naraberu",
+    "english": "to arrange / to line up"
+  },
+  {
+    "kanji": "習う",
+    "kana": "ならう",
+    "romaji": "narau",
+    "english": "to learn"
+  },
+  {
+    "kanji": "鳴らす",
+    "kana": "ならす",
+    "romaji": "narasu",
+    "english": "to ring / to sound"
+  },
+  {
+    "kanji": "鳴る",
+    "kana": "なる",
+    "romaji": "naru",
+    "english": "to ring / to sound"
+  },
+  {
+    "kanji": "成る",
+    "kana": "なる",
+    "romaji": "naru",
+    "english": "to become"
+  },
+  {
+    "kanji": "通う",
+    "kana": "かよう",
+    "romaji": "kayou",
+    "english": "to commute / to attend regularly"
+  },
+  {
+    "kanji": "計画",
+    "kana": "けいかく",
+    "romaji": "keikaku",
+    "english": "plan / scheme"
+  },
+  {
+    "kanji": "消える",
+    "kana": "きえる",
+    "romaji": "kieru",
+    "english": "to disappear / to go out"
+  },
+  {
+    "kanji": "季節",
+    "kana": "きせつ",
+    "romaji": "kisetsu",
+    "english": "season"
+  },
+  {
+    "kanji": "汚い",
+    "kana": "きたない",
+    "romaji": "kitanai",
+    "english": "dirty / filthy"
+  },
+  {
+    "kanji": "決まる",
+    "kana": "きまる",
+    "romaji": "kimaru",
+    "english": "to be decided / to be settled"
+  },
+  {
+    "kanji": "気分",
+    "kana": "きぶん",
+    "romaji": "kibun",
+    "english": "mood / feeling"
+  },
+  {
+    "kanji": "緊張",
+    "kana": "きんちょう",
+    "romaji": "kinchou",
+    "english": "tension / nervousness"
+  },
+  {
+    "kanji": "組む",
+    "kana": "くむ",
+    "romaji": "kumu",
+    "english": "to cross / to join / to assemble"
+  },
+  {
+    "kanji": "苦労",
+    "kana": "くろう",
+    "romaji": "kurou",
+    "english": "hardship / trouble"
+  },
+  {
+    "kanji": "恋人",
+    "kana": "こいびと",
+    "romaji": "koibito",
+    "english": "lover / boyfriend / girlfriend"
+  },
+  {
+    "kanji": "故障",
+    "kana": "こしょう",
+    "romaji": "koshou",
+    "english": "breakdown / malfunction"
+  },
+  {
+    "kanji": "小遣い",
+    "kana": "こづかい",
+    "romaji": "kozukai",
+    "english": "pocket money / allowance"
+  },
+  {
+    "kanji": "交差点",
+    "kana": "こうさてん",
+    "romaji": "kousaten",
+    "english": "intersection / crossroads"
+  },
+  {
+    "kanji": "講習",
+    "kana": "こうしゅう",
+    "romaji": "koushuu",
+    "english": "training course / workshop"
+  },
+  {
+    "kanji": "工夫",
+    "kana": "くふう",
+    "romaji": "kufuu",
+    "english": "scheme / device / ingenuity"
+  },
+  {
+    "kanji": "招く",
+    "kana": "まねく",
+    "romaji": "maneku",
+    "english": "to invite"
+  },
+  {
+    "kanji": "港",
+    "kana": "みなと",
+    "romaji": "minato",
+    "english": "port / harbor"
+  },
+  {
+    "kanji": "水道",
+    "kana": "すいどう",
+    "romaji": "suidou",
+    "english": "water supply / tap water"
+  },
+  {
+    "kanji": "眠い",
+    "kana": "ねむい",
+    "romaji": "nemui",
+    "english": "sleepy"
+  },
+  {
+    "kanji": "眠る",
+    "kana": "ねむる",
+    "romaji": "nemuru",
+    "english": "to sleep"
+  },
+  {
+    "kanji": "逃げる",
+    "kana": "にげる",
+    "romaji": "nigeru",
+    "english": "to escape / to run away"
+  },
+  {
+    "kanji": "似る",
+    "kana": "にる",
+    "romaji": "niru",
+    "english": "to resemble / to be similar"
+  },
+  {
+    "kanji": "登る",
+    "kana": "のぼる",
+    "romaji": "noboru",
+    "english": "to climb / to ascend"
+  },
+  {
+    "kanji": "残る",
+    "kana": "のこる",
+    "romaji": "nokoru",
+    "english": "to remain / to be left"
+  },
+  {
+    "kanji": "乗り物",
+    "kana": "のりもの",
+    "romaji": "norimono",
+    "english": "vehicle / transportation"
+  },
+  {
+    "kanji": "起きる",
+    "kana": "おきる",
+    "romaji": "okiru",
+    "english": "to happen / to occur"
+  },
+  {
+    "kanji": "億",
+    "kana": "おく",
+    "romaji": "oku",
+    "english": "hundred million"
+  },
+  {
+    "kanji": "温泉",
+    "kana": "おんせん",
+    "romaji": "onsen",
+    "english": "hot spring"
+  },
+  {
+    "kanji": "大勢",
+    "kana": "おおぜい",
+    "romaji": "oozei",
+    "english": "many people / crowd"
+  },
+  {
+    "kanji": "落ちる",
+    "kana": "おちる",
+    "romaji": "ochiru",
+    "english": "to fall / to drop"
+  },
+  {
+    "kanji": "怒る",
+    "kana": "おこる",
+    "romaji": "okoru",
+    "english": "to get angry"
+  },
+  {
+    "kanji": "押す",
+    "kana": "おす",
+    "romaji": "osu",
+    "english": "to push / to press"
+  },
+  {
+    "kanji": "遅れる",
+    "kana": "おくれる",
+    "romaji": "okureru",
+    "english": "to be late / to be delayed"
+  },
+  {
+    "kanji": "送る",
+    "kana": "おくる",
+    "romaji": "okuru",
+    "english": "to send"
+  },
+  {
+    "kanji": "表",
+    "kana": "おもて",
+    "romaji": "omote",
+    "english": "surface / front"
+  },
+  {
+    "kanji": "泳ぐ",
+    "kana": "およぐ",
+    "romaji": "oyogu",
+    "english": "to swim"
+  },
+  {
+    "kanji": "親",
+    "kana": "おや",
+    "romaji": "oya",
+    "english": "parent"
+  },
+  {
+    "kanji": "飛行機",
+    "kana": "ひこうき",
+    "romaji": "hikouki",
+    "english": "airplane"
+  },
+  {
+    "kanji": "人",
+    "kana": "ひと",
+    "romaji": "hito",
+    "english": "person / people"
+  },
+  {
+    "kanji": "一人",
+    "kana": "ひとり",
+    "romaji": "hitori",
+    "english": "one person / alone"
+  },
+  {
+    "kanji": "暇",
+    "kana": "ひま",
+    "romaji": "hima",
+    "english": "free time / leisure"
+  },
+  {
+    "kanji": "昼間",
+    "kana": "ひるま",
+    "romaji": "hiruma",
+    "english": "daytime"
+  },
+  {
+    "kanji": "昼休み",
+    "kana": "ひるやすみ",
+    "romaji": "hiru yasumi",
+    "english": "lunch break"
+  },
+  {
+    "kanji": "拾う",
+    "kana": "ひろう",
+    "romaji": "hirou",
+    "english": "to pick up"
+  },
+  {
+    "kanji": "広い",
+    "kana": "ひろい",
+    "romaji": "hiroi",
+    "english": "wide / spacious"
+  },
+  {
+    "kanji": "広場",
+    "kana": "ひろば",
+    "romaji": "hiroba",
+    "english": "plaza / square"
+  },
+  {
+    "kanji": "貧乏",
+    "kana": "びんぼう",
+    "romaji": "binbou",
+    "english": "poor / poverty"
+  },
+  {
+    "kanji": "平気",
+    "kana": "へいき",
+    "romaji": "heiki",
+    "english": "all right / fine"
+  },
+  {
+    "kanji": "平和",
+    "kana": "へいわ",
+    "romaji": "heiwa",
+    "english": "peace"
+  },
+  {
+    "kanji": "変",
+    "kana": "へん",
+    "romaji": "hen",
+    "english": "strange / weird"
+  },
+  {
+    "kanji": "返事",
+    "kana": "へんじ",
+    "romaji": "henji",
+    "english": "reply / answer"
+  },
+  {
+    "kanji": "変更",
+    "kana": "へんこう",
+    "romaji": "henkou",
+    "english": "change / modification"
+  },
+  {
+    "kanji": "勉強",
+    "kana": "べんきょう",
+    "romaji": "benkyou",
+    "english": "study"
+  },
+  {
+    "kanji": "便利",
+    "kana": "べんり",
+    "romaji": "benri",
+    "english": "convenient"
+  },
+  {
+    "kanji": "方法",
+    "kana": "ほうほう",
+    "romaji": "houhou",
+    "english": "method / way"
+  },
+  {
+    "kanji": "方向",
+    "kana": "ほうこう",
+    "romaji": "houkou",
+    "english": "direction"
+  },
+  {
+    "kanji": "ぼく",
+    "kana": "ぼく",
+    "romaji": "boku",
+    "english": "I / me (casual, male)"
+  },
+  {
+    "kanji": "欲しい",
+    "kana": "ほしい",
+    "romaji": "hoshii",
+    "english": "to want"
+  },
+  {
+    "kanji": "細い",
+    "kana": "ほそい",
+    "romaji": "hosoi",
+    "english": "thin / narrow"
+  },
+  {
+    "kanji": "他",
+    "kana": "ほか",
+    "romaji": "hoka",
+    "english": "other / else"
+  },
+  {
+    "kanji": "誇り",
+    "kana": "ほこり",
+    "romaji": "hokori",
+    "english": "pride"
+  },
+  {
+    "kanji": "毎回",
+    "kana": "まいかい",
+    "romaji": "maikai",
+    "english": "every time"
+  },
+  {
+    "kanji": "参る",
+    "kana": "まいる",
+    "romaji": "mairu",
+    "english": "to go / come (humble)"
+  },
+  {
+    "kanji": "孫",
+    "kana": "まご",
+    "romaji": "mago",
+    "english": "grandchild"
+  },
+  {
+    "kanji": "混ぜる",
+    "kana": "まぜる",
+    "romaji": "mazeru",
+    "english": "to mix"
+  },
+  {
+    "kanji": "真面目",
+    "kana": "まじめ",
+    "romaji": "majime",
+    "english": "serious / earnest"
+  },
+  {
+    "kanji": "間違い",
+    "kana": "まちがい",
+    "romaji": "machigai",
+    "english": "mistake / error"
+  },
+  {
+    "kanji": "間違う",
+    "kana": "まちがう",
+    "romaji": "machigau",
+    "english": "to make a mistake"
+  },
+  {
+    "kanji": "合格",
+    "kana": "ごうかく",
+    "romaji": "goukaku",
+    "english": "success / passing (exam)"
+  },
+  {
+    "kanji": "腹",
+    "kana": "はら",
+    "romaji": "hara",
+    "english": "stomach / belly"
+  },
+  {
+    "kanji": "払う",
+    "kana": "はらう",
+    "romaji": "harau",
+    "english": "to pay"
+  },
+  {
+    "kanji": "鼻",
+    "kana": "はな",
+    "romaji": "hana",
+    "english": "nose"
+  },
+  {
+    "kanji": "花見",
+    "kana": "はなみ",
+    "romaji": "hanami",
+    "english": "cherry blossom viewing"
+  },
+  {
+    "kanji": "恥ずかしい",
+    "kana": "はずかしい",
+    "romaji": "hazukashii",
+    "english": "embarrassing / shy"
+  },
+  {
+    "kanji": "変化",
+    "kana": "へんか",
+    "romaji": "henka",
+    "english": "change / transformation"
+  },
+  {
+    "kanji": "比べる",
+    "kana": "くらべる",
+    "romaji": "kuraberu",
+    "english": "to compare"
+  },
+  {
+    "kanji": "広がる",
+    "kana": "ひろがる",
+    "romaji": "hirogaru",
+    "english": "to spread / to extend"
+  },
+  {
+    "kanji": "包む",
+    "kana": "つつむ",
+    "romaji": "tsutsumu",
+    "english": "to wrap / to cover"
+  },
+  {
+    "kanji": "急ぐ",
+    "kana": "いそぐ",
+    "romaji": "isogu",
+    "english": "to hurry / to rush"
+  },
+  {
+    "kanji": "痛い",
+    "kana": "いたい",
+    "romaji": "itai",
+    "english": "painful / sore"
+  },
+  {
+    "kanji": "自動車",
+    "kana": "じどうしゃ",
+    "romaji": "jidousha",
+    "english": "automobile / car"
+  },
+  {
+    "kanji": "実は",
+    "kana": "じつは",
+    "romaji": "jitsu wa",
+    "english": "actually / in fact"
+  },
+  {
+    "kanji": "冗談",
+    "kana": "じょうだん",
+    "romaji": "joudan",
+    "english": "joke / jest"
+  },
+  {
+    "kanji": "準備",
+    "kana": "じゅんび",
+    "romaji": "junbi",
+    "english": "preparation"
+  },
+  {
+    "kanji": "過ぎる",
+    "kana": "すぎる",
+    "romaji": "sugiru",
+    "english": "to pass / to exceed"
+  },
+  {
+    "kanji": "鍵",
+    "kana": "かぎ",
+    "romaji": "kagi",
+    "english": "key / lock"
+  },
+  {
+    "kanji": "返す",
+    "kana": "かえす",
+    "romaji": "kaesu",
+    "english": "to return / to give back"
+  },
+  {
+    "kanji": "確かに",
+    "kana": "たしかに",
+    "romaji": "tashika ni",
+    "english": "certainly / surely"
+  },
+  {
+    "kanji": "彼",
+    "kana": "かれ",
+    "romaji": "kare",
+    "english": "he / boyfriend"
+  },
+  {
+    "kanji": "肩",
+    "kana": "かた",
+    "romaji": "kata",
+    "english": "shoulder"
+  },
+  {
+    "kanji": "片付ける",
+    "kana": "かたづける",
+    "romaji": "katazukeru",
+    "english": "to tidy up / to put away"
+  },
+  {
+    "kanji": "木綿",
+    "kana": "もめん",
+    "romaji": "momen",
+    "english": "cotton"
+  },
+  {
+    "kanji": "気をつける",
+    "kana": "きをつける",
+    "romaji": "ki wo tsukeru",
+    "english": "to be careful / to pay attention"
+  },
+  {
+    "kanji": "絹",
+    "kana": "きぬ",
+    "romaji": "kinu",
+    "english": "silk"
+  },
+  {
+    "kanji": "直接",
+    "kana": "ちょくせつ",
+    "romaji": "chokusetsu",
+    "english": "direct / directly"
+  },
+  {
+    "kanji": "貯金",
+    "kana": "ちょきん",
+    "romaji": "chokin",
+    "english": "savings / deposit"
+  },
+  {
+    "kanji": "調子",
+    "kana": "ちょうし",
+    "romaji": "choushi",
+    "english": "condition / tune / tone"
+  },
+  {
+    "kanji": "近づく",
+    "kana": "ちかづく",
+    "romaji": "chikazuku",
+    "english": "to approach / to get close"
+  },
+  {
+    "kanji": "力",
+    "kana": "ちから",
+    "romaji": "chikara",
+    "english": "strength / power / force"
+  },
+  {
+    "kanji": "地球",
+    "kana": "ちきゅう",
+    "romaji": "chikyuu",
+    "english": "Earth / globe"
+  },
+  {
+    "kanji": "治療",
+    "kana": "ちりょう",
+    "romaji": "chiryou",
+    "english": "medical treatment / therapy"
+  },
+  {
+    "kanji": "血",
+    "kana": "ち",
+    "romaji": "chi",
+    "english": "blood"
+  },
+  {
+    "kanji": "だんだん",
+    "kana": "だんだん",
+    "romaji": "dandan",
+    "english": "gradually / little by little"
+  },
+  {
+    "kanji": "男性",
+    "kana": "だんせい",
+    "romaji": "dansei",
+    "english": "man / male"
+  },
+  {
+    "kanji": "大体",
+    "kana": "だいたい",
+    "romaji": "daitai",
+    "english": "mostly / roughly"
+  },
+  {
+    "kanji": "代わり",
+    "kana": "かわり",
+    "romaji": "kawari",
+    "english": "substitute / replacement / instead"
+  },
+  {
+    "kanji": "段々",
+    "kana": "だんだん",
+    "romaji": "dandan",
+    "english": "step by step / gradually"
+  },
+  {
+    "kanji": "出来る",
+    "kana": "できる",
+    "romaji": "dekiru",
+    "english": "to be able to / can"
+  },
+  {
+    "kanji": "出発",
+    "kana": "しゅっぱつ",
+    "romaji": "shuppatsu",
+    "english": "departure"
+  },
+  {
+    "kanji": "出席",
+    "kana": "しゅっせき",
+    "romaji": "shusseki",
+    "english": "attendance / presence"
+  },
+  {
+    "kanji": "電子",
+    "kana": "でんし",
+    "romaji": "denshi",
+    "english": "electron / electronic"
+  },
+  {
+    "kanji": "でも",
+    "kana": "でも",
+    "romaji": "demo",
+    "english": "but / however"
+  },
+  {
+    "kanji": "出会う",
+    "kana": "であう",
+    "romaji": "deau",
+    "english": "to meet / to encounter"
+  },
+  {
+    "kanji": "出かける",
+    "kana": "でかける",
+    "romaji": "dekakeru",
+    "english": "to go out / to leave"
+  },
+  {
+    "kanji": "できるだけ",
+    "kana": "できるだけ",
+    "romaji": "dekiru dake",
+    "english": "as much as possible"
+  },
+  {
+    "kanji": "電車",
+    "kana": "でんしゃ",
+    "romaji": "densha",
+    "english": "train"
+  },
+  {
+    "kanji": "電話",
+    "kana": "でんわ",
+    "romaji": "denwa",
+    "english": "telephone"
+  },
+  {
+    "kanji": "動く",
+    "kana": "うごく",
+    "romaji": "ugoku",
+    "english": "to move"
+  },
+  {
+    "kanji": "どうして",
+    "kana": "どうして",
+    "romaji": "doushite",
+    "english": "why / how"
+  },
+  {
+    "kanji": "どうぞ",
+    "kana": "どうぞ",
+    "romaji": "douzo",
+    "english": "please / go ahead"
+  },
+  {
+    "kanji": "同じ",
+    "kana": "おなじ",
+    "romaji": "onaji",
+    "english": "same"
+  },
+  {
+    "kanji": "どちら",
+    "kana": "どちら",
+    "romaji": "dochira",
+    "english": "which / where"
+  },
+  {
+    "kanji": "特別",
+    "kana": "とくべつ",
+    "romaji": "tokubetsu",
+    "english": "special / particular"
+  },
+  {
+    "kanji": "特に",
+    "kana": "とくに",
+    "romaji": "toku ni",
+    "english": "especially / particularly"
+  },
+  {
+    "kanji": "所",
+    "kana": "ところ",
+    "romaji": "tokoro",
+    "english": "place / point"
+  },
+  {
+    "kanji": "途中",
+    "kana": "とちゅう",
+    "romaji": "tochuu",
+    "english": "on the way / en route"
+  },
+  {
+    "kanji": "届ける",
+    "kana": "とどける",
+    "romaji": "todokeru",
+    "english": "to deliver / to report"
+  },
+  {
+    "kanji": "汚れる",
+    "kana": "よごれる",
+    "romaji": "yogoreru",
+    "english": "to get dirty / to become soiled"
+  },
+  {
+    "kanji": "予習",
+    "kana": "よしゅう",
+    "romaji": "yoshuu",
+    "english": "preparation for a lesson / preview"
+  },
+  {
+    "kanji": "予定",
+    "kana": "よてい",
+    "romaji": "yotei",
+    "english": "plan / schedule / arrangement"
+  },
+  {
+    "kanji": "酔う",
+    "kana": "よう",
+    "romaji": "you",
+    "english": "to get drunk / to become intoxicated"
+  },
+  {
+    "kanji": "用事",
+    "kana": "ようじ",
+    "romaji": "youji",
+    "english": "business / errand / thing to do"
+  },
+  {
+    "kanji": "用意",
+    "kana": "ようい",
+    "romaji": "youi",
+    "english": "preparation / arrangements"
+  },
+  {
+    "kanji": "幼稚園",
+    "kana": "ようちえん",
+    "romaji": "youchien",
+    "english": "kindergarten"
+  },
+  {
+    "kanji": "床",
+    "kana": "ゆか",
+    "romaji": "yuka",
+    "english": "floor"
+  },
+  {
+    "kanji": "湯",
+    "kana": "ゆ",
+    "romaji": "yu",
+    "english": "hot water / hot bath"
+  },
+  {
+    "kanji": "指",
+    "kana": "ゆび",
+    "romaji": "yubi",
+    "english": "finger"
+  },
+  {
+    "kanji": "夢",
+    "kana": "ゆめ",
+    "romaji": "yume",
+    "english": "dream"
+  },
+  {
+    "kanji": "輸出",
+    "kana": "ゆしゅつ",
+    "romaji": "yushutsu",
+    "english": "export"
+  },
+  {
+    "kanji": "輸入",
+    "kana": "ゆにゅう",
+    "romaji": "yunyuu",
+    "english": "import"
+  },
+  {
+    "kanji": "ゆっくり",
+    "kana": "ゆっくり",
+    "romaji": "yukkuri",
+    "english": "slowly / at ease / leisurely"
+  },
+  {
+    "kanji": "雪",
+    "kana": "ゆき",
+    "romaji": "yuki",
+    "english": "snow"
+  },
+  {
+    "kanji": "ゆうべ",
+    "kana": "ゆうべ",
+    "romaji": "yuube",
+    "english": "last night / yesterday evening"
+  },
+  {
+    "kanji": "夕方",
+    "kana": "ゆうがた",
+    "romaji": "yuugata",
+    "english": "evening / dusk"
+  },
+  {
+    "kanji": "有名",
+    "kana": "ゆうめい",
+    "romaji": "yuumei",
+    "english": "famous"
+  },
+  {
+    "kanji": "郵便局",
+    "kana": "ゆうびんきょく",
+    "romaji": "yuubinkyoku",
+    "english": "post office"
+  },
+  {
+    "kanji": "座る",
+    "kana": "すわる",
+    "romaji": "suwaru",
+    "english": "to sit"
+  },
+  {
+    "kanji": "全部",
+    "kana": "ぜんぶ",
+    "romaji": "zenbu",
+    "english": "all / everything / whole"
+  },
+  {
+    "kanji": "絶対",
+    "kana": "ぜったい",
+    "romaji": "zettai",
+    "english": "absolutely / definitely"
+  },
+  {
+    "kanji": "税金",
+    "kana": "ぜいきん",
+    "romaji": "zeikin",
+    "english": "tax"
+  },
+  {
+    "kanji": "材料",
+    "kana": "ざいりょう",
+    "romaji": "zairyou",
+    "english": "material / ingredient"
+  },
+  {
+    "kanji": "雑誌",
+    "kana": "ざっし",
+    "romaji": "zasshi",
+    "english": "magazine"
+  },
+  {
+    "kanji": "残念",
+    "kana": "ざんねん",
+    "romaji": "zannen",
+    "english": "regrettable / disappointing"
+  },
+  {
+    "kanji": "在宅",
+    "kana": "ざいたく",
+    "romaji": "zaitaku",
+    "english": "staying at home"
+  },
+  {
+    "kanji": "挨拶",
+    "kana": "あいさつ",
+    "romaji": "aisatsu",
+    "english": "greeting"
+  },
+  {
+    "kanji": "圧力",
+    "kana": "あつりょく",
+    "romaji": "atsuryoku",
+    "english": "pressure"
+  },
+  {
+    "kanji": "暴れる",
+    "kana": "あばれる",
+    "romaji": "abareru",
+    "english": "to rampage / to act violently"
+  },
+  {
+    "kanji": "雨",
+    "kana": "あめ",
+    "romaji": "ame",
+    "english": "rain"
+  },
+  {
+    "kanji": "油",
+    "kana": "あぶら",
+    "romaji": "abura",
+    "english": "oil / fat"
+  },
+  {
+    "kanji": "溢れる",
+    "kana": "あふれる",
+    "romaji": "afureru",
+    "english": "to overflow / to brim over"
+  },
+  {
+    "kanji": "空く",
+    "kana": "あく",
+    "romaji": "aku",
+    "english": "to become empty / to open"
+  },
+  {
+    "kanji": "悪い",
+    "kana": "わるい",
+    "romaji": "warui",
+    "english": "bad"
+  },
+  {
+    "kanji": "和らぐ",
+    "kana": "やわらぐ",
+    "romaji": "yawaragu",
+    "english": "to soften / to calm down"
+  },
+  {
+    "kanji": "別れる",
+    "kana": "わかれる",
+    "romaji": "wakareru",
+    "english": "to part / to separate"
+  },
+  {
+    "kanji": "笑う",
+    "kana": "わらう",
+    "romaji": "warau",
+    "english": "to laugh"
+  },
+  {
+    "kanji": "忘れ物",
+    "kana": "わすれもの",
+    "romaji": "wasuremono",
+    "english": "forgotten item / lost article"
+  },
+  {
+    "kanji": "忘れる",
+    "kana": "わすれる",
+    "romaji": "wasureru",
+    "english": "to forget"
+  },
+  {
+    "kanji": "渡す",
+    "kana": "わたす",
+    "romaji": "watasu",
+    "english": "to hand over / to pass"
+  },
+  {
+    "kanji": "渡る",
+    "kana": "わたる",
+    "romaji": "wataru",
+    "english": "to cross / to go across"
+  },
+  {
+    "kanji": "沸く",
+    "kana": "わく",
+    "romaji": "waku",
+    "english": "to boil / to grow hot"
+  },
+  {
+    "kanji": "湧く",
+    "kana": "わく",
+    "romaji": "waku",
+    "english": "to well up / to spring"
+  },
+  {
+    "kanji": "枠",
+    "kana": "わく",
+    "romaji": "waku",
+    "english": "frame / framework"
+  },
+  {
+    "kanji": "割る",
+    "kana": "わる",
+    "romaji": "waru",
+    "english": "to break / to divide"
+  },
+  {
+    "kanji": "割れる",
+    "kana": "われる",
+    "romaji": "wareru",
+    "english": "to break / to crack"
+  },
+  {
+    "kanji": "世話",
+    "kana": "せわ",
+    "romaji": "sewa",
+    "english": "care / assistance"
+  },
+  {
+    "kanji": "狭い",
+    "kana": "せまい",
+    "romaji": "semai",
+    "english": "narrow / cramped"
+  },
+  {
+    "kanji": "線",
+    "kana": "せん",
+    "romaji": "sen",
+    "english": "line"
+  },
+  {
+    "kanji": "洗濯",
+    "kana": "せんたく",
+    "romaji": "sentaku",
+    "english": "laundry / washing"
+  },
+  {
+    "kanji": "先輩",
+    "kana": "せんぱい",
+    "romaji": "senpai",
+    "english": "senior / upperclassman"
+  },
+  {
+    "kanji": "専門",
+    "kana": "せんもん",
+    "romaji": "senmon",
+    "english": "specialty / major"
+  },
+  {
+    "kanji": "全然",
+    "kana": "ぜんぜん",
+    "romaji": "zenzen",
+    "english": "not at all / completely"
+  },
+  {
+    "kanji": "祖父",
+    "kana": "そふ",
+    "romaji": "sofu",
+    "english": "grandfather"
+  },
+  {
+    "kanji": "祖母",
+    "kana": "そぼ",
+    "romaji": "sobo",
+    "english": "grandmother"
+  },
+  {
+    "kanji": "卒業",
+    "kana": "そつぎょう",
+    "romaji": "sotsugyou",
+    "english": "graduation"
+  },
+  {
+    "kanji": "育てる",
+    "kana": "そだてる",
+    "romaji": "sodateru",
+    "english": "to raise / to bring up"
+  },
+  {
+    "kanji": "そのまま",
+    "kana": "そのまま",
+    "romaji": "sono mama",
+    "english": "as it is / unchanged"
+  },
+  {
+    "kanji": "空",
+    "kana": "そら",
+    "romaji": "sora",
+    "english": "sky"
+  },
+  {
+    "kanji": "それで",
+    "kana": "それで",
+    "romaji": "sore de",
+    "english": "so / therefore"
+  },
+  {
+    "kanji": "それでは",
+    "kana": "それでは",
+    "romaji": "sore dewa",
+    "english": "well then / in that case"
+  },
+  {
+    "kanji": "それに",
+    "kana": "それに",
+    "romaji": "sore ni",
+    "english": "besides / moreover"
+  },
+  {
+    "kanji": "揃う",
+    "kana": "そろう",
+    "romaji": "sorou",
+    "english": "to be complete / to be gathered"
+  },
+  {
+    "kanji": "そろそろ",
+    "kana": "そろそろ",
+    "romaji": "soro soro",
+    "english": "soon / gradually"
+  },
+  {
+    "kanji": "相談",
+    "kana": "そうだん",
+    "romaji": "soudan",
+    "english": "consultation / discussion"
+  },
+  {
+    "kanji": "掃除",
+    "kana": "そうじ",
+    "romaji": "souji",
+    "english": "cleaning"
+  },
+  {
+    "kanji": "操作",
+    "kana": "そうさ",
+    "romaji": "sousa",
+    "english": "operation / manipulation"
+  },
+  {
+    "kanji": "素晴らしい",
+    "kana": "すばらしい",
+    "romaji": "subarashii",
+    "english": "wonderful / splendid"
+  },
+  {
+    "kanji": "すっかり",
+    "kana": "すっかり",
+    "romaji": "sukkari",
+    "english": "completely / entirely"
+  },
+  {
+    "kanji": "すっと",
+    "kana": "すっと",
+    "romaji": "sutto",
+    "english": "smoothly / straight"
+  },
+  {
+    "kanji": "砂糖",
+    "kana": "さとう",
+    "romaji": "satou",
+    "english": "sugar"
+  },
+  {
+    "kanji": "寂しい",
+    "kana": "さびしい",
+    "romaji": "sabishii",
+    "english": "lonely / sad"
+  },
+  {
+    "kanji": "差",
+    "kana": "さ",
+    "romaji": "sa",
+    "english": "difference"
+  },
+  {
+    "kanji": "最後",
+    "kana": "さいご",
+    "romaji": "saigo",
+    "english": "last / end"
+  },
+  {
+    "kanji": "最近",
+    "kana": "さいきん",
+    "romaji": "saikin",
+    "english": "recently / lately"
+  },
+  {
+    "kanji": "最初",
+    "kana": "さいしょ",
+    "romaji": "saisho",
+    "english": "first / beginning"
+  },
+  {
+    "kanji": "財布",
+    "kana": "さいふ",
+    "romaji": "saifu",
+    "english": "wallet / purse"
+  },
+  {
+    "kanji": "咲く",
+    "kana": "さく",
+    "romaji": "saku",
+    "english": "to bloom / to blossom"
+  },
+  {
+    "kanji": "探す",
+    "kana": "さがす",
+    "romaji": "sagasu",
+    "english": "to search / to look for"
+  },
+  {
+    "kanji": "下がる",
+    "kana": "さがる",
+    "romaji": "sagaru",
+    "english": "to fall / to drop"
+  },
+  {
+    "kanji": "騒ぐ",
+    "kana": "さわぐ",
+    "romaji": "sawagu",
+    "english": "to make noise / to be noisy"
+  },
+  {
+    "kanji": "触る",
+    "kana": "さわる",
+    "romaji": "sawaru",
+    "english": "to touch"
+  },
+  {
+    "kanji": "さっぱり",
+    "kana": "さっぱり",
+    "romaji": "sappari",
+    "english": "not at all / refreshed"
+  },
+  {
+    "kanji": "三角",
+    "kana": "さんかく",
+    "romaji": "sankaku",
+    "english": "triangle"
+  },
+  {
+    "kanji": "参加",
+    "kana": "さんか",
+    "romaji": "sanka",
+    "english": "participation"
+  },
+  {
+    "kanji": "散歩",
+    "kana": "さんぽ",
+    "romaji": "sanpo",
+    "english": "walk / stroll"
+  },
+  {
+    "kanji": "皿",
+    "kana": "さら",
+    "romaji": "sara",
+    "english": "plate / dish"
+  },
+  {
+    "kanji": "更に",
+    "kana": "さらに",
+    "romaji": "sara ni",
+    "english": "furthermore / moreover"
+  },
+  {
+    "kanji": "然し",
+    "kana": "しかし",
+    "romaji": "shikashi",
+    "english": "however / but"
+  },
+  {
+    "kanji": "仕方",
+    "kana": "しかた",
+    "romaji": "shikata",
+    "english": "method / way"
+  },
+  {
+    "kanji": "四角",
+    "kana": "しかく",
+    "romaji": "shikaku",
+    "english": "square / rectangle"
+  },
+  {
+    "kanji": "資格",
+    "kana": "しかく",
+    "romaji": "shikaku",
+    "english": "qualification / license"
+  },
+  {
+    "kanji": "失敗",
+    "kana": "しっぱい",
+    "romaji": "shippai",
+    "english": "failure / mistake"
+  },
+  {
+    "kanji": "質問",
+    "kana": "しつもん",
+    "romaji": "shitsumon",
+    "english": "question"
+  },
+  {
+    "kanji": "奥さん",
+    "kana": "おくさん",
+    "romaji": "okusan",
+    "english": "wife (respectful)"
+  },
+  {
+    "kanji": "奥",
+    "kana": "おく",
+    "romaji": "oku",
+    "english": "interior / back / depths"
+  },
+  {
+    "kanji": "起こす",
+    "kana": "おこす",
+    "romaji": "okosu",
+    "english": "to wake someone up / to cause"
+  },
+  {
+    "kanji": "行う",
+    "kana": "おこなう",
+    "romaji": "okonau",
+    "english": "to perform / to carry out"
+  },
+  {
+    "kanji": "訪ねる",
+    "kana": "たずねる",
+    "romaji": "tazuneru",
+    "english": "to visit / to call on"
+  },
+  {
+    "kanji": "尋ねる",
+    "kana": "たずねる",
+    "romaji": "tazuneru",
+    "english": "to ask / to inquire"
+  },
+  {
+    "kanji": "畳",
+    "kana": "たたみ",
+    "romaji": "tatami",
+    "english": "tatami mat"
+  },
+  {
+    "kanji": "叩く",
+    "kana": "たたく",
+    "romaji": "tataku",
+    "english": "to hit / to strike / to knock"
+  },
+  {
+    "kanji": "建てる",
+    "kana": "たてる",
+    "romaji": "tateru",
+    "english": "to build / to construct"
+  },
+  {
+    "kanji": "例えば",
+    "kana": "たとえば",
+    "romaji": "tatoeba",
+    "english": "for example"
+  },
+  {
+    "kanji": "頼む",
+    "kana": "たのむ",
+    "romaji": "tanomu",
+    "english": "to ask / to request"
+  },
+  {
+    "kanji": "楽しむ",
+    "kana": "たのしむ",
+    "romaji": "tanoshimu",
+    "english": "to enjoy"
+  },
+  {
+    "kanji": "足りる",
+    "kana": "たりる",
+    "romaji": "tariru",
+    "english": "to be sufficient / to be enough"
+  },
+  {
+    "kanji": "助ける",
+    "kana": "たすける",
+    "romaji": "tasukeru",
+    "english": "to help / to save"
+  },
+  {
+    "kanji": "確かめる",
+    "kana": "たしかめる",
+    "romaji": "tashikameru",
+    "english": "to confirm / to verify"
+  },
+  {
+    "kanji": "確か",
+    "kana": "たしか",
+    "romaji": "tashika",
+    "english": "certain / sure / if I remember correctly"
+  },
+  {
+    "kanji": "倒れる",
+    "kana": "たおれる",
+    "romaji": "taoreru",
+    "english": "to fall down / to collapse"
+  },
+  {
+    "kanji": "頼る",
+    "kana": "たよる",
+    "romaji": "tayoru",
+    "english": "to depend on / to rely on"
+  },
+  {
+    "kanji": "手伝う",
+    "kana": "てつだう",
+    "romaji": "tetsudau",
+    "english": "to help"
+  },
+  {
+    "kanji": "手袋",
+    "kana": "てぶくろ",
+    "romaji": "tebukuro",
+    "english": "gloves"
+  },
+  {
+    "kanji": "適当",
+    "kana": "てきとう",
+    "romaji": "tekitou",
+    "english": "appropriate / suitable / random"
+  },
+  {
+    "kanji": "丁寧",
+    "kana": "ていねい",
+    "romaji": "teinei",
+    "english": "polite / careful"
+  },
+  {
+    "kanji": "定期",
+    "kana": "ていき",
+    "romaji": "teiki",
+    "english": "regular / periodic / commuter pass"
+  },
+  {
+    "kanji": "敵",
+    "kana": "てき",
+    "romaji": "teki",
+    "english": "enemy"
+  },
+  {
+    "kanji": "点",
+    "kana": "てん",
+    "romaji": "ten",
+    "english": "point / dot / mark"
+  },
+  {
+    "kanji": "展覧会",
+    "kana": "てんらんかい",
+    "romaji": "tenrankai",
+    "english": "exhibition"
+  },
+  {
+    "kanji": "店員",
+    "kana": "てんいん",
+    "romaji": "ten'in",
+    "english": "shop clerk / store employee"
+  },
+  {
+    "kanji": "天気予報",
+    "kana": "てんきよほう",
+    "romaji": "tenki yohou",
+    "english": "weather forecast"
+  },
+  {
+    "kanji": "転校",
+    "kana": "てんこう",
+    "romaji": "tenkou",
+    "english": "changing schools"
+  },
+  {
+    "kanji": "寺",
+    "kana": "てら",
+    "romaji": "tera",
+    "english": "temple"
+  },
+  {
+    "kanji": "照れる",
+    "kana": "てれる",
+    "romaji": "tereru",
+    "english": "to be shy / to feel embarrassed"
+  },
+  {
+    "kanji": "時代",
+    "kana": "じだい",
+    "romaji": "jidai",
+    "english": "era / period / age"
+  },
+  {
+    "kanji": "自動",
+    "kana": "じどう",
+    "romaji": "jidou",
+    "english": "automatic"
+  },
+  {
+    "kanji": "地震",
+    "kana": "じしん",
+    "romaji": "jishin",
+    "english": "earthquake"
+  },
+  {
+    "kanji": "実際",
+    "kana": "じっさい",
+    "romaji": "jissai",
+    "english": "actual / reality"
+  },
+  {
+    "kanji": "実験",
+    "kana": "じっけん",
+    "romaji": "jikken",
+    "english": "experiment"
+  },
+  {
+    "kanji": "授業",
+    "kana": "じゅぎょう",
+    "romaji": "jugyou",
+    "english": "class / lesson"
+  },
+  {
+    "kanji": "住所",
+    "kana": "じゅうしょ",
+    "romaji": "juusho",
+    "english": "address"
+  },
+  {
+    "kanji": "十分",
+    "kana": "じゅうぶん",
+    "romaji": "juubun",
+    "english": "enough / sufficient"
+  },
+  {
+    "kanji": "重要",
+    "kana": "じゅうよう",
+    "romaji": "juuyou",
+    "english": "important / significant"
+  },
+  {
+    "kanji": "上達",
+    "kana": "じょうたつ",
+    "romaji": "joutatsu",
+    "english": "improvement / progress"
+  },
+  {
+    "kanji": "状態",
+    "kana": "じょうたい",
+    "romaji": "joutai",
+    "english": "condition / state"
+  },
+  {
+    "kanji": "内",
+    "kana": "うち",
+    "romaji": "uchi",
+    "english": "inside / home / within"
+  },
+  {
+    "kanji": "運転",
+    "kana": "うんてん",
+    "romaji": "unten",
+    "english": "driving / operation"
+  },
+  {
+    "kanji": "運転する",
+    "kana": "うんてんする",
+    "romaji": "unten suru",
+    "english": "to drive / to operate"
+  },
+  {
+    "kanji": "運動",
+    "kana": "うんどう",
+    "romaji": "undou",
+    "english": "exercise / movement"
+  },
+  {
+    "kanji": "運動する",
+    "kana": "うんどうする",
+    "romaji": "undou suru",
+    "english": "to exercise"
+  },
+  {
+    "kanji": "お祝い",
+    "kana": "おいわい",
+    "romaji": "oiwai",
+    "english": "celebration / congratulation"
+  },
+  {
+    "kanji": "お客さん",
+    "kana": "おきゃくさん",
+    "romaji": "okyaku san",
+    "english": "customer / guest"
+  },
+  {
+    "kanji": "お礼",
+    "kana": "おれい",
+    "romaji": "orei",
+    "english": "thanks / gratitude"
+  },
+  {
+    "kanji": "下りる",
+    "kana": "おりる",
+    "romaji": "oriru",
+    "english": "to get off / to descend"
+  },
+  {
+    "kanji": "大人",
+    "kana": "おとな",
+    "romaji": "otona",
+    "english": "adult"
+  },
+  {
+    "kanji": "弟",
+    "kana": "おとうと",
+    "romaji": "otouto",
+    "english": "younger brother"
+  },
+  {
+    "kanji": "驚く",
+    "kana": "おどろく",
+    "romaji": "odoroku",
+    "english": "to be surprised"
+  },
+  {
+    "kanji": "お腹",
+    "kana": "おなか",
+    "romaji": "onaka",
+    "english": "stomach / belly"
+  },
+  {
+    "kanji": "お祭り",
+    "kana": "おまつり",
+    "romaji": "omatsuri",
+    "english": "festival"
+  },
+  {
+    "kanji": "重い",
+    "kana": "おもい",
+    "romaji": "omoi",
+    "english": "heavy"
+  },
+  {
+    "kanji": "思い出",
+    "kana": "おもいで",
+    "romaji": "omoide",
+    "english": "memory / remembrance"
+  },
+  {
+    "kanji": "思い出す",
+    "kana": "おもいだす",
+    "romaji": "omoidasu",
+    "english": "to recall / to remember"
+  },
+  {
+    "kanji": "主に",
+    "kana": "おもに",
+    "romaji": "omo ni",
+    "english": "mainly / primarily"
+  },
+  {
+    "kanji": "面白い",
+    "kana": "おもしろい",
+    "romaji": "omoshiroi",
+    "english": "interesting / funny"
+  },
+  {
+    "kanji": "お湯",
+    "kana": "おゆ",
+    "romaji": "oyu",
+    "english": "hot water"
+  },
+  {
+    "kanji": "お世話",
+    "kana": "おせわ",
+    "romaji": "osewa",
+    "english": "care / help / assistance"
+  },
+  {
+    "kanji": "遅い",
+    "kana": "おそい",
+    "romaji": "osoi",
+    "english": "slow / late"
+  },
+  {
+    "kanji": "教わる",
+    "kana": "おそわる",
+    "romaji": "osowaru",
+    "english": "to be taught / to learn from"
+  },
+  {
+    "kanji": "恐らく",
+    "kana": "おそらく",
+    "romaji": "osoraku",
+    "english": "probably / perhaps"
+  },
+  {
+    "kanji": "襲う",
+    "kana": "おそう",
+    "romaji": "osou",
+    "english": "to attack / to strike"
+  },
+  {
+    "kanji": "汚す",
+    "kana": "よごす",
+    "romaji": "yogosu",
+    "english": "to make dirty / to soil"
+  },
+  {
+    "kanji": "喜ぶ",
+    "kana": "よろこぶ",
+    "romaji": "yorokobu",
+    "english": "to be delighted / to rejoice"
+  },
+  {
+    "kanji": "寄る",
+    "kana": "よる",
+    "romaji": "yoru",
+    "english": "to approach / to drop by"
+  },
+  {
+    "kanji": "呼ぶ",
+    "kana": "よぶ",
+    "romaji": "yobu",
+    "english": "to call / to invite"
+  },
+  {
+    "kanji": "読み方",
+    "kana": "よみかた",
+    "romaji": "yomikata",
+    "english": "way of reading / pronunciation"
+  },
+  {
+    "kanji": "用意する",
+    "kana": "よういする",
+    "romaji": "youi suru",
+    "english": "to prepare / to get ready"
+  },
+  {
+    "kanji": "要る",
+    "kana": "いる",
+    "romaji": "iru",
+    "english": "to need / to require"
+  },
+  {
+    "kanji": "やっと",
+    "kana": "やっと",
+    "romaji": "yatto",
+    "english": "finally / at last"
+  },
+  {
+    "kanji": "約束",
+    "kana": "やくそく",
+    "romaji": "yakusoku",
+    "english": "promise / appointment"
+  },
+  {
+    "kanji": "試合",
+    "kana": "しあい",
+    "romaji": "shiai",
+    "english": "match / game / competition"
+  },
+  {
+    "kanji": "芝生",
+    "kana": "しばふ",
+    "romaji": "shibafu",
+    "english": "lawn / grass"
+  },
+  {
+    "kanji": "信号",
+    "kana": "しんごう",
+    "romaji": "shingou",
+    "english": "traffic light / signal"
+  },
+  {
+    "kanji": "心配",
+    "kana": "しんぱい",
+    "romaji": "shinpai",
+    "english": "worry / concern"
+  },
+  {
+    "kanji": "招待",
+    "kana": "しょうたい",
+    "romaji": "shoutai",
+    "english": "invitation"
+  },
+  {
+    "kanji": "紹介",
+    "kana": "しょうかい",
+    "romaji": "shoukai",
+    "english": "introduction"
+  },
+  {
+    "kanji": "小説",
+    "kana": "しょうせつ",
+    "romaji": "shousetsu",
+    "english": "novel"
+  },
+  {
+    "kanji": "食器",
+    "kana": "しょっき",
+    "romaji": "shokki",
+    "english": "tableware / dishes"
+  },
+  {
+    "kanji": "食事",
+    "kana": "しょくじ",
+    "romaji": "shokuji",
+    "english": "meal"
+  },
+  {
+    "kanji": "植物",
+    "kana": "しょくぶつ",
+    "romaji": "shokubutsu",
+    "english": "plant"
+  },
+  {
+    "kanji": "書類",
+    "kana": "しょるい",
+    "romaji": "shorui",
+    "english": "document / papers"
+  },
+  {
+    "kanji": "酸っぱい",
+    "kana": "すっぱい",
+    "romaji": "suppai",
+    "english": "sour"
+  },
+  {
+    "kanji": "スケート",
+    "kana": "スケート",
+    "romaji": "sukeeto",
+    "english": "skating"
+  },
+  {
+    "kanji": "済む",
+    "kana": "すむ",
+    "romaji": "sumu",
+    "english": "to be finished / to be settled"
+  },
+  {
+    "kanji": "スリッパ",
+    "kana": "スリッパ",
+    "romaji": "surippa",
+    "english": "slippers"
+  },
+  {
+    "kanji": "生活",
+    "kana": "せいかつ",
+    "romaji": "seikatsu",
+    "english": "life / living"
+  },
+  {
+    "kanji": "成功",
+    "kana": "せいこう",
+    "romaji": "seikou",
+    "english": "success"
+  },
+  {
+    "kanji": "政治",
+    "kana": "せいじ",
+    "romaji": "seiji",
+    "english": "politics"
+  },
+  {
+    "kanji": "製品",
+    "kana": "せいひん",
+    "romaji": "seihin",
+    "english": "product / manufactured goods"
+  },
+  {
+    "kanji": "世界",
+    "kana": "せかい",
+    "romaji": "sekai",
+    "english": "world"
+  },
+  {
+    "kanji": "石鹸",
+    "kana": "せっけん",
+    "romaji": "sekken",
+    "english": "soap"
+  },
+  {
+    "kanji": "戦争",
+    "kana": "せんそう",
+    "romaji": "sensou",
+    "english": "war"
+  },
+  {
+    "kanji": "洗濯機",
+    "kana": "せんたくき",
+    "romaji": "sentakuki",
+    "english": "washing machine"
+  },
+  {
+    "kanji": "そっと",
+    "kana": "そっと",
+    "romaji": "sotto",
+    "english": "softly / quietly"
+  },
+  {
+    "kanji": "その他",
+    "kana": "そのた",
+    "romaji": "sonota",
+    "english": "others / besides"
+  },
+  {
+    "kanji": "その通り",
+    "kana": "そのとおり",
+    "romaji": "sonotoori",
+    "english": "exactly / that's right"
+  },
+  {
+    "kanji": "それぞれ",
+    "kana": "それぞれ",
+    "romaji": "sorezore",
+    "english": "each / respectively"
+  },
+  {
+    "kanji": "損",
+    "kana": "そん",
+    "romaji": "son",
+    "english": "loss / damage"
+  },
+  {
+    "kanji": "存じる",
+    "kana": "ぞんじる",
+    "romaji": "zonjiru",
+    "english": "to know (humble)"
+  },
+  {
+    "kanji": "他",
+    "kana": "た",
+    "romaji": "ta",
+    "english": "other"
+  },
+  {
+    "kanji": "大抵",
+    "kana": "たいてい",
+    "romaji": "taitei",
+    "english": "usually / mostly"
+  },
+  {
+    "kanji": "態度",
+    "kana": "たいど",
+    "romaji": "taido",
+    "english": "attitude"
+  },
+  {
+    "kanji": "大変",
+    "kana": "たいへん",
+    "romaji": "taihen",
+    "english": "very / terrible / serious"
+  },
+  {
+    "kanji": "速達",
+    "kana": "そくたつ",
+    "romaji": "sokutatsu",
+    "english": "express mail / special delivery"
+  },
+  {
+    "kanji": "外",
+    "kana": "そと",
+    "romaji": "soto",
+    "english": "outside / exterior"
+  },
+  {
+    "kanji": "その後",
+    "kana": "そのあと",
+    "romaji": "sono ato",
+    "english": "after that / afterwards"
+  },
+  {
+    "kanji": "その上",
+    "kana": "そのうえ",
+    "romaji": "sono ue",
+    "english": "besides / moreover"
+  },
+  {
+    "kanji": "そのうち",
+    "kana": "そのうち",
+    "romaji": "sono uchi",
+    "english": "before long / sooner or later"
+  },
+  {
+    "kanji": "その場",
+    "kana": "そのば",
+    "romaji": "sono ba",
+    "english": "that place / on the spot"
+  },
+  {
+    "kanji": "そば",
+    "kana": "そば",
+    "romaji": "soba",
+    "english": "buckwheat noodles"
+  },
+  {
+    "kanji": "染める",
+    "kana": "そめる",
+    "romaji": "someru",
+    "english": "to dye / to color"
+  },
+  {
+    "kanji": "備える",
+    "kana": "そなえる",
+    "romaji": "sonaeru",
+    "english": "to provide / to prepare"
+  },
+  {
+    "kanji": "尊敬",
+    "kana": "そんけい",
+    "romaji": "sonkei",
+    "english": "respect / reverence"
+  },
+  {
+    "kanji": "そんな",
+    "kana": "そんな",
+    "romaji": "sonna",
+    "english": "such / that kind of"
+  },
+  {
+    "kanji": "そんなに",
+    "kana": "そんなに",
+    "romaji": "sonna ni",
+    "english": "so much / to that extent"
+  },
+  {
+    "kanji": "送料",
+    "kana": "そうりょう",
+    "romaji": "souryou",
+    "english": "postage / shipping fee"
+  },
+  {
+    "kanji": "添える",
+    "kana": "そえる",
+    "romaji": "soeru",
+    "english": "to attach / to add"
+  },
+  {
+    "kanji": "隅",
+    "kana": "すみ",
+    "romaji": "sumi",
+    "english": "corner / nook"
+  },
+  {
+    "kanji": "炭",
+    "kana": "すみ",
+    "romaji": "sumi",
+    "english": "charcoal"
+  },
+  {
+    "kanji": "進む",
+    "kana": "すすむ",
+    "romaji": "susumu",
+    "english": "to advance / to progress"
+  },
+  {
+    "kanji": "勧める",
+    "kana": "すすめる",
+    "romaji": "susumeru",
+    "english": "to recommend / to advise"
+  },
+  {
+    "kanji": "捨てる",
+    "kana": "すてる",
+    "romaji": "suteru",
+    "english": "to throw away / to discard"
+  },
+  {
+    "kanji": "素敵",
+    "kana": "すてき",
+    "romaji": "suteki",
+    "english": "lovely / wonderful"
+  },
+  {
+    "kanji": "既に",
+    "kana": "すでに",
+    "romaji": "sude ni",
+    "english": "already / too late"
+  },
+  {
+    "kanji": "全て",
+    "kana": "すべて",
+    "romaji": "subete",
+    "english": "all / everything"
+  },
+  {
+    "kanji": "滑る",
+    "kana": "すべる",
+    "romaji": "suberu",
+    "english": "to slip / to slide"
+  },
+  {
+    "kanji": "数学",
+    "kana": "すうがく",
+    "romaji": "suugaku",
+    "english": "mathematics"
+  },
+  {
+    "kanji": "水泳",
+    "kana": "すいえい",
+    "romaji": "suiei",
+    "english": "swimming"
+  },
+  {
+    "kanji": "随分",
+    "kana": "ずいぶん",
+    "romaji": "zuibun",
+    "english": "very / extremely"
+  },
+  {
+    "kanji": "図書館",
+    "kana": "としょかん",
+    "romaji": "toshokan",
+    "english": "library"
+  },
+  {
+    "kanji": "止める",
+    "kana": "とめる",
+    "romaji": "tomeru",
+    "english": "to stop / to halt"
+  },
+  {
+    "kanji": "泊まる",
+    "kana": "とまる",
+    "romaji": "tomaru",
+    "english": "to stay overnight"
+  },
+  {
+    "kanji": "富",
+    "kana": "とみ",
+    "romaji": "tomi",
+    "english": "wealth / fortune"
+  },
+  {
+    "kanji": "友達",
+    "kana": "ともだち",
+    "romaji": "tomodachi",
+    "english": "friend"
+  },
+  {
+    "kanji": "共に",
+    "kana": "ともに",
+    "romaji": "tomo ni",
+    "english": "together / both"
+  },
+  {
+    "kanji": "飛ぶ",
+    "kana": "とぶ",
+    "romaji": "tobu",
+    "english": "to fly / to jump"
+  },
+  {
+    "kanji": "鳥",
+    "kana": "とり",
+    "romaji": "tori",
+    "english": "bird"
+  },
+  {
+    "kanji": "取る",
+    "kana": "とる",
+    "romaji": "toru",
+    "english": "to take / to get"
+  },
+  {
+    "kanji": "年",
+    "kana": "とし",
+    "romaji": "toshi",
+    "english": "year / age"
+  },
+  {
+    "kanji": "相談する",
+    "kana": "そうだんする",
+    "romaji": "soudan suru",
+    "english": "to consult / to discuss"
+  },
+  {
+    "kanji": "掃除する",
+    "kana": "そうじする",
+    "romaji": "souji suru",
+    "english": "to clean"
+  },
+  {
+    "kanji": "卒業する",
+    "kana": "そつぎょうする",
+    "romaji": "sotsugyou suru",
+    "english": "to graduate"
+  },
+  {
+    "kanji": "それとも",
+    "kana": "それとも",
+    "romaji": "sore tomo",
+    "english": "or / or else"
+  },
+  {
+    "kanji": "体",
+    "kana": "たい",
+    "romaji": "tai",
+    "english": "body"
+  },
+  {
+    "kanji": "大会",
+    "kana": "たいかい",
+    "romaji": "taikai",
+    "english": "tournament / convention"
+  },
+  {
+    "kanji": "大丈夫",
+    "kana": "だいじょうぶ",
+    "romaji": "daijoubu",
+    "english": "all right / okay"
+  },
+  {
+    "kanji": "代表",
+    "kana": "だいひょう",
+    "romaji": "daihyou",
+    "english": "representative"
+  },
+  {
+    "kanji": "太陽",
+    "kana": "たいよう",
+    "romaji": "taiyou",
+    "english": "sun"
+  },
+  {
+    "kanji": "戦う",
+    "kana": "たたかう",
+    "romaji": "tatakau",
+    "english": "to fight / to battle"
+  },
+  {
+    "kanji": "楽しみ",
+    "kana": "たのしみ",
+    "romaji": "tanoshimi",
+    "english": "pleasure / enjoyment"
+  },
+  {
+    "kanji": "足りない",
+    "kana": "たりない",
+    "romaji": "tarinai",
+    "english": "insufficient / not enough"
+  },
+  {
+    "kanji": "建物",
+    "kana": "たてもの",
+    "romaji": "tatemono",
+    "english": "building"
+  },
+  {
+    "kanji": "床屋",
+    "kana": "とこや",
+    "romaji": "tokoya",
+    "english": "barbershop"
+  },
+  {
+    "kanji": "突然",
+    "kana": "とつぜん",
+    "romaji": "totsuzen",
+    "english": "suddenly / unexpectedly"
+  },
+  {
+    "kanji": "焼く",
+    "kana": "やく",
+    "romaji": "yaku",
+    "english": "to burn / to bake / to grill"
+  },
+  {
+    "kanji": "約",
+    "kana": "やく",
+    "romaji": "yaku",
+    "english": "approximately / about"
+  },
+  {
+    "kanji": "役",
+    "kana": "やく",
+    "romaji": "yaku",
+    "english": "role / duty / function"
+  },
+  {
+    "kanji": "野菜",
+    "kana": "やさい",
+    "romaji": "yasai",
+    "english": "vegetables"
+  },
+  {
+    "kanji": "優しい",
+    "kana": "やさしい",
+    "romaji": "yasashii",
+    "english": "kind / gentle / easy"
+  },
+  {
+    "kanji": "安い",
+    "kana": "やすい",
+    "romaji": "yasui",
+    "english": "cheap / inexpensive"
+  },
+  {
+    "kanji": "休む",
+    "kana": "やすむ",
+    "romaji": "yasumu",
+    "english": "to rest / to take a break"
+  },
+  {
+    "kanji": "屋根",
+    "kana": "やね",
+    "romaji": "yane",
+    "english": "roof"
+  },
+  {
+    "kanji": "破る",
+    "kana": "やぶる",
+    "romaji": "yaburu",
+    "english": "to tear / to break"
+  },
+  {
+    "kanji": "山",
+    "kana": "やま",
+    "romaji": "yama",
+    "english": "mountain"
+  },
+  {
+    "kanji": "止める",
+    "kana": "やめる",
+    "romaji": "yameru",
+    "english": "to stop / to quit"
+  },
+  {
+    "kanji": "やる",
+    "kana": "やる",
+    "romaji": "yaru",
+    "english": "to do / to give"
+  },
+  {
+    "kanji": "痩せる",
+    "kana": "やせる",
+    "romaji": "yaseru",
+    "english": "to become thin / to lose weight"
+  },
+  {
+    "kanji": "夜",
+    "kana": "よる",
+    "romaji": "yoru",
+    "english": "night / evening"
+  },
+  {
+    "kanji": "よろしく",
+    "kana": "よろしく",
+    "romaji": "yoroshiku",
+    "english": "please / favorably"
+  },
+  {
+    "kanji": "弱い",
+    "kana": "よわい",
+    "romaji": "yowai",
+    "english": "weak"
+  },
+  {
+    "kanji": "是非",
+    "kana": "ぜひ",
+    "romaji": "zehi",
+    "english": "by all means / certainly"
+  },
+  {
+    "kanji": "象",
+    "kana": "ぞう",
+    "romaji": "zou",
+    "english": "elephant"
+  },
+  {
+    "kanji": "続く",
+    "kana": "つづく",
+    "romaji": "tsuzuku",
+    "english": "to continue"
+  },
+  {
+    "kanji": "続ける",
+    "kana": "つづける",
+    "romaji": "tsuzukeru",
+    "english": "to continue / to keep on"
+  },
+  {
+    "kanji": "空港",
+    "kana": "くうこう",
+    "romaji": "kuukou",
+    "english": "airport"
+  },
+  {
+    "kanji": "首",
+    "kana": "くび",
+    "romaji": "kubi",
+    "english": "neck"
+  },
+  {
+    "kanji": "雲",
+    "kana": "くも",
+    "romaji": "kumo",
+    "english": "cloud"
+  },
+  {
+    "kanji": "暗い",
+    "kana": "くらい",
+    "romaji": "kurai",
+    "english": "dark / gloomy"
+  },
+  {
+    "kanji": "車",
+    "kana": "くるま",
+    "romaji": "kuruma",
+    "english": "car"
+  },
+  {
+    "kanji": "黒",
+    "kana": "くろ",
+    "romaji": "kuro",
+    "english": "black"
+  },
+  {
+    "kanji": "計算",
+    "kana": "けいさん",
+    "romaji": "keisan",
+    "english": "calculation"
+  },
+  {
+    "kanji": "警察",
+    "kana": "けいさつ",
+    "romaji": "keisatsu",
+    "english": "police"
+  },
+  {
+    "kanji": "結構",
+    "kana": "けっこう",
+    "romaji": "kekkou",
+    "english": "quite / fairly / fine"
+  },
+  {
+    "kanji": "煙",
+    "kana": "けむり",
+    "romaji": "kemuri",
+    "english": "smoke"
+  },
+  {
+    "kanji": "研究",
+    "kana": "けんきゅう",
+    "romaji": "kenkyuu",
+    "english": "research"
+  },
+  {
+    "kanji": "喧嘩",
+    "kana": "けんか",
+    "romaji": "kenka",
+    "english": "quarrel / fight"
+  },
+  {
+    "kanji": "米",
+    "kana": "こめ",
+    "romaji": "kome",
+    "english": "rice (uncooked)"
+  },
+  {
+    "kanji": "子供",
+    "kana": "こども",
+    "romaji": "kodomo",
+    "english": "child"
+  },
+  {
+    "kanji": "声",
+    "kana": "こえ",
+    "romaji": "koe",
+    "english": "voice"
+  },
+  {
+    "kanji": "氷",
+    "kana": "こおり",
+    "romaji": "koori",
+    "english": "ice"
+  },
+  {
+    "kanji": "心",
+    "kana": "こころ",
+    "romaji": "kokoro",
+    "english": "heart / mind"
+  },
+  {
+    "kanji": "個",
+    "kana": "こ",
+    "romaji": "ko",
+    "english": "counter for small objects"
+  },
+  {
+    "kanji": "紅茶",
+    "kana": "こうちゃ",
+    "romaji": "koucha",
+    "english": "black tea"
+  },
+  {
+    "kanji": "高校",
+    "kana": "こうこう",
+    "romaji": "koukou",
+    "english": "high school"
+  },
+  {
+    "kanji": "講義",
+    "kana": "こうぎ",
+    "romaji": "kougi",
+    "english": "lecture"
+  },
+  {
+    "kanji": "効果",
+    "kana": "こうか",
+    "romaji": "kouka",
+    "english": "effect / result"
+  },
+  {
+    "kanji": "公園",
+    "kana": "こうえん",
+    "romaji": "kouen",
+    "english": "park"
+  },
+  {
+    "kanji": "答える",
+    "kana": "こたえる",
+    "romaji": "kotaeru",
+    "english": "to answer / to reply"
+  },
+  {
+    "kanji": "今月",
+    "kana": "こんげつ",
+    "romaji": "kongetsu",
+    "english": "this month"
+  },
+  {
+    "kanji": "今週",
+    "kana": "こんしゅう",
+    "romaji": "konshuu",
+    "english": "this week"
+  },
+  {
+    "kanji": "昆虫",
+    "kana": "こんちゅう",
+    "romaji": "konchuu",
+    "english": "insect"
+  },
+  {
+    "kanji": "混雑",
+    "kana": "こんざつ",
+    "romaji": "konzatsu",
+    "english": "congestion / crowding"
+  },
+  {
+    "kanji": "今日",
+    "kana": "きょう",
+    "romaji": "kyou",
+    "english": "today"
+  },
+  {
+    "kanji": "教室",
+    "kana": "きょうしつ",
+    "romaji": "kyoushitsu",
+    "english": "classroom"
+  },
+  {
+    "kanji": "兄弟",
+    "kana": "きょうだい",
+    "romaji": "kyoudai",
+    "english": "siblings"
+  },
+  {
+    "kanji": "去年",
+    "kana": "きょねん",
+    "romaji": "kyonen",
+    "english": "last year"
+  },
+  {
+    "kanji": "急に",
+    "kana": "きゅうに",
+    "romaji": "kyuu ni",
+    "english": "suddenly / quickly"
+  },
+  {
+    "kanji": "牛乳",
+    "kana": "ぎゅうにゅう",
+    "romaji": "gyuunyuu",
+    "english": "milk"
+  },
+  {
+    "kanji": "牛肉",
+    "kana": "ぎゅうにく",
+    "romaji": "gyuuniku",
+    "english": "beef"
+  },
+  {
+    "kanji": "切符",
+    "kana": "きっぷ",
+    "romaji": "kippu",
+    "english": "ticket"
+  },
+  {
+    "kanji": "成田",
+    "kana": "なりた",
+    "romaji": "narita",
+    "english": "Narita (airport/city)"
+  },
+  {
+    "kanji": "何",
+    "kana": "なん",
+    "romaji": "nan",
+    "english": "what / how many"
+  },
+  {
+    "kanji": "何度",
+    "kana": "なんど",
+    "romaji": "nando",
+    "english": "how many times / how often"
+  },
+  {
+    "kanji": "何とか",
+    "kana": "なんとか",
+    "romaji": "nantoka",
+    "english": "somehow / one way or another"
+  },
+  {
+    "kanji": "何でも",
+    "kana": "なんでも",
+    "romaji": "nandemo",
+    "english": "anything / whatever"
+  },
+  {
+    "kanji": "熱",
+    "kana": "ねつ",
+    "romaji": "netsu",
+    "english": "fever / heat"
+  },
+  {
+    "kanji": "年上",
+    "kana": "としうえ",
+    "romaji": "toshiue",
+    "english": "older / senior"
+  },
+  {
+    "kanji": "年下",
+    "kana": "としした",
+    "romaji": "toshishita",
+    "english": "younger / junior"
+  },
+  {
+    "kanji": "日記",
+    "kana": "にっき",
+    "romaji": "nikki",
+    "english": "diary"
+  },
+  {
+    "kanji": "荷物",
+    "kana": "にもつ",
+    "romaji": "nimotsu",
+    "english": "luggage / baggage"
+  },
+  {
+    "kanji": "人気",
+    "kana": "にんき",
+    "romaji": "ninki",
+    "english": "popularity / popular"
+  },
+  {
+    "kanji": "人形",
+    "kana": "にんぎょう",
+    "romaji": "ningyou",
+    "english": "doll / puppet"
+  },
+  {
+    "kanji": "ニュース",
+    "kana": "ニュース",
+    "romaji": "nyuusu",
+    "english": "news"
+  },
+  {
+    "kanji": "脱ぐ",
+    "kana": "ぬぐ",
+    "romaji": "nugu",
+    "english": "to take off (clothes/shoes)"
+  },
+  {
+    "kanji": "温かい",
+    "kana": "あたたかい",
+    "romaji": "atatakai",
+    "english": "warm"
+  },
+  {
+    "kanji": "お見舞い",
+    "kana": "おみまい",
+    "romaji": "omimai",
+    "english": "visiting the sick / get-well visit"
+  },
+  {
+    "kanji": "お土産",
+    "kana": "おみやげ",
+    "romaji": "omiyage",
+    "english": "souvenir / gift"
+  },
+  {
+    "kanji": "おもちゃ",
+    "kana": "おもちゃ",
+    "romaji": "omocha",
+    "english": "toy"
+  },
+  {
+    "kanji": "お疲れ様",
+    "kana": "おつかれさま",
+    "romaji": "otsukaresama",
+    "english": "thank you for your hard work"
+  },
+  {
+    "kanji": "お釣り",
+    "kana": "おつり",
+    "romaji": "otsuri",
+    "english": "change (money)"
+  },
+  {
+    "kanji": "夫",
+    "kana": "おっと",
+    "romaji": "otto",
+    "english": "husband"
+  },
+  {
+    "kanji": "およそ",
+    "kana": "およそ",
+    "romaji": "oyoso",
+    "english": "approximately / about"
+  },
+  {
+    "kanji": "パン",
+    "kana": "パン",
+    "romaji": "pan",
+    "english": "bread"
+  },
+  {
+    "kanji": "パーティー",
+    "kana": "パーティー",
+    "romaji": "paatii",
+    "english": "party"
+  },
+  {
+    "kanji": "ピアノ",
+    "kana": "ピアノ",
+    "romaji": "piano",
+    "english": "piano"
+  },
+  {
+    "kanji": "ピンク",
+    "kana": "ピンク",
+    "romaji": "pinku",
+    "english": "pink"
+  },
+  {
+    "kanji": "プール",
+    "kana": "プール",
+    "romaji": "puuru",
+    "english": "pool"
+  },
+  {
+    "kanji": "プレゼント",
+    "kana": "プレゼント",
+    "romaji": "purezento",
+    "english": "present / gift"
+  },
+  {
+    "kanji": "ラジオ",
+    "kana": "ラジオ",
+    "romaji": "rajio",
+    "english": "radio"
+  },
+  {
+    "kanji": "来月",
+    "kana": "らいげつ",
+    "romaji": "raigetsu",
+    "english": "next month"
+  },
+  {
+    "kanji": "来週",
+    "kana": "らいしゅう",
+    "romaji": "raishuu",
+    "english": "next week"
+  },
+  {
+    "kanji": "すてき",
+    "kana": "すてき",
+    "romaji": "suteki",
+    "english": "lovely / wonderful"
+  },
+  {
+    "kanji": "住む",
+    "kana": "すむ",
+    "romaji": "sumu",
+    "english": "to live / to reside"
+  },
+  {
+    "kanji": "すり",
+    "kana": "すり",
+    "romaji": "suri",
+    "english": "pickpocket"
+  },
+  {
+    "kanji": "する",
+    "kana": "する",
+    "romaji": "suru",
+    "english": "to do"
+  },
+  {
+    "kanji": "すると",
+    "kana": "すると",
+    "romaji": "suru to",
+    "english": "then / thereupon"
+  },
+  {
+    "kanji": "座席",
+    "kana": "ざせき",
+    "romaji": "zaseki",
+    "english": "seat"
+  },
+  {
+    "kanji": "そっち",
+    "kana": "そっち",
+    "romaji": "socchi",
+    "english": "that way / your side"
+  },
+  {
+    "kanji": "そう",
+    "kana": "そう",
+    "romaji": "sou",
+    "english": "so / that way"
+  },
+  {
+    "kanji": "そうして",
+    "kana": "そうして",
+    "romaji": "sou shite",
+    "english": "and then / in that way"
+  },
+  {
+    "kanji": "測る",
+    "kana": "はかる",
+    "romaji": "hakaru",
+    "english": "to measure"
+  },
+  {
+    "kanji": "速度",
+    "kana": "そくど",
+    "romaji": "sokudo",
+    "english": "speed / velocity"
+  },
+  {
+    "kanji": "そこで",
+    "kana": "そこで",
+    "romaji": "soko de",
+    "english": "so / therefore / then"
+  },
+  {
+    "kanji": "台",
+    "kana": "だい",
+    "romaji": "dai",
+    "english": "counter for machines / stand"
+  },
+  {
+    "kanji": "台風",
+    "kana": "たいふう",
+    "romaji": "taifuu",
+    "english": "typhoon"
+  },
+  {
+    "kanji": "対象",
+    "kana": "たいしょう",
+    "romaji": "taishou",
+    "english": "target / object"
+  },
+  {
+    "kanji": "退院",
+    "kana": "たいいん",
+    "romaji": "taiin",
+    "english": "leaving hospital"
+  },
+  {
+    "kanji": "体温",
+    "kana": "たいおん",
+    "romaji": "taion",
+    "english": "body temperature"
+  },
+  {
+    "kanji": "全体",
+    "kana": "ぜんたい",
+    "romaji": "zentai",
+    "english": "whole / entire"
+  },
+  {
+    "kanji": "贈り物",
+    "kana": "おくりもの",
+    "romaji": "zokurimono",
+    "english": "gift / present"
+  },
+  {
+    "kanji": "頭痛",
+    "kana": "ずつう",
+    "romaji": "zutsuu",
+    "english": "headache"
+  },
+  {
+    "kanji": "残す",
+    "kana": "のこす",
+    "romaji": "zansu",
+    "english": "to leave / to save"
+  },
+  {
+    "kanji": "善悪",
+    "kana": "ぜんあく",
+    "romaji": "zenaku",
+    "english": "good and evil / right and wrong"
+  },
+  {
+    "kanji": "全員",
+    "kana": "ぜんいん",
+    "romaji": "zenin",
+    "english": "all members / everyone"
+  },
+  {
+    "kanji": "全国",
+    "kana": "ぜんこく",
+    "romaji": "zenkoku",
+    "english": "the whole country / nationwide"
+  },
+  {
+    "kanji": "全力",
+    "kana": "ぜんりょく",
+    "romaji": "zenryoku",
+    "english": "full power / one's best effort"
+  },
+  {
+    "kanji": "贈る",
+    "kana": "おくる",
+    "romaji": "zokuru",
+    "english": "to give / to present"
+  },
+  {
+    "kanji": "存在",
+    "kana": "そんざい",
+    "romaji": "zonzai",
+    "english": "existence / being"
+  },
+  {
+    "kanji": "象徴",
+    "kana": "しょうちょう",
+    "romaji": "zouchou",
+    "english": "symbol"
+  },
+  {
+    "kanji": "増加",
+    "kana": "ぞうか",
+    "romaji": "zouka",
+    "english": "increase / growth"
+  },
+  {
+    "kanji": "造る",
+    "kana": "つくる",
+    "romaji": "zouru",
+    "english": "to make / to build"
+  },
+  {
+    "kanji": "属する",
+    "kana": "ぞくする",
+    "romaji": "zokusuru",
+    "english": "to belong to"
+  },
+  {
+    "kanji": "族",
+    "kana": "ぞく",
+    "romaji": "zoku",
+    "english": "tribe / family"
+  },
+  {
+    "kanji": "贈答",
+    "kana": "ぞうとう",
+    "romaji": "zoutou",
+    "english": "giving and receiving gifts"
+  },
+  {
+    "kanji": "象牙",
+    "kana": "ぞうげ",
+    "romaji": "zouge",
+    "english": "ivory"
+  },
+  {
+    "kanji": "増強",
+    "kana": "ぞうきょう",
+    "romaji": "zoukyou",
+    "english": "reinforcement / strengthening"
+  },
+  {
+    "kanji": "増減",
+    "kana": "ぞうげん",
+    "romaji": "zougen",
+    "english": "increase and decrease"
+  },
+  {
+    "kanji": "造船",
+    "kana": "ぞうせん",
+    "romaji": "zousen",
+    "english": "shipbuilding"
+  },
+  {
+    "kanji": "増税",
+    "kana": "ぞうぜい",
+    "romaji": "zouzei",
+    "english": "tax increase"
+  },
+  {
+    "kanji": "造園",
+    "kana": "ぞうえん",
+    "romaji": "zouen",
+    "english": "landscape gardening"
+  },
+  {
+    "kanji": "増大",
+    "kana": "ぞうだい",
+    "romaji": "zoudai",
+    "english": "enlargement / increase"
+  },
+  {
+    "kanji": "造花",
+    "kana": "ぞうか",
+    "romaji": "zouka",
+    "english": "artificial flower"
+  },
+  {
+    "kanji": "雑音",
+    "kana": "ざつおん",
+    "romaji": "zatsuon",
+    "english": "noise"
+  },
+  {
+    "kanji": "雑貨",
+    "kana": "ざっか",
+    "romaji": "zakka",
+    "english": "miscellaneous goods"
+  },
+  {
+    "kanji": "雑草",
+    "kana": "ざっそう",
+    "romaji": "zassou",
+    "english": "weed"
+  },
+  {
+    "kanji": "座禅",
+    "kana": "ざぜん",
+    "romaji": "zazen",
+    "english": "Zen meditation"
+  },
+  {
+    "kanji": "責任",
+    "kana": "せきにん",
+    "romaji": "sekinin",
+    "english": "responsibility"
+  },
+  {
+    "kanji": "設備",
+    "kana": "せつび",
+    "romaji": "setsubi",
+    "english": "equipment / facilities"
+  },
+  {
+    "kanji": "社会",
+    "kana": "しゃかい",
+    "romaji": "shakai",
+    "english": "society"
+  },
+  {
+    "kanji": "社長",
+    "kana": "しゃちょう",
+    "romaji": "shachou",
+    "english": "company president"
+  },
+  {
+    "kanji": "写真",
+    "kana": "しゃしん",
+    "romaji": "shashin",
+    "english": "photograph"
+  },
+  {
+    "kanji": "試験",
+    "kana": "しけん",
+    "romaji": "shiken",
+    "english": "exam / test"
+  },
+  {
+    "kanji": "商品",
+    "kana": "しょうひん",
+    "romaji": "shouhin",
+    "english": "merchandise / goods"
+  },
+  {
+    "kanji": "職業",
+    "kana": "しょくぎょう",
+    "romaji": "shokugyou",
+    "english": "occupation / job"
+  },
+  {
+    "kanji": "信用",
+    "kana": "しんよう",
+    "romaji": "shinyou",
+    "english": "trust / credit"
+  },
+  {
+    "kanji": "進歩",
+    "kana": "しんぽ",
+    "romaji": "shinpo",
+    "english": "progress / advancement"
+  },
+  {
+    "kanji": "趣味",
+    "kana": "しゅみ",
+    "romaji": "shumi",
+    "english": "hobby / interest"
+  },
+  {
+    "kanji": "出張",
+    "kana": "しゅっちょう",
+    "romaji": "shucchou",
+    "english": "business trip"
+  },
+  {
+    "kanji": "収入",
+    "kana": "しゅうにゅう",
+    "romaji": "shuunyuu",
+    "english": "income"
+  },
+  {
+    "kanji": "修理",
+    "kana": "しゅうり",
+    "romaji": "shuuri",
+    "english": "repair"
+  },
+  {
+    "kanji": "ずっと",
+    "kana": "ずっと",
+    "romaji": "zutto",
+    "english": "all along / continuously"
+  },
+  {
+    "kanji": "住宅",
+    "kana": "じゅうたく",
+    "romaji": "juutaku",
+    "english": "residence / housing"
+  },
+  {
+    "kanji": "住民",
+    "kana": "じゅうみん",
+    "romaji": "juumin",
+    "english": "resident / inhabitant"
+  },
+  {
+    "kanji": "すぐに",
+    "kana": "すぐに",
+    "romaji": "sugu ni",
+    "english": "immediately / right away"
+  },
+  {
+    "kanji": "すでに",
+    "kana": "すでに",
+    "romaji": "sude ni",
+    "english": "already"
+  },
+  {
+    "kanji": "すなわち",
+    "kana": "すなわち",
+    "romaji": "sunawachi",
+    "english": "that is to say / namely"
+  },
+  {
+    "kanji": "すべて",
+    "kana": "すべて",
+    "romaji": "subete",
+    "english": "everything / all"
+  },
+  {
+    "kanji": "たいてい",
+    "kana": "たいてい",
+    "romaji": "taitei",
+    "english": "usually / mostly"
+  },
+  {
+    "kanji": "たしか",
+    "kana": "たしか",
+    "romaji": "tashika",
+    "english": "if I remember correctly"
+  },
+  {
+    "kanji": "単純",
+    "kana": "たんじゅん",
+    "romaji": "tanjun",
+    "english": "simple / plain"
+  },
+  {
+    "kanji": "単語",
+    "kana": "たんご",
+    "romaji": "tango",
+    "english": "word / vocabulary"
+  },
+  {
+    "kanji": "誕生",
+    "kana": "たんじょう",
+    "romaji": "tanjou",
+    "english": "birth"
+  },
+  {
+    "kanji": "ちゃんと",
+    "kana": "ちゃんと",
+    "romaji": "chanto",
+    "english": "properly / correctly"
+  },
+  {
+    "kanji": "寝坊",
+    "kana": "ねぼう",
+    "romaji": "nebou",
+    "english": "oversleeping / sleeping in"
+  },
+  {
+    "kanji": "熱心",
+    "kana": "ねっしん",
+    "romaji": "nesshin",
+    "english": "enthusiastic / earnest"
+  },
+  {
+    "kanji": "似合う",
+    "kana": "にあう",
+    "romaji": "niau",
+    "english": "to suit / to look good on"
+  },
+  {
+    "kanji": "匂い",
+    "kana": "におい",
+    "romaji": "nioi",
+    "english": "smell / scent / odor"
+  },
+  {
+    "kanji": "苦手",
+    "kana": "にがて",
+    "romaji": "nigate",
+    "english": "weak point / not good at"
+  },
+  {
+    "kanji": "人間",
+    "kana": "にんげん",
+    "romaji": "ningen",
+    "english": "human being / person"
+  },
+  {
+    "kanji": "認める",
+    "kana": "みとめる",
+    "romaji": "mitomeru",
+    "english": "to recognize / to acknowledge"
+  },
+  {
+    "kanji": "濡れる",
+    "kana": "ぬれる",
+    "romaji": "nureru",
+    "english": "to get wet"
+  },
+  {
+    "kanji": "盗む",
+    "kana": "ぬすむ",
+    "romaji": "nusumu",
+    "english": "to steal / to rob"
+  },
+  {
+    "kanji": "塗る",
+    "kana": "ぬる",
+    "romaji": "nuru",
+    "english": "to paint / to apply"
+  },
+  {
+    "kanji": "布",
+    "kana": "ぬの",
+    "romaji": "nuno",
+    "english": "cloth / fabric"
+  },
+  {
+    "kanji": "上る",
+    "kana": "のぼる",
+    "romaji": "noboru",
+    "english": "to climb / to go up"
+  },
+  {
+    "kanji": "延びる",
+    "kana": "のびる",
+    "romaji": "nobiru",
+    "english": "to extend / to grow"
+  },
+  {
+    "kanji": "乗り換える",
+    "kana": "のりかえる",
+    "romaji": "norikaeru",
+    "english": "to transfer / to change"
+  },
+  {
+    "kanji": "飲み物",
+    "kana": "のみもの",
+    "romaji": "nomimono",
+    "english": "drink / beverage"
+  },
+  {
+    "kanji": "喉",
+    "kana": "のど",
+    "romaji": "nodo",
+    "english": "throat"
+  },
+  {
+    "kanji": "呪い",
+    "kana": "のろい",
+    "romaji": "noroi",
+    "english": "curse / spell"
+  },
+  {
+    "kanji": "鈍い",
+    "kana": "にぶい",
+    "romaji": "nibui",
+    "english": "dull / slow / blunt"
+  },
+  {
+    "kanji": "温める",
+    "kana": "あたためる",
+    "romaji": "atatameru",
+    "english": "to warm / to heat"
+  },
+  {
+    "kanji": "恩",
+    "kana": "おん",
+    "romaji": "on",
+    "english": "favor / kindness / debt"
+  },
+  {
+    "kanji": "音楽家",
+    "kana": "おんがくか",
+    "romaji": "ongakuka",
+    "english": "musician"
+  },
+  {
+    "kanji": "女の子",
+    "kana": "おんなのこ",
+    "romaji": "onnanoko",
+    "english": "girl"
+  },
+  {
+    "kanji": "降りる",
+    "kana": "おりる",
+    "romaji": "oriru",
+    "english": "to get off / to descend"
+  },
+  {
+    "kanji": "織る",
+    "kana": "おる",
+    "romaji": "oru",
+    "english": "to weave"
+  },
+  {
+    "kanji": "恐ろしい",
+    "kana": "おそろしい",
+    "romaji": "osoroshii",
+    "english": "terrible / frightening"
+  },
+  {
+    "kanji": "脅かす",
+    "kana": "おどかす",
+    "romaji": "odokasu",
+    "english": "to threaten / to frighten"
+  },
+  {
+    "kanji": "追う",
+    "kana": "おう",
+    "romaji": "ou",
+    "english": "to chase / to pursue"
+  },
+  {
+    "kanji": "覆う",
+    "kana": "おおう",
+    "romaji": "oou",
+    "english": "to cover / to conceal"
+  },
+  {
+    "kanji": "応援",
+    "kana": "おうえん",
+    "romaji": "ouen",
+    "english": "support / cheering"
+  },
+  {
+    "kanji": "応じる",
+    "kana": "おうじる",
+    "romaji": "oujiru",
+    "english": "to respond / to comply"
+  },
+  {
+    "kanji": "応用",
+    "kana": "おうよう",
+    "romaji": "ouyou",
+    "english": "application / practical use"
+  },
+  {
+    "kanji": "王様",
+    "kana": "おうさま",
+    "romaji": "ousama",
+    "english": "king"
+  },
+  {
+    "kanji": "王子",
+    "kana": "おうじ",
+    "romaji": "ouji",
+    "english": "prince"
+  },
+  {
+    "kanji": "往復",
+    "kana": "おうふく",
+    "romaji": "oufuku",
+    "english": "round trip"
+  },
+  {
+    "kanji": "横断",
+    "kana": "おうだん",
+    "romaji": "oudan",
+    "english": "crossing / traversing"
+  },
+  {
+    "kanji": "王女",
+    "kana": "おうじょ",
+    "romaji": "oujo",
+    "english": "princess"
+  },
+  {
+    "kanji": "黄金",
+    "kana": "おうごん",
+    "romaji": "ougon",
+    "english": "gold / golden"
+  },
+  {
+    "kanji": "重さ",
+    "kana": "おもさ",
+    "romaji": "omosa",
+    "english": "weight"
+  },
+  {
+    "kanji": "ペット",
+    "kana": "ペット",
+    "romaji": "petto",
+    "english": "pet"
+  },
+  {
+    "kanji": "理由",
+    "kana": "りゆう",
+    "romaji": "riyuu",
+    "english": "reason / cause"
+  },
+  {
+    "kanji": "留学",
+    "kana": "りゅうがく",
+    "romaji": "ryuugaku",
+    "english": "studying abroad"
+  },
+  {
+    "kanji": "旅行",
+    "kana": "りょこう",
+    "romaji": "ryokou",
+    "english": "trip / travel"
+  },
+  {
+    "kanji": "魚",
+    "kana": "さかな",
+    "romaji": "sakana",
+    "english": "fish"
+  },
+  {
+    "kanji": "作品",
+    "kana": "さくひん",
+    "romaji": "sakuhin",
+    "english": "work / creation"
+  },
+  {
+    "kanji": "桜",
+    "kana": "さくら",
+    "romaji": "sakura",
+    "english": "cherry blossom"
+  },
+  {
+    "kanji": "背中",
+    "kana": "せなか",
+    "romaji": "senaka",
+    "english": "back"
+  },
+  {
+    "kanji": "そうじ",
+    "kana": "そうじ",
+    "romaji": "souji",
+    "english": "cleaning"
+  },
+  {
+    "kanji": "薄い",
+    "kana": "うすい",
+    "romaji": "usui",
+    "english": "thin / light / weak"
+  },
+  {
+    "kanji": "嘘",
+    "kana": "うそ",
+    "romaji": "uso",
+    "english": "lie / falsehood"
+  },
+  {
+    "kanji": "移る",
+    "kana": "うつる",
+    "romaji": "utsuru",
+    "english": "to move / to transfer / to be infected"
+  },
+  {
+    "kanji": "写る",
+    "kana": "うつる",
+    "romaji": "utsuru",
+    "english": "to be photographed / to appear in a photo"
+  },
+  {
+    "kanji": "美しい",
+    "kana": "うつくしい",
+    "romaji": "utsukushii",
+    "english": "beautiful"
+  },
+  {
+    "kanji": "腕",
+    "kana": "うで",
+    "romaji": "ude",
+    "english": "arm"
+  },
+  {
+    "kanji": "海",
+    "kana": "うみ",
+    "romaji": "umi",
+    "english": "sea / ocean"
+  },
+  {
+    "kanji": "埋める",
+    "kana": "うめる",
+    "romaji": "umeru",
+    "english": "to bury / to fill in"
+  },
+  {
+    "kanji": "運ぶ",
+    "kana": "はこぶ",
+    "romaji": "hakobu",
+    "english": "to carry / to transport"
+  },
+  {
+    "kanji": "裏",
+    "kana": "うら",
+    "romaji": "ura",
+    "english": "back / reverse side / behind"
+  },
+  {
+    "kanji": "売る",
+    "kana": "うる",
+    "romaji": "uru",
+    "english": "to sell"
+  },
+  {
+    "kanji": "煩い",
+    "kana": "うるさい",
+    "romaji": "urusai",
+    "english": "noisy / annoying"
+  },
+  {
+    "kanji": "嬉しい",
+    "kana": "うれしい",
+    "romaji": "ureshii",
+    "english": "happy / glad"
+  },
+  {
+    "kanji": "上",
+    "kana": "うえ",
+    "romaji": "ue",
+    "english": "above / on top / upper"
+  },
+  {
+    "kanji": "植える",
+    "kana": "うえる",
+    "romaji": "ueru",
+    "english": "to plant"
+  },
+  {
+    "kanji": "受ける",
+    "kana": "うける",
+    "romaji": "ukeru",
+    "english": "to receive / to take (exam)"
+  },
+  {
+    "kanji": "後ろ",
+    "kana": "うしろ",
+    "romaji": "ushiro",
+    "english": "behind / back"
+  },
+  {
+    "kanji": "失う",
+    "kana": "うしなう",
+    "romaji": "ushinau",
+    "english": "to lose"
+  },
+  {
+    "kanji": "歌",
+    "kana": "うた",
+    "romaji": "uta",
+    "english": "song"
+  },
+  {
+    "kanji": "疑う",
+    "kana": "うたがう",
+    "romaji": "utagau",
+    "english": "to doubt / to suspect"
+  },
+  {
+    "kanji": "歌う",
+    "kana": "うたう",
+    "romaji": "utau",
+    "english": "to sing"
+  },
+  {
+    "kanji": "宇宙",
+    "kana": "うちゅう",
+    "romaji": "uchuu",
+    "english": "universe / space"
+  },
+  {
+    "kanji": "訪れる",
+    "kana": "おとずれる",
+    "romaji": "otozureru",
+    "english": "to visit / to call on"
+  },
+  {
+    "kanji": "和",
+    "kana": "わ",
+    "romaji": "wa",
+    "english": "harmony / peace / Japan"
+  },
+  {
+    "kanji": "若い",
+    "kana": "わかい",
+    "romaji": "wakai",
+    "english": "young"
+  },
+  {
+    "kanji": "分かれる",
+    "kana": "わかれる",
+    "romaji": "wakareru",
+    "english": "to separate / to part"
+  },
+  {
+    "kanji": "私",
+    "kana": "わたし",
+    "romaji": "watashi",
+    "english": "I / me"
+  },
+  {
+    "kanji": "技",
+    "kana": "わざ",
+    "romaji": "waza",
+    "english": "technique / skill"
+  },
+  {
+    "kanji": "故意",
+    "kana": "わざと",
+    "romaji": "wazato",
+    "english": "on purpose / deliberately"
+  },
+  {
+    "kanji": "煩わしい",
+    "kana": "わずらわしい",
+    "romaji": "wazurawashii",
+    "english": "troublesome / bothersome"
+  },
+  {
+    "kanji": "僅か",
+    "kana": "わずか",
+    "romaji": "wazuka",
+    "english": "only / merely / a little"
+  },
+  {
+    "kanji": "綿",
+    "kana": "わた",
+    "romaji": "wata",
+    "english": "cotton"
+  },
+  {
+    "kanji": "話",
+    "kana": "わ",
+    "romaji": "wa",
+    "english": "story / talk"
+  },
+  {
+    "kanji": "話題",
+    "kana": "わだい",
+    "romaji": "wadai",
+    "english": "topic / subject"
+  },
+  {
+    "kanji": "和食",
+    "kana": "わしょく",
+    "romaji": "washoku",
+    "english": "Japanese food"
+  },
+  {
+    "kanji": "冷房",
+    "kana": "れいぼう",
+    "romaji": "reibou",
+    "english": "air conditioning"
+  },
+  {
+    "kanji": "歴史",
+    "kana": "れきし",
+    "romaji": "rekishi",
+    "english": "history"
+  },
+  {
+    "kanji": "連絡",
+    "kana": "れんらく",
+    "romaji": "renraku",
+    "english": "to contact / communication"
+  },
+  {
+    "kanji": "練習",
+    "kana": "れんしゅう",
+    "romaji": "renshuu",
+    "english": "to practice / practice"
+  },
+  {
+    "kanji": "利用",
+    "kana": "りよう",
+    "romaji": "riyou",
+    "english": "to use / utilization"
+  },
+  {
+    "kanji": "料理",
+    "kana": "りょうり",
+    "romaji": "ryouri",
+    "english": "cooking / cuisine"
+  },
+  {
+    "kanji": "両親",
+    "kana": "りょうしん",
+    "romaji": "ryoushin",
+    "english": "parents"
+  },
+  {
+    "kanji": "酒",
+    "kana": "さけ",
+    "romaji": "sake",
+    "english": "alcohol / rice wine"
+  },
+  {
+    "kanji": "島",
+    "kana": "しま",
+    "romaji": "shima",
+    "english": "island"
+  },
+  {
+    "kanji": "品物",
+    "kana": "しなもの",
+    "romaji": "shinamono",
+    "english": "goods / articles"
+  },
+  {
+    "kanji": "将来",
+    "kana": "しょうらい",
+    "romaji": "shourai",
+    "english": "future"
+  },
+  {
+    "kanji": "親切",
+    "kana": "しんせつ",
+    "romaji": "shinsetsu",
+    "english": "kind / kindness"
+  },
+  {
+    "kanji": "新聞",
+    "kana": "しんぶん",
+    "romaji": "shinbun",
+    "english": "newspaper"
+  },
+  {
+    "kanji": "スポーツ",
+    "kana": "スポーツ",
+    "romaji": "supootsu",
+    "english": "sports"
+  },
+  {
+    "kanji": "夜中",
+    "kana": "よなか",
+    "romaji": "yonaka",
+    "english": "middle of the night / midnight"
+  },
+  {
+    "kanji": "ずるい",
+    "kana": "ずるい",
+    "romaji": "zurui",
+    "english": "sly / cunning / unfair"
+  },
+  {
+    "kanji": "ぞう",
+    "kana": "ぞう",
+    "romaji": "zou",
+    "english": "elephant"
+  },
+  {
+    "kanji": "揃える",
+    "kana": "そろえる",
+    "romaji": "soroeru",
+    "english": "to gather / to collect / to arrange"
+  }
+]

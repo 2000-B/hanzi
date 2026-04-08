@@ -41,7 +41,9 @@ const path = require('path');
 const INPUT_FILE  = path.join(__dirname, '..', 'data', 'jlpt-input.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'data', 'jlpt-enriched.json');
 const BATCH_SIZE  = 6;    // smaller than Chinese — kanji entries are more complex (dual readings)
-const DELAY_MS    = 1000; // slightly more conservative
+const DELAY_MS    = 1500; // slightly more conservative
+const RATE_LIMIT_WAIT = 35000;
+const MAX_RETRIES = 3;
 const MODEL       = 'claude-sonnet-4-20250514';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -220,7 +222,7 @@ function runValidation(output) {
 
 // ── API call ──────────────────────────────────────────────────────────────────
 
-async function enrichBatch(batch, apiKey) {
+async function enrichBatch(batch, apiKey, retryCount = 0) {
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -234,6 +236,13 @@ async function enrichBatch(batch, apiKey) {
       messages: [{ role: 'user', content: buildPrompt(batch) }],
     }),
   });
+
+  if (response.status === 429 && retryCount < MAX_RETRIES) {
+    const waitSec = Math.round(RATE_LIMIT_WAIT / 1000 * (retryCount + 1));
+    process.stdout.write(`rate limited, waiting ${waitSec}s ... `);
+    await sleep(waitSec * 1000);
+    return enrichBatch(batch, apiKey, retryCount + 1);
+  }
 
   if (!response.ok) {
     const err = await response.text();

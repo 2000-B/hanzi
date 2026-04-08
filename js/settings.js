@@ -28,7 +28,8 @@ let appearance = {
   secondaryHue: null,        // manual secondary hue; null means use getSecondaryHue(primaryHue)
   color: '#ffb347',          // solid background color (for type='color')
   image: null,
-  blur: false
+  blur: false,
+  matchBg: false             // if true, tint all bg/border/surface colors to accent hue
 };
 let showTimerOnly = false;
 
@@ -67,6 +68,7 @@ function selectSwatch(hue) {
   appearance.type = 'theme';
   applyThemeColors();
   applyBlobTint();
+  if (appearance.matchBg) applyAccentFromHue(hue);
   saveAppearance();
   syncSettingsUI();
 }
@@ -93,12 +95,9 @@ function syncSettingsUI() {
   ['diff-ratings-toggle','fs-diff-ratings-toggle'].forEach(id => { const el=document.getElementById(id); if(el) el.classList.toggle('on',showDifficultyRatings); });
   // Swatch palette
   renderSwatches();
-  // Primary color custom picker
-  const primaryHex = hueToHex(appearance.primaryHue);
-  const primarySwatch = document.getElementById('bg-primary-swatch');
-  if(primarySwatch) primarySwatch.style.background = primaryHex;
-  const primaryPicker = document.getElementById('bg-primary-picker');
-  if(primaryPicker) primaryPicker.value = primaryHex;
+  // Match-bg toggle
+  const matchBgToggle = document.getElementById('fs-match-bg-toggle');
+  if (matchBgToggle) matchBgToggle.classList.toggle('on', !!appearance.matchBg);
 }
 
 function updatePrefsVisibility() {
@@ -157,9 +156,13 @@ function applyBackground() {
   applyThemeColors();
   // Blob tint follows primary hue (only visible in 'theme' dark mode)
   applyBlobTint();
-  // Remove any stale legacy accent-theme override
-  const stale = document.getElementById('accent-theme');
-  if (stale) stale.remove();
+  // Apply full UI tint if matchBg is enabled, otherwise remove stale override
+  if (appearance.matchBg) {
+    applyAccentFromHue(appearance.primaryHue);
+  } else {
+    const stale = document.getElementById('accent-theme');
+    if (stale) stale.remove();
+  }
   saveAppearance();
 }
 
@@ -207,7 +210,7 @@ function toggleBgBlur() {
 }
 
 function resetAppearance() {
-  appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false };
+  appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false, matchBg: false };
   ['blob-style', 'accent-theme', 'theme-colors'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();
@@ -362,7 +365,8 @@ function saveAppearance() {
     complementSecondary: appearance.complementSecondary,
     secondaryHue: appearance.secondaryHue,
     color: appearance.color,
-    blur: appearance.blur
+    blur: appearance.blur,
+    matchBg: appearance.matchBg
   };
   if (appearance.image) toSave.image = appearance.image;
   try { setProfileData('hanzi-appearance', JSON.stringify(toSave)); } catch(e) {}
@@ -407,6 +411,19 @@ function toggleComplementSecondary() {
   syncSettingsUI();
   applyThemeColors();
   saveAppearance();
+}
+
+function toggleMatchBg() {
+  appearance.matchBg = !appearance.matchBg;
+  if (appearance.matchBg) {
+    applyAccentFromHue(appearance.primaryHue);
+  } else {
+    // Remove the accent-theme override to restore default bg colors
+    const el = document.getElementById('accent-theme');
+    if (el) el.remove();
+  }
+  saveAppearance();
+  syncSettingsUI();
 }
 
 function toggleTheme() {
