@@ -1882,7 +1882,8 @@ body.light .test-start-begin {
   background: color-mix(in srgb, var(--accent) 65%, #fff) !important;
   border-color: color-mix(in srgb, var(--accent) 50%, transparent) !important;
 }
-.test-start-begin:hover {
+.test-start-begin:hover,
+body.light .test-start-begin:hover {
   background: var(--accent) !important;
   border-color: var(--accent) !important;
 }
