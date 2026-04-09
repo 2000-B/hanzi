@@ -296,11 +296,11 @@ function setMode(mode) {
     // Reset inline overrides so test-view children are clean on next entry
     const ss = document.getElementById('test-start-screen');
     const ta = document.getElementById('test-area');
-    const sb = document.getElementById('stats-bar');
+    const pb = document.getElementById('test-progress-bar');
     const nd = document.getElementById('test-no-deck');
     if (ss) ss.style.display = '';
     if (ta) ta.style.display = '';
-    if (sb) sb.style.display = '';
+    if (pb) pb.style.display = '';
     if (nd) nd.style.display = 'none';
   }
 }
@@ -308,7 +308,7 @@ function setMode(mode) {
 function _showTestNoDeck() {
   document.getElementById('test-start-screen').style.display = 'none';
   document.getElementById('test-area').style.display = 'none';
-  document.getElementById('stats-bar').style.display = 'none';
+  document.getElementById('test-progress-bar').style.display = 'none';
   const nd = document.getElementById('test-no-deck');
   if (nd) nd.style.display = '';
 }
@@ -316,10 +316,10 @@ function _showTestNoDeck() {
 function _showTestStartScreen() {
   const startScreen = document.getElementById('test-start-screen');
   const testArea = document.getElementById('test-area');
-  const statsBar = document.getElementById('stats-bar');
+  const progressBar = document.getElementById('test-progress-bar');
   startScreen.style.display = '';
   testArea.style.display = 'none';
-  statsBar.style.display = 'none';
+  progressBar.style.display = 'none';
 
   // Fill in deck info
   document.getElementById('test-start-deck-name').textContent = activeDeckName;
@@ -345,7 +345,7 @@ function beginTest() {
 
   document.getElementById('test-start-screen').style.display = 'none';
   document.getElementById('test-area').style.display = '';
-  document.getElementById('stats-bar').style.display = '';
+  document.getElementById('test-progress-bar').style.display = '';
 
   updateStats();
   initTestCard();

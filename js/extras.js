@@ -1,3 +1,19 @@
+// REVIEW HELP TOOLTIP
+// ══════════════════════════════════════════
+function toggleReviewHelp(btn) {
+  const tooltip = document.getElementById('review-help-tooltip');
+  const isOpen = tooltip.classList.toggle('open');
+  if (isOpen) {
+    const r = btn.getBoundingClientRect();
+    tooltip.style.top = r.bottom + 6 + 'px';
+    tooltip.style.left = r.left + 'px';
+    setTimeout(() => document.addEventListener('click', _closeReviewHelp, { once: true }), 0);
+  }
+}
+function _closeReviewHelp() {
+  document.getElementById('review-help-tooltip').classList.remove('open');
+}
+
 // CSV IMPORT
 // ══════════════════════════════════════════
 function loadCSV(input) {

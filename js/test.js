@@ -64,6 +64,7 @@ function handleAnswer(correct, btn, card) {
   if (correct) {
     stats.correct++;
     stats.streak++;
+    if (stats.streak > (stats.bestStreak || 0)) stats.bestStreak = stats.streak;
     cd.correct = (cd.correct || 0) + 1;
     btn.classList.add('correct');
 
@@ -137,6 +138,7 @@ function submitTyping() {
   if (correct) {
     stats.correct++;
     stats.streak++;
+    if (stats.streak > (stats.bestStreak || 0)) stats.bestStreak = stats.streak;
     cd.correct = (cd.correct || 0) + 1;
     flash.textContent = '✓ correct';
     flash.style.color = 'var(--green)';
@@ -200,11 +202,12 @@ function startTimer() {
   const bar = document.getElementById('timer-bar');
   bar.style.width = '100%';
   bar.style.background = 'var(--accent)';
-  let remaining = 10000;
+  const duration = currentFormat === 'type' ? 15000 : 10000;
+  let remaining = duration;
   if (timerInterval) clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     remaining -= 100;
-    const pct = Math.max(0, remaining / 10000 * 100);
+    const pct = Math.max(0, remaining / duration * 100);
     bar.style.width = pct + '%';
     if (pct < 30) bar.style.background = 'var(--red)';
     else if (pct < 60) bar.style.background = 'var(--orange)';
@@ -230,7 +233,7 @@ function handleTimeout(card) {
   flash.textContent = '⏱ time\'s up — ' + card.english;
   flash.style.color = 'var(--orange)';
 
-  sessionLog.push({ hanzi: card.hanzi, correct: false, time: 10000 });
+  sessionLog.push({ hanzi: card.hanzi, correct: false, time: currentFormat === 'type' ? 15000 : 10000 });
   saveProgress();
   updateStats();
   if (activeDeckName === '⟳ review' || showDifficultyRatings) {
@@ -243,12 +246,10 @@ function handleTimeout(card) {
 }
 
 function updateStats() {
-  document.getElementById('stat-correct').textContent = stats.correct;
-  document.getElementById('stat-wrong').textContent = stats.wrong;
-  const total = stats.correct + stats.wrong;
-  document.getElementById('stat-accuracy').textContent = total > 0 ? Math.round(stats.correct / total * 100) + '%' : '—';
-  document.getElementById('stat-speed').textContent = stats.times.length > 0 ? (stats.times.reduce((a, b) => a + b, 0) / stats.times.length / 1000).toFixed(1) + 's' : '—';
-  document.getElementById('stat-streak').textContent = stats.streak;
+  const total = activeDeck.length;
+  const answered = stats.correct + stats.wrong;
+  const el = document.getElementById('test-progress-text');
+  if (el) el.textContent = answered + ' / ' + total;
 }
 
 function showSessionReport() {
@@ -258,8 +259,11 @@ function showSessionReport() {
   const total = stats.correct + stats.wrong;
   const accuracy = total > 0 ? Math.round(stats.correct / total * 100) : 0;
   const avgTime = stats.times.length > 0 ? (stats.times.reduce((a, b) => a + b, 0) / stats.times.length / 1000).toFixed(1) : '—';
+  const masteredCount = stats.mastered.size;
+  const bestStreak = stats.bestStreak || stats.streak;
 
   const flagged = sessionLog.filter(l => !l.correct);
+  const slow = sessionLog.filter(l => l.correct && l.time > SLOW_THRESHOLD);
   content.innerHTML = `
     <div class="sr-stats">
       <div class="sr-stat"><div class="sr-stat-label">correct</div><div class="sr-stat-value" style="color:var(--green)">${stats.correct}</div></div>
@@ -267,8 +271,10 @@ function showSessionReport() {
       <div class="sr-stat"><div class="sr-stat-label">accuracy</div><div class="sr-stat-value" style="color:var(--accent)">${accuracy}%</div></div>
       <div class="sr-stat"><div class="sr-stat-label">avg time</div><div class="sr-stat-value" style="color:var(--text)">${avgTime}s</div></div>
     </div>
+    <div class="sr-detail-row"><span class="sr-detail-label">best streak</span><span class="sr-detail-value">${bestStreak}</span></div>
+    ${masteredCount > 0 ? `<div class="sr-detail-row"><span class="sr-detail-label">mastered this session</span><span class="sr-detail-value" style="color:var(--green)">${masteredCount}</span></div>` : ''}
     ${flagged.length > 0 ? `
-      <div class="sr-flagged-title">flagged for review</div>
+      <div class="sr-flagged-title" style="margin-top:16px">flagged for review</div>
       ${flagged.map(l => `
         <div class="sr-flagged-row">
           <span class="sr-flagged-hanzi">${l.hanzi}</span>
@@ -277,6 +283,16 @@ function showSessionReport() {
         </div>
       `).join('')}
     ` : '<div class="sr-perfect">perfect score! 🎉</div>'}
+    ${slow.length > 0 ? `
+      <div class="sr-flagged-title" style="margin-top:16px">correct but slow</div>
+      ${slow.map(l => `
+        <div class="sr-flagged-row">
+          <span class="sr-flagged-hanzi">${l.hanzi}</span>
+          <span style="flex:1;font-size:13px;color:var(--text2)">${cardData[l.hanzi]?.english || ''}</span>
+          <span style="font-size:12px;color:var(--text3)">${(l.time / 1000).toFixed(1)}s</span>
+        </div>
+      `).join('')}
+    ` : ''}
   `;
 }
 

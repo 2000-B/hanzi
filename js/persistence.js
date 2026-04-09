@@ -113,6 +113,53 @@ function importProgress(input) {
   reader.readAsText(file);
 }
 
+function toggleSessionHistory() {
+  const wrap = document.getElementById('session-history');
+  const list = document.getElementById('session-history-list');
+  if (!wrap || !list) return;
+  const isOpen = wrap.style.display !== 'none';
+  if (isOpen) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+
+  // Gather sessions from all language prefixes
+  const sessions = [];
+  for (const prefix of ['hanzi', 'jp']) {
+    try {
+      const raw = getProfileData(prefix + '-progress');
+      if (!raw) continue;
+      const data = JSON.parse(raw);
+      if (!data.sessions) continue;
+      for (const [deck, arr] of Object.entries(data.sessions)) {
+        for (const s of arr) {
+          sessions.push({ ...s, deck });
+        }
+      }
+    } catch(e) {}
+  }
+
+  if (!sessions.length) {
+    list.innerHTML = '<div class="sh-empty">no sessions yet</div>';
+    return;
+  }
+
+  sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const recent = sessions.slice(0, 50);
+  list.innerHTML = recent.map(s => {
+    const d = new Date(s.date);
+    const dateStr = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    return `<div class="sh-row">
+      <div class="sh-row-top"><span class="sh-deck">${s.deck}</span><span class="sh-date">${dateStr}</span></div>
+      <div class="sh-row-stats">
+        <span class="sh-stat" style="color:var(--green)">${s.correct}✓</span>
+        <span class="sh-stat" style="color:var(--red)">${s.wrong}✗</span>
+        <span class="sh-stat">${s.accuracy}%</span>
+        <span class="sh-stat">${s.avgTime}s avg</span>
+        ${s.mastered ? `<span class="sh-stat" style="color:var(--green)">+${s.mastered} mastered</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim();
   if (key) setProfileData('hanzi-api-key', key);

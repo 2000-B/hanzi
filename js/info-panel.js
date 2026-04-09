@@ -6,6 +6,37 @@ function toggleInfoPanel() {
   panel.classList.toggle('open', infoPanelOpen);
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
 
+  if (!infoPanelOpen) {
+    // Clear fullscreen state if panel was fullscreened when closed
+    if (panel.classList.contains('ws-fullscreen')) {
+      panel.classList.remove('ws-fullscreen');
+      // Restore fullscreen btn icon
+      const expandPath = `<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"
+        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+      panel.querySelectorAll('.ws-fullscreen-btn svg').forEach(svg => {
+        svg.innerHTML = expandPath;
+      });
+      // Restore saved inline styles on all panels
+      const allPanels = [document.getElementById('main-content'), panel];
+      allPanels.forEach(el => {
+        if (el && el._savedStyle) {
+          el.style.width = el._savedStyle.width;
+          el.style.height = el._savedStyle.height;
+          el.style.flex = el._savedStyle.flex;
+          delete el._savedStyle;
+        }
+        if (el) el.style.display = '';
+      });
+      // Restore dividers
+      const workspace = document.getElementById('workspace');
+      if (workspace) workspace.querySelectorAll('.ws-divider').forEach(d => d.style.display = '');
+    }
+    // Clear stale inline styles from the closing panel
+    panel.style.width = '';
+    panel.style.height = '';
+    panel.style.flex = '';
+  }
+
   if (infoPanelOpen) {
     // Restore saved panel width
     const savedW = getProfileData('hanzi-info-width');
@@ -214,6 +245,24 @@ function renderInfoPanel(card) {
             ${enriched.sameRadical.map(ch => `
               <div class="ip-related-char" onclick="navigateToChar('${ch}')" data-tip="${ch}">${ch}</div>
             `).join('')}
+          </div>
+        </div>`;
+      }
+
+      // ── Card-level stats ──
+      const cdStats = cardData[card.hanzi];
+      if (cdStats && (cdStats.correct || cdStats.wrong || cdStats.mastered)) {
+        const seen = (cdStats.correct || 0) + (cdStats.wrong || 0);
+        const acc = seen > 0 ? Math.round((cdStats.correct || 0) / seen * 100) : 0;
+        html += `<div class="ip-section">
+          <div class="ip-section-title">card stats</div>
+          <div class="ip-card-stats">
+            <div class="ip-card-stat"><span class="ip-card-stat-label">seen</span><span class="ip-card-stat-value">${seen}</span></div>
+            <div class="ip-card-stat"><span class="ip-card-stat-label">accuracy</span><span class="ip-card-stat-value">${acc}%</span></div>
+            <div class="ip-card-stat"><span class="ip-card-stat-label">streak</span><span class="ip-card-stat-value">${cdStats.correct || 0}</span></div>
+            ${cdStats.mastered ? `<div class="ip-card-stat"><span class="ip-card-stat-label">mastered</span><span class="ip-card-stat-value" style="color:var(--green)">✓</span></div>` : ''}
+            ${cdStats.due ? `<div class="ip-card-stat"><span class="ip-card-stat-label">next review</span><span class="ip-card-stat-value">${cdStats.due}</span></div>` : ''}
+            ${cdStats.reviewFlag ? `<div class="ip-card-stat"><span class="ip-card-stat-label">flagged</span><span class="ip-card-stat-value" style="color:var(--orange)">⚑</span></div>` : ''}
           </div>
         </div>`;
       }

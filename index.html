@@ -184,6 +184,10 @@
           <button class="btn btn-sm" onclick="exportProgress()" style="flex:1">export progress</button>
           <label class="btn btn-sm" style="flex:1;cursor:pointer">import<input type="file" accept=".json" onchange="importProgress(this)" style="display:none"></label>
         </div>
+        <button class="btn btn-sm" onclick="toggleSessionHistory()" style="margin-top:6px;width:100%">session history</button>
+        <div class="session-history" id="session-history" style="display:none">
+          <div class="session-history-list" id="session-history-list"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -228,6 +232,9 @@
             <path d="M14.5 8A6.5 6.5 0 0 1 3.02 12.17M1.5 14.5v-4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           review
+          <span class="review-help-tip" onclick="event.stopPropagation();toggleReviewHelp(this)">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M6 6.2a2.2 2.2 0 0 1 4.1.7c0 1.2-1.9 1.1-1.9 2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="12.2" r=".7" fill="currentColor"/></svg>
+          </span>
         </span>
         <span class="review-badge empty" id="review-badge">0</span>
       </div>
@@ -358,16 +365,8 @@
             <button class="rating-btn easy"   onclick="rateCard(5)">Easy</button>
           </div>
         </div><!-- /test-area -->
-        <div class="stats-bar" id="stats-bar">
-          <div class="stat"><span class="stat-label">correct</span><span class="stat-value green" id="stat-correct">0</span></div>
-          <div class="stats-sep"></div>
-          <div class="stat"><span class="stat-label">wrong</span><span class="stat-value red" id="stat-wrong">0</span></div>
-          <div class="stats-sep"></div>
-          <div class="stat"><span class="stat-label">accuracy</span><span class="stat-value accent" id="stat-accuracy">—</span></div>
-          <div class="stats-sep"></div>
-          <div class="stat"><span class="stat-label">avg speed</span><span class="stat-value" id="stat-speed">—</span></div>
-          <div class="stats-sep"></div>
-          <div class="stat"><span class="stat-label">streak</span><span class="stat-value orange" id="stat-streak">0</span></div>
+        <div class="test-progress-bar" id="test-progress-bar">
+          <span class="test-progress-text" id="test-progress-text">1 / 20</span>
         </div>
       </div>
 
@@ -412,6 +411,8 @@
     <button class="btn btn-accent" onclick="closeSessionModal()" style="margin-top:16px;width:100%">close</button>
   </div>
 </div>
+
+<div class="review-help-tooltip" id="review-help-tooltip">Cards you missed or haven't reviewed in a while appear here. The app uses spaced repetition to schedule them just before you'd forget — so you review less but remember more.</div>
 
 <div class="modal-overlay" id="mastered-list-modal" onclick="if(event.target===this)toggleMasteredList()">
   <div class="modal">

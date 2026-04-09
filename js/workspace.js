@@ -40,6 +40,24 @@ function wsToggleFullscreen(panelId) {
     if (id !== panelId && el) el.classList.remove('ws-fullscreen');
   });
 
+  // Save / restore inline styles set by divider or edge resize
+  const allPanels = Object.values(panelEls).filter(Boolean);
+  if (isNowFullscreen) {
+    allPanels.forEach(el => {
+      el._savedStyle = { width: el.style.width, height: el.style.height, flex: el.style.flex };
+      el.style.width = ''; el.style.height = ''; el.style.flex = '';
+    });
+  } else {
+    allPanels.forEach(el => {
+      if (el._savedStyle) {
+        el.style.width = el._savedStyle.width;
+        el.style.height = el._savedStyle.height;
+        el.style.flex = el._savedStyle.flex;
+        delete el._savedStyle;
+      }
+    });
+  }
+
   // Hide/show other panels and dividers when entering/exiting fullscreen
   Object.entries(panelEls).forEach(([id, el]) => {
     if (id !== panelId && el) {
@@ -81,14 +99,21 @@ document.addEventListener('keydown', e => {
       fs.querySelectorAll('.ws-fullscreen-btn svg').forEach(svg => {
         svg.innerHTML = expandPath;
       });
-      // Restore hidden panels and dividers
+      // Restore hidden panels, dividers, and saved inline styles
       const workspace = document.getElementById('workspace');
       const panelEls = {
         flashcard: document.getElementById('main-content'),
         info:      document.getElementById('info-panel'),
       };
       Object.entries(panelEls).forEach(([id, el]) => {
-        if (el) el.style.display = '';
+        if (!el) return;
+        el.style.display = '';
+        if (el._savedStyle) {
+          el.style.width = el._savedStyle.width;
+          el.style.height = el._savedStyle.height;
+          el.style.flex = el._savedStyle.flex;
+          delete el._savedStyle;
+        }
       });
       if (workspace) {
         workspace.querySelectorAll('.ws-divider').forEach(d => d.style.display = '');

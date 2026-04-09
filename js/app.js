@@ -52,8 +52,10 @@ async function init() {
   // Build search index
   buildSearchIndex();
 
-  // Sidebar starts closed — toggled via header deck button
-  sidebarOpen = false;
+  // Sidebar starts open so user can pick a deck
+  sidebarOpen = true;
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('btn-deck').classList.add('active');
 
   // Inject per-panel fullscreen buttons
   ensureFullscreenBtns();
