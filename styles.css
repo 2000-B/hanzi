@@ -1165,15 +1165,17 @@ body:not(.light) .review-deck.has-cards:hover {
   gap: 6px;
 }
 .review-badge {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--grad-mid);
-  background: color-mix(in srgb, var(--grad-start) 14%, transparent);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
   border-radius: var(--radius);
-  padding: 2px 8px;
+  padding: 2px 9px;
   font-feature-settings: "tnum";
+  min-width: 22px;
+  text-align: center;
 }
-.review-badge.empty { color: var(--text3); background: var(--bg3); }
+.review-badge.empty { color: var(--text3); background: var(--bg3); font-weight: 600; font-size: 11px; }
 
 /* Section headers */
 .sidebar-section {
@@ -2687,22 +2689,7 @@ body.light .search-results { background:rgba(255,255,255,0.85); backdrop-filter:
 .sr-detail-label { color:var(--text3); }
 .sr-detail-value { font-weight:600; color:var(--text); }
 
-/* Review help tooltip */
-.review-help-tip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  color: var(--text3);
-  cursor: pointer;
-  margin-left: 4px;
-  vertical-align: middle;
-  transition: color .15s;
-  flex-shrink: 0;
-}
-.review-help-tip:hover { color: var(--accent); }
+/* Review help tooltip (right-click on review deck) */
 .review-help-tooltip {
   position: fixed;
   z-index: 9999;

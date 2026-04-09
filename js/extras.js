@@ -1,13 +1,14 @@
 // REVIEW HELP TOOLTIP
 // ══════════════════════════════════════════
-function toggleReviewHelp(btn) {
+function toggleReviewHelp(el) {
   const tooltip = document.getElementById('review-help-tooltip');
   const isOpen = tooltip.classList.toggle('open');
   if (isOpen) {
-    const r = btn.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
     tooltip.style.top = r.bottom + 6 + 'px';
     tooltip.style.left = r.left + 'px';
     setTimeout(() => document.addEventListener('click', _closeReviewHelp, { once: true }), 0);
+    setTimeout(() => document.addEventListener('contextmenu', _closeReviewHelp, { once: true }), 0);
   }
 }
 function _closeReviewHelp() {
