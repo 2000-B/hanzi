@@ -1142,9 +1142,10 @@ body:not(.light) .review-deck.has-cards:hover {
   border-color: color-mix(in srgb, var(--grad-start) 30%, transparent);
 }
 /* Active state: review deck is selected */
-.review-deck.active {
-  background: var(--accent);
-  border-color: var(--accent);
+.review-deck.active,
+.review-deck.active:hover {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
   color: #fff;
 }
 .review-deck.active .review-deck-label,

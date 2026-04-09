@@ -223,8 +223,8 @@ function applyAccentFromHue(hue) {
   let styleEl = document.getElementById('accent-theme');
   if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'accent-theme'; document.head.appendChild(styleEl); }
   styleEl.textContent = `
-    .app-body { background: hsl(${h}, 30%, 10%); }
-    .main-content { background: hsl(${h}, 25%, 13%); }
+    .app-body { background: hsl(${h}, 45%, 14%); }
+    .main-content { background: hsl(${h}, 35%, 17%); }
     body.light .app-body { background: hsl(${h}, 55%, 87%); }
     body.light .main-content { background: hsl(${h}, 45%, 91%); }
   `;

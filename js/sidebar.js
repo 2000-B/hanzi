@@ -188,7 +188,7 @@ function renderSidebar() {
   // Custom decks
   const customList = document.getElementById('custom-deck-list');
   customList.innerHTML = '';
-  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/) && !k.match(/^jlpt \d/));
+  const custom = Object.entries(decks).filter(([k]) => !k.match(/^hsk \d/) && !k.match(/^jlpt \d/) && k !== '⟳ review');
   document.getElementById('custom-decks-header').style.display = custom.length > 0 ? '' : 'none';
 
   custom.forEach(([name, cards]) => {
