@@ -1150,9 +1150,9 @@ body:not(.light) .review-deck.has-cards:hover {
 /* Subdued state: no cards due */
 .review-deck:not(.has-cards) .review-deck-label { color: var(--text3); }
 .review-deck:not(.has-cards) .review-icon { opacity: 0.4; }
-/* Icon */
-.review-icon { opacity: 0.65; flex-shrink: 0; }
-.review-deck.has-cards .review-icon { opacity: 0.85; }
+/* Icon — subdued by default, vivid on hover */
+.review-icon { opacity: 0.45; flex-shrink: 0; transition: opacity .2s; }
+.review-deck:hover .review-icon { opacity: 0.85; }
 .review-deck-label {
   font-size: 13px;
   font-weight: 500;
@@ -1163,15 +1163,17 @@ body:not(.light) .review-deck.has-cards:hover {
 }
 .review-badge {
   font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  background: var(--accent);
+  font-weight: 600;
+  color: var(--text2);
+  background: var(--bg4);
   border-radius: var(--radius);
   padding: 2px 9px;
   font-feature-settings: "tnum";
   min-width: 22px;
   text-align: center;
+  transition: all .2s;
 }
+.review-deck:hover .review-badge { background: var(--accent); color: #fff; font-weight: 700; }
 .review-badge.empty { color: var(--text3); background: var(--bg3); font-weight: 600; font-size: 11px; }
 
 /* Section headers */
