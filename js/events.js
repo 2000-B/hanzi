@@ -28,7 +28,7 @@ function renderContextStrip() {
     const tile = document.createElement('button');
     tile.className = 'ctx-tile' + (isCurrent ? ' ctx-current' : '') + (cd.mastered ? ' ctx-mastered' : '');
     tile.innerHTML = `<span class="ctx-hanzi">${card.hanzi}</span>`;
-    tile.title = `${card.pinyin} — ${card.english}`;
+    tile.dataset.tip = `${card.pinyin} — ${card.english}`;
     tile.onclick = () => { currentIndex = idx; renderCard(); };
     strip.appendChild(tile);
     if (isCurrent) activeTile = tile;

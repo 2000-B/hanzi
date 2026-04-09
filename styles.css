@@ -1116,12 +1116,10 @@ body.light .ip-component:hover { border-color: var(--accent-border); box-shadow:
   border-color: var(--border2);
   background: var(--bg4);
 }
-/* CTA state: cards are due */
+/* CTA state: cards are due — subdued by default, vivid on hover */
 .review-deck.has-cards {
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--grad-start) 12%, transparent),
-    color-mix(in srgb, var(--grad-end) 6%, transparent));
-  border-color: color-mix(in srgb, var(--grad-start) 28%, transparent);
+  background: var(--bg3);
+  border-color: var(--border);
 }
 .review-deck.has-cards:hover {
   background: linear-gradient(135deg,
@@ -1130,10 +1128,8 @@ body.light .ip-component:hover { border-color: var(--accent-border); box-shadow:
   border-color: color-mix(in srgb, var(--grad-start) 50%, transparent);
 }
 body:not(.light) .review-deck.has-cards {
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--grad-start) 7%, transparent),
-    color-mix(in srgb, var(--grad-end) 3%, transparent));
-  border-color: color-mix(in srgb, var(--grad-start) 16%, transparent);
+  background: var(--bg3);
+  border-color: var(--border);
 }
 body:not(.light) .review-deck.has-cards:hover {
   background: linear-gradient(135deg,
@@ -1676,7 +1672,8 @@ body.bg-custom .context-strip {
   white-space: nowrap;
 }
 .ctx-tile:hover { background: var(--bg3); }
-.ctx-tile.ctx-current { background: var(--bg4); border-color: var(--border2); }
+.ctx-tile.ctx-current { background: rgba(13,13,26,0.92); border-color: var(--border2); }
+body.light .ctx-tile.ctx-current { background: #fefefe; border-color: rgba(0,0,0,0.06); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 .ctx-tile.ctx-mastered { opacity: 0.35; }
 .ctx-tile.ctx-mastered.ctx-current { opacity: 1; }
 .ctx-hanzi {
@@ -1874,6 +1871,20 @@ body.light .controls-tray .btn:hover {
   margin-top: 8px;
   min-width: 140px;
   justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: color-mix(in srgb, var(--accent) 60%, var(--bg3)) !important;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)) !important;
+  transition: all .2s;
+}
+body.light .test-start-begin {
+  background: color-mix(in srgb, var(--accent) 65%, #fff) !important;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent) !important;
+}
+.test-start-begin:hover {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
 }
 
 .test-area {

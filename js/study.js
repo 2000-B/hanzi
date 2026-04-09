@@ -322,10 +322,14 @@ function _showTestStartScreen() {
   progressBar.style.display = 'none';
 
   // Fill in deck info
-  document.getElementById('test-start-deck-name').textContent = activeDeckName;
-  const visible = activeDeck.filter(c => !(cardData[c.hanzi]?.mastered));
+  const deckNameEl = document.getElementById('test-start-deck-name');
+  if (activeDeckName === '⟳ review') {
+    deckNameEl.innerHTML = '<svg class="review-icon" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M1.5 8a6.5 6.5 0 0 1 11.48-4.17M14.5 1.5v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 8A6.5 6.5 0 0 1 3.02 12.17M1.5 14.5v-4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> review';
+  } else {
+    deckNameEl.textContent = activeDeckName;
+  }
   document.getElementById('test-start-meta').textContent =
-    `${visible.length} card${visible.length !== 1 ? 's' : ''} · ${activeDeck.length} total`;
+    `${activeDeck.length} card${activeDeck.length !== 1 ? 's' : ''}`;
 
   syncStartFmt();
 }
