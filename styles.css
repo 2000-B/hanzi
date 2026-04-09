@@ -100,15 +100,15 @@ body::after {
   inset: -15%;
   z-index: -1;
   background:
-    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(200,100,30,0.28) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(180,60,30,0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(220,140,30,0.10) 0%, transparent 55%);
+    radial-gradient(ellipse 65% 55% at 18% 14%, rgba(200,100,30,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 60% at 80% 86%, rgba(180,60,30,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 52% 48%, rgba(220,140,30,0.05) 0%, transparent 55%);
   filter: blur(60px);
   animation: bgPulse 12s ease-in-out infinite;
   transition: opacity .3s;
 }
 body.light::before { background: #f2f3f5; }
-body.light::after { opacity: 0.5; }
+body.light::after { opacity: 0.45; }
 @keyframes bgPulse {
   0%,100% { transform: translate(0%, 0%) scale(1); opacity: 1; }
   30%     { transform: translate(3%, -4%) scale(1.05); opacity: 0.88; }
@@ -224,26 +224,31 @@ body.light header {
   white-space: nowrap;
   pointer-events: none;
   z-index: 2;
+  opacity: 0.6;
+  transition: opacity .2s;
 }
+.card-face:hover .card-counter { opacity: 1; }
 /* Card mode button — positioned on the card face */
 .card-mode-btn {
   position: absolute;
   top: 8px;
   left: 10px;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: .04em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   padding: 3px 10px;
-  background: var(--bg3);
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text3);
   cursor: pointer;
   transition: all .2s;
   z-index: 2;
+  opacity: 0.5;
 }
+.card-face:hover .card-mode-btn { opacity: 1; }
 .card-mode-btn:hover { border-color: var(--accent-border); color: var(--text2); }
 .card-mode-btn.active {
   background: var(--accent);
@@ -441,7 +446,7 @@ body.light .hsk-label-icon {
   min-width: 200px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  margin: 6px;
+  margin: 4px;
   transition: transform .25s ease, opacity .25s ease, filter .2s ease;
 }
 .ws-panel:not(.open) {
@@ -577,7 +582,7 @@ body.light .hsk-label-icon {
   border: 1px solid var(--border2);
   border-radius: var(--radius-md);
   box-shadow: 0 8px 32px rgba(0,0,0,.35);
-  margin: 6px;
+  margin: 4px;
   flex-direction: column;
   position: relative;
   width: var(--info-panel-w);
@@ -597,8 +602,8 @@ body.light .info-panel {
   background: rgba(255,255,255,0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  border-color: var(--border2);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  border-color: var(--border);
 }
 
 .info-panel-scroll {
@@ -989,13 +994,14 @@ body.light .ip-component:hover { border-color: var(--accent-border); box-shadow:
   font-size: 13px;
   padding: 10px 12px;
   background: var(--bg3);
-  border: 1px solid var(--border2);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
   outline: none;
   resize: vertical;
   transition: border-color .2s;
 }
+.ip-note-area:hover { border-color: var(--border2); }
 .ip-note-area:focus { border-color: var(--accent); }
 .ip-note-area::placeholder { color: var(--text3); }
 
@@ -1515,9 +1521,9 @@ body.light .empty-sub {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.07);
   background: rgba(13,13,26,0.92);
-  box-shadow: 0 8px 32px rgba(0,0,0,.40);
+  box-shadow: 0 4px 24px rgba(0,0,0,.35);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1539,10 +1545,9 @@ body.light .card-face {
   background: #fefefe;
   border-color: rgba(0,0,0,0.06);
   box-shadow:
-    0 2px 8px rgba(0,0,0,.06),
-    0 8px 32px rgba(0,0,0,.05),
-    0 20px 48px rgba(0,0,0,.03),
-    inset 0 1px 0 rgba(255,255,255,1);
+    0 1px 4px rgba(0,0,0,.04),
+    0 4px 16px rgba(0,0,0,.04),
+    0 12px 32px rgba(0,0,0,.02);
 }
 body.light .card-face::before {
   background: none;
