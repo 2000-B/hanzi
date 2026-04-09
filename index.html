@@ -125,8 +125,13 @@
         <div class="fs-section-label" style="margin-top:8px">accent color</div>
         <div class="swatch-row" id="swatch-row-full"></div>
         <div class="settings-toggle-row" style="margin-top:4px">
-          <span class="settings-toggle-label">tint ui to accent</span>
+          <span class="settings-toggle-label">tint background to match</span>
           <button class="toggle-switch" id="fs-match-bg-toggle" onclick="toggleMatchBg()"></button>
+        </div>
+        <div class="fs-section-label" style="margin-top:12px">language</div>
+        <div class="settings-pill">
+          <button class="settings-pill-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文 chinese</button>
+          <button class="settings-pill-btn" id="lang-ja" onclick="switchLanguage('ja')">日本語 japanese</button>
         </div>
       </div>
       <div class="fs-section">
@@ -153,13 +158,6 @@
         <div class="settings-toggle-row">
           <span class="settings-toggle-label">difficulty ratings</span>
           <button class="toggle-switch" id="fs-diff-ratings-toggle" onclick="toggleDiffRatings()"></button>
-        </div>
-      </div>
-      <div class="fs-section">
-        <div class="fs-section-label">language</div>
-        <div class="settings-pill">
-          <button class="settings-pill-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文 chinese</button>
-          <button class="settings-pill-btn" id="lang-ja" onclick="switchLanguage('ja')">日本語 japanese</button>
         </div>
       </div>
       <div class="fs-section">

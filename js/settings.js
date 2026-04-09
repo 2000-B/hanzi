@@ -217,77 +217,16 @@ function resetAppearance() {
   removeProfileData('hanzi-appearance');
 }
 
-// ── Accent theme: adapt all UI tokens to background hue ───────────────
+// ── Background tint: tint workspace + panel backdrop to accent hue ───────────────
 function applyAccentFromHue(hue) {
   const h = ((hue % 360) + 360) % 360;
   let styleEl = document.getElementById('accent-theme');
   if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'accent-theme'; document.head.appendChild(styleEl); }
   styleEl.textContent = `
-    :root {
-      --accent:        hsl(${h}, 90%, 68%);
-      --accent2:       hsl(${h}, 78%, 58%);
-      --accent-glow:   hsla(${h}, 90%, 65%, 0.18);
-      --accent-soft:   hsla(${h}, 90%, 65%, 0.08);
-      --accent-softer: hsla(${h}, 90%, 65%, 0.06);
-      --accent-border: hsla(${h}, 90%, 65%, 0.25);
-      --grad-start: hsl(${h}, 90%, 65%);
-      --grad-mid:   hsl(${(h+30)%360}, 80%, 74%);
-      --grad-end:   hsl(${(h-30+360)%360}, 95%, 72%);
-      --bg:    hsl(${h}, 8%, 4%);
-      --bg2:   hsl(${h}, 10%, 7%);
-      --bg3:   hsl(${h}, 8%, 10%);
-      --bg4:   hsl(${h}, 8%, 13%);
-      --border:  hsla(${h}, 90%, 65%, 0.10);
-      --border2: hsla(${h}, 90%, 65%, 0.17);
-      --border3: hsla(${h}, 90%, 65%, 0.26);
-      --elevation: 0 8px 40px rgba(0,0,0,.5), 0 0 80px hsla(${h},80%,60%,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
-      --elevation-hover: 0 12px 50px rgba(0,0,0,.6), 0 0 100px hsla(${h},80%,60%,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .light {
-      --accent:        hsl(${h}, 75%, 42%);
-      --accent2:       hsl(${h}, 70%, 35%);
-      --accent-glow:   hsla(${h}, 75%, 42%, 0.18);
-      --accent-soft:   hsla(${h}, 75%, 42%, 0.10);
-      --accent-border: hsla(${h}, 75%, 42%, 0.30);
-      --grad-start: #111118;
-      --grad-mid:   #111118;
-      --grad-end:   #111118;
-      --bg:    hsl(${h}, 20%, 97%);
-      --bg2:   hsl(${h}, 55%, 96%);
-      --bg3:   hsl(${h}, 50%, 93%);
-      --bg4:   hsl(${h}, 45%, 88%);
-      --border:  hsla(${h}, 60%, 35%, 0.10);
-      --border2: hsla(${h}, 60%, 35%, 0.16);
-      --border3: hsla(${h}, 60%, 35%, 0.22);
-    }
-    .sidebar { background: hsl(${h}, 10%, 7%); }
-    body.light .sidebar { background: hsl(${h}, 55%, 96%); }
-    header { background: hsla(${h}, 8%, 4%, 0.88); }
-    body.light header { background: hsla(${h}, 50%, 95%, 0.88); }
-    .card-face {
-      border-color: hsla(${h}, 90%, 65%, 0.22);
-      background: linear-gradient(165deg, hsla(${h}, 25%, 14%, 0.97) 0%, hsla(${h}, 15%, 8%, 0.98) 50%, hsla(${h}, 20%, 12%, 0.97) 100%);
-    }
-    body.light .card-face {
-      background:
-        linear-gradient(165deg, hsla(${h}, 80%, 65%, 0.08) 0%, hsla(${h}, 50%, 82%, 0.05) 50%, hsla(${h}, 70%, 65%, 0.10) 100%),
-        linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(248,248,255,0.95) 100%);
-      border-color: hsla(${h}, 75%, 42%, 0.22);
-    }
-    body.light .header-title {
-      background: linear-gradient(135deg, hsl(${h}, 85%, 38%) 0%, hsl(${(h+30)%360}, 80%, 46%) 50%, hsl(${(h-30+360)%360}, 85%, 40%) 100%);
-      background-size: 200% 200%;
-      animation: gradShift 8s ease infinite;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    body.light .card-hanzi {
-      background: linear-gradient(135deg, hsl(${h}, 85%, 38%) 0%, hsl(${(h+30)%360}, 80%, 46%) 40%, hsl(${(h-30+360)%360}, 85%, 40%) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .app-body { background: hsl(${h}, 30%, 10%); }
+    .main-content { background: hsl(${h}, 25%, 13%); }
+    body.light .app-body { background: hsl(${h}, 55%, 87%); }
+    body.light .main-content { background: hsl(${h}, 45%, 91%); }
   `;
 }
 
