@@ -425,19 +425,16 @@
   <div class="welcome-modal">
     <div class="welcome-char">学</div>
     <div class="welcome-title">welcome to <span id="welcome-app-title">汉字学习</span></div>
-    <div class="welcome-sub">set up your profile to get started</div>
-    <div class="welcome-field">
-      <label class="welcome-label">profile name</label>
-      <input class="gen-input" id="welcome-name" placeholder="your name…" onkeydown="if(event.key==='Enter')completeWelcome()">
-    </div>
+    <div class="welcome-sub">what should we call you?</div>
+    <input class="welcome-input" id="welcome-name" placeholder="your name" onkeydown="if(event.key==='Enter')completeWelcome()">
     <div class="welcome-field">
       <label class="welcome-label">i'm studying</label>
-      <div class="settings-pill">
+      <div class="settings-pill welcome-lang-pill">
         <button class="settings-pill-btn active" id="welcome-zh" onclick="document.getElementById('welcome-zh').classList.add('active');document.getElementById('welcome-ja').classList.remove('active')">中文 chinese</button>
         <button class="settings-pill-btn" id="welcome-ja" onclick="document.getElementById('welcome-ja').classList.add('active');document.getElementById('welcome-zh').classList.remove('active')">日本語 japanese</button>
       </div>
     </div>
-    <button class="btn btn-accent welcome-go" onclick="completeWelcome()">get started →</button>
+    <button class="btn btn-accent welcome-go" onclick="completeWelcome()">get started <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="vertical-align:middle;margin-left:2px"><path d="M5 2l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </div>
 </div>
 
