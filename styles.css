@@ -1881,18 +1881,10 @@ body.light .controls-tray .btn:hover {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  background: color-mix(in srgb, var(--accent) 60%, var(--bg3)) !important;
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)) !important;
   transition: all .2s;
 }
-body.light .test-start-begin {
-  background: color-mix(in srgb, var(--accent) 65%, #fff) !important;
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent) !important;
-}
-.test-start-begin:hover,
-body.light .test-start-begin:hover {
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
+.test-start-begin:hover {
+  filter: brightness(1.1);
 }
 
 .test-area {

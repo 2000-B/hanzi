@@ -40,9 +40,17 @@ function renderMCOptions(card) {
   const options = document.getElementById('mc-options');
   options.innerHTML = '';
 
-  // Get 3 distractors from current deck
+  // Get 3 distractors — prefer current deck, backfill from all loaded cards
   const others = activeDeck.filter(c => c.hanzi !== card.hanzi);
   const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+  if (shuffled.length < 3 && searchIndex.length > 0) {
+    const used = new Set([card.hanzi, ...shuffled.map(c => c.hanzi)]);
+    const pool = searchIndex.filter(e => !used.has(e.card.hanzi)).sort(() => Math.random() - 0.5);
+    for (const entry of pool) {
+      if (shuffled.length >= 3) break;
+      shuffled.push(entry.card);
+    }
+  }
   const all = [...shuffled, card].sort(() => Math.random() - 0.5);
 
   all.forEach(c => {
