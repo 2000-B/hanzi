@@ -423,14 +423,13 @@
 <!-- Welcome modal (first launch) -->
 <div class="welcome-overlay" id="welcome-modal">
   <div class="welcome-modal">
-    <div class="welcome-char">学</div>
-    <div class="welcome-title">welcome to <span id="welcome-app-title">汉字学习</span></div>
-    <div class="welcome-sub">what should we call you?</div>
+    <div class="welcome-hero">welcome</div>
+    <div class="welcome-sub">create a profile</div>
     <input class="welcome-input" id="welcome-name" placeholder="your name" onkeydown="if(event.key==='Enter')completeWelcome()">
     <div class="welcome-field">
       <label class="welcome-label">i'm studying</label>
       <div class="settings-pill welcome-lang-pill">
-        <button class="settings-pill-btn active" id="welcome-zh" onclick="document.getElementById('welcome-zh').classList.add('active');document.getElementById('welcome-ja').classList.remove('active')">中文 chinese</button>
+        <button class="settings-pill-btn" id="welcome-zh" onclick="document.getElementById('welcome-zh').classList.add('active');document.getElementById('welcome-ja').classList.remove('active')">中文 chinese</button>
         <button class="settings-pill-btn" id="welcome-ja" onclick="document.getElementById('welcome-ja').classList.add('active');document.getElementById('welcome-zh').classList.remove('active')">日本語 japanese</button>
       </div>
     </div>
