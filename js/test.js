@@ -80,8 +80,6 @@ function handleAnswer(correct, btn, card) {
     if (cd.correct >= 3 && !cd.mastered) {
       cd.mastered = true;
       cd.masteredDate = new Date().toISOString();
-      cd.interval = 1;
-      cd.efactor = 2.5;
       cd.due = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
       stats.mastered.add(card.hanzi);
     }
@@ -153,8 +151,6 @@ function submitTyping() {
     if (cd.correct >= 3 && !cd.mastered) {
       cd.mastered = true;
       cd.masteredDate = new Date().toISOString();
-      cd.interval = 1;
-      cd.efactor = 2.5;
       cd.due = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
       stats.mastered.add(card.hanzi);
     }
@@ -310,13 +306,14 @@ function closeSessionModal() {
 }
 
 // ══════════════════════════════════════════
-// RATE CARD (SM-2)
+// RATE CARD (FSRS-4.5)
 // ══════════════════════════════════════════
-function rateCard(q) {
+function rateCard(rating) {
   const card = activeDeck[currentIndex];
   if (!card) return;
   const cd = getCardData(card.hanzi);
-  applySM2(cd, q);
+  const today = new Date().toISOString().slice(0, 10);
+  applyFSRS(cd, rating, today, desiredRetention);
   saveProgress();
   updateReviewBadge();
   document.getElementById('rating-btns').style.display = 'none';

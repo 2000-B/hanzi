@@ -1,26 +1,5 @@
-// SM-2 ALGORITHM
+// MASTERY (FSRS scheduling lives in js/fsrs.js)
 // ══════════════════════════════════════════
-function applySM2(cd, q) {
-  // q: 0=Again, 3=Hard, 4=Good, 5=Easy
-  if (q < 3) {
-    cd.interval = 1;
-    cd.reviewFlag = true;
-  } else {
-    const prev = cd.interval || 1;
-    if (prev <= 1) cd.interval = q === 5 ? 4 : 1;
-    else cd.interval = q === 5 ? Math.round(prev * cd.efactor * 1.3) : Math.round(prev * cd.efactor);
-    cd.interval = Math.max(1, cd.interval);
-    cd.efactor = Math.max(1.3, (cd.efactor || 2.5) + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)));
-    cd.reviewFlag = false;
-  }
-  const d = new Date();
-  d.setDate(d.getDate() + cd.interval);
-  cd.due = d.toISOString().slice(0, 10);
-  cd.lastRating = q;
-}
-
-// ══════════════════════════════════════════
-// MASTERY
 // ══════════════════════════════════════════
 function toggleMastered() {
   if (!activeDeck.length) return;
@@ -45,13 +24,16 @@ function markMastered() {
   if (!cardData[card.hanzi]) cardData[card.hanzi] = {};
   const cd = cardData[card.hanzi];
 
-  // Store undo snapshot
-  lastMasteredCard = { hanzi: card.hanzi, prev: { mastered: cd.mastered, masteredDate: cd.masteredDate, interval: cd.interval, efactor: cd.efactor, due: cd.due, reviewFlag: cd.reviewFlag, correct: cd.correct, wrong: cd.wrong, lastRating: cd.lastRating } };
+  // Store undo snapshot — capture FSRS state and mastery flags so undoMastered can restore.
+  lastMasteredCard = { hanzi: card.hanzi, prev: {
+    mastered: cd.mastered, masteredDate: cd.masteredDate,
+    stability: cd.stability, difficulty: cd.difficulty, lastReview: cd.lastReview,
+    due: cd.due, reviewFlag: cd.reviewFlag, lastRating: cd.lastRating,
+    correct: cd.correct, wrong: cd.wrong,
+  }};
 
   cd.mastered = true;
   cd.masteredDate = new Date().toISOString();
-  if (!cd.interval) cd.interval = 1;
-  if (!cd.efactor) cd.efactor = 2.5;
   cd.due = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
   cd.reviewFlag = false;
 
@@ -145,7 +127,6 @@ function unmasterCard(hanzi) {
   if (!cardData[hanzi]) return;
   cardData[hanzi].mastered = false;
   cardData[hanzi].masteredDate = null;
-  cardData[hanzi].interval = 0;
   cardData[hanzi].due = null;
   saveProgress();
   updateReviewBadge();
@@ -155,7 +136,11 @@ function unmasterCard(hanzi) {
 
 function getCardData(hanzi) {
   if (!cardData[hanzi]) {
-    cardData[hanzi] = { correct: 0, wrong: 0, reviewFlag: false, interval: 0, efactor: 2.5, due: null, lastRating: null, note: '', mastered: false };
+    cardData[hanzi] = {
+      correct: 0, wrong: 0, reviewFlag: false,
+      stability: null, difficulty: null, lastReview: null,
+      due: null, lastRating: null, note: '', mastered: false,
+    };
   }
   return cardData[hanzi];
 }

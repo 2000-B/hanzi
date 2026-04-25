@@ -47,6 +47,16 @@ function loadProgress() {
     const data = JSON.parse(raw);
     if (data.cardData) cardData = data.cardData;
     if (data.customDecks) Object.assign(decks, data.customDecks);
+    // FSRS migration — drop SM-2 fields, reset to "new" while preserving mastered.
+    let migrated = 0;
+    for (const k of Object.keys(cardData)) {
+      const cd = cardData[k];
+      if (cd && (cd.efactor !== undefined || cd.interval !== undefined)) {
+        fsrsMigrateCard(cd);
+        migrated++;
+      }
+    }
+    if (migrated > 0) saveProgress();
   } catch (e) {
     console.error('Failed to load progress:', e);
   }

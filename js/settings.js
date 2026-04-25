@@ -84,6 +84,11 @@ function syncSettingsUI() {
     const el = document.getElementById('fs-tray-' + key);
     if (el) el.classList.toggle('on', trayButtonVisibility[key] !== false);
   });
+  // FSRS desired retention
+  const slider = document.getElementById('fs-retention-slider');
+  const valueLabel = document.getElementById('fs-retention-value');
+  if (slider) slider.value = desiredRetention;
+  if (valueLabel) valueLabel.textContent = Math.round(desiredRetention * 100) + '%';
 }
 
 function updatePrefsVisibility() {
@@ -384,6 +389,17 @@ function toggleTimerOnly() {
 function setFormat(fmt) {
   currentFormat = fmt;
   syncSettingsUI();
+}
+
+// ── FSRS desired retention ──
+function setDesiredRetention(value) {
+  const r = parseFloat(value);
+  if (!(r >= 0.7 && r <= 0.97)) return;
+  desiredRetention = r;
+  try { setProfileData('hanzi-desired-retention', String(r)); } catch (e) {}
+  // Update the value label if visible
+  const label = document.getElementById('fs-retention-value');
+  if (label) label.textContent = Math.round(r * 100) + '%';
 }
 
 // ── Tool tray button visibility ──

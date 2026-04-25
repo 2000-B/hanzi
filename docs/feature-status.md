@@ -33,10 +33,10 @@
 
 | Feature | State | Spec / Notes |
 |---|---|---|
-| SM-2 algorithm | done | being replaced by FSRS in Phase 4 |
-| FSRS algorithm | not-started | roadmap Phase 4 |
+| SM-2 algorithm | removed | replaced by FSRS in Phase 4 |
+| FSRS-4.5 algorithm | done | `js/fsrs.js`, default weights, no parameter training (Phase 4) |
 | Review deck | done | `hanzi-app-spec-v5_3.md` |
-| Desired retention setting | not-started | roadmap Phase 4 (FSRS-only) |
+| Desired retention setting | done | per-profile, default 90%, settings slider + first-run onboarding (Phase 4) |
 | Daily new-card budget | not-started | roadmap Phase 5 (`progress-management-spec.md`) |
 
 ## Progress management

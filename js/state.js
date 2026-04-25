@@ -70,6 +70,7 @@ let showDifficultyRatings = false; // persists in localStorage as 'hanzi-diff-ra
 let listViewActive = false;
 let hideMastered = true;
 let trayButtonVisibility = { hideMastered: true, notePencil: true, infoPanel: false };
+let desiredRetention = 0.9; /* FSRS target retention (0.7–0.97 typical), persisted as 'hanzi-desired-retention' */
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
 let infoPanelHistory = [];    // stack of card objects for info panel back navigation

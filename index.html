@@ -148,6 +148,15 @@
         </div>
       </div>
       <div class="fs-section">
+        <div class="fs-section-label">review</div>
+        <label class="settings-toggle-label" style="display:flex;align-items:center;gap:10px">
+          <span>desired retention</span>
+          <input type="range" min="0.70" max="0.97" step="0.01" id="fs-retention-slider" oninput="setDesiredRetention(this.value)" style="flex:1">
+          <span id="fs-retention-value" style="min-width:36px;text-align:right;color:var(--text2);font-feature-settings:'tnum'">90%</span>
+        </label>
+        <div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px">how often FSRS aims for you to recall a card. higher = more reviews, lower = fewer but more lapses.</div>
+      </div>
+      <div class="fs-section">
         <div class="fs-section-label">tool tray</div>
         <div class="settings-toggle-row">
           <span class="settings-toggle-label">hide/show mastered button</span>
@@ -383,10 +392,10 @@
           <div class="result-flash" id="result-flash"></div>
           <button class="btn" id="next-test-btn" onclick="nextTestCard()" style="display:none">next →</button>
           <div id="rating-btns" style="display:none" class="rating-btns">
-            <button class="rating-btn again"  onclick="rateCard(0)">Again</button>
-            <button class="rating-btn hard"   onclick="rateCard(3)">Hard</button>
-            <button class="rating-btn good"   onclick="rateCard(4)">Good</button>
-            <button class="rating-btn easy"   onclick="rateCard(5)">Easy</button>
+            <button class="rating-btn again" onclick="rateCard(1)">Again</button>
+            <button class="rating-btn hard"  onclick="rateCard(2)">Hard</button>
+            <button class="rating-btn good"  onclick="rateCard(3)">Good</button>
+            <button class="rating-btn easy"  onclick="rateCard(4)">Easy</button>
           </div>
         </div><!-- /test-area -->
         <div class="test-progress-bar" id="test-progress-bar">
@@ -449,6 +458,20 @@
 </div>
 
 
+<!-- FSRS desired-retention onboarding (first launch after FSRS migration) -->
+<div class="welcome-overlay" id="retention-onboarding">
+  <div class="welcome-modal" style="max-width:420px">
+    <div class="welcome-hero" style="font-size:32px">spaced repetition</div>
+    <div class="welcome-sub" style="margin-bottom:14px">how often should the app aim for you to recall a card?</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <input type="range" min="0.70" max="0.97" step="0.01" id="onb-retention-slider" value="0.90" oninput="document.getElementById('onb-retention-value').textContent = Math.round(this.value*100) + '%'" style="flex:1">
+      <span id="onb-retention-value" style="min-width:48px;text-align:right;font-size:18px;font-weight:600;color:var(--accent);font-feature-settings:'tnum'">90%</span>
+    </div>
+    <div style="font-size:12px;color:var(--text3);line-height:1.5;text-align:left;margin-bottom:16px">90% is a good default — you'll review most cards just before you'd forget. higher means more reviews; lower means fewer but more lapses. you can change this any time in settings.</div>
+    <button class="welcome-go" onclick="completeRetentionOnboarding()">use this and start</button>
+  </div>
+</div>
+
 <!-- Welcome modal (first launch) -->
 <div class="welcome-overlay" id="welcome-modal">
   <div class="welcome-modal">
@@ -470,6 +493,7 @@
 <script src="js/profiles.js"></script>
 <script src="js/data.js"></script>
 <script src="js/persistence.js"></script>
+<script src="js/fsrs.js"></script>
 <script src="js/settings.js"></script>
 <script src="js/sidebar.js"></script>
 <script src="js/deck.js"></script>

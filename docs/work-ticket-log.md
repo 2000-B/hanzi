@@ -4,6 +4,75 @@
 
 ---
 
+## 2026-04-25 — Phase 4: FSRS migration — COMPLETE
+
+**Status:** Done on branch `phase-4/fsrs`. Cache bumped `hanzi-v6.67` → `hanzi-v6.68`.
+
+**Context:** Replace SM-2 with FSRS-4.5. Slate-clean migration drops the old fields. Ratings switch from `0/3/4/5` (SM-2 quality) to `1/2/3/4` (FSRS Again/Hard/Good/Easy). Default weights, no parameter training. See `docs/roadmap.md` Phase 4.
+
+### Implementation
+
+**`js/fsrs.js` — pure functions:**
+- `applyFSRS(cd, rating, todayISO, desiredRetention)` — main entry point. Mutates `cd` with new `stability`, `difficulty`, `lastReview`, `due`, `lastRating`, `reviewFlag`.
+- Helpers: `fsrsInitStability`, `fsrsInitDifficulty`, `fsrsNextDifficulty` (with mean reversion), `fsrsRetrievability`, `fsrsRecallStability`, `fsrsForgetStability`, `fsrsInterval`.
+- Constants: `FSRS_W` (19 default weights), `FSRS_FACTOR = 19/81`, `FSRS_DECAY = -0.5`, `FSRS_DEFAULT_RETENTION = 0.9`.
+- `fsrsMigrateCard(cd)` — drops `efactor`, `interval`, resets FSRS state, preserves `mastered`/`masteredDate`/correct/wrong.
+- Module-aware: exports for `node:test`, no-op in browser script tags.
+
+**`tests/fsrs.test.js`:**
+- 21 tests covering every helper plus `applyFSRS` and `fsrsMigrateCard`. Includes invariants like "interval at desired retention yields exactly that retention", "Hard < Good < Easy stabilities", "Again rating sets reviewFlag", and migration preserving the mastered flag. `npm test` runs them in ~330ms.
+
+**Migration:**
+- `loadProgress()` (`js/persistence.js`) runs `fsrsMigrateCard` over all card-data entries on every load. The migration is idempotent — cards without SM-2 fields are untouched. After any migrations run, `saveProgress()` is called once so the cleaned data persists.
+
+**Rating flow:**
+- HTML rating buttons in `index.html` switched from `rateCard(0)/(3)/(4)/(5)` to `rateCard(1)/(2)/(3)/(4)`.
+- `rateCard()` in `js/test.js` calls `applyFSRS(cd, rating, today, desiredRetention)` instead of `applySM2(cd, q)`.
+- `applySM2()` removed from `js/study.js`.
+- Test-mode auto-mastery (`cd.correct >= 3`) no longer seeds `efactor`/`interval` (FSRS doesn't use them; `cd.due` is set inline as before).
+- `getCardData()` initializer now seeds FSRS fields (`stability`, `difficulty`, `lastReview`) instead of SM-2 fields.
+
+**Desired-retention setting:**
+- New state variable `desiredRetention` (default `0.9`), persisted per-profile as `hanzi-desired-retention`.
+- `setDesiredRetention(value)` in `js/settings.js` clamps to `[0.7, 0.97]`, saves, updates the value label.
+- New "review" section in full settings: range slider with live-updating percentage label, plus a one-line explanation of what retention means.
+- First-run onboarding modal (`#retention-onboarding`) shown once per profile after the SM-2→FSRS migration. Same slider + a "use this and start" button. `hanzi-fsrs-onboarded` flag prevents repeat shows. Onboarding is suppressed for brand-new users (no progress data) so it doesn't pile on top of the welcome modal.
+
+### Files touched
+
+- `js/fsrs.js` (new) — pure FSRS-4.5 implementation, ~120 lines
+- `tests/fsrs.test.js` (new) — 21 tests
+- `js/state.js` — `desiredRetention = 0.9` declared
+- `js/app.js` — load saved retention from profile; show onboarding modal when needed; `completeRetentionOnboarding()` handler
+- `js/persistence.js` — `loadProgress()` runs `fsrsMigrateCard` over card-data
+- `js/test.js` — `rateCard()` rewritten for FSRS; auto-mastery cleanup drops SM-2 fields
+- `js/study.js` — `applySM2()` removed; `markMastered()` undo snapshot stores FSRS fields; `unmasterCard()` no longer touches `interval`; `getCardData()` initializer updated
+- `js/settings.js` — `setDesiredRetention()`; `syncSettingsUI()` reflects retention slider
+- `index.html` — rating buttons switched to 1/2/3/4; new "review" settings section with slider; new `#retention-onboarding` modal; `<script src="js/fsrs.js">` added
+- `sw.js` — cache bump + `js/fsrs.js` added to ASSETS list
+- `docs/roadmap.md` — Phase 4 task list marked done
+- `docs/feature-status.md` — SM-2 marked removed, FSRS + retention marked done
+
+### Verified
+
+- 21 unit tests pass (`npm test` → 22 total including the placeholder).
+- Browser preview: simulated migration of an SM-2-encoded card preserves `mastered: true`, drops `efactor`/`interval`, resets `stability`/`difficulty`/`lastReview` to null.
+- New card review: `applyFSRS(cd, 3, '2026-04-25', 0.9)` produces `stability ≈ 3.13`, `difficulty ≈ 7.21`, `due` 3 days out — matches expected FSRS output for Good rating from new state.
+- No console errors after reload.
+
+### Pending verification (user-side)
+
+- Visual smoke test of rating buttons in test mode.
+- Confirm onboarding modal renders correctly on first run (clear `hanzi-fsrs-onboarded` from a profile with progress data to retest).
+- Confirm settings "review" slider updates in real time and persists across reloads.
+- Confirm review deck still surfaces cards correctly (logic untouched, but worth a sanity pass).
+
+### Next
+
+- Push `phase-4/fsrs`, merge to main, branch `phase-5/progress-management` off the new main.
+
+---
+
 ## 2026-04-25 — Phase 3: post-implementation tweaks (round 2)
 
 **Status:** Follow-up polish on `claude/strange-poincare-ca9fde`. Cache bumped `hanzi-v6.66` → `hanzi-v6.67`.

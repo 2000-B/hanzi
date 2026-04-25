@@ -18,6 +18,13 @@ async function init() {
   if (getProfileData('hanzi-diff-ratings')) {
     showDifficultyRatings = true;
   }
+
+  // Load FSRS desired retention (per-profile, default 0.9)
+  const savedRet = getProfileData('hanzi-desired-retention');
+  if (savedRet) {
+    const r = parseFloat(savedRet);
+    if (r >= 0.7 && r <= 0.97) desiredRetention = r;
+  }
   // Load appearance (per-profile)
   try {
     const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');
@@ -87,6 +94,31 @@ async function init() {
       document.getElementById('welcome-name').focus();
     }, 500);
   }
+
+  // FSRS desired-retention onboarding — shown once per profile, after the
+  // user has data (so it follows the SM-2→FSRS migration without surprising
+  // brand-new users who haven't even picked a deck yet).
+  const fsrsOnboarded = getProfileData('hanzi-fsrs-onboarded');
+  if (!fsrsOnboarded && !isFirstLaunch && hasProgress) {
+    setTimeout(() => {
+      const m = document.getElementById('retention-onboarding');
+      if (m) {
+        const slider = document.getElementById('onb-retention-slider');
+        const value  = document.getElementById('onb-retention-value');
+        if (slider) slider.value = desiredRetention;
+        if (value)  value.textContent = Math.round(desiredRetention * 100) + '%';
+        m.classList.add('open');
+      }
+    }, 600);
+  }
+}
+
+// Called by the onboarding modal's "use this and start" button.
+function completeRetentionOnboarding() {
+  const slider = document.getElementById('onb-retention-slider');
+  if (slider) setDesiredRetention(slider.value);
+  try { setProfileData('hanzi-fsrs-onboarded', '1'); } catch (e) {}
+  document.getElementById('retention-onboarding')?.classList.remove('open');
 }
 
 // ── Welcome modal ───────────────────────────────────────────────────────

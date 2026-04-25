@@ -231,15 +231,15 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - Cache bumped, work ticket added, feature-status.md updated
 
 **Tasks:**
-- [ ] Implement FSRS in `js/fsrs.js`
-- [ ] Write `tests/fsrs.test.js` with ground-truth cases
-- [ ] Add migration logic: on init, if user has SM-2 fields, drop them and mark cards as unscheduled
-- [ ] Add four-button rating UI to test mode
-- [ ] Add desired-retention onboarding (first-run only)
-- [ ] Add desired-retention setting to full settings modal
-- [ ] Update `getReviewCards()` to use FSRS due dates
-- [ ] Remove `applySM2()` and SM-2 references from `js/study.js`
-- [ ] Bump cache, add work ticket, update feature-status
+- [x] Implement FSRS in `js/fsrs.js`
+- [x] Write `tests/fsrs.test.js` with ground-truth cases (21 tests, all passing)
+- [x] Add migration logic: `fsrsMigrateCard` runs in `loadProgress()` when SM-2 fields detected
+- [x] Update four-button rating UI to FSRS scheme (1/2/3/4 instead of 0/3/4/5)
+- [x] Add desired-retention onboarding (first-run, per-profile flag `hanzi-fsrs-onboarded`)
+- [x] Add desired-retention setting to full settings modal (slider 0.70–0.97)
+- [x] `getReviewCards()` already uses `cd.due` field — FSRS now writes that field, no logic change needed
+- [x] Remove `applySM2()` and SM-2 references from `js/study.js` and `js/test.js`
+- [x] Bump cache, add work ticket, update feature-status
 
 ---
 
