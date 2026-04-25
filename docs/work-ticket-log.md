@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-04-24 — Roadmap, doc structure, Phase 0 — COMPLETE
+
+**Status:** Done. No cache bump (no shipped-asset changes).
+
+**Context:** Multi-session planning pass. User wanted a real roadmap, design docs in order, and a triage of the 2026-04-02 bad-merge regression list before resuming feature work. Established documentation conventions and test scaffolding so Phase 1 can begin clean.
+
+### Documentation
+- [x] `docs/CLAUDE.md` rewritten as a navigation map (doc index + workflow conventions)
+- [x] `docs/feature-status.md` created — single source of truth for feature state
+- [x] `docs/roadmap.md` created — eight phases with goal/scope/done-criteria/checklist
+- [x] `docs/progress-management-spec.md` created — active focus + daily session + mastery-gated promotion (Phase 5)
+- [x] `docs/tray-customization-spec.md` created — tool tray buttons + settings toggles (Phase 2)
+- [x] `docs/search-consolidation-spec.md` created — header search → deck-panel + card-list searches (Phase 2)
+- [x] `docs/bad-merge-triage.md` created — 52 items triaged, dispositions resolved
+- [x] Shelved banner added to `docs/workspace-reimplementation-plan.md`
+- [x] `project-workflow-blueprint.md` (workspace root) — reusable doc/workflow conventions for future projects
+
+### Triage outcomes (2026-04-02 bad-merge list)
+- 24 items DONE, 19 MISSING, 8 AMBIGUOUS, 1 mixed
+- Five missing items absorbed into Phase 1: list overlay clip-path, frosted-glass tooltip, tooltip-below positioning, info-panel scrollbar (expanded scope — clipping bug, possible deck-panel scrollbar restoration), info-panel opacity fade
+- Ten items dropped (analytics-related deletions, zoom shelved, stats-bar concept abandoned, font auto-shrink low-value, panel position memory beyond info width, deck name dark-mode variant, dark-mode blob opacities presumed addressed)
+- Snap-to-grid intentionally removed (confirmed)
+
+### Test scaffolding
+- [x] `package.json` at workspace root (no dependencies — `node --test` is built-in)
+- [x] `tests/sample.test.js` placeholder
+- [x] `npm test` runs and the placeholder passes
+
+### Files added
+- `docs/CLAUDE.md` (rewritten)
+- `docs/feature-status.md`
+- `docs/roadmap.md`
+- `docs/progress-management-spec.md`
+- `docs/tray-customization-spec.md`
+- `docs/search-consolidation-spec.md`
+- `docs/bad-merge-triage.md`
+- `project-workflow-blueprint.md`
+- `package.json`
+- `tests/sample.test.js`
+
+### Files modified
+- `docs/workspace-reimplementation-plan.md` — shelved banner added at top
+
+### Next
+- Phase 1 (quick wins) is unblocked; will move to its own feature branch when ready
+
+---
+
 ## 2026-04-07 — UI/UX Redesign Phase 3: Interface Refinements — COMPLETE
 
 **Status:** Done. Cache bumped to `hanzi-v6.52`. 12 UI refinements implemented.

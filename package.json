@@ -1,0 +1,10 @@
+{
+  "name": "character-study",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Character Study — language flashcard PWA",
+  "scripts": {
+    "test": "node --test tests/",
+    "start": "node server.js"
+  }
+}

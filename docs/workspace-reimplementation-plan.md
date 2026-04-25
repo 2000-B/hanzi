@@ -1,6 +1,13 @@
 # Workspace Tiling Re-implementation Plan
 
-> **Context:** A previous Claude Code session implemented workspace tiling changes across ~760 lines of new CSS + JS, but the session expired before the changes were pushed. The current `index.html` (4,580 lines) has **none** of this work — it's the baseline with a simple flex `split-pane` layout (sidebar + main-content + info-panel). This plan breaks the lost work into sequential, testable phases that Claude Code can implement one at a time.
+> **STATUS: SHELVED as of 2026-04-02.**
+> Reason: deprioritized in favor of multi-user profile support and (now) the broader roadmap. Plan preserved for future reference. Do not implement unless explicitly requested.
+>
+> Some of the simpler primitives from this plan (basic tiling, divider, fullscreen) were re-built independently and now live in `js/workspace.js`. The phases below — particularly the zoom controls, floating panels, and workspace-as-its-own-mode — have not been implemented and are not currently planned. See `docs/roadmap.md` Phase 3 for the current scope of tiling work (lock to row layout, fix divider/edge bugs).
+>
+> ---
+
+> **Original context:** A previous Claude Code session implemented workspace tiling changes across ~760 lines of new CSS + JS, but the session expired before the changes were pushed. The current `index.html` (4,580 lines) has **none** of this work — it's the baseline with a simple flex `split-pane` layout (sidebar + main-content + info-panel). This plan breaks the lost work into sequential, testable phases that Claude Code can implement one at a time.
 
 > **Current layout:** `.app-body` → `.sidebar` + `.split-pane` → `.main-content` + `.info-panel`. The info panel toggles via `toggleInfoPanel()`, sidebar via `toggleSidebar()`. Analytics is a view swap inside `.main-content`. No workspace manager, no panel drag/drop, no floating mode, no zoom, no fullscreen.
 
