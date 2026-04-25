@@ -43,10 +43,10 @@
 
 | Feature | State | Spec / Notes |
 |---|---|---|
-| Active focus chunk | not-started | `progress-management-spec.md` |
-| Daily session abstraction | not-started | `progress-management-spec.md` |
-| Mastery-gated promotion suggestions | not-started | `progress-management-spec.md` |
-| Welcome card (empty state) | done | basic flashcard-shaped greeting card in Phase 2; daily session integration deferred to Phase 5 |
+| Active focus chunk | done | per-profile `activeFocusId`; sidebar emphasis + right-click set/clear; resets session on change (Phase 5) |
+| Daily session abstraction | done | new + review IDs generated per-day, persists across reloads; `newCardsPerDay` setting (default 10) (Phase 5) |
+| Mastery-gated promotion suggestions | done | non-blocking banner at default 80% threshold, accept/postpone/dismiss; auto-finds next HSK/JLPT chunk (Phase 5) |
+| Welcome card (empty state) | done | flashcard-shaped greeting; surfaces today's session counts + start button when active focus set (Phase 5) |
 
 ## Info panel
 
@@ -114,7 +114,7 @@
 | Feature | State | Spec / Notes |
 |---|---|---|
 | Title + deck/info/settings buttons | done | Phase 2 — search button removed; redesign with progress indicators in Phase 5 |
-| Header redesign with progress indicators | not-started | Phase 5 (paired with progress management) |
+| Header redesign with progress indicators | done | active-focus chip (center) shows focus name + session progress (X/N); click to start/continue session (Phase 5) |
 
 ## Pronunciation / audio
 

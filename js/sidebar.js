@@ -3,6 +3,20 @@
 // Sidebar is either open (visible) or closed (hidden). No collapsed strip.
 // Toggled via the deck button in the header.
 
+// ── Phase 5: active focus ──
+function setActiveFocus(deckId) {
+  activeFocusId = deckId || null;
+  try { setProfileData('hanzi-active-focus', activeFocusId || ''); } catch(e) {}
+  // Reset today's session — generated on demand against the new focus.
+  todaySession = null;
+  try { setProfileData('hanzi-today-session', 'null'); } catch(e) {}
+  renderSidebar();
+  if (typeof renderHeaderFocus === 'function') renderHeaderFocus();
+  if (typeof renderWelcomeCardSession === 'function') renderWelcomeCardSession();
+}
+
+function clearActiveFocus() { setActiveFocus(null); }
+
 // ── Favorites ──
 let favorites = { levels: [], chunks: {} };
 
@@ -160,9 +174,13 @@ function renderSidebar() {
         }
         const pct = Math.round((mastered / cards.length) * 100);
 
+        const isFocused = name === activeFocusId;
         const item = document.createElement('div');
-        item.className = 'chunk-item' + (name === activeDeckName ? ' active' : '');
+        item.className = 'chunk-item'
+          + (name === activeDeckName ? ' active' : '')
+          + (isFocused ? ' focused' : '');
         item.innerHTML = `
+          ${isFocused ? '<span class="focus-marker" title="active focus">●</span>' : ''}
           ${isChunkFav ? '<span class="fav-star">★</span>' : ''}
           <span>${chunkNum}/${totalChunks}</span>
           <span class="chunk-count">${cards.length}</span>
@@ -192,11 +210,14 @@ function renderSidebar() {
   document.getElementById('custom-decks-header').style.display = custom.length > 0 ? '' : 'none';
 
   custom.forEach(([name, cards]) => {
+    const isFocused = name === activeFocusId;
     const item = document.createElement('div');
-    item.className = 'deck-item' + (name === activeDeckName ? ' active' : '');
+    item.className = 'deck-item'
+      + (name === activeDeckName ? ' active' : '')
+      + (isFocused ? ' focused' : '');
     const tag = name.startsWith('📁') ? 'csv' : 'ai';
     item.innerHTML = `
-      <span class="deck-name">${name}</span>
+      <span class="deck-name">${isFocused ? '<span class="focus-marker" title="active focus">●</span> ' : ''}${name}</span>
       <span class="deck-tag ${tag}">${tag}</span>
     `;
     item.onclick = () => {
@@ -207,8 +228,15 @@ function renderSidebar() {
       e.stopPropagation();
       startRenameDeck(item, name, cards);
     };
+    item.oncontextmenu = (e) => {
+      e.preventDefault();
+      _showCustomDeckContextMenu(e, name);
+    };
     customList.appendChild(item);
   });
+
+  // Phase 5: dim the sidebar when a focus is set, so the focused row stands out.
+  document.getElementById('sidebar').classList.toggle('has-focus', !!activeFocusId);
 
   updateReviewBadge();
 }
@@ -290,13 +318,28 @@ function _showChunkContextMenu(e, level, chunkNum, levelKey, isJapanese) {
   const isFav = favChunks.includes(chunkNum);
   const sizes = isJapanese ? jlptChunkSize : hskChunkSize;
   const current = sizes[level] || 20;
+  const prefix = isJapanese ? 'jlpt' : 'hsk';
+  // Reconstruct the chunk's deck name (matches sidebar render): "hsk 1 · 1/8"
+  const dataSource = isJapanese ? JLPT_DATA : HSK_DATA;
+  const totalChunks = Math.ceil((dataSource[level] || []).length / current);
+  const chunkDeckName = `${prefix} ${level} · ${chunkNum}/${totalChunks}`;
+  const isFocused = chunkDeckName === activeFocusId;
   _showCtxMenu(e, `
+    <button class="ctx-menu-item" onclick="event.stopPropagation();${isFocused ? "clearActiveFocus()" : `setActiveFocus('${chunkDeckName}')`};document.getElementById('chunk-ctx-menu').remove()">${isFocused ? '◯ clear focus' : '● set as focus'}</button>
+    <div class="ctx-menu-divider"></div>
     <button class="ctx-menu-item" onclick="event.stopPropagation();toggleChunkFavorite('${levelKey}',${chunkNum});document.getElementById('chunk-ctx-menu').remove()">${isFav ? '★ unfavorite' : '☆ favorite'}</button>
     <div class="ctx-menu-divider"></div>
     <div class="ctx-menu-title">chunk size</div>
     ${[10, 15, 20, 30, 50].map(n =>
       `<button class="ctx-menu-item${n === current ? ' active' : ''}" onclick="event.stopPropagation();_setChunkSize(${level},${n},${isJapanese});document.getElementById('chunk-ctx-menu').remove()">${n} cards</button>`
     ).join('')}
+  `);
+}
+
+function _showCustomDeckContextMenu(e, name) {
+  const isFocused = name === activeFocusId;
+  _showCtxMenu(e, `
+    <button class="ctx-menu-item" onclick="event.stopPropagation();${isFocused ? "clearActiveFocus()" : `setActiveFocus(${JSON.stringify(name)})`};document.getElementById('chunk-ctx-menu').remove()">${isFocused ? '◯ clear focus' : '● set as focus'}</button>
   `);
 }
 

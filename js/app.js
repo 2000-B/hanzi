@@ -25,6 +25,21 @@ async function init() {
     const r = parseFloat(savedRet);
     if (r >= 0.7 && r <= 0.97) desiredRetention = r;
   }
+
+  // Phase 5 — progress management state
+  activeFocusId = getProfileData('hanzi-active-focus') || null;
+  const savedNew = getProfileData('hanzi-new-cards-per-day');
+  if (savedNew) {
+    const n = parseInt(savedNew, 10);
+    if (n >= 1 && n <= 100) newCardsPerDay = n;
+  }
+  try { todaySession = JSON.parse(getProfileData('hanzi-today-session') || 'null'); } catch (e) { todaySession = null; }
+  const savedThresh = getProfileData('hanzi-mastery-threshold');
+  if (savedThresh) {
+    const t = parseFloat(savedThresh);
+    if (t >= 0.5 && t <= 1) masteryPromotionThreshold = t;
+  }
+  try { dismissedPromotions = JSON.parse(getProfileData('hanzi-dismissed-promotions') || '[]'); } catch (e) { dismissedPromotions = []; }
   // Load appearance (per-profile)
   try {
     const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');
@@ -80,6 +95,10 @@ async function init() {
   setTimeout(() => {
     document.getElementById('loading-screen').classList.add('hidden');
   }, 300);
+
+  // Initial render of progress-management surfaces (header focus + welcome session info)
+  if (typeof renderHeaderFocus === 'function') renderHeaderFocus();
+  if (typeof renderWelcomeCardSession === 'function') renderWelcomeCardSession();
 
   // First-time welcome — show only for truly new users (no progress, no custom profiles)
   const profileData = getProfiles();

@@ -28,6 +28,9 @@
     </button>
   </div>
 
+  <!-- Phase 5: active-focus indicator (center) — name + today's session progress -->
+  <div class="header-focus" id="header-focus" style="display:none" onclick="startTodaySession()" data-tip="today's session"></div>
+
   <div class="header-right">
     <button class="icon-btn" id="btn-info" data-tip="info panel · double-click to fullscreen">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="4.8" r=".9" fill="currentColor"/></svg>
@@ -155,6 +158,11 @@
           <span id="fs-retention-value" style="min-width:36px;text-align:right;color:var(--text2);font-feature-settings:'tnum'">90%</span>
         </label>
         <div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px">how often FSRS aims for you to recall a card. higher = more reviews, lower = fewer but more lapses.</div>
+        <label class="settings-toggle-label" style="display:flex;align-items:center;gap:10px;margin-top:14px">
+          <span>new cards per day</span>
+          <input type="number" min="1" max="100" step="1" id="fs-new-cards-per-day" oninput="setNewCardsPerDay(this.value)" style="width:64px;text-align:right;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;font-feature-settings:'tnum'">
+        </label>
+        <div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px">budget for new cards drawn from the active focus chunk. reviews from FSRS aren't capped here.</div>
       </div>
       <div class="fs-section">
         <div class="fs-section-label">tool tray</div>
@@ -285,7 +293,8 @@
         <div class="welcome-card" aria-label="welcome">
           <div class="welcome-card-greeting" id="welcome-greeting">你好</div>
           <div class="welcome-card-hello">Hello</div>
-          <button class="welcome-card-cta" onclick="(function(){ if (!document.querySelector('.sidebar').classList.contains('open')) document.getElementById('btn-deck').click(); setTimeout(()=>document.getElementById('deck-search-input')?.focus(),60); })()">select a deck</button>
+          <div id="welcome-session-info" class="welcome-card-session"></div>
+          <button class="welcome-card-cta" id="welcome-card-cta" onclick="onWelcomeCardCta()">select a deck</button>
         </div>
       </div>
 

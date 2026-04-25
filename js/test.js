@@ -307,6 +307,8 @@ function rateCard(rating) {
   applyFSRS(cd, rating, today, desiredRetention);
   saveProgress();
   updateReviewBadge();
+  // Phase 5: a successful rating (≥ Hard) marks the card complete in today's session.
+  if (rating >= 2) recordSessionCompletion(card.hanzi);
   document.getElementById('rating-btns').style.display = 'none';
   nextTestCard();
 }

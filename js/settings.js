@@ -89,6 +89,9 @@ function syncSettingsUI() {
   const valueLabel = document.getElementById('fs-retention-value');
   if (slider) slider.value = desiredRetention;
   if (valueLabel) valueLabel.textContent = Math.round(desiredRetention * 100) + '%';
+  // Phase 5: new cards per day
+  const ncInput = document.getElementById('fs-new-cards-per-day');
+  if (ncInput) ncInput.value = newCardsPerDay;
 }
 
 function updatePrefsVisibility() {
@@ -400,6 +403,19 @@ function setDesiredRetention(value) {
   // Update the value label if visible
   const label = document.getElementById('fs-retention-value');
   if (label) label.textContent = Math.round(r * 100) + '%';
+}
+
+// ── Phase 5: new-cards-per-day ──
+function setNewCardsPerDay(value) {
+  const n = parseInt(value, 10);
+  if (!(n >= 1 && n <= 100)) return;
+  newCardsPerDay = n;
+  try { setProfileData('hanzi-new-cards-per-day', String(n)); } catch (e) {}
+  // Reset today's session — the budget changed mid-session, regenerate next time it's needed.
+  todaySession = null;
+  try { setProfileData('hanzi-today-session', 'null'); } catch (e) {}
+  if (typeof renderWelcomeCardSession === 'function') renderWelcomeCardSession();
+  if (typeof renderHeaderFocus === 'function') renderHeaderFocus();
 }
 
 // ── Tool tray button visibility ──

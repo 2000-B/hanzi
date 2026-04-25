@@ -259,9 +259,9 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 
 **Dependencies:** Phase 4 done. Daily session generation depends on FSRS due dates being authoritative.
 
-**Done criteria:** see `progress-management-spec.md` acceptance criteria.
+**Done criteria:** see `progress-management-spec.md` acceptance criteria. **Status: complete (2026-04-25)** — all four layers (active focus, daily session, mastery-gated promotion, header redesign) shipped.
 
-**Tasks:** see `progress-management-spec.md` checklist.
+**Tasks:** see `progress-management-spec.md` checklist. All implemented; see work-ticket-log entry "Phase 5: progress management — COMPLETE" for the per-layer breakdown.
 
 ---
 

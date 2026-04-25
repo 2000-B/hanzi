@@ -71,6 +71,13 @@ let listViewActive = false;
 let hideMastered = true;
 let trayButtonVisibility = { hideMastered: true, notePencil: true, infoPanel: false };
 let desiredRetention = 0.9; /* FSRS target retention (0.7–0.97 typical), persisted as 'hanzi-desired-retention' */
+
+// ── Phase 5 — progress management ──
+let activeFocusId = null;            // deck/chunk identifier the user is currently working on; persisted as 'hanzi-active-focus'
+let newCardsPerDay = 10;             // session budget; persisted as 'hanzi-new-cards-per-day'
+let todaySession = null;             // { date: 'YYYY-MM-DD', newCardIds, reviewCardIds, completedIds } | null; persisted as 'hanzi-today-session'
+let masteryPromotionThreshold = 0.8; // chunk mastery % at which to suggest promotion; persisted as 'hanzi-mastery-threshold'
+let dismissedPromotions = [];        // chunk IDs the user has dismissed promotion suggestions for; persisted as 'hanzi-dismissed-promotions'
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
 let infoPanelHistory = [];    // stack of card objects for info panel back navigation

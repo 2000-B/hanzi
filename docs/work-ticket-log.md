@@ -4,6 +4,78 @@
 
 ---
 
+## 2026-04-25 — Phase 5: progress management — COMPLETE
+
+**Status:** Done on branch `phase-5/progress-management`. Cache bumped `hanzi-v6.69` → `hanzi-v6.71`. See `docs/progress-management-spec.md` for the design.
+
+**Context:** Add active-focus, daily-session, and mastery-gated promotion layers, plus a header chip that surfaces the current focus and today's progress at a glance.
+
+### Layer A — active focus
+
+- Per-profile `activeFocusId` (string) persisted as `hanzi-active-focus`.
+- Right-click on any HSK/JLPT chunk → "● set as focus" / "◯ clear focus" entry above the existing favorites/chunk-size menu items. Custom decks gain a minimal context menu with the same set/clear option.
+- Sidebar: focused row gets a small accent dot marker + bold weight; non-focus rows dim to `opacity: 0.65` when a focus is set (`.sidebar.has-focus` modifier). Hover, active, and focused rows all stay full-opacity.
+- Setting/clearing focus also clears `todaySession` so the next welcome-card render generates a fresh one against the new focus.
+
+### Layer B — daily session
+
+- Per-profile `newCardsPerDay` (default 10), `todaySession` (`{ date, newCardIds, reviewCardIds, completedIds }`).
+- `generateTodaySession()` (in `js/study.js`): cached if `date === today`; otherwise rebuilt. Walks the active focus chunk first, takes up to `newCardsPerDay` cards with no FSRS scheduling state. Reviews drawn from `getReviewCards()` (FSRS-due) capped at 50.
+- `_focusChunkCards()` reconstructs the chunk's card array from raw HSK/JLPT data so session generation works without prior navigation having loaded the chunk into the live `decks` map.
+- `startTodaySession()` builds a synthetic deck named `☀ today` from the session's card IDs and calls `selectDeck`.
+- `recordSessionCompletion(hanzi)` is called from `rateCard` for ratings ≥ Hard, persisting `completedIds`.
+- "new cards per day" input added to the full-settings "review" section alongside the existing FSRS retention slider. Changing it nulls the cached session so the new budget takes effect immediately.
+
+### Layer C — mastery-gated promotion
+
+- Per-profile `masteryPromotionThreshold` (default 0.8) and `dismissedPromotions` (array of chunk IDs).
+- `checkMasteryPromotion()` runs after every rating: if focus chunk's mastery ≥ threshold, finds the next chunk (next number within the level, or chunk 1 of the next level), and shows a non-blocking banner at the bottom.
+- Banner: "X% mastered — move on to `<next chunk>`?" with three actions:
+  - **move** — `acceptPromotion(nextId)` calls `setActiveFocus(nextId)`, regenerates session.
+  - **later** — `postponePromotion()` hides for now; re-shown next session.
+  - **dismiss** — `dismissPromotion()` adds focus ID to `dismissedPromotions`; never re-shown for that chunk.
+- A `_promotionShownFor` in-memory flag suppresses re-shows within a session even if the user keeps rating after dismissing.
+- Custom decks: `_findNextChunk()` returns null, so promotion is suppressed (matches the spec).
+
+### Layer D — header redesign
+
+- New `#header-focus` chip absolutely centered in the header, shown only when `activeFocusId` is set. Renders the focus name + a session-progress badge (e.g. `0/15`).
+- Click → `startTodaySession()`.
+- Hidden via `display: none` when no focus.
+
+### Files touched
+
+- `js/state.js` (new state vars: `activeFocusId`, `newCardsPerDay`, `todaySession`, `masteryPromotionThreshold`, `dismissedPromotions`)
+- `js/app.js` (load all the above from profile data; initial `renderHeaderFocus()` + `renderWelcomeCardSession()` call after init)
+- `js/sidebar.js` (`setActiveFocus`/`clearActiveFocus`; chunk-item + deck-item focused class + dot marker; `.sidebar.has-focus` modifier; chunk + custom-deck context menus gain set/clear focus entry; new `_showCustomDeckContextMenu`)
+- `js/study.js` (`_focusChunkCards`, `generateTodaySession`, `startTodaySession`, `recordSessionCompletion`, `renderWelcomeCardSession`, `renderHeaderFocus`, `onWelcomeCardCta`, `_focusChunkMasteryPct`, `_findNextChunk`, `checkMasteryPromotion`, `showPromotionBanner`, `postponePromotion`, `dismissPromotion`, `acceptPromotion`)
+- `js/test.js` (`rateCard` calls `recordSessionCompletion` on ratings ≥ Hard)
+- `js/settings.js` (`setNewCardsPerDay`; `syncSettingsUI` reflects the input)
+- `index.html` (welcome card session-info span + CTA dispatcher; header `#header-focus` slot; settings "review" section gains new-cards-per-day input)
+- `styles.css` (`.chunk-item.focused`, `.deck-item.focused`, `.focus-marker`, `.sidebar.has-focus` dimming; `.header-focus` chip + name + count; `.welcome-card-session`; `.promotion-banner` with `slideUpFade` keyframe)
+- `sw.js` (cache bump)
+- `docs/feature-status.md`, `docs/roadmap.md` (rows updated)
+
+### Verified (preview)
+
+- `setActiveFocus('hsk 1 · 1/8')` → sidebar shows orange dot on chunk 1/8 + dims all other chunks/levels; welcome card shows "hsk 1 · 1/8 · 10 new · 5 review · [start session]"; header chip reads `hsk 1 · 1/8 0/15`.
+- Simulated 80% mastery on the focus chunk → promotion banner renders at bottom-center: "80% mastered — move on to `hsk 1 · 2/8`?" with later/dismiss/move buttons.
+- `_findNextChunk()` correctly handles within-level (1→2) progression; rolls over to next level's chunk 1 at end-of-level; returns null for custom decks.
+- New-cards-per-day input regenerates session on change.
+
+### Pending verification (user-side)
+
+- Visual smoke test of the focus chip in light + dark.
+- Test mode rating a card → confirm `completedIds` advances + header count updates live.
+- Two profiles, different focuses → confirm state isolation.
+- Click-through of "move" / "later" / "dismiss" on the promotion banner.
+
+### Next
+
+- Push `phase-5/progress-management`, merge to main, branch `phase-6/tone-viz` off the new main.
+
+---
+
 ## 2026-04-25 — Phase 4: rating-buttons always visible
 
 **Status:** Follow-up to the FSRS migration. Cache bumped `hanzi-v6.68` → `hanzi-v6.69`.

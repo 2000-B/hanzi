@@ -301,6 +301,26 @@ body.light .card-side-scrollbar-thumb { background: rgba(0,0,0,0.42); }
   font-size: 12px;
 }
 
+.header-focus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  max-width: 38vw;
+}
+.header-focus:hover { background: var(--bg3); border-color: var(--border2); }
+.header-focus-name { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-focus-count { color: var(--accent); font-weight: 600; font-feature-settings: 'tnum'; padding-left: 6px; border-left: 1px solid var(--border); }
 .header-title {
   font-family: 'Noto Sans SC', sans-serif;
   font-size: 17px;
@@ -1437,6 +1457,20 @@ body:not(.light) .review-deck.has-cards:hover {
 }
 .chunk-item:hover { background: var(--bg3); color: var(--text); }
 .chunk-item.active { background: var(--accent-soft); color: var(--accent); }
+/* Phase 5: active focus — chunk gets a small accent dot. Sibling chunks/levels
+ * within a focused sidebar dim slightly so the focus stands out. */
+.chunk-item.focused { color: var(--text); font-weight: 500; }
+.chunk-item.focused .focus-marker,
+.deck-item.focused .focus-marker {
+  color: var(--accent);
+  font-size: 11px;
+  margin-right: 4px;
+}
+.deck-item.focused { color: var(--text); font-weight: 500; }
+/* Dim non-focus rows when a focus is set (full opacity preserved on hover/active/focused). */
+.sidebar.has-focus .chunk-item:not(.focused):not(.active):not(:hover),
+.sidebar.has-focus .deck-item:not(.focused):not(.active):not(:hover),
+.sidebar.has-focus .hsk-level-header:not(:hover) { opacity: 0.65; }
 .chunk-item .chunk-count {
   font-size: 10px;
   color: var(--text3);
@@ -1642,6 +1676,44 @@ body.ja-mode .welcome-card-greeting { font-family: 'Noto Sans JP', sans-serif; }
   letter-spacing: 0.04em;
   font-weight: 400;
 }
+/* Phase 5: mastery-gated promotion banner — non-blocking, bottom-center */
+.promotion-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgba(20,20,34,0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  z-index: 250;
+  animation: slideUpFade .2s cubic-bezier(.4,0,.2,1);
+}
+body.light .promotion-banner { background: rgba(255,255,255,0.92); }
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+.promotion-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.promotion-title { font-size: 12px; font-weight: 600; color: var(--accent); }
+.promotion-sub { font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 36vw; }
+.promotion-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.promotion-actions .btn { font-size: 11px; padding: 5px 12px; }
+
+.welcome-card-session {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.5;
+  min-height: 1em;
+}
+.welcome-card-session .focus-name { color: var(--text); font-weight: 500; }
+.welcome-card-session .session-counts { font-feature-settings: 'tnum'; color: var(--accent); font-weight: 500; }
 .welcome-card-cta {
   margin-top: 12px;
   padding: 10px 22px;
