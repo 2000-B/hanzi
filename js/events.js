@@ -88,6 +88,12 @@ function renderListView() {
   fade.className = 'list-search-fade';
   el.appendChild(fade);
 
+  // Bottom strip blur — fills the 6px gap below the search pill so the
+  // frosted effect is continuous around the pill.
+  const fadeBottom = document.createElement('div');
+  fadeBottom.className = 'list-search-fade-bottom';
+  el.appendChild(fadeBottom);
+
   // Search results container (shown when query is non-empty; hides .list-scroll)
   const sr = document.createElement('div');
   sr.className = 'search-results list-search-results';

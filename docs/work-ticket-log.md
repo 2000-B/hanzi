@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 6)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.60` → `hanzi-v6.61`.
+
+### Changes
+
+- **Blur extended below the search pill.** New `.list-search-fade-bottom` element sits at the very bottom of the list-view, height 6px, with `backdrop-filter: blur(8px)`, filling the gap between the pill's bottom edge and the list-view's rounded bottom. The frosted effect now wraps around the pill rather than visibly stopping at its top edge.
+- **Fade restored over the scrollbar.** Previous round pulled the upper fade's `right` to 6px to keep the scrollbar lane clear; user feedback was the scrollbar should blur with everything else. Restored `right: 0` so the fade extends to the right edge.
+- **Dark-mode pill now darker bg + whiter outline / text.** Earlier round had lifted the bg to `rgba(28,28,42,0.82)` to make the pill visible. User wanted the pill to stay dark and gain visibility through the outline and text instead. Reverted bg to `rgba(13,13,26,0.55)`, added `border-color: rgba(255,255,255,0.32)` on the inner `.search-bar`, set input text to `#fff`, placeholder to `rgba(255,255,255,0.65)`, and search icon to `rgba(255,255,255,0.7)`.
+
+### Files touched
+
+- `styles.css` — `.list-search-fade { right: 6 → 0 }`; new `.list-search-fade-bottom`; dark-mode `.list-search` reverted bg + new border/text/icon colors
+- `js/events.js` — `renderListView()` appends `.list-search-fade-bottom`
+- `sw.js` — cache bump
+
+### Verified
+
+- Bottom fade element rendered with `backdrop-filter: blur(8px)` confirmed via DOM query.
+- Dark-mode pill `backgroundColor` = `rgba(13,13,26,0.55)`, `.search-bar` `border-color` = `rgba(255,255,255,0.32)`.
+- Pill text + placeholder visibly whiter against the darker pill in the screenshot.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 5)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.59` → `hanzi-v6.60`.
