@@ -360,6 +360,13 @@ body.light .card-side-scrollbar-thumb { background: rgba(0,0,0,0.42); }
   z-index: 2;
   opacity: 0.6;
   transition: opacity .2s;
+  /* Without an explicit backface-visibility, browsers that promote this
+   * absolute-positioned element to its own composite layer (Chromium does
+   * this when z-index + transition are combined) skip the parent face's
+   * backface-hidden, so the front-face copy bleeds through and renders
+   * mirrored on the back during the flip. */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .card-face:hover .card-counter { opacity: 1; }
 /* Card mode button — one copy per face so it flips with the card but reads correctly on whichever face is showing. */
@@ -381,6 +388,11 @@ body.light .card-side-scrollbar-thumb { background: rgba(0,0,0,0.42); }
   transition: all .2s;
   z-index: 2;
   opacity: 0.85;
+  /* Same reason as .card-counter: keep this element on the same compositor
+   * layer rules as its .card-face parent so the front-face copy actually
+   * hides on the flipped (back) side instead of leaking through mirrored. */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .card-face:hover .card-mode-btn { opacity: 1; }
 .card-mode-btn:hover { border-color: var(--accent-border); color: var(--text2); }
