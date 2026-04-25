@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 8)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.62` → `hanzi-v6.63`.
+
+### Changes
+
+- **Side buffers around the search pill now blur.** The bottom fade was 6px tall — only blurring the 6px gap below the pill. Extended its height to 42px so it covers the entire pill row plus the buffer, blurring the 6px gaps to the left and right of the pill (and the right-edge column where the scrollbar would have rendered). Blur radius bumped 8 → 10px for a slightly stronger effect.
+- **Rows scroll into the fade region.** `.list-scroll` padding-bottom reduced 56 → 8px so rows can scroll down to nearly the bottom of the list-view, giving the bottom-fade and side-buffer regions actual content to blur. The pill sits on top with its more-opaque bg; the bottom row visibly tucks under/around the pill via the fade. Reducing the visual clutter at the rounded edges was the goal.
+
+### Files touched
+
+- `styles.css` — `.list-search-fade-bottom` height 6 → 42, blur 8 → 10; `.list-scroll` padding-bottom 56 → 8
+- `sw.js` — cache bump
+
+### Verified
+
+- Bottom fade `height = 42px`, `backdrop-filter = blur(10px)` confirmed.
+- Rows visibly extend further down the list-view when scrolled to bottom; the row directly behind the pill is faintly visible / blurred through the pill's translucent bg + fade-bottom layer.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 7)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.61` → `hanzi-v6.62`.

@@ -230,19 +230,22 @@ body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,
   mask-image: linear-gradient(to top, black 30%, transparent 100%);
   -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
 }
-/* Bottom strip — blurs the 6px gap between the search pill and the bottom edge
- * of the list-view so the frosted-glass effect is continuous around the pill
- * rather than visibly stopping at its top edge. */
+/* Bottom region blur — covers the entire band where the search pill lives plus
+ * the 6px buffer below. The pill sits on top of this (z-index 2), so the side
+ * gaps to the left/right of the pill, the bottom gap, and (when the scrollbar
+ * is shown) the scroll lane around it all share the same frosted blur. The
+ * goal is to reduce visual clutter at the edges so content reads as fading
+ * out into the frosted bar. */
 .list-view .list-search-fade-bottom {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 6px;
+  height: 42px; /* pill height (~30) + 6px above + 6px below */
   pointer-events: none;
   z-index: 1;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .list-view .list-search-results {
   position: absolute;
@@ -253,7 +256,12 @@ body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,
   width: auto;
   max-height: 60%;
 }
-.list-view .list-scroll { padding-bottom: 56px; }
+/* Allow rows to scroll all the way to the bottom edge so the fade-bottom and
+ * side-buffer regions have actual row content to blur. The pill sits on top
+ * of those rows; users see the bottom row blurred under/around the pill,
+ * which is the "reduce visual clutter" effect. Last-row visibility comes
+ * from scrolling up — typical scroll-with-floating-bar behavior. */
+.list-view .list-scroll { padding-bottom: 8px; }
 /* Hide the native scrollbar — webkit scrollbars render above the
  * backdrop-filter and can't be blurred by it. The fade-blur above the
  * pill is now the only "more rows up there" indicator. */
