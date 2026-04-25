@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-04-25 — Phase 3: post-implementation tweaks
+
+**Status:** Follow-up polish on `claude/strange-poincare-ca9fde`. Cache bumped `hanzi-v6.65` → `hanzi-v6.66`.
+
+### Changes
+
+- **Info-panel min-width raised 200 → 260px.** Narrower than ~260 breaks layout in several ways the user has decided aren't worth fixing. Updated CSS (`.info-panel { min-width: 260px }`), workspace.js divider clamp `MIN_PANEL`, and all `Math.max(200, …)` width clamps in edge resize and divider drag.
+- **TEST button on card face now reads as a primary affordance.** Color from `var(--text3) → var(--text)`, border from `var(--border) → var(--text2)`, opacity from `0.5 → 0.85`, font-weight `600 → 700`. Stays subtle but is no longer a faint hint.
+- **List-view fade collapsed to a single element.** Previously the bottom-region blur was a 42px-tall rect and the upper fade was a 36px-tall rect with overlap — together they painted two visible rectangles around the search pill. Replaced both with one 78px-tall fade rooted at the bottom edge, with a top-fading mask. The pill's bg + border draw on top; the surrounding frost is now one continuous layer.
+- **Info-panel close → flashcard returns to default fullscreen.** Previous behavior cleared the info-panel's inline width but left main-content's width pinned from a prior divider drag, so the flashcard never reclaimed the empty space. Now `toggleInfoPanel()` saves the panel's pre-close width to `hanzi-info-width`, then clears inline geometry on BOTH panels so the flashcard's flex:1 takes over. On reopen, the saved width is reapplied with `flex: none` so the divider position is re-created.
+- **Flashcard fullscreen button removed.** With closing the info panel automatically returning the flashcard to full width, the manual fullscreen toggle is redundant. `ensureFullscreenBtns()` only adds the button to the info panel now.
+
+### Files touched
+
+- `styles.css` — `.info-panel { min-width: 260 }`; `.card-mode-btn` color/border/opacity/weight; merged `.list-search-fade` (bottom: 0, height: 78, mask top-fade) and removed `.list-search-fade-bottom` rule
+- `js/workspace.js` — `MIN_PANEL = 260`; `Math.max(200, …)` → `Math.max(260, …)` for width clamps; `ensureFullscreenBtns` no longer adds a flashcard-panel button
+- `js/info-panel.js` — `toggleInfoPanel()` saves width before clearing on close; clears `main-content`'s inline geometry too; restores both `width` and `flex: none` on reopen
+- `js/events.js` — `renderListView()` no longer appends `.list-search-fade-bottom`
+- `sw.js` — cache bump
+
+### Verified
+
+- Info-panel computed `min-width = 260px`.
+- No `.ws-fullscreen-btn` inside `#main-content`.
+- TEST button color `rgb(234,234,242)` (= `var(--text)`), opacity 0.85.
+- Single `.list-search-fade` element in the rendered list-view (no `.list-search-fade-bottom`).
+- Close info-panel: `main-content.style.width = ""`, offsetWidth grows to fill workspace (987px in the test viewport).
+- Reopen info-panel: saved 400px restored as inline width with `flex: none`.
+
+---
+
 ## 2026-04-25 — Phase 3: tiling cleanup — COMPLETE
 
 **Status:** Done on `claude/strange-poincare-ca9fde` (will fast-forward into `phase-3/tiling-cleanup` when Phase 2 lands on main). Cache bumped `hanzi-v6.64` → `hanzi-v6.65`.

@@ -220,40 +220,24 @@ body:not(.light) .list-view .list-search .search-bar:focus-within { border-color
 body:not(.light) .list-view .list-search .search-input { color: #fff; }
 body:not(.light) .list-view .list-search .search-input::placeholder { color: rgba(255,255,255,0.65); }
 body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,0.7); }
-/* Backdrop blur that fades upward, flush with the top of the search pill —
- * items scrolling between the rows and the pill get progressively blurred so
- * the transition into the frosted bar is smooth instead of a hard cut.
- * Height matches the pill's height so the fade is visually proportionate.
- * Extends to the right edge so the scroll-bar lane shares the blur. */
+/* Single bottom-region blur — extends from the very bottom of the list-view
+ * up past the search pill, so the pill's side buffers, bottom buffer, and the
+ * fade region above it all share one continuous frosted layer. The mask
+ * fades out the top edge so there's no visible boundary above; the bottom is
+ * a hard edge against the rounded list-view corner. The pill sits on top
+ * (z-index 2) and draws its own visible bg + border. */
 .list-view .list-search-fade {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 36px; /* search-pill height ≈ 30px + 6px bottom — flush with pill top */
-  height: 36px;
-  pointer-events: none;
-  z-index: 1;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to top, black 30%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
-}
-/* Bottom region blur — covers the entire band where the search pill lives plus
- * the 6px buffer below. The pill sits on top of this (z-index 2), so the side
- * gaps to the left/right of the pill, the bottom gap, and (when the scrollbar
- * is shown) the scroll lane around it all share the same frosted blur. The
- * goal is to reduce visual clutter at the edges so content reads as fading
- * out into the frosted bar. */
-.list-view .list-search-fade-bottom {
-  position: absolute;
-  left: 0;
-  right: 0;
   bottom: 0;
-  height: 42px; /* pill height (~30) + 6px above + 6px below */
+  height: 78px; /* pill (~32) + 6px buffers + 36px fade-up region */
   pointer-events: none;
   z-index: 1;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to top, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 50%, transparent 100%);
 }
 .list-view .list-search-results {
   position: absolute;
@@ -359,18 +343,18 @@ body.light .card-side-scrollbar-thumb { background: rgba(0,0,0,0.42); }
   left: 10px;
   font-family: inherit;
   font-size: 9px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
   padding: 3px 10px;
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--text2);
   border-radius: var(--radius);
-  color: var(--text3);
+  color: var(--text);
   cursor: pointer;
   transition: all .2s;
   z-index: 2;
-  opacity: 0.5;
+  opacity: 0.85;
 }
 .card-face:hover .card-mode-btn { opacity: 1; }
 .card-mode-btn:hover { border-color: var(--accent-border); color: var(--text2); }
@@ -726,7 +710,7 @@ body.light .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0
   flex-direction: column;
   position: relative;
   width: var(--info-panel-w);
-  min-width: 200px;
+  min-width: 260px; /* Locked to roughly the user's current state — narrower breaks layout in ways no one wants to use anyway. */
   max-width: 600px;
   flex-shrink: 0;
   /* Clip child overflow (especially the inner scrollbar) to the panel's rounded corners. */

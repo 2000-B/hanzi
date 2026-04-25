@@ -108,17 +108,11 @@ function renderListView() {
     if (i === currentIndex) activeRow = row;
   });
 
-  // Backdrop-blur fade above the search bar — items scrolling under it get
-  // progressively blurred as they approach the input.
+  // Single bottom-region blur — extends from the very bottom past the pill,
+  // covering the pill's side buffers and the fade-up region above the pill.
   const fade = document.createElement('div');
   fade.className = 'list-search-fade';
   el.appendChild(fade);
-
-  // Bottom strip blur — fills the 6px gap below the search pill so the
-  // frosted effect is continuous around the pill.
-  const fadeBottom = document.createElement('div');
-  fadeBottom.className = 'list-search-fade-bottom';
-  el.appendChild(fadeBottom);
 
   // Search results container (shown when query is non-empty; hides .list-scroll)
   const sr = document.createElement('div');

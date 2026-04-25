@@ -6,9 +6,16 @@ function toggleInfoPanel() {
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
   document.getElementById('btn-tray-info')?.classList.toggle('active', infoPanelOpen);
 
+  const main = document.getElementById('main-content');
+
   if (!infoPanelOpen) {
-    // Closing — play fade-out animation, then drop display:flex by removing both classes.
-    // Cancel any in-flight closing animation first so re-toggling is responsive.
+    // Closing — save the user's current divider position before clearing widths
+    // so it can be restored next time the panel opens. The flashcard then
+    // resumes its default full-width position; manual divider state is only
+    // re-applied when the user toggles the info panel back on.
+    if (panel.offsetWidth >= 260) {
+      try { setProfileData('hanzi-info-width', panel.offsetWidth + ''); } catch(e) {}
+    }
     clearTimeout(panel._closeTimer);
     panel.classList.remove('open');
     panel.classList.add('closing');
@@ -19,31 +26,23 @@ function toggleInfoPanel() {
     // Clear fullscreen state if panel was fullscreened when closed
     if (panel.classList.contains('ws-fullscreen')) {
       panel.classList.remove('ws-fullscreen');
-      // Restore fullscreen btn icon
       const expandPath = `<path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"
         stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
       panel.querySelectorAll('.ws-fullscreen-btn svg').forEach(svg => {
         svg.innerHTML = expandPath;
       });
-      // Restore saved inline styles on all panels
-      const allPanels = [document.getElementById('main-content'), panel];
-      allPanels.forEach(el => {
-        if (el && el._savedStyle) {
-          el.style.width = el._savedStyle.width;
-          el.style.height = el._savedStyle.height;
-          el.style.flex = el._savedStyle.flex;
-          delete el._savedStyle;
-        }
+      [document.getElementById('main-content'), panel].forEach(el => {
+        if (el && el._savedStyle) { delete el._savedStyle; }
         if (el) el.style.display = '';
       });
-      // Restore dividers
       const workspace = document.getElementById('workspace');
       if (workspace) workspace.querySelectorAll('.ws-divider').forEach(d => d.style.display = '');
     }
-    // Clear stale inline styles from the closing panel
-    panel.style.width = '';
-    panel.style.height = '';
-    panel.style.flex = '';
+    // Clear inline geometry on BOTH panels so the flashcard recovers its
+    // default full-width flex behavior. Without clearing main-content, an
+    // earlier divider drag's explicit width would keep the flashcard pinned.
+    panel.style.width = ''; panel.style.height = ''; panel.style.flex = '';
+    if (main) { main.style.width = ''; main.style.height = ''; main.style.flex = ''; }
   }
 
   if (infoPanelOpen) {
@@ -52,11 +51,14 @@ function toggleInfoPanel() {
     panel.classList.remove('closing');
     panel.classList.add('open');
 
-    // Restore saved panel width
+    // Restore the user's last divider position from saved width.
     const savedW = getProfileData('hanzi-info-width');
     if (savedW) {
       const w = parseInt(savedW, 10);
-      if (w >= 240 && w <= 600) { panel.style.width = w + 'px'; }
+      if (w >= 260 && w <= 600) {
+        panel.style.width = w + 'px';
+        panel.style.flex = 'none';
+      }
     }
     if (activeDeck.length) {
       renderInfoPanel(activeDeck[currentIndex]);

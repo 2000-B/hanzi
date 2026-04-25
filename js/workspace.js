@@ -4,9 +4,11 @@
 // ── Fullscreen ────────────────────────────
 
 function ensureFullscreenBtns() {
+  // Phase 3+: flashcard panel no longer gets a fullscreen button — closing the
+  // info panel returns the flashcard to its full-width default automatically,
+  // so the manual toggle is redundant.
   const panels = [
-    { id: 'flashcard', el: document.getElementById('main-content') },
-    { id: 'info',      el: document.getElementById('info-panel') },
+    { id: 'info', el: document.getElementById('info-panel') },
   ];
   panels.forEach(({ id, el }) => {
     if (!el || el.querySelector('.ws-fullscreen-btn')) return;
@@ -218,7 +220,7 @@ function _initTiling() {
     divRightStart = isRow ? divRightEl.offsetWidth : divRightEl.offsetHeight;
 
     const SNAP_DIST = 12;
-    const MIN_PANEL = 200;
+    const MIN_PANEL = 260; /* Locked to ~current info-panel width — narrower breaks layout. */
     const onMove = (ev) => {
       if (!divDragging) return;
       const wsRect = workspace.getBoundingClientRect();
@@ -484,10 +486,10 @@ function _initTiling() {
       const panelRect = resizePanel.getBoundingClientRect();
       if (resizeEdge.includes('left') || resizeEdge.includes('right')) {
         const dx = resizeEdge.includes('right') ? (ev.clientX - resizeStartX) : (resizeStartX - ev.clientX);
-        let newW = Math.max(200, resizeStartW + dx);
+        let newW = Math.max(260, resizeStartW + dx);
         if (resizeEdge.includes('right')) newW = snap(panelRect.left + newW, snapEdges.xs) - panelRect.left;
         else newW = panelRect.right - snap(panelRect.right - newW, snapEdges.xs);
-        resizePanel.style.width = Math.max(200, newW) + 'px';
+        resizePanel.style.width = Math.max(260, newW) + 'px';
         resizePanel.style.flex = 'none';
       }
       if (resizeEdge.includes('bottom') || resizeEdge.includes('top')) {
