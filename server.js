@@ -4,7 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 7777;
+const PORT = parseInt(process.env.PORT, 10) || 7777;
 const ROOT = __dirname;
 
 const MIME = {

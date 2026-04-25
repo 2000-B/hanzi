@@ -190,23 +190,29 @@ body:not(.light) .sidebar > .deck-search .search-icon { color: rgba(255,255,255,
   width: 100%;
   max-height: 360px;
 }
-/* Card-list: pinned bottom of overlay. Translucent + backdrop-blur so list rows
- * scrolling behind the pill remain visible (blurred), and the bar itself reads
- * as a frosted floating element. The pill sits closer to the list-view edges
- * (6px) so the visible buffer matches the pill's own internal padding. */
+/* Card-list: pinned bottom of overlay. The bg + backdrop-blur live on the
+ * rounded .search-bar (the visible pill), not on the rectangular .list-search
+ * wrapper — otherwise the wrapper's bounding box paints its own bg into the
+ * 4 corner gaps left by the pill's rounded ends, creating a faint rectangle
+ * inside the soft fade region. With the wrapper transparent, only the rounded
+ * pill has a frosted body, and the .list-search-fade behind handles the
+ * smooth top fade-out without any visible boundary. */
 .list-view .list-search {
   position: absolute;
   left: 6px;
   right: 6px;
   bottom: 6px;
+  background: transparent;
+  z-index: 2;
+}
+.list-view .list-search .search-bar {
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  z-index: 2;
 }
 .list-view .list-search:hover .search-bar { border-color: var(--text2); }
 .list-view .list-search .search-bar:focus-within { border-color: var(--accent); }
-body:not(.light) .list-view .list-search {
+body:not(.light) .list-view .list-search .search-bar {
   background: rgba(13,13,26,0.78);
 }
 /* In dark mode, give the pill a brighter outline + brighter placeholder/icon
@@ -552,27 +558,74 @@ body.light .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0
   overflow: hidden;
 }
 
+/* Pinned bottom region of the deck panel. The wrapper itself is transparent —
+ * it just positions the floating elements (button + panel children). Each
+ * floating element draws its own translucent bg + backdrop-blur, so the
+ * elements read as frosted pills above the deck list rather than a single
+ * rectangular frosted slab. A side-fade region (sidebar-scroll-fade, below)
+ * handles the soft transition between the unblurred scrolling rows and the
+ * blurred area behind the floating buttons. */
 .sidebar-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 10px 12px;
-  border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   gap: 6px;
+  background: transparent;
+  z-index: 2;
 }
-/* Quiet new deck button */
+/* Soft fade-up backdrop sitting behind the bottom region. Matches the
+ * .list-search-fade pattern: full-intensity blur covers the area behind the
+ * floating buttons, then the top ~32px fades to transparent so the boundary
+ * against the scrolling deck rows is soft. The height tracks the bottom
+ * region (set via --sidebar-bottom-h by sidebar.js's ResizeObserver) so the
+ * fade grows/shrinks smoothly when the new-deck-panel opens/closes.
+ * Sits below the floating buttons (z-index 1) so they overlay it cleanly. */
+.sidebar-bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--sidebar-bottom-h, 44px) + 32px);
+  pointer-events: none;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to top, black calc(100% - 32px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black calc(100% - 32px), transparent 100%);
+  /* No height transition: --sidebar-bottom-h is updated each frame by the
+   * ResizeObserver as the panel animates, so a CSS transition here would
+   * layer a 250ms tween on top of every per-frame variable update — that
+   * stacking is what made the open/close animation look choppy. Letting
+   * the height track the variable directly is what stays smooth. */
+}
+/* Frosted floating new-deck button. Translucent bg + backdrop-blur on the
+ * pill itself (same pattern as the list-view search pill) so the deck list
+ * scrolling beneath shows through, blurred — and the button reads as a pill
+ * floating above the rows rather than sitting on a flat divider strip. */
 .new-deck-btn {
   font-size: 11px;
-  color: var(--text3);
-  border-color: transparent;
-  background: none;
-  padding: 4px 10px;
+  color: var(--text2);
+  padding: 4px 12px;
   align-self: center;
+  background: rgba(255,255,255,0.85);
+  border-color: var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+body:not(.light) .new-deck-btn {
+  background: rgba(13,13,26,0.78);
+  color: rgba(255,255,255,0.78);
+  border-color: rgba(255,255,255,0.32);
 }
 .new-deck-btn:hover {
-  color: var(--text2);
-  border-color: var(--border);
-  background: var(--bg3);
+  color: var(--text);
+  border-color: var(--text2);
 }
+body:not(.light) .new-deck-btn:hover { border-color: rgba(255,255,255,0.55); }
 
 /* Split pane: main content + info panel */
 .split-pane {
@@ -1475,6 +1528,21 @@ body:not(.light) .review-deck.has-cards:hover {
 .hsk-level.open > .hsk-level-header .chevron { transform: rotate(90deg); }
 .hsk-level.open > .hsk-level-header { color: var(--text); }
 
+/* Inline chunk list — animates open/closed beneath the level header. Always
+ * present in the DOM (when level data is loaded) so the CSS transition has a
+ * stable starting point on toggle. The max-height ceiling is generous enough
+ * to fit the largest level; actual content height is bounded by the chunks. */
+.chunk-list {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .28s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+}
+.hsk-level.open .chunk-list {
+  max-height: 1400px;
+  opacity: 1;
+}
+
 /* Chunk controls */
 .chunk-controls {
   padding: 6px 12px;
@@ -1613,9 +1681,40 @@ body.light .deck-item.active .deck-name {
 .deck-tag.ai { color: var(--accent); background: var(--accent-soft); }
 .deck-tag.csv { color: var(--green); background: rgba(61,186,138,.12); }
 
-/* New deck panel */
-.new-deck-panel { display: none; flex-direction: column; gap: 6px; }
-.new-deck-panel.open { display: flex; }
+/* New deck panel — animates open/closed via max-height + opacity. Stays in
+ * flex layout so the .sidebar-bottom region grows/shrinks smoothly with it
+ * (the ResizeObserver in sidebar.js syncs .sidebar-scroll's bottom padding). */
+.new-deck-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .25s cubic-bezier(.4,0,.2,1), opacity .2s ease, margin-top .25s cubic-bezier(.4,0,.2,1);
+  margin-top: -6px; /* cancels the .sidebar-bottom gap when collapsed */
+}
+.new-deck-panel.open {
+  /* max-height is set inline by toggleNewDeck() to the panel's measured
+   * scrollHeight, so the transition runs over the actual content height
+   * rather than a fixed ceiling — otherwise close has a "frozen" phase
+   * (max-height shrinking from the ceiling down to actual content height
+   * before visible shrinkage starts), which reads as choppy. */
+  opacity: 1;
+  margin-top: 0;
+}
+/* Frosted styling for the panel's controls — same pattern as the new-deck
+ * button, so the whole bottom-region cluster reads as floating pills above
+ * the blurred deck list rather than a flat strip. */
+.new-deck-panel .gen-input {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+body:not(.light) .new-deck-panel .gen-input {
+  background: rgba(13,13,26,0.78);
+  border-color: rgba(255,255,255,0.18);
+}
 .gen-input {
   font-family: inherit;
   font-size: 12px;

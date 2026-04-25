@@ -131,8 +131,10 @@ function renderSidebar() {
       </span>
     `;
     header.onclick = () => {
+      // Toggle the open class on the existing wrapper rather than re-rendering
+      // the whole sidebar, so the CSS transition on .chunk-list can run.
       openState[level] = !openState[level];
-      renderSidebar();
+      wrapper.classList.toggle('open', openState[level]);
     };
     // Right-click on level header
     header.oncontextmenu = (e) => {
@@ -141,7 +143,12 @@ function renderSidebar() {
     };
     wrapper.appendChild(header);
 
-    if (loaded && isOpen) {
+    if (loaded) {
+      // Always render the chunk list when data is loaded — visibility is
+      // driven by .hsk-level.open in CSS so opening/closing can animate.
+      const chunkListEl = document.createElement('div');
+      chunkListEl.className = 'chunk-list';
+
       const sz = chunkSizes[level] || 20;
       const totalChunks = Math.ceil(data.length / sz);
       const levelKey = `${deckPrefix}${level}`;
@@ -196,8 +203,10 @@ function renderSidebar() {
           e.preventDefault();
           _showChunkContextMenu(e, level, chunkNum, levelKey, isJapanese);
         };
-        wrapper.appendChild(item);
+        chunkListEl.appendChild(item);
       }
+
+      wrapper.appendChild(chunkListEl);
     }
 
     list.appendChild(wrapper);
@@ -246,11 +255,20 @@ function toggleNewDeck() {
   if (!sidebarOpen) toggleSidebar();
   const panel = document.getElementById('new-deck-panel');
   const btn = document.getElementById('new-deck-btn');
-  panel.classList.toggle('open');
-  const isOpen = panel.classList.contains('open');
-  if (isOpen) {
+  const willOpen = !panel.classList.contains('open');
+  if (willOpen) {
+    // Set max-height to actual content height so the transition spans the
+    // real visible range (no frozen tail on close).
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
     btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7.5L8.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   } else {
+    // Pin current measured height inline, force reflow, then drop to 0 so
+    // the transition starts from the real height rather than the inline px.
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    panel.offsetHeight;
+    panel.style.maxHeight = '0px';
+    panel.classList.remove('open');
     updateNewDeckBtn();
   }
 }
@@ -341,6 +359,32 @@ function _showCustomDeckContextMenu(e, name) {
   _showCtxMenu(e, `
     <button class="ctx-menu-item" onclick="event.stopPropagation();${isFocused ? "clearActiveFocus()" : `setActiveFocus(${JSON.stringify(name)})`};document.getElementById('chunk-ctx-menu').remove()">${isFocused ? '◯ clear focus' : '● set as focus'}</button>
   `);
+}
+
+// Keep .sidebar-scroll's bottom padding equal to the (absolute-positioned)
+// .sidebar-bottom's height so deck rows can scroll fully behind the frosted
+// region. Also publishes the bottom region's height as --sidebar-bottom-h on
+// the sidebar so .sidebar-bottom-fade can size its blur+fade region to match.
+// ResizeObserver tracks the panel's open/close transition smoothly.
+function _initSidebarBottomSync() {
+  const bottom = document.querySelector('.sidebar-bottom');
+  const scroll = document.getElementById('sidebar-scroll');
+  const sidebar = document.getElementById('sidebar');
+  if (!bottom || !scroll || !sidebar) return;
+  const sync = () => {
+    const h = bottom.offsetHeight;
+    scroll.style.paddingBottom = h + 'px';
+    sidebar.style.setProperty('--sidebar-bottom-h', h + 'px');
+  };
+  sync();
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(sync).observe(bottom);
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _initSidebarBottomSync);
+} else {
+  _initSidebarBottomSync();
 }
 
 // ══════════════════════════════════════════
