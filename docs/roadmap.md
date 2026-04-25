@@ -330,12 +330,12 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - Cache bumped, work ticket added, feature-status updated
 
 **Tasks:**
-- [ ] Generate minimal-pair groupings from existing pinyin data (in-session)
-- [ ] Write to `data/minimal-pairs.json` (or fold into enriched data — decide)
-- [ ] Add render path in `info-panel.js` for minimal-pair section
-- [ ] Wire up navigate-on-tap for list rows
-- [ ] Verify collapse-state persistence across card nav
-- [ ] Bump cache, add ticket, update status
+- [x] Generate minimal-pair groupings from existing pinyin data (in-session) — `js/minimal-pairs.js` builds at init + on language switch
+- [x] ~~Write to `data/minimal-pairs.json`~~ — decided: in-session generation only, no JSON file. Keeps the data sync'd with vocabulary changes and avoids a build step.
+- [x] Add render path in `info-panel.js` for minimal-pair section
+- [x] Wire up navigate-on-tap for list rows (uses existing `navigateToChar`)
+- [x] Verify collapse-state persistence across card nav (`hanzi-tone-section-collapsed`)
+- [x] Bump cache, add ticket, update status
 
 ---
 

@@ -300,6 +300,7 @@ function switchLanguage(langId) {
   applyLangUI();
   renderSidebar();
   buildSearchIndex();
+  if (typeof buildMinimalPairsIndex === 'function') buildMinimalPairsIndex();
 
   // Reset card display to empty state
   document.getElementById('empty-view').style.display = '';

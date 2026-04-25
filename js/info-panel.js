@@ -68,6 +68,14 @@ function toggleInfoPanel() {
   }
 }
 
+/** Collapse / expand the info-panel tones section; persists per profile. */
+function toggleToneSection() {
+  toneSectionCollapsed = !toneSectionCollapsed;
+  try { setProfileData('hanzi-tone-section-collapsed', toneSectionCollapsed ? '1' : '0'); } catch (e) {}
+  const sec = document.getElementById('ip-tone-section');
+  if (sec) sec.classList.toggle('collapsed', toneSectionCollapsed);
+}
+
 /** Hide the tutor bar when no API key is set. */
 function _syncTutorBarVisibility() {
   const bar = document.querySelector('.tutor-bar');
@@ -210,6 +218,30 @@ function renderInfoPanel(card) {
       <div class="ip-section-title">definitions</div>
       <div class="ip-defs">${entry.defs.join(' · ')}</div>
     </div>`;
+  }
+
+  // ── Tones / minimal pairs (Mandarin only, single-syllable words) ──
+  if (currentLang === 'zh' && toneGlyphsOnCard && typeof findMinimalPairs === 'function') {
+    const pairs = findMinimalPairs(card);
+    if (pairs.length > 0) {
+      const collapsed = toneSectionCollapsed ? ' collapsed' : '';
+      html += `<div class="ip-section ip-tone-section${collapsed}" id="ip-tone-section">
+        <div class="ip-section-title ip-tone-section-title" onclick="toggleToneSection()">
+          <span>tones · ${pinyinBaseSyllable(card.pinyin)}</span>
+          <svg class="ip-tone-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 4l2.5 2.5L7.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="ip-tone-section-body">
+          ${pairs.map(p => `
+            <div class="ip-tone-pair" onclick="navigateToChar('${p.hanzi}')" data-tip="${p.deck}">
+              <div class="ip-tone-pair-glyph">${toneGlyphSVG(p.tone)}</div>
+              <div class="ip-tone-pair-hanzi">${p.hanzi}</div>
+              <div class="ip-tone-pair-pinyin">${p.pinyin}</div>
+              <div class="ip-tone-pair-english">${p.english}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    }
   }
 
   // ── Enriched data sections ──

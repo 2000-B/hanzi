@@ -4,6 +4,53 @@
 
 ---
 
+## 2026-04-25 — Phase 7: minimal pairs / homophones — COMPLETE
+
+**Status:** Done on branch `phase-7/homophones`. Cache bumped `hanzi-v6.75` → `hanzi-v6.76`.
+
+**Context:** Surface tone-based minimal pairs in the info panel for single-syllable Mandarin cards. Folds in the deferred "collapsible tone section" from Phase 6.
+
+### Changes
+
+- **New `js/minimal-pairs.js`** with three pure helpers:
+  - `pinyinBaseSyllable(syl)` strips diacritics + trailing tone numbers (`mā / ma1 / ma → 'ma'`).
+  - `buildMinimalPairsIndex()` walks every HSK level's data, picks single-syllable cards, groups by base syllable. Each entry has `{ hanzi, pinyin, english, tone, deck }`. Sorted within each group as 1, 2, 3, 4, then neutral.
+  - `findMinimalPairs(card)` returns the entries for the card's base syllable, excluding the card itself.
+- **In-session generation only** — no `data/minimal-pairs.json` file. Build runs in `init()` after `loadAllData()` and again on language switch. Cards are filtered by single-syllable + Mandarin so JP mode is a no-op.
+- **Collapsible "tones · `<base>`" section in info panel.** Renders between `definitions` and the enriched-data sections, only when the current card is single-syllable Mandarin AND the master pitch toggle (`toneGlyphsOnCard`) is on AND there's at least one pair. Each row: tone glyph (Phase 6 SVG), hanzi, pinyin, english. Click → `navigateToChar(hanzi)`.
+- **Collapse persists per profile** via `hanzi-tone-section-collapsed`. New `toggleToneSection()` flips the state, persists, and toggles a `.collapsed` class on the section. Chevron rotates `-90deg` when collapsed.
+
+### Files touched
+
+- `js/minimal-pairs.js` (new)
+- `js/info-panel.js` (renders the new `.ip-tone-section` block; new `toggleToneSection()`)
+- `js/app.js` (calls `buildMinimalPairsIndex()` after `buildSearchIndex()`)
+- `js/events.js` (`switchLanguage` rebuilds the index too)
+- `index.html` (loads `js/minimal-pairs.js`)
+- `styles.css` (`.ip-tone-section`, `.ip-tone-section-title`, `.ip-tone-chevron`, `.ip-tone-pair*` grid layout)
+- `sw.js` (cache bump + asset)
+- `docs/feature-status.md`, `docs/roadmap.md`
+
+### Verified (preview)
+
+- Index built across HSK 1–6: 128 base syllables; 22 of them have ≥ 2 entries (genuine minimal pairs).
+- Loading 好 (`hǎo`): tones section appears with one pair `↘ 号 hào "number / day of month"`.
+- Toggling the section: `.collapsed` class flips correctly; `hanzi-tone-section-collapsed` persists `'1'` ↔ `'0'`.
+- Cards with no pairs (e.g. 爱 ài — only entry for base `ai`): section omitted entirely.
+- Master pitch toggle off: section is also omitted (matches the visual gating of the pitch line in the header).
+
+### Pending verification (user-side)
+
+- Click a pair row and confirm `navigateToChar` jumps to that card cleanly.
+- Multi-syllable cards (e.g. 你好) — confirm no section renders.
+- Switch to Japanese → confirm section does not appear.
+
+### Next
+
+- Push `phase-7/homophones`, merge to main, branch `phase-8/platform-prep` (which per the roadmap requires a spec-writing pass before any code).
+
+---
+
 ## 2026-04-25 — Phase 6: master pitch toggle in quick settings + tone-3 V
 
 **Status:** Iteration on Phase 6. Cache bumped `hanzi-v6.73` → `hanzi-v6.75`.

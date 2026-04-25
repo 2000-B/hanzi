@@ -81,6 +81,8 @@ async function init() {
 
   // Build search index
   buildSearchIndex();
+  // Build minimal-pairs index (Mandarin only; no-op in JP mode)
+  if (typeof buildMinimalPairsIndex === 'function') buildMinimalPairsIndex();
 
   // Sidebar starts open so user can pick a deck
   sidebarOpen = true;

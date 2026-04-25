@@ -1008,6 +1008,43 @@ body.light .tutor-overlay {
 }
 .ip-section-title .collapse-arrow.collapsed { transform: rotate(-90deg); }
 
+/* Phase 7: tones section in info panel — minimal pairs grouped by base syllable. */
+.ip-tone-section-title {
+  cursor: pointer;
+  user-select: none;
+  justify-content: space-between;
+  width: 100%;
+}
+.ip-tone-chevron {
+  transition: transform .2s;
+  color: var(--text3);
+}
+.ip-tone-section.collapsed .ip-tone-chevron { transform: rotate(-90deg); }
+.ip-tone-section.collapsed .ip-tone-section-body { display: none; }
+.ip-tone-section-body { display: flex; flex-direction: column; gap: 4px; }
+.ip-tone-pair {
+  display: grid;
+  grid-template-columns: 20px 32px auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.ip-tone-pair:hover { background: var(--bg3); }
+.ip-tone-pair-glyph { display: flex; align-items: center; color: var(--accent); }
+.ip-tone-pair-glyph .tone-glyph { width: 16px; height: 14px; }
+.ip-tone-pair-hanzi { font-family: 'Noto Sans SC', sans-serif; font-size: 20px; color: var(--text); }
+.ip-tone-pair-pinyin { font-size: 12px; color: var(--text2); font-feature-settings: 'tnum'; }
+.ip-tone-pair-english {
+  font-size: 12px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Contextual help */
 .ip-help-btn {
   display: inline-flex;

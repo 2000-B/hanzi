@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hanzi-v6.75';
+const CACHE_NAME = 'hanzi-v6.76';
 const ASSETS = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   '/js/persistence.js',
   '/js/fsrs.js',
   '/js/tone-viz.js',
+  '/js/minimal-pairs.js',
   '/js/settings.js',
   '/js/sidebar.js',
   '/js/deck.js',
