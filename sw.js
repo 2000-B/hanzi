@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hanzi-v6.76';
+const CACHE_NAME = 'hanzi-v6.77';
 const ASSETS = [
   '/',
   '/index.html',

@@ -5,8 +5,7 @@
       "name": "hanzi-study",
       "runtimeExecutable": "node",
       "runtimeArgs": ["server.js"],
-      "port": 7777,
-      "autoPort": true
+      "port": 7777
     }
   ]
 }

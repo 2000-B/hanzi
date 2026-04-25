@@ -52,8 +52,15 @@ async function init() {
       // Migrate old type names
       if (savedApp.type === 'default') savedApp.type = 'theme';
       if (savedApp.type === 'solid') savedApp.type = 'color';
-      // Migrate old blobHue → primaryHue
-      if (savedApp.blobHue != null && savedApp.primaryHue == null) savedApp.primaryHue = savedApp.blobHue;
+      // Migrate old blobHue → primaryHue. The previous default was blobHue:240
+      // (cool blue/purple); migrating that carries the old default forward and
+      // shows up as a purple app on first load after the SW updates. Treat
+      // exactly 240 as "never customized" and fall through to the new amber
+      // default — users who actively chose that hue can re-pick it from the
+      // swatch row, which is much rarer than the silent-default case.
+      if (savedApp.blobHue != null && savedApp.primaryHue == null && savedApp.blobHue !== 240) {
+        savedApp.primaryHue = savedApp.blobHue;
+      }
       // Guard against accidentally saved hue=0 (red) when default amber (25) was intended
       if (savedApp.primaryHue === 0 && savedApp.type === 'theme') savedApp.primaryHue = 25;
       appearance = { ...appearance, ...savedApp };
