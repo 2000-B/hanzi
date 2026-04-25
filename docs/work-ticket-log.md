@@ -4,6 +4,48 @@
 
 ---
 
+## 2026-04-25 — Phase 3: tiling cleanup — COMPLETE
+
+**Status:** Done on `claude/strange-poincare-ca9fde` (will fast-forward into `phase-3/tiling-cleanup` when Phase 2 lands on main). Cache bumped `hanzi-v6.64` → `hanzi-v6.65`.
+
+**Context:** Lock the workspace tiling to row-only and fix two known divider/edge bugs. See `docs/roadmap.md` Phase 3.
+
+### Bug repros (before fix)
+
+1. **Top/bottom drops created a column layout that wasn't supposed to exist.** Long-pressing a panel and dropping it on the top/bottom edge of another panel triggered `layoutDirection = 'column'` and `rebuildLayout()` — producing a vertical stack the rest of the workspace code didn't really support.
+2. **Outer-edge narrowing.** With panels in `[main-content][divider][info-panel]` order, dragging the info-panel's outer right edge inward set `info-panel.style.width` to a smaller value. Because info-panel sits at the workspace's right edge in the flex row, shrinking the width made the LEFT edge move right (flex right-aligns the rightmost element). User expected the right edge to follow the cursor with the left edge anchored.
+3. **Sticky divider after hitting min-width.** Dragging the divider far enough that one panel hit the 200px min and held there meant the cursor kept moving while widths stayed clamped. The original delta-based math used `divLeftStart + delta` against an unbounded `delta` — when reversing direction, the cursor had to traverse the entire dead band before widths started changing again.
+
+### Fixes
+
+- **Top/bottom drops rejected.** `onDragMove` only emits `left` / `right` drop indicators now. `onDragEnd` no longer flips `layoutDirection` to `column`. `layoutDirection` is now `const 'row'` (kept as a variable so the rest of the code reads coherently). Drop indicator no longer surfaces an unactionable target on top/bottom hover.
+- **Outer-edge resize disabled.** `getResizeEdge()` now skips edges that sit at the workspace boundary (within 2px tolerance). The outermost panel edges no longer act as resize hotzones — there's no adjacent panel to give/take width from. The flex-induced narrow-from-opposite-edge artifact is gone because the gesture is no longer offered. Inner edges (between panels) and divider drags still work as before.
+- **Divider clamp moved into the delta itself.** `onMove` now clamps `delta` to `[MIN_PANEL - divLeftStart, divRightStart - MIN_PANEL]` before computing widths. Once a panel reaches min, the cursor stops affecting widths in that direction; reverse motion immediately moves the divider back without a dead band.
+
+### Files touched
+
+- `js/workspace.js` — long-press: drop sides reduced to left/right, `layoutDirection` const-locked, column switch removed in `onDragEnd`; edge resize: `getResizeEdge` skips workspace-boundary edges; divider drag: delta clamped to legal range
+- `docs/roadmap.md` — Phase 3 task list marked done
+- `docs/feature-status.md` — vertical (column) layout marked `removed`
+- `sw.js` — cache bump
+
+### Verified (code-level)
+
+- `layoutDirection` no longer reassigned anywhere; rebuildLayout reads `'row'` only.
+- Drop-target loop builds 2 entries per panel (left, right) instead of 4.
+- `onDragEnd` `layoutDirection = 'column'` line gone.
+- `getResizeEdge` returns `''` for any edge within 2px of the workspace bounds.
+- Divider `onMove` clamps `delta` against `MIN_PANEL` constraints before applying.
+
+### Pending verification (user-side)
+
+- Drag a panel and confirm only left/right drop indicators appear.
+- Confirm dragging the workspace-outer edge of either panel doesn't trigger resize cursor or narrowing.
+- Pin the divider all the way left, then drag it back right — confirm the right edge of the right panel responds immediately on reverse motion.
+- Long-press swap of info ↔ flashcard panels — confirm divider, edge resize, and fullscreen all behave consistently in either order.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 9)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.63` → `hanzi-v6.64`.

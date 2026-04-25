@@ -188,14 +188,14 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - Cache bumped, work ticket added
 
 **Tasks:**
-- [ ] Reproduce each of the three bugs and document repro steps in work ticket
-- [ ] Modify drop-target detection to skip top/bottom in `js/workspace.js`
-- [ ] Suppress drop indicators for top/bottom hover
-- [ ] Fix opposite-edge narrowing
-- [ ] Fix sticky-pinned divider
-- [ ] Verify swap-sides
-- [ ] Update `feature-status.md`
-- [ ] Bump cache, add work ticket
+- [x] Reproduce each of the three bugs and document repro steps in work ticket
+- [x] Modify drop-target detection to skip top/bottom in `js/workspace.js`
+- [x] Suppress drop indicators for top/bottom hover
+- [x] Fix opposite-edge narrowing — `getResizeEdge()` skips edges at workspace boundary
+- [x] Fix sticky-pinned divider — clamp `delta` itself, not just the resulting widths
+- [x] Verify swap-sides — code paths use `divLeftEl`/`divRightEl` references, agnostic to which panel is which
+- [x] Update `feature-status.md`
+- [x] Bump cache, add work ticket
 
 ---
 

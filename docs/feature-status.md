@@ -68,7 +68,7 @@
 | Two-panel workspace (flashcard + info) | done | `js/workspace.js` |
 | Divider drag-to-resize | done | edge bugs in Phase 3 |
 | Long-press drag-to-reorder | done | row-only in Phase 3 |
-| Vertical (column) layout | being-removed | Phase 3 — drop-zone removal, not code removal |
+| Vertical (column) layout | removed | Phase 3 — top/bottom drop zones rejected, column switch in onDragEnd removed; layoutDirection locked to row |
 | Per-panel fullscreen | done | |
 | Snap-to-grid during resize | removed | intentionally removed — confirmed in 2026-04-24 triage |
 | Earlier tiling system (zoom, floating panels) | shelved | `workspace-reimplementation-plan.md` |

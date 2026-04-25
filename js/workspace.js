@@ -141,9 +141,12 @@ function _initTiling() {
   if (!workspace) return;
   const LONG_PRESS_MS = 250;
 
-  // Panel order state — visible panel IDs in display order
+  // Panel order state — visible panel IDs in display order.
+  // Layout is locked to `row` (Phase 3): top/bottom drops are rejected and the
+  // column switch in onDragEnd is gone. The variable stays so any defensive
+  // code paths read a sensible value, but it's never reassigned.
   let panelOrder = ['flashcard'];
-  let layoutDirection = 'row';
+  const layoutDirection = 'row';
 
   function getPanelEl(id) {
     return workspace.querySelector(`[data-panel-id="${id}"]`);
@@ -215,6 +218,7 @@ function _initTiling() {
     divRightStart = isRow ? divRightEl.offsetWidth : divRightEl.offsetHeight;
 
     const SNAP_DIST = 12;
+    const MIN_PANEL = 200;
     const onMove = (ev) => {
       if (!divDragging) return;
       const wsRect = workspace.getBoundingClientRect();
@@ -233,9 +237,18 @@ function _initTiling() {
         if (Math.abs(mousePos - t) < SNAP_DIST) { mousePos = t; break; }
       }
 
-      const delta = mousePos - divStartPos;
-      const newLeft = Math.max(200, divLeftStart + delta);
-      const newRight = Math.max(200, divRightStart - delta);
+      // Phase 3 fix: clamp the delta itself (not just the resulting widths).
+      // Previously delta could grow past the legal range while the widths were
+      // clamped at MIN_PANEL — dragging back required moving the cursor through
+      // that "dead band" before the panels responded again. With delta clamped,
+      // the panels react to cursor input immediately on any reverse motion.
+      const minDelta = MIN_PANEL - divLeftStart;          // newLeft hits MIN
+      const maxDelta = divRightStart - MIN_PANEL;          // newRight hits MIN
+      let delta = mousePos - divStartPos;
+      if (delta < minDelta) delta = minDelta;
+      if (delta > maxDelta) delta = maxDelta;
+      const newLeft = divLeftStart + delta;
+      const newRight = divRightStart - delta;
       if (isRow) {
         divLeftEl.style.width = newLeft + 'px'; divLeftEl.style.flex = 'none';
         divRightEl.style.width = newRight + 'px'; divRightEl.style.flex = 'none';
@@ -315,11 +328,13 @@ function _initTiling() {
 
     panels.forEach(panel => {
       const rect = panel.getBoundingClientRect();
+      // Phase 3: layout is locked to row, so only left/right are valid drop
+      // targets. Top/bottom hover used to switch to a column layout — that
+      // path is gone, and surfacing a top/bottom indicator the user can't act
+      // on is misleading.
       const sides = [
-        { side: 'left',   dist: Math.abs(e.clientX - rect.left),   x: rect.left,      y: rect.top,       w: 4,          h: rect.height },
-        { side: 'right',  dist: Math.abs(e.clientX - rect.right),  x: rect.right - 4, y: rect.top,       w: 4,          h: rect.height },
-        { side: 'top',    dist: Math.abs(e.clientY - rect.top),     x: rect.left,      y: rect.top,       w: rect.width, h: 4           },
-        { side: 'bottom', dist: Math.abs(e.clientY - rect.bottom),  x: rect.left,      y: rect.bottom - 4,w: rect.width, h: 4           },
+        { side: 'left',  dist: Math.abs(e.clientX - rect.left),  x: rect.left,      y: rect.top, w: 4, h: rect.height },
+        { side: 'right', dist: Math.abs(e.clientX - rect.right), x: rect.right - 4, y: rect.top, w: 4, h: rect.height },
       ];
       sides.forEach(s => {
         const inX = e.clientX >= rect.left - 40 && e.clientX <= rect.right + 40;
@@ -360,10 +375,9 @@ function _initTiling() {
         if (targetId && sourceId !== targetId) {
           panelOrder = panelOrder.filter(id => id !== sourceId);
           const targetIdx = panelOrder.indexOf(targetId);
-          if (side === 'left' || side === 'top') panelOrder.splice(targetIdx, 0, sourceId);
+          // Only `left`/`right` drops can fire (top/bottom rejected upstream).
+          if (side === 'left') panelOrder.splice(targetIdx, 0, sourceId);
           else panelOrder.splice(targetIdx + 1, 0, sourceId);
-          if (side === 'top' || side === 'bottom') layoutDirection = 'column';
-          else layoutDirection = 'row';
           rebuildLayout();
         }
       }
@@ -405,11 +419,21 @@ function _initTiling() {
 
   function getResizeEdge(panel, e) {
     const rect = panel.getBoundingClientRect();
+    const wsRect = workspace.getBoundingClientRect();
     const E = 8;
-    const onL = e.clientX >= rect.left - E && e.clientX <= rect.left + E;
-    const onR = e.clientX >= rect.right - E && e.clientX <= rect.right + E;
-    const onB = e.clientY >= rect.bottom - E && e.clientY <= rect.bottom + E;
-    const onT = e.clientY >= rect.top - E && e.clientY <= rect.top + E;
+    const T = 2; // tolerance for "edge sits at workspace boundary"
+    // Edges that touch the workspace boundary aren't resizable — there's no
+    // adjacent panel to give/take space, and width-only resizes on the
+    // outermost panel cause it to narrow from the opposite edge (the edge
+    // anchored by flex layout). Skip those hotzones.
+    const atWsLeft   = Math.abs(rect.left   - wsRect.left)   < T;
+    const atWsRight  = Math.abs(rect.right  - wsRect.right)  < T;
+    const atWsTop    = Math.abs(rect.top    - wsRect.top)    < T;
+    const atWsBottom = Math.abs(rect.bottom - wsRect.bottom) < T;
+    const onL = !atWsLeft   && e.clientX >= rect.left   - E && e.clientX <= rect.left   + E;
+    const onR = !atWsRight  && e.clientX >= rect.right  - E && e.clientX <= rect.right  + E;
+    const onB = !atWsBottom && e.clientY >= rect.bottom - E && e.clientY <= rect.bottom + E;
+    const onT = !atWsTop    && e.clientY >= rect.top    - E && e.clientY <= rect.top    + E;
     if ((onL || onR) && onB) return (onL ? 'left' : 'right') + '-bottom';
     if ((onL || onR) && onT) return (onL ? 'left' : 'right') + '-top';
     if (onL) return 'left'; if (onR) return 'right';
