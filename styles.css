@@ -2819,14 +2819,16 @@ body.light .welcome-modal {
 .mastered-pill-btn.active .mastered-eye-strike { display:block; }
 
 /* Undo button — pill shape, absolutely positioned so the three main tray buttons stay centered when undo appears/disappears */
-.btn-undo {
+.controls-tray .btn-undo {
   font-size: 10px;
   font-weight: 500;
   padding: 0;
   border-radius: var(--radius);
   height: auto;
   /* Inline flex sibling — sits adjacent to the rightmost button. Animates width 0 → auto so it
-   * doesn't reserve space until shown; the centered group recenters when it appears. */
+   * doesn't reserve space until shown; the centered group recenters when it appears.
+   * margin-left: -8px while hidden cancels the flex `gap: 8px` so the visible buttons
+   * stay perfectly centered (without it, the trailing gap shifts them 4px left). */
   width: 0;
   min-width: 0;
   overflow: hidden;
@@ -2835,14 +2837,16 @@ body.light .welcome-modal {
   opacity: 0;
   pointer-events: none;
   transform: translateX(8px);
-  transition: width .25s cubic-bezier(.4,0,.2,1), padding .25s cubic-bezier(.4,0,.2,1), opacity .2s ease, transform .25s cubic-bezier(.4,0,.2,1), border-width .2s;
+  margin-left: -8px;
+  transition: width .25s cubic-bezier(.4,0,.2,1), padding .25s cubic-bezier(.4,0,.2,1), margin-left .25s cubic-bezier(.4,0,.2,1), opacity .2s ease, transform .25s cubic-bezier(.4,0,.2,1), border-width .2s;
   transition: opacity .2s ease, transform .2s ease;
 }
-.btn-undo.visible {
+.controls-tray .btn-undo.visible {
   opacity: 1;
   width: auto;
   padding: 4px 12px;
   border-width: 1px;
+  margin-left: 0;
   transform: translateX(0);
   pointer-events: auto;
 }
