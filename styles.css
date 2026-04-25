@@ -184,6 +184,21 @@ body.light header {
   background: var(--bg2);
   z-index: 2;
 }
+/* Backdrop blur that fades upward, sitting just above the search pill — items
+ * scrolling under this region get progressively blurred toward the bar. */
+.list-view .list-search-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 48px; /* search-pill height ≈ 36px + 12px bottom */
+  height: 56px;
+  pointer-events: none;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: linear-gradient(to top, black 30%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
+}
 .list-view .list-search-results {
   position: absolute;
   top: auto;
