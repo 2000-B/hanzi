@@ -57,7 +57,7 @@
 | Pre-recorded HSK 1 audio | deferred | depends on audio sourcing decision |
 | Tutor chat (AI-powered) | done | `hanzi-app-spec-v5_3.md` |
 | User notes (per card) | done | tray pencil button shipped in Phase 2; on-card pencil indicator z-order fixed |
-| Tone visualization (mnemonic) | not-started | roadmap Phase 6 |
+| Tone visualization (mnemonic) | done | 5 SVG contour glyphs (1/2/3/4/neutral) shown inline next to pinyin in info-panel; optional card-face display via settings toggle (Mandarin only) (Phase 6) |
 | Homophone / minimal pair groupings | not-started | roadmap Phase 7 |
 | Japanese pitch accent visualization | deferred | needs separate design pass |
 

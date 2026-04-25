@@ -163,6 +163,11 @@
           <input type="number" min="1" max="100" step="1" id="fs-new-cards-per-day" oninput="setNewCardsPerDay(this.value)" style="width:64px;text-align:right;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;font-feature-settings:'tnum'">
         </label>
         <div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px">budget for new cards drawn from the active focus chunk. reviews from FSRS aren't capped here.</div>
+        <div class="settings-toggle-row" id="fs-tone-row" style="margin-top:14px">
+          <span class="settings-toggle-label">tone glyphs on card</span>
+          <button class="toggle-switch" id="fs-tone-glyphs-card" onclick="toggleToneGlyphsOnCard()"></button>
+        </div>
+        <div style="font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px">show small contour glyphs next to pinyin on the card face (Mandarin only). info-panel pinyin always shows them.</div>
       </div>
       <div class="fs-section">
         <div class="fs-section-label">tool tray</div>
@@ -503,6 +508,7 @@
 <script src="js/data.js"></script>
 <script src="js/persistence.js"></script>
 <script src="js/fsrs.js"></script>
+<script src="js/tone-viz.js"></script>
 <script src="js/settings.js"></script>
 <script src="js/sidebar.js"></script>
 <script src="js/deck.js"></script>

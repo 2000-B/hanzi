@@ -78,6 +78,10 @@ let newCardsPerDay = 10;             // session budget; persisted as 'hanzi-new-
 let todaySession = null;             // { date: 'YYYY-MM-DD', newCardIds, reviewCardIds, completedIds } | null; persisted as 'hanzi-today-session'
 let masteryPromotionThreshold = 0.8; // chunk mastery % at which to suggest promotion; persisted as 'hanzi-mastery-threshold'
 let dismissedPromotions = [];        // chunk IDs the user has dismissed promotion suggestions for; persisted as 'hanzi-dismissed-promotions'
+
+// ── Phase 6 — tone visualization (Mandarin only) ──
+let toneGlyphsOnCard = false;        // show tone glyphs alongside pinyin on the card face; persisted as 'hanzi-tone-glyphs-card'
+let toneSectionCollapsed = false;    // info-panel tone section collapse state; persisted as 'hanzi-tone-section-collapsed'
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
 let infoPanelHistory = [];    // stack of card objects for info panel back navigation

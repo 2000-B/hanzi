@@ -40,6 +40,10 @@ async function init() {
     if (t >= 0.5 && t <= 1) masteryPromotionThreshold = t;
   }
   try { dismissedPromotions = JSON.parse(getProfileData('hanzi-dismissed-promotions') || '[]'); } catch (e) { dismissedPromotions = []; }
+
+  // Phase 6 — tone visualization (Mandarin only)
+  toneGlyphsOnCard = getProfileData('hanzi-tone-glyphs-card') === '1';
+  toneSectionCollapsed = getProfileData('hanzi-tone-section-collapsed') === '1';
   // Load appearance (per-profile)
   try {
     const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');

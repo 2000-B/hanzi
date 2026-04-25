@@ -906,6 +906,24 @@ body.light .tutor-overlay {
   color: var(--text2);
   margin-top: 4px;
 }
+/* Phase 6: Mandarin tone glyphs — small contour shape next to each pinyin syllable.
+ * Inherits color from currentColor so it adapts to dark/light without an override. */
+.pinyin-syllable {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+.pinyin-syllable + .pinyin-syllable { margin-left: 4px; }
+.tone-glyph {
+  width: 1em;
+  height: 0.85em;
+  vertical-align: middle;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.card-pinyin .tone-glyph { color: var(--accent); }
+.ip-pinyin .tone-glyph { color: var(--accent); }
 .ip-english {
   font-size: 14px;
   color: var(--text);

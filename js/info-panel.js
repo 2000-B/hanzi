@@ -171,7 +171,7 @@ function renderInfoPanel(card) {
   html += `<div class="ip-header">
     <div class="ip-hanzi">${card.hanzi}</div>
     ${isJapanese && card.kana && card.kana !== card.hanzi ? `<div class="ip-kana">${card.kana}</div>` : ''}
-    <div class="ip-pinyin">${card.pinyin}${_hasTtsVoice() ? `
+    <div class="ip-pinyin">${currentLang === 'zh' ? pinyinWithToneGlyphs(card.pinyin) : card.pinyin}${_hasTtsVoice() ? `
       <button class="ip-audio-btn" onclick="speakHanzi('${card.hanzi}')" data-tip="listen">
         <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 5.5h2l3-3v11l-3-3H3a1 1 0 01-1-1v-3a1 1 0 011-1z" fill="currentColor"/><path d="M11 4.5a5 5 0 010 7M9 6.5a2.5 2.5 0 010 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       </button>` : ''}

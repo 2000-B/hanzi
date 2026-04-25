@@ -292,12 +292,14 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - Cache bumped, work ticket added, feature-status updated
 
 **Tasks:**
-- [ ] Design five canonical glyph SVGs (sketches in spec, draft in code)
-- [ ] Add render path in `info-panel.js` for tone glyphs
-- [ ] Add card-face glyph display, gated by settings toggle
-- [ ] Add tone visualization toggle to full settings
-- [ ] Verify visual fidelity in light and dark modes
-- [ ] Bump cache, add ticket, update status
+- [x] Design five canonical glyph SVGs (high-flat / rising / dip-rise / sharp-fall / short-flat)
+- [x] Add render path in `info-panel.js` for tone glyphs (`pinyinWithToneGlyphs` in `js/tone-viz.js`, called from `ip-pinyin`)
+- [x] Add card-face glyph display, gated by `toneGlyphsOnCard` setting; render path in `js/deck.js`
+- [x] Add "tone glyphs on card" toggle to full settings (Mandarin-only row, hidden in JP)
+- [x] Verify visual fidelity in light and dark modes (glyphs use `currentColor` → adapts to `var(--accent)`)
+- [x] Bump cache, add ticket, update status
+
+**Deferred from Phase 6 (intentional):** the dedicated collapsible "tones" section in the info panel is folded into Phase 7 since it pairs naturally with the minimal-pairs UI (line-graph + glyph list).
 
 ---
 

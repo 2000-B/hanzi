@@ -92,6 +92,11 @@ function syncSettingsUI() {
   // Phase 5: new cards per day
   const ncInput = document.getElementById('fs-new-cards-per-day');
   if (ncInput) ncInput.value = newCardsPerDay;
+  // Phase 6: tone glyphs on card face — Mandarin only; hide the row entirely in JP mode
+  const toneRow = document.getElementById('fs-tone-row');
+  if (toneRow) toneRow.style.display = currentLang === 'zh' ? '' : 'none';
+  const toneToggle = document.getElementById('fs-tone-glyphs-card');
+  if (toneToggle) toneToggle.classList.toggle('on', toneGlyphsOnCard);
 }
 
 function updatePrefsVisibility() {
@@ -403,6 +408,14 @@ function setDesiredRetention(value) {
   // Update the value label if visible
   const label = document.getElementById('fs-retention-value');
   if (label) label.textContent = Math.round(r * 100) + '%';
+}
+
+// ── Phase 6: tone glyphs on card face ──
+function toggleToneGlyphsOnCard() {
+  toneGlyphsOnCard = !toneGlyphsOnCard;
+  try { setProfileData('hanzi-tone-glyphs-card', toneGlyphsOnCard ? '1' : '0'); } catch (e) {}
+  syncSettingsUI();
+  if (typeof renderCard === 'function' && activeDeck.length) renderCard();
 }
 
 // ── Phase 5: new-cards-per-day ──

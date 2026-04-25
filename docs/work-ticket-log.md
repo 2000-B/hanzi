@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-04-25 — Phase 6: tone visualization — COMPLETE
+
+**Status:** Done on branch `phase-6/tone-viz`. Cache bumped `hanzi-v6.71` → `hanzi-v6.72`. Mandarin-only feature; Japanese pitch-accent visualization remains deferred.
+
+### Changes
+
+- **`js/tone-viz.js` (new):** pure functions for parsing and rendering tones.
+  - `pinyinSyllableTone(syl)` returns `0–4` for a single syllable. Recognizes both diacritic notation (`mā/má/mǎ/mà/ma`) via a vowel-mark scan AND numeric notation (`ma1` … `ma5`, where `5 = neutral = 0`).
+  - `splitPinyinSyllables(pinyin)` is whitespace-split.
+  - `toneGlyphSVG(tone)` returns inline `<svg>` markup using `currentColor` so the glyph inherits its surrounding theme color.
+  - `pinyinWithToneGlyphs(pinyin)` wraps each syllable in a `.pinyin-syllable` span followed by its glyph; returns the input untouched in JP mode.
+- **Five glyph paths** (in `TONE_PATHS`): high-flat, rising curve, dip-rise (V-shape), sharp downward fall, short flat (neutral). Stroke-only, 16×14 viewBox, 1.6 stroke-width with rounded line joins.
+- **Info panel** (`js/info-panel.js`): the `.ip-pinyin` row now passes through `pinyinWithToneGlyphs` for Mandarin. Tone glyphs always render in the info panel.
+- **Card face** (`js/deck.js`): pinyin render path now uses `innerHTML = pinyinWithToneGlyphs(...)` when `toneGlyphsOnCard` is on (and language is `zh`); falls back to `textContent = pinyin` otherwise.
+- **Setting** (`js/state.js`, `js/settings.js`): `toneGlyphsOnCard` boolean (default off), persisted as `hanzi-tone-glyphs-card`. New `toggleToneGlyphsOnCard()` re-renders the active card. Settings UI gains a "tone glyphs on card" toggle in the "review" section, hidden when `currentLang === 'ja'`.
+- **CSS** (`styles.css`): `.pinyin-syllable` is `inline-flex` with `gap: 3px` so the syllable + glyph stays together; `.tone-glyph { color: var(--accent) }` gives the glyph its accent tint, scales via `1em` width.
+
+### Files touched
+
+- `js/tone-viz.js` (new)
+- `js/state.js` (+ `toneGlyphsOnCard`, `toneSectionCollapsed`)
+- `js/app.js` (load both from profile data)
+- `js/info-panel.js` (`.ip-pinyin` uses `pinyinWithToneGlyphs`)
+- `js/deck.js` (card-face pinyin render)
+- `js/settings.js` (`toggleToneGlyphsOnCard`, `syncSettingsUI` reflects toggle + hides row in JP)
+- `index.html` (`<script src>` + settings toggle row)
+- `styles.css` (`.pinyin-syllable`, `.tone-glyph`)
+- `sw.js` (cache bump + js/tone-viz.js in ASSETS)
+- `docs/feature-status.md`, `docs/roadmap.md`
+
+### Verified (preview)
+
+- Tone parsing: `nǐ`→3, `hǎo`→3, `mā`→1, `má`→2, `mà`→4, `ma`→0, `shí`→2, `ni3`→3, `a5`→0.
+- Info panel for `爱 ài`: renders `<span class="pinyin-syllable">ài<svg class="tone-glyph">…</svg></span>` — sharp downward fall glyph (tone 4) ✓
+- Card face with `toggleToneGlyphsOnCard()` on: front pinyin shows the same glyph next to `ài`.
+- JP mode: settings row hidden; card-face render falls back to plain `textContent`.
+
+### Pending verification (user-side)
+
+- Visual smoke test in light + dark — glyphs should be visible against both backgrounds.
+- Multi-syllable words (e.g. `bù kè qi`, `xié zi`) — confirm each syllable gets its own glyph.
+
+### Next
+
+- Push `phase-6/tone-viz`, merge to main, branch `phase-7/homophones`. Phase 7 will reuse the tone glyphs in the minimal-pairs list.
+
+---
+
 ## 2026-04-25 — Phase 5: progress management — COMPLETE
 
 **Status:** Done on branch `phase-5/progress-management`. Cache bumped `hanzi-v6.69` → `hanzi-v6.71`. See `docs/progress-management-spec.md` for the design.
