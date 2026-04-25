@@ -1586,11 +1586,14 @@ body.light .deck-item.active .deck-name {
   user-select: none;
 }
 
-/* Welcome card — empty state placeholder, mirrors the .card-face flashcard look. */
+/* Welcome card — sized to match .card-scene (the real flashcard) so the empty
+ * state feels continuous with study mode. The CTA button sits inside the card
+ * and opens the deck panel + focuses the search. */
 .welcome-card {
   width: 100%;
-  max-width: 340px;
-  aspect-ratio: 1;
+  max-width: 420px;
+  min-width: 220px;
+  aspect-ratio: 3 / 4;
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(13,13,26,0.92);
@@ -1600,6 +1603,7 @@ body.light .deck-item.active .deck-name {
   align-items: center;
   justify-content: center;
   gap: 18px;
+  padding: 30px;
   position: relative;
   overflow: hidden;
 }
@@ -1622,7 +1626,7 @@ body.light .welcome-card {
 body.light .welcome-card::before { background: none; }
 .welcome-card-greeting {
   font-family: 'Noto Sans SC', sans-serif;
-  font-size: 64px;
+  font-size: 72px;
   font-weight: 300;
   background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
   -webkit-background-clip: text;
@@ -1633,16 +1637,30 @@ body.light .welcome-card::before { background: none; }
 }
 body.ja-mode .welcome-card-greeting { font-family: 'Noto Sans JP', sans-serif; }
 .welcome-card-hello {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--text2);
   letter-spacing: 0.04em;
   font-weight: 400;
 }
-.empty-hint {
+.welcome-card-cta {
+  margin-top: 12px;
+  padding: 10px 22px;
+  font-family: inherit;
   font-size: 13px;
-  color: var(--text3);
-  text-align: center;
+  font-weight: 600;
+  letter-spacing: .02em;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px var(--accent-glow);
+  transition: filter .2s, transform .15s;
+  position: relative;
+  z-index: 1;
 }
+.welcome-card-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.welcome-card-cta:active { transform: translateY(0); }
 
 /* Study area */
 .study-area {

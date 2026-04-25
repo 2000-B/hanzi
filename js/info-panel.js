@@ -19,8 +19,13 @@ function toggleInfoPanel() {
     clearTimeout(panel._closeTimer);
     panel.classList.remove('open');
     panel.classList.add('closing');
+    // Defer the inline-width clear until AFTER the 200ms slideOut animation.
+    // Clearing immediately drops the panel to the CSS default width (340) for
+    // the duration of the animation, which reads as a brief widening.
     panel._closeTimer = setTimeout(() => {
       panel.classList.remove('closing');
+      panel.style.width = ''; panel.style.height = ''; panel.style.flex = '';
+      if (main) { main.style.width = ''; main.style.height = ''; main.style.flex = ''; }
     }, 200);
 
     // Clear fullscreen state if panel was fullscreened when closed
@@ -38,11 +43,6 @@ function toggleInfoPanel() {
       const workspace = document.getElementById('workspace');
       if (workspace) workspace.querySelectorAll('.ws-divider').forEach(d => d.style.display = '');
     }
-    // Clear inline geometry on BOTH panels so the flashcard recovers its
-    // default full-width flex behavior. Without clearing main-content, an
-    // earlier divider drag's explicit width would keep the flashcard pinned.
-    panel.style.width = ''; panel.style.height = ''; panel.style.flex = '';
-    if (main) { main.style.width = ''; main.style.height = ''; main.style.flex = ''; }
   }
 
   if (infoPanelOpen) {

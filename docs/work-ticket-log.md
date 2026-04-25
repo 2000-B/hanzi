@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-04-25 — Phase 3: post-implementation tweaks (round 2)
+
+**Status:** Follow-up polish on `claude/strange-poincare-ca9fde`. Cache bumped `hanzi-v6.66` → `hanzi-v6.67`.
+
+### Changes
+
+- **Info-panel close no longer briefly widens.** Previous version cleared `panel.style.width` synchronously, which dropped the panel to the CSS default `var(--info-panel-w)` (340px) for the duration of the slideOut animation — a visible widen-then-slide. Moved both the `width`/`height`/`flex` clear on the info panel AND on `main-content` into the post-animation `setTimeout(..., 200)` callback, so the panel slides out at its current width and the inline geometry only resets after the panel is gone.
+- **Welcome card sized like a real flashcard.** `.welcome-card` now uses `max-width: 420px` and `aspect-ratio: 3/4` (matching `.card-scene`) with `padding: 30px`, instead of the smaller square. Greeting font scaled up 64 → 72px and "Hello" 18 → 20px to fit the larger surface.
+- **"select a deck" CTA inside the welcome card.** The hint text `select a deck from the panel to begin` (which previously sat below the card) is replaced with a pill-shaped accent-colored button inside the card. Click opens the deck panel and focuses `#deck-search-input` after a 60ms beat. Selecting a deck still hides the empty-state via the existing `selectDeck` flow.
+
+### Files touched
+
+- `js/info-panel.js` — `toggleInfoPanel()` deferred width clear: both panels' inline geometry resets in the 200ms timer instead of synchronously
+- `index.html` — welcome-card markup gains `<button class="welcome-card-cta">`, removes external `.empty-hint`
+- `styles.css` — `.welcome-card` resized to flashcard dimensions; new `.welcome-card-cta` button styles
+- `sw.js` — cache bump
+
+### Verified
+
+- Welcome card aspect ratio = `3 / 4`, CTA text = "select a deck".
+- (Code-level) info-panel close path now does inline-style reset only inside `panel._closeTimer`'s 200ms callback.
+
+---
+
 ## 2026-04-25 — Phase 3: post-implementation tweaks
 
 **Status:** Follow-up polish on `claude/strange-poincare-ca9fde`. Cache bumped `hanzi-v6.65` → `hanzi-v6.66`.

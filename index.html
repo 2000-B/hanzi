@@ -271,13 +271,13 @@
     <!-- Main content area (flashcard panel) -->
     <div class="main-content ws-panel open" id="main-content" data-panel-id="flashcard">
 
-      <!-- Empty state — welcome card -->
+      <!-- Empty state — welcome card sized like a real flashcard -->
       <div class="empty-state" id="empty-view">
         <div class="welcome-card" aria-label="welcome">
           <div class="welcome-card-greeting" id="welcome-greeting">你好</div>
           <div class="welcome-card-hello">Hello</div>
+          <button class="welcome-card-cta" onclick="(function(){ if (!document.querySelector('.sidebar').classList.contains('open')) document.getElementById('btn-deck').click(); setTimeout(()=>document.getElementById('deck-search-input')?.focus(),60); })()">select a deck</button>
         </div>
-        <div class="empty-hint">select a deck from the panel to begin</div>
       </div>
 
       <!-- Study view -->
