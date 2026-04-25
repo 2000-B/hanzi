@@ -115,9 +115,9 @@ body.light::after { opacity: 0.45; }
   65%     { transform: translate(-3%, 3%) scale(0.96); opacity: 0.94; }
 }
 
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border3); }
 
 /* ══════════════════════════════════════════
@@ -175,29 +175,37 @@ body.light header {
   width: 100%;
   max-height: 360px;
 }
-/* Card-list: pinned bottom of overlay */
+/* Card-list: pinned bottom of overlay. Translucent + backdrop-blur so list rows
+ * scrolling behind the pill remain visible (blurred), and the bar itself reads
+ * as a frosted floating element. */
 .list-view .list-search {
   position: absolute;
   left: 12px;
   right: 12px;
   bottom: 12px;
-  background: var(--bg2);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 2;
 }
+body:not(.light) .list-view .list-search {
+  background: rgba(13,13,26,0.55);
+}
 /* Backdrop blur that fades upward, sitting just above the search pill — items
- * scrolling under this region get progressively blurred toward the bar. */
+ * scrolling between the rows and the pill get progressively blurred so the
+ * transition into the frosted bar is smooth instead of a hard cut. */
 .list-view .list-search-fade {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 48px; /* search-pill height ≈ 36px + 12px bottom */
-  height: 56px;
+  height: 48px;
   pointer-events: none;
   z-index: 1;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to top, black 30%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
+  mask-image: linear-gradient(to top, black 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
 }
 .list-view .list-search-results {
   position: absolute;
@@ -439,11 +447,11 @@ body.light .hsk-label-icon {
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
-.sidebar-scroll::-webkit-scrollbar { width: 6px; }
+.sidebar-scroll::-webkit-scrollbar { width: 4px; }
 .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.18);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
 body.light .sidebar-scroll {
@@ -681,11 +689,11 @@ body.light .info-panel {
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
-.info-panel-scroll::-webkit-scrollbar { width: 6px; }
+.info-panel-scroll::-webkit-scrollbar { width: 4px; }
 .info-panel-scroll::-webkit-scrollbar-track { background: transparent; }
 .info-panel-scroll::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.18);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 .info-panel-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
 body.light .info-panel-scroll {
@@ -1522,7 +1530,7 @@ body.light .deck-item.active .deck-name {
   width: 100%;
   max-width: 340px;
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(13,13,26,0.92);
   box-shadow: 0 4px 24px rgba(0,0,0,.35);
@@ -1538,7 +1546,7 @@ body.light .deck-item.active .deck-name {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: 22px;
   background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
   pointer-events: none;
 }
@@ -1645,7 +1653,7 @@ body.ja-mode .welcome-card-greeting { font-family: 'Noto Sans JP', sans-serif; }
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 16px;
+  border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(13,13,26,0.92);
   box-shadow: 0 4px 24px rgba(0,0,0,.35);
@@ -1662,7 +1670,7 @@ body.ja-mode .welcome-card-greeting { font-family: 'Noto Sans JP', sans-serif; }
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: 22px;
   background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
   pointer-events: none;
 }
@@ -2864,7 +2872,7 @@ body.light .welcome-modal {
 .mastered-list-unmaster:hover { border-color:var(--red); color:var(--red); }
 
 /* List view */
-.list-view { display:none; position:absolute; inset:0; border-radius:16px; overflow:hidden; clip-path: inset(0 round 16px); z-index:10; background:var(--bg2); }
+.list-view { display:none; position:absolute; inset:0; border-radius:22px; overflow:hidden; clip-path: inset(0 round 22px); z-index:10; background:var(--bg2); }
 .list-view.active { display:block; }
 .list-scroll { height:100%; overflow-y:auto; padding:8px 0; }
 .list-row { display:grid; grid-template-columns:44px 1fr 1.8fr 24px; align-items:center; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); cursor:pointer; }

@@ -140,12 +140,14 @@ init();
   const tip = document.createElement('div');
   tip.className = 'app-tooltip';
   document.body.appendChild(tip);
-  let hideTimer;
+  let showTimer;
+  // Most tooltips are hand-holding when instantaneous; delay them a bit so they
+  // only appear when the user actually hovers to ask "what's this". The context
+  // strip is exempt because its tiles are dense and the tooltip (pinyin / english
+  // for the character) is the primary affordance — instant feedback there is wanted.
+  const HOVER_DELAY_MS = 600;
 
-  document.addEventListener('mouseover', e => {
-    const el = e.target.closest('[data-tip]');
-    if (!el) return;
-    clearTimeout(hideTimer);
+  function showTip(el) {
     tip.textContent = el.dataset.tip;
     const rect = el.getBoundingClientRect();
     // Position vertically — header buttons always render tooltip below; otherwise flip below when near top
@@ -167,10 +169,23 @@ init();
     if (left - tipW / 2 < 8) left = 8 + tipW / 2;
     tip.style.left = left + 'px';
     tip.style.visibility = '';
+  }
+
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('[data-tip]');
+    if (!el) return;
+    clearTimeout(showTimer);
+    const instant = !!el.closest('.context-strip');
+    if (instant) {
+      showTip(el);
+    } else {
+      showTimer = setTimeout(() => showTip(el), HOVER_DELAY_MS);
+    }
   });
 
   document.addEventListener('mouseout', e => {
     if (e.relatedTarget?.closest('[data-tip]')) return;
+    clearTimeout(showTimer);
     tip.classList.remove('visible');
   });
 })();

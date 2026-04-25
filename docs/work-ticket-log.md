@@ -4,6 +4,33 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 2)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.56` → `hanzi-v6.57`.
+
+### Changes
+
+- **List-view search pill made translucent + backdrop-blurred.** The previous solid `var(--bg2)` background hid everything underneath — so blur effects elsewhere weren't doing visible work. The pill now uses `rgba(255,255,255,0.55)` (light) / `rgba(13,13,26,0.55)` (dark) plus `backdrop-filter: blur(14px)` so list rows behind it remain faintly visible (blurred) and the bar reads as a frosted floating element. The fade element above the bar was tuned (height 56→48px, mask 30→40% black) so the transition between blurred-by-fade and blurred-by-pill is smoother.
+- **Card-face / list-view / welcome-card border-radius bumped 16 → 22px.** The list-view's bottom-rounded corners and the search pill's pill-shaped corners no longer compete visually; the card itself still feels coherent. `.card-inner.flipped` border-radius was left at 16 (it's not visually exposed). Updated all three places that pair (face, sheen overlay, list-view clip-path).
+- **Scrollbars trimmed.** Global / sidebar / info-panel webkit scrollbars dropped from 6px width / 3px radius to 4px / 2px. They were dominating the panel edges; now they're a thin guide.
+- **Tooltip hover delay added.** `data-tip` tooltips now wait 600ms before showing (matches the tool-tray slide timing). Context-strip tiles are exempt — their pinyin/english tooltip is the primary affordance for that row of dense character tiles, so instant feedback is wanted there. Implementation: `setTimeout` keyed on the element, cleared on mouseout; an `el.closest('.context-strip')` check chooses instant vs delayed.
+
+### Files touched
+
+- `styles.css` — `.list-view .list-search` translucent + blur (with dark-mode variant); `.list-search-fade` height/mask tuned; `.card-face`, `.card-face::before`, `.list-view`, `.welcome-card`, `.welcome-card::before` border-radius 16 → 22; sidebar / info-panel / global scrollbars 6 → 4px, radius 3 → 2
+- `js/app.js` — tooltip mouseover handler split into `showTip()` helper; 600ms `setTimeout` with context-strip exception
+- `sw.js` — cache bump
+
+### Verified
+
+- List-view in light + dark: search pill shows rows behind it through a frosted blur; fade above the bar transitions smoothly into the pill region.
+- Tooltip on `#btn-info`: hidden at 50/200/500ms, visible at 700ms (matches the 600ms delay).
+- Tooltip on context-strip tile: visible at 50ms (instant).
+- Card / list-view / welcome card all share the new 22px radius — visually consistent across faces and overlay.
+- Scrollbar visibly thinner in sidebar; less prominent against the rounded panel edge.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 1)
 
 **Status:** Visual-verification follow-ups on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.55` → `hanzi-v6.56`.
