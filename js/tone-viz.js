@@ -12,7 +12,7 @@
 const TONE_PATHS = {
   1: 'M2 4 L14 4',                                    // high flat
   2: 'M2 9 Q5 4 14 3',                                // rising curve
-  3: 'M2 4 Q5 11 8 9 Q11 7 14 9',                     // dip then rise
+  3: 'M2 4 L7 12 L14 4',                              // dip then rise — sharp V
   4: 'M2 3 Q4 4 14 11',                               // sharp downward
   0: 'M5 7.5 L11 7.5',                                // short flat (neutral)
 };
