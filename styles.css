@@ -191,31 +191,32 @@ body.light header {
   left: 6px;
   right: 6px;
   bottom: 6px;
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.72);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   z-index: 2;
 }
 body:not(.light) .list-view .list-search {
-  background: rgba(13,13,26,0.55);
+  background: rgba(28,28,42,0.82);
+  border: 1px solid rgba(255,255,255,0.06);
 }
-/* Backdrop blur that fades upward, sitting just above the search pill — items
- * scrolling between the rows and the pill get progressively blurred so the
- * transition into the frosted bar is smooth instead of a hard cut.
- * `right: 6px` keeps the fade off the scroll-bar lane so the bar doesn't
- * become blurry as rows scroll under the fade. */
+/* Backdrop blur that fades upward, flush with the top of the search pill —
+ * items scrolling between the rows and the pill get progressively blurred so
+ * the transition into the frosted bar is smooth instead of a hard cut.
+ * Height matches the pill's height so the fade is visually proportionate.
+ * `right: 6px` keeps the fade off the scroll-bar lane so the bar stays sharp. */
 .list-view .list-search-fade {
   position: absolute;
   left: 0;
   right: 6px;
-  bottom: 42px; /* search-pill height ≈ 36px + 6px bottom */
-  height: 48px;
+  bottom: 36px; /* search-pill height ≈ 30px + 6px bottom — flush with pill top */
+  height: 36px;
   pointer-events: none;
   z-index: 1;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to top, black 40%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
+  mask-image: linear-gradient(to top, black 30%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
 }
 .list-view .list-search-results {
   position: absolute;

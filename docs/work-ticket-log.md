@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 5)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.59` → `hanzi-v6.60`.
+
+### Changes
+
+- **Card-list fade reproportioned to the slimmed pill.** Pill is now ~30px tall, but the fade element above it was still 48px and sat 6px above the pill — disproportionate, with a visible empty gap where the pill and fade should meet. Pulled fade `bottom: 42 → 36px` so it's flush with the pill's top edge, and `height: 48 → 36px` so the fade height roughly matches the pill height. Mask gradient eased from `40% black` to `30% black` so the upper two-thirds is the actual fade rather than a hard cap.
+- **Search pill more visible in dark mode.** The pill bg was `rgba(13,13,26,0.55)` — too close to the list-view's own dark bg, so the pill was barely distinguishable. Switched to `rgba(28,28,42,0.82)` (lighter dark + higher opacity) plus a `1px solid rgba(255,255,255,0.06)` border so the pill clearly reads as a floating element. Light mode bumped from `0.55 → 0.72` opacity for matching presence on a light list-view.
+
+### Files touched
+
+- `styles.css` — `.list-view .list-search` bg + border (light + dark variants); `.list-view .list-search-fade` bottom + height + mask
+- `sw.js` — cache bump
+
+### Verified
+
+- Pill height ≈ 32px, fade height = 36px — roughly matched and flush.
+- Dark-mode pill bg = `rgba(28,28,42,0.82)` confirmed via computed style; visibly distinct from the list-view's own dark bg.
+- Light mode: pill remains visible against the white list-view; bottom row blurs cleanly into it through the fade.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 4)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.58` → `hanzi-v6.59`.
