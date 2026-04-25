@@ -62,8 +62,8 @@ function toneGlyphSVG(tone, opts) {
 }
 
 /**
- * Render a pinyin string with each syllable followed by its tone glyph.
- * For Japanese, returns the input untouched (no Mandarin-style tones).
+ * Render a pinyin string with each syllable followed by its tone glyph (legacy
+ * inline format — kept for places that still want compact, per-syllable glyphs).
  */
 function pinyinWithToneGlyphs(pinyin, opts) {
   if (currentLang !== 'zh') return pinyin || '';
@@ -75,6 +75,32 @@ function pinyinWithToneGlyphs(pinyin, opts) {
   }).join(' ');
 }
 
+/**
+ * Render the full pitch contour for a pinyin string as a single SVG, drawn
+ * with one path per syllable inside one `<svg>`. The viewBox auto-sizes to
+ * the syllable count so multi-character words stretch horizontally and the
+ * pitch trajectory reads continuously across the word.
+ *
+ * Returns '' for non-Mandarin contexts or empty input.
+ */
+function tonePitchLineSVG(pinyin, opts) {
+  if (currentLang !== 'zh') return '';
+  const syllables = splitPinyinSyllables(pinyin);
+  if (!syllables.length) return '';
+  const SYL_W = 16; // each syllable's path uses x=0..16 in its own coordinate space
+  const GAP = 6;   // small visual breath between syllables
+  const HEIGHT = 14;
+  const total = syllables.length * SYL_W + Math.max(0, syllables.length - 1) * GAP;
+  const cls = (opts && opts.className) || 'tone-pitch-line';
+  const segs = syllables.map((s, i) => {
+    const tone = pinyinSyllableTone(s);
+    const path = TONE_PATHS[tone] != null ? TONE_PATHS[tone] : TONE_PATHS[0];
+    const tx = i * (SYL_W + GAP);
+    return `<g transform="translate(${tx},0)"><path d="${path}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  }).join('');
+  return `<svg class="${cls}" viewBox="0 0 ${total} ${HEIGHT}" fill="none" preserveAspectRatio="xMidYMid meet" aria-label="tone contour">${segs}</svg>`;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { TONE_PATHS, TONE_VIEWBOX, pinyinSyllableTone, splitPinyinSyllables, toneGlyphSVG, pinyinWithToneGlyphs };
+  module.exports = { TONE_PATHS, TONE_VIEWBOX, pinyinSyllableTone, splitPinyinSyllables, toneGlyphSVG, pinyinWithToneGlyphs, tonePitchLineSVG };
 }

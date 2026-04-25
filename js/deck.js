@@ -41,14 +41,21 @@ function renderCard() {
   document.getElementById('card-inner').classList.remove('flipped');
 
   document.getElementById('front-hanzi').textContent = card.hanzi;
-  // Phase 6: optional tone glyphs alongside pinyin on the card face.
+  // Pinyin (plain text — tone contour now lives in its own row above)
   const pinyinEl = document.getElementById('front-pinyin');
-  if (currentLang === 'zh' && toneGlyphsOnCard && typeof pinyinWithToneGlyphs === 'function') {
-    pinyinEl.innerHTML = pinyinWithToneGlyphs(card.pinyin);
-  } else {
-    pinyinEl.textContent = card.pinyin;
-  }
+  pinyinEl.textContent = card.pinyin;
   pinyinEl.classList.toggle('hidden', !showPinyin);
+  // Phase 6: tone pitch contour line between hanzi and pinyin (Mandarin only, gated by setting).
+  const toneEl = document.getElementById('front-tone-line');
+  if (toneEl) {
+    if (currentLang === 'zh' && toneGlyphsOnCard && typeof tonePitchLineSVG === 'function') {
+      toneEl.innerHTML = tonePitchLineSVG(card.pinyin);
+      toneEl.style.display = '';
+    } else {
+      toneEl.innerHTML = '';
+      toneEl.style.display = 'none';
+    }
+  }
   document.getElementById('back-english').textContent = card.english;
 
   // Note indicator

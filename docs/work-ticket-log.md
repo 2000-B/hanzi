@@ -4,6 +4,35 @@
 
 ---
 
+## 2026-04-25 — Phase 6: continuous pitch line above pinyin
+
+**Status:** Iteration on Phase 6. Cache bumped `hanzi-v6.72` → `hanzi-v6.73`.
+
+**Context:** First Phase 6 cut put a small per-syllable glyph immediately after each pinyin syllable (`nǐ↘ hǎo↘`). User wanted the pitches drawn as one continuous line, placed BETWEEN the hanzi and the pinyin row.
+
+### Changes
+
+- **New `tonePitchLineSVG(pinyin)`** in `js/tone-viz.js`. Generates one `<svg>` containing one `<g transform="translate(...)">` per syllable. Each `<g>` holds the syllable's tone path. The SVG's viewBox auto-sizes to `n*16 + (n-1)*6` units of width so multi-character words stretch horizontally and the contour reads continuously left-to-right.
+- **Info panel** (`js/info-panel.js`): the inline `pinyinWithToneGlyphs` call on `.ip-pinyin` is gone. A new `<div class="ip-tone-line-wrap">` containing the pitch SVG is inserted between the hanzi (or kana) row and the `.ip-pinyin` row.
+- **Card face** (`index.html`, `js/deck.js`): a new `<div class="card-tone-line" id="front-tone-line">` element sits between `#front-hanzi` and `#front-pinyin`. `renderCard()` populates it with `tonePitchLineSVG(card.pinyin)` when `currentLang === 'zh' && toneGlyphsOnCard`; clears it otherwise.
+- **CSS:** new `.tone-pitch-line` (block, `currentColor`, accent tint). `.ip-tone-line-wrap` and `.card-tone-line` are flex-centered containers. Old `.tone-glyph` rules retained — the legacy compact form is still useful as a building block.
+
+### Files touched
+
+- `js/tone-viz.js` (added `tonePitchLineSVG`, exported in module hatch)
+- `js/info-panel.js` (insert `.ip-tone-line-wrap` between hanzi and pinyin; revert `.ip-pinyin` to plain text)
+- `js/deck.js` (`renderCard()` populates `#front-tone-line`)
+- `index.html` (added `<div class="card-tone-line" id="front-tone-line">` between hanzi and pinyin on the card face)
+- `styles.css` (`.tone-pitch-line`, `.ip-tone-line-wrap`, `.card-tone-line`)
+- `sw.js` (cache bump)
+
+### Verified (preview)
+
+- Card `不客气` (`bù kè qi`): viewBox = `0 0 60 14`; pitch line renders three syllable segments (fall + fall + neutral-flat) between the hanzi and pinyin rows on both the card face and the info panel.
+- Single-syllable card (`爱` / `ài`): viewBox = `0 0 16 14`; one fall segment.
+
+---
+
 ## 2026-04-25 — Phase 6: tone visualization — COMPLETE
 
 **Status:** Done on branch `phase-6/tone-viz`. Cache bumped `hanzi-v6.71` → `hanzi-v6.72`. Mandarin-only feature; Japanese pitch-accent visualization remains deferred.

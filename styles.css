@@ -906,8 +906,11 @@ body.light .tutor-overlay {
   color: var(--text2);
   margin-top: 4px;
 }
-/* Phase 6: Mandarin tone glyphs — small contour shape next to each pinyin syllable.
- * Inherits color from currentColor so it adapts to dark/light without an override. */
+/* Phase 6: Mandarin tone glyphs.
+ * `.tone-glyph` is the legacy compact per-syllable mark (kept as a building
+ * block); `.tone-pitch-line` is the new continuous contour drawn above the
+ * pinyin row in info-panel + card-face. Both inherit color via currentColor
+ * so they tint via var(--accent) and adapt across themes. */
 .pinyin-syllable {
   display: inline-flex;
   align-items: center;
@@ -922,8 +925,27 @@ body.light .tutor-overlay {
   color: var(--accent);
   flex-shrink: 0;
 }
-.card-pinyin .tone-glyph { color: var(--accent); }
-.ip-pinyin .tone-glyph { color: var(--accent); }
+.tone-pitch-line {
+  height: 18px;
+  width: auto;
+  max-width: 80%;
+  color: var(--accent);
+  display: block;
+}
+.ip-tone-line-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+.ip-tone-line-wrap .tone-pitch-line { height: 16px; max-width: 70%; }
+.card-tone-line {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0 4px;
+  min-height: 18px;
+}
+.card-tone-line .tone-pitch-line { height: 18px; max-width: 60%; }
 .ip-english {
   font-size: 14px;
   color: var(--text);
