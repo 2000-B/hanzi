@@ -94,20 +94,20 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - feature-status.md rows updated where relevant
 
 **Tasks:**
-- [ ] Verify hide/show button current behavior; relabel as needed
-- [ ] Tray-undo centering: CSS-only fix or layout change (decide on inspection)
-- [ ] Move `#btn-test` and card counter outside `.card-face` flip container
-- [ ] Implement voice-availability check in `info-panel.js` audio button render path
-- [ ] Bump settings section header font size and spacing in `styles.css`
-- [ ] Add `clip-path: inset(0 round 16px)` to `.list-view`
-- [ ] Frosted-glass tooltip styling (`backdrop-filter: blur(12px)` + accent tint)
-- [ ] Reposition header-button tooltips below the buttons
-- [ ] Investigate info panel scrollbar — find non-clipping, non-cluttered implementation
-- [ ] If above succeeds, restore deck-panel scrollbar with same approach
-- [ ] Add opacity fade transition to info panel open/close
-- [ ] Test in dark and light modes
-- [ ] Bump `CACHE_NAME` in `sw.js`
-- [ ] Add work ticket entry
+- [x] Verify hide/show button current behavior; relabel as needed (tooltip simplified to "hide"/"show")
+- [x] Tray-undo centering (undo absolutely positioned; main buttons stay centered)
+- [x] Move `#btn-test` and card counter outside `.card-face` flip container
+- [x] Implement voice-availability check in `info-panel.js` audio button render path
+- [x] Bump settings section header font size and spacing in `styles.css`
+- [x] Add `clip-path: inset(0 round 16px)` to `.list-view`
+- [x] Frosted-glass tooltip styling (`backdrop-filter: blur(12px)` + accent tint)
+- [x] Reposition header-button tooltips below the buttons
+- [x] Investigate info panel scrollbar — `overflow: hidden` on `.info-panel` + thin custom scrollbar on `.info-panel-scroll`
+- [x] Restore deck-panel scrollbar with same approach
+- [x] Add opacity fade transition to info panel open/close (slideOutRight + `closing` class)
+- [ ] Visual verification in dark and light modes (user-side)
+- [x] Bump `CACHE_NAME` in `sw.js` (v6.52 → v6.53)
+- [x] Add work ticket entry
 
 ---
 

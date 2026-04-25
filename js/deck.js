@@ -59,7 +59,7 @@ function renderCard() {
   const btnMastered = document.getElementById('btn-mastered');
   if (btnMastered) {
     const isMastered = cd && cd.mastered;
-    btnMastered.setAttribute('data-tip', isMastered ? 'show mastered' : 'hide mastered');
+    btnMastered.setAttribute('data-tip', isMastered ? 'show' : 'hide');
     // Eye icon (open) vs eye-slash (hidden)
     btnMastered.innerHTML = isMastered
       ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 13.5l11-11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>'

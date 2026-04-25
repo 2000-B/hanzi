@@ -4,6 +4,57 @@
 
 ---
 
+## 2026-04-24 — Phase 1: quick wins — COMPLETE
+
+**Status:** Done on branch `phase-1/quick-wins`. Cache bumped `hanzi-v6.52` → `hanzi-v6.53`. Awaiting user visual verification in dark/light modes before merge.
+
+**Context:** First feature-work branch off Phase 0. Bundles bug fixes, polish items, and five fold-ins absorbed from the bad-merge triage. All small/medium scope changes; no new specs. See `docs/roadmap.md` Phase 1.
+
+### Changes
+
+**Original Phase 1 scope:**
+- Hide/show mastered button: tooltip simplified from "hide mastered"/"show mastered" to "hide"/"show" (reflects the eye/eye-slash icon directly). `js/deck.js:62`, `index.html:304`.
+- Tool tray centering: `.btn-undo` now `position: absolute` with right-aligned placement and a fade-in transform animation. The three main buttons stay centered when undo appears. `.controls-tray` gains `position: relative` as the anchor. `styles.css`.
+- Backward card text orientation: `#card-counter` and `#card-mode-btn` moved out of `.card-face` (which flips with `rotateY(180deg)`) and into `.card-scene` as siblings of `.card-inner`. They retain absolute positioning at the same visual location and stay readable on the back face. Hover rules updated from `.card-face:hover` to `.card-scene:hover`. `index.html`, `styles.css`.
+- Voice-availability detection: new `_hasTtsVoice()` helper in `js/info-panel.js`. Audio button is conditionally rendered based on whether `speechSynthesis.getVoices()` includes a voice matching the current language's `ttsVoicePrefix`. Voices may load asynchronously, so `_hasTtsVoice()` returns true optimistically when the list is empty; the `voiceschanged` handler now re-renders the info panel when voices update so the button can be added or removed in place.
+- Settings section header sizing: `.settings-section-title` bumped from 10px uppercase to 14px regular case, with proper top margin; visual hierarchy now puts headers above body text. `styles.css:2158`.
+
+**Bad-merge triage fold-ins:**
+- `.list-view` gets `clip-path: inset(0 round 16px)` alongside existing `overflow: hidden` for reliable rounded-corner clipping of the backdrop blur.
+- Tooltip frosted-glass with accent tint: `.app-tooltip` now uses `color-mix(in srgb, var(--accent) 78%, transparent)` with `backdrop-filter: blur(12px)`. Both dark and light modes share the accent-tinted frosted look. Solid-accent fallback retained for browsers without `color-mix` support.
+- Tooltip positioning: header buttons (any button inside `<header>`) now always render their tooltip below the button. Other buttons keep the existing rect.top-threshold behavior. `js/app.js:147-156`.
+- Info panel scrollbar (expanded scope from triage): `.info-panel` gains `overflow: hidden` so its scrollbar is clipped to the rounded corners. `.info-panel-scroll` gets a thin custom scrollbar (6px, accent-tinted thumb on a transparent track) styled for both Firefox (`scrollbar-width`/`scrollbar-color`) and WebKit (`::-webkit-scrollbar*`). Light-mode variants included.
+- Deck panel scrollbar restored with the same approach: `.sidebar-scroll` previously had `scrollbar-width: none`; now gets the thin styled scrollbar. `.sidebar` already had `overflow: hidden` + `border-radius`, so the rounded clipping comes for free.
+- Info panel opacity fade: new `slideOutRight` keyframe mirrors `slideInRight`. `.info-panel.closing` class plays the fade-out while keeping `display: flex` for the duration. `toggleInfoPanel()` adds `.closing` and removes `.open` on close, with a 200ms timer to remove `.closing`. Re-toggling mid-animation cancels cleanly via the timer.
+
+### Files touched
+
+- `index.html` — tray button tooltip relabel; counter and test button relocated out of `.card-front`
+- `js/app.js` — tooltip positioning gains header-detection branch
+- `js/deck.js` — mastered-button tooltip uses simplified labels
+- `js/info-panel.js` — `_hasTtsVoice()` helper, conditional audio button render, voiceschanged re-render hook, `toggleInfoPanel()` rewrite for fade-out coordination
+- `styles.css` — eight distinct edits: list-view clip-path, settings section title, tooltip styling, card counter/mode-btn hover selectors and comments, btn-undo absolute positioning, controls-tray relative anchor, info-panel overflow + slideOutRight + closing class, info-panel-scroll thin scrollbar, sidebar-scroll thin scrollbar
+- `sw.js` — cache version bump
+- `docs/roadmap.md` — Phase 1 task list marked done
+
+### Verified
+- All modified JS files pass `node --check` syntax validation
+- `npm test` continues to pass (placeholder test reachable)
+
+### Pending verification (user-side)
+- Visual smoke test in dark and light modes
+- Confirm card counter and test button render correctly on both card faces
+- Confirm tooltip appears below header buttons and matches frosted-glass aesthetic
+- Confirm info panel scrollbar is visible, thin, and clipped to rounded corners
+- Confirm deck panel scrollbar restored without clipping
+- Confirm info panel fades out when closed (rather than snapping)
+- Confirm undo button does not shift the three main tray buttons when it appears
+
+### Next
+- User visual verification, then merge `phase-1/quick-wins` to main and start Phase 2 (`phase-2/tray-search-welcome`)
+
+---
+
 ## 2026-04-24 — Roadmap, doc structure, Phase 0 — COMPLETE
 
 **Status:** Done. No cache bump (no shipped-asset changes).

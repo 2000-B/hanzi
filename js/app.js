@@ -145,8 +145,9 @@ init();
     clearTimeout(hideTimer);
     tip.textContent = el.dataset.tip;
     const rect = el.getBoundingClientRect();
-    // Position vertically — flip below when near top
-    if (rect.top < 80) {
+    // Position vertically — header buttons always render tooltip below; otherwise flip below when near top
+    const isHeaderBtn = !!el.closest('header');
+    if (isHeaderBtn || rect.top < 80) {
       tip.style.top = (rect.bottom + 8) + 'px';
       tip.style.transform = 'translateX(-50%)';
     } else {

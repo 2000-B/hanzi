@@ -3,10 +3,18 @@
 function toggleInfoPanel() {
   infoPanelOpen = !infoPanelOpen;
   const panel = document.getElementById('info-panel');
-  panel.classList.toggle('open', infoPanelOpen);
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
 
   if (!infoPanelOpen) {
+    // Closing — play fade-out animation, then drop display:flex by removing both classes.
+    // Cancel any in-flight closing animation first so re-toggling is responsive.
+    clearTimeout(panel._closeTimer);
+    panel.classList.remove('open');
+    panel.classList.add('closing');
+    panel._closeTimer = setTimeout(() => {
+      panel.classList.remove('closing');
+    }, 200);
+
     // Clear fullscreen state if panel was fullscreened when closed
     if (panel.classList.contains('ws-fullscreen')) {
       panel.classList.remove('ws-fullscreen');
@@ -38,6 +46,11 @@ function toggleInfoPanel() {
   }
 
   if (infoPanelOpen) {
+    // Opening — clear any in-flight close animation and apply the open class.
+    clearTimeout(panel._closeTimer);
+    panel.classList.remove('closing');
+    panel.classList.add('open');
+
     // Restore saved panel width
     const savedW = getProfileData('hanzi-info-width');
     if (savedW) {
@@ -113,10 +126,10 @@ function renderInfoPanel(card) {
   html += `<div class="ip-header">
     <div class="ip-hanzi">${card.hanzi}</div>
     ${isJapanese && card.kana && card.kana !== card.hanzi ? `<div class="ip-kana">${card.kana}</div>` : ''}
-    <div class="ip-pinyin">${card.pinyin}
+    <div class="ip-pinyin">${card.pinyin}${_hasTtsVoice() ? `
       <button class="ip-audio-btn" onclick="speakHanzi('${card.hanzi}')" data-tip="listen">
         <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 5.5h2l3-3v11l-3-3H3a1 1 0 01-1-1v-3a1 1 0 011-1z" fill="currentColor"/><path d="M11 4.5a5 5 0 010 7M9 6.5a2.5 2.5 0 010 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      </button>
+      </button>` : ''}
     </div>
     <div class="ip-english">${card.english}</div>
     <div class="ip-badges">
@@ -347,10 +360,25 @@ function speakHanzi(text) {
   if (zhVoice) utt.voice = zhVoice;
   speechSynthesis.speak(utt);
 }
-// Preload voices
+// Voice availability check — used to decide whether to render the audio button.
+// Returns true when a voice for the current language is available, OR when voices haven't loaded yet
+// (assume yes until proven otherwise; voiceschanged will re-render).
+function _hasTtsVoice() {
+  if (!('speechSynthesis' in window)) return false;
+  const voices = speechSynthesis.getVoices();
+  if (!voices.length) return true; // not loaded yet — optimistic
+  return !!voices.find(v => v.lang.startsWith(lang().ttsVoicePrefix));
+}
+// Preload voices and re-render info panel when the list updates so the audio button
+// can be shown/hidden once the browser knows what voices are available.
 if ('speechSynthesis' in window) {
   speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+    if (typeof infoPanelOpen !== 'undefined' && infoPanelOpen && infoPanelCurrentCard) {
+      renderInfoPanel(infoPanelCurrentCard);
+    }
+  };
 }
 
 // ── Tutor overlay ──
