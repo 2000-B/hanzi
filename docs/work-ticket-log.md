@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 9)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.63` → `hanzi-v6.64`.
+
+### Changes
+
+- **List-view scrollbar replaced with a custom one in the open space.** Native webkit scrollbars render above `backdrop-filter` so they couldn't share the frosted blur, and they were inside the card overlay. Added a JS-driven `#card-side-scrollbar` element as a sibling of `#list-view` inside `.card-scene`, positioned `right: -10px` (6px buffer + 4px width) so it sits in the open space just outside the card's right edge — matching the buffer between the search pill and the card edge. The thumb's height and position track `list-scroll`'s scroll progress; it shows only while the card list is active and content overflows. Native scrollbar stays hidden.
+- **Deck-panel search pill whitened (matches the list-view pill).** Added the same hover/focus/dark-mode treatment used for the list-view pill: dark-mode border `rgba(255,255,255,0.32)`, hover lift to `0.55`, accent on `:focus-within`, white input text, brighter placeholder + icon. Light mode gets `var(--text2)` hover and `var(--accent)` focus.
+
+### Files touched
+
+- `index.html` — `#card-side-scrollbar` markup added inside `.card-scene`
+- `styles.css` — `.card-side-scrollbar`/`.card-side-scrollbar-thumb` rules; `.sidebar > .deck-search` hover/focus/dark-mode rules
+- `js/events.js` — `setListView` toggles scrollbar visibility; `updateCardSideScrollbar` syncs thumb size + position; `renderListView` wires a `scroll` listener
+- `sw.js` — cache bump
+
+### Verified
+
+- `#card-side-scrollbar` rendered at x≈496 (just outside card-scene's right edge), height matching the card. Thumb height set to `155px` for the visible/scrollable ratio of a 20-row deck. Thumb transform updates on scroll.
+- Deck-search border in dark mode = `rgba(255,255,255,0.32)`; placeholder + icon visibly whiter against the panel's dark bg.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 8)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.62` → `hanzi-v6.63`.

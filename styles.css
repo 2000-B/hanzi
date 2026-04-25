@@ -175,6 +175,14 @@ body.light header {
   flex-shrink: 0;
   margin: 6px 6px 4px;
 }
+.sidebar > .deck-search:hover .search-bar { border-color: var(--text2); }
+.sidebar > .deck-search .search-bar:focus-within { border-color: var(--accent); }
+body:not(.light) .sidebar > .deck-search .search-bar { border-color: rgba(255,255,255,0.32); }
+body:not(.light) .sidebar > .deck-search:hover .search-bar { border-color: rgba(255,255,255,0.55); }
+body:not(.light) .sidebar > .deck-search .search-bar:focus-within { border-color: var(--accent); }
+body:not(.light) .sidebar > .deck-search .search-input { color: #fff; }
+body:not(.light) .sidebar > .deck-search .search-input::placeholder { color: rgba(255,255,255,0.65); }
+body:not(.light) .sidebar > .deck-search .search-icon { color: rgba(255,255,255,0.7); }
 .sidebar > .deck-search .search-results {
   position: relative;
   top: 6px;
@@ -262,11 +270,30 @@ body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,
  * which is the "reduce visual clutter" effect. Last-row visibility comes
  * from scrolling up — typical scroll-with-floating-bar behavior. */
 .list-view .list-scroll { padding-bottom: 8px; }
-/* Hide the native scrollbar — webkit scrollbars render above the
- * backdrop-filter and can't be blurred by it. The fade-blur above the
- * pill is now the only "more rows up there" indicator. */
+/* Hide the native scrollbar — replaced by a custom scrollbar that sits
+ * outside the card in the open space (see #card-side-scrollbar). */
 .list-view .list-scroll { scrollbar-width: none; -ms-overflow-style: none; }
 .list-view .list-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
+/* Custom scrollbar — sits 6px to the right of the card, matching the
+ * pill-to-card buffer. JS drives thumb size/position from list-scroll. */
+.card-side-scrollbar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -10px; /* 6px buffer + 4px width — places thumb in open space outside the card */
+  width: 4px;
+  z-index: 11;
+  pointer-events: none;
+}
+.card-side-scrollbar[hidden] { display: none; }
+.card-side-scrollbar-thumb {
+  position: absolute;
+  width: 100%;
+  background: rgba(255,255,255,0.42);
+  border-radius: 2px;
+  transition: opacity .2s ease;
+}
+body.light .card-side-scrollbar-thumb { background: rgba(0,0,0,0.42); }
 .search-result-group {
   padding: 6px 12px 4px;
   font-size: 10px;

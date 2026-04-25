@@ -50,6 +50,31 @@ function setListView(active) {
   btn.classList.toggle('active', active);
   btn.blur();
   if (active) renderListView();
+  // Side scrollbar — show only when list view is active
+  const sb = document.getElementById('card-side-scrollbar');
+  if (sb) sb.hidden = !active;
+  if (active) requestAnimationFrame(updateCardSideScrollbar);
+}
+
+/** Sync the custom side scrollbar's thumb size + position to the list-scroll. */
+function updateCardSideScrollbar() {
+  const ls = document.querySelector('#list-view .list-scroll');
+  const sb = document.getElementById('card-side-scrollbar');
+  const thumb = document.getElementById('card-side-scrollbar-thumb');
+  if (!ls || !sb || !thumb) return;
+  const ratio = ls.clientHeight / ls.scrollHeight;
+  if (ratio >= 1 || !listViewActive) {
+    sb.hidden = true;
+    return;
+  }
+  sb.hidden = false;
+  const trackH = sb.clientHeight;
+  const thumbH = Math.max(24, trackH * ratio);
+  const maxScroll = ls.scrollHeight - ls.clientHeight;
+  const scrollProgress = maxScroll > 0 ? ls.scrollTop / maxScroll : 0;
+  const thumbTop = (trackH - thumbH) * scrollProgress;
+  thumb.style.height = thumbH + 'px';
+  thumb.style.transform = `translateY(${thumbTop}px)`;
 }
 
 function renderListView() {
@@ -58,6 +83,7 @@ function renderListView() {
   el.innerHTML = '';
   const scroll = document.createElement('div');
   scroll.className = 'list-scroll';
+  scroll.addEventListener('scroll', updateCardSideScrollbar, { passive: true });
   el.appendChild(scroll);
   let activeRow = null;
   activeDeck.forEach((card, i) => {
