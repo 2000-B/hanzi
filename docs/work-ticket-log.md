@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 3)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.57` → `hanzi-v6.58`.
+
+### Changes
+
+- **List-view scrollbar excluded from the blur fade.** The fade element previously stretched to the right edge of the list-view, causing the inner scrollbar to render under the backdrop-filter and appear blurred along with the rows. Pulled the fade's `right` from 0 → 6px so the scrollbar lane sits outside the fade and renders at full sharpness while rows still blur as they approach the search bar.
+- **Search-pill buffer tightened 12 → 6px.** Pill now sits 6px from the list-view edges (left/right/bottom) so the gap visually matches the pill's own internal padding instead of leaving a visible whitespace ring. Adjusted `.list-search-fade` bottom (48 → 42), `.list-search-results` bottom (60 → 48) and edges (12 → 6), and `.list-scroll` padding-bottom (64 → 56) to keep the spacing consistent with the new pill position.
+- **Context strip default flipped to off.** New users now start with `showContextStrip = false`. Existing profiles' persisted setting still wins (per-profile via `hanzi-context-strip`), so this is only a fresh-install default change.
+
+### Files touched
+
+- `styles.css` — `.list-search` left/right/bottom 12 → 6; `.list-search-fade` right 0 → 6 and bottom 48 → 42; `.list-search-results` bottom 60 → 48 and edges 12 → 6; `.list-scroll` padding-bottom 64 → 56
+- `js/state.js` — `showContextStrip` default `true` → `false`
+- `sw.js` — cache bump
+
+### Verified
+
+- Light + dark: search pill sits closer to the list-view edges; visible buffer matches the pill's internal padding.
+- Scrollbar at the right edge of the list-view renders clearly through the fade region (no blur applied to it).
+- New profile with no persisted setting starts with context strip hidden.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 2)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.56` → `hanzi-v6.57`.

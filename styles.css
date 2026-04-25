@@ -177,12 +177,13 @@ body.light header {
 }
 /* Card-list: pinned bottom of overlay. Translucent + backdrop-blur so list rows
  * scrolling behind the pill remain visible (blurred), and the bar itself reads
- * as a frosted floating element. */
+ * as a frosted floating element. The pill sits closer to the list-view edges
+ * (6px) so the visible buffer matches the pill's own internal padding. */
 .list-view .list-search {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
   background: rgba(255,255,255,0.55);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -193,12 +194,14 @@ body:not(.light) .list-view .list-search {
 }
 /* Backdrop blur that fades upward, sitting just above the search pill — items
  * scrolling between the rows and the pill get progressively blurred so the
- * transition into the frosted bar is smooth instead of a hard cut. */
+ * transition into the frosted bar is smooth instead of a hard cut.
+ * `right: 6px` keeps the fade off the scroll-bar lane so the bar doesn't
+ * become blurry as rows scroll under the fade. */
 .list-view .list-search-fade {
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: 48px; /* search-pill height ≈ 36px + 12px bottom */
+  right: 6px;
+  bottom: 42px; /* search-pill height ≈ 36px + 6px bottom */
   height: 48px;
   pointer-events: none;
   z-index: 1;
@@ -210,13 +213,13 @@ body:not(.light) .list-view .list-search {
 .list-view .list-search-results {
   position: absolute;
   top: auto;
-  left: 12px;
-  right: 12px;
-  bottom: 60px;
+  left: 6px;
+  right: 6px;
+  bottom: 48px;
   width: auto;
   max-height: 60%;
 }
-.list-view .list-scroll { padding-bottom: 64px; }
+.list-view .list-scroll { padding-bottom: 56px; }
 .search-result-group {
   padding: 6px 12px 4px;
   font-size: 10px;
