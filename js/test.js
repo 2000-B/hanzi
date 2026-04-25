@@ -116,13 +116,10 @@ function handleAnswer(correct, btn, card) {
   saveProgress();
   updateStats();
 
-  if (activeDeckName === '⟳ review' || showDifficultyRatings) {
-    document.getElementById('next-test-btn').style.display = 'none';
-    document.getElementById('rating-btns').style.display = '';
-  } else {
-    document.getElementById('next-test-btn').style.display = '';
-    document.getElementById('rating-btns').style.display = 'none';
-  }
+  // FSRS needs every review to produce a rating, so always show the rating UI.
+  // The "Next" button is hidden until rating is given (rateCard reveals it).
+  document.getElementById('next-test-btn').style.display = 'none';
+  document.getElementById('rating-btns').style.display = '';
 }
 
 function submitTyping() {
@@ -174,13 +171,10 @@ function submitTyping() {
   saveProgress();
   updateStats();
   input.disabled = true;
-  if (activeDeckName === '⟳ review' || showDifficultyRatings) {
-    document.getElementById('next-test-btn').style.display = 'none';
-    document.getElementById('rating-btns').style.display = '';
-  } else {
-    document.getElementById('next-test-btn').style.display = '';
-    document.getElementById('rating-btns').style.display = 'none';
-  }
+  // FSRS needs every review to produce a rating, so always show the rating UI.
+  // The "Next" button is hidden until rating is given (rateCard reveals it).
+  document.getElementById('next-test-btn').style.display = 'none';
+  document.getElementById('rating-btns').style.display = '';
 }
 
 function fuzzyMatch(answer, target) {
@@ -240,13 +234,10 @@ function handleTimeout(card) {
   sessionLog.push({ hanzi: card.hanzi, correct: false, time: currentFormat === 'type' ? 15000 : 10000 });
   saveProgress();
   updateStats();
-  if (activeDeckName === '⟳ review' || showDifficultyRatings) {
-    document.getElementById('next-test-btn').style.display = 'none';
-    document.getElementById('rating-btns').style.display = '';
-  } else {
-    document.getElementById('next-test-btn').style.display = '';
-    document.getElementById('rating-btns').style.display = 'none';
-  }
+  // FSRS needs every review to produce a rating, so always show the rating UI.
+  // The "Next" button is hidden until rating is given (rateCard reveals it).
+  document.getElementById('next-test-btn').style.display = 'none';
+  document.getElementById('rating-btns').style.display = '';
 }
 
 function updateStats() {

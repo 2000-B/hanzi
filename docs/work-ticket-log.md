@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-04-25 — Phase 4: rating-buttons always visible
+
+**Status:** Follow-up to the FSRS migration. Cache bumped `hanzi-v6.68` → `hanzi-v6.69`.
+
+**Context:** `js/test.js` gated the four-button rating UI behind `(activeDeckName === '⟳ review' || showDifficultyRatings)`. That was an SM-2-era toggle: SM-2 only used quality scores when reviewing the review deck. FSRS, however, needs a rating on every review to update card stability + difficulty — without ratings, no FSRS scheduling happens at all.
+
+### Change
+
+Removed the conditional in all three answer-paths (multiple-choice, typing, fallback). Rating UI now always shows after an answer; the "Next" button is hidden until a rating is given (`rateCard()` reveals it via `nextTestCard()`). The `showDifficultyRatings` state variable and its toggle are vestigial for now and can be removed in a later cleanup.
+
+### Files touched
+
+- `js/test.js` — three identical conditionals replaced with unconditional show/hide
+- `sw.js` — cache bump
+
+### Verified
+
+- Test mode in preview: after answering an MC question, rating-btns.display = "flex" (was "none"), next-test-btn = "none" (hidden). All four rating buttons render: Again, Hard, Good, Easy.
+
+---
+
 ## 2026-04-25 — Phase 4: FSRS migration — COMPLETE
 
 **Status:** Done on branch `phase-4/fsrs`. Cache bumped `hanzi-v6.67` → `hanzi-v6.68`.
