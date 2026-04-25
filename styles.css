@@ -2825,11 +2825,13 @@ body.light .welcome-modal {
   padding: 0;
   border-radius: var(--radius);
   height: auto;
-  /* Inline flex sibling — sits adjacent to the rightmost button. Animates width 0 → auto so it
-   * doesn't reserve space until shown; the centered group recenters when it appears.
-   * margin-left: -8px while hidden cancels the flex `gap: 8px` so the visible buttons
-   * stay perfectly centered (without it, the trailing gap shifts them 4px left). */
-  width: 0;
+  /* Inline flex sibling — sits adjacent to the rightmost button. Uses max-width
+   * (animatable) instead of width: auto (not animatable) so the show/hide is a
+   * smooth slide rather than a snap, matching the tool tray and context strip
+   * timing. margin-left: -8px while hidden cancels the flex `gap: 8px` so the
+   * visible buttons stay centered. */
+  width: auto;
+  max-width: 0;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -2838,12 +2840,11 @@ body.light .welcome-modal {
   pointer-events: none;
   transform: translateX(8px);
   margin-left: -8px;
-  transition: width .25s cubic-bezier(.4,0,.2,1), padding .25s cubic-bezier(.4,0,.2,1), margin-left .25s cubic-bezier(.4,0,.2,1), opacity .2s ease, transform .25s cubic-bezier(.4,0,.2,1), border-width .2s;
-  transition: opacity .2s ease, transform .2s ease;
+  transition: max-width .28s cubic-bezier(.4,0,.2,1), padding .28s cubic-bezier(.4,0,.2,1), margin-left .28s cubic-bezier(.4,0,.2,1), opacity .2s ease, transform .28s cubic-bezier(.4,0,.2,1), border-width .2s ease;
 }
 .controls-tray .btn-undo.visible {
   opacity: 1;
-  width: auto;
+  max-width: 80px; /* "undo" text is ~40px wide; 80px gives a safe upper bound for animation */
   padding: 4px 12px;
   border-width: 1px;
   margin-left: 0;

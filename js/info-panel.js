@@ -74,21 +74,27 @@ function _syncTutorBarVisibility() {
 
 /**
  * Tray pencil button action.
- * If the info panel is closed → open it; once rendered, scroll to and focus the note field.
- * If the panel is open and the note field is in view → flash the note border briefly.
- * If the panel is open but the note is out of view → scroll to it.
+ * - If the info panel is closed → open it, then focus the note field and flash it.
+ * - If the panel is open and the note is in view → focus + flash.
+ * - If the panel is open but the note is out of view → scroll to it, then focus + flash.
  */
 function openNoteFromTray() {
-  const panelOpen = !!infoPanelOpen;
-  if (!panelOpen) {
+  const focusAndFlash = () => {
+    const ta = document.getElementById('user-note');
+    if (!ta) return;
+    ta.focus();
+    ta.classList.add('flash');
+    clearTimeout(ta._flashT);
+    ta._flashT = setTimeout(() => ta.classList.remove('flash'), 600);
+  };
+  if (!infoPanelOpen) {
     toggleInfoPanel();
-    // renderInfoPanel runs synchronously inside toggleInfoPanel → user-note exists by next tick.
-    requestAnimationFrame(() => {
+    // Wait one paint frame so the slide-in animation has started before stealing focus.
+    setTimeout(() => {
       const ta = document.getElementById('user-note');
-      if (!ta) return;
-      ta.scrollIntoView({ block: 'center', behavior: 'instant' });
-      ta.focus();
-    });
+      if (ta) ta.scrollIntoView({ block: 'center', behavior: 'instant' });
+      focusAndFlash();
+    }, 60);
     return;
   }
   const ta = document.getElementById('user-note');
@@ -101,12 +107,10 @@ function openNoteFromTray() {
     inView = tr.top >= sr.top && tr.bottom <= sr.bottom;
   }
   if (inView) {
-    ta.classList.add('flash');
-    setTimeout(() => ta.classList.remove('flash'), 600);
-    ta.focus();
+    focusAndFlash();
   } else {
     ta.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    setTimeout(() => ta.focus(), 250);
+    setTimeout(focusAndFlash, 250);
   }
 }
 
@@ -492,12 +496,14 @@ function saveNote() {
   const card = activeDeck[currentIndex];
   const note = document.getElementById('user-note')?.value || '';
   const cd = getCardData(card.hanzi);
+  const prev = cd.note || '';
+  if (note === prev) return; // unchanged — don't save, don't show "saved"
   cd.note = note;
   saveProgress();
   // Update note indicator on card without resetting infoPanelHistory
   const noteIcon = document.querySelector('.ip-note-icon');
   if (noteIcon) noteIcon.style.opacity = note.trim() ? '1' : '0.4';
-  // Brief save confirmation
+  // Brief save confirmation (only when something actually changed)
   const indicator = document.getElementById('ip-note-saved');
   if (indicator) {
     indicator.classList.add('show');

@@ -4,6 +4,36 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 1)
+
+**Status:** Visual-verification follow-ups on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.55` → `hanzi-v6.56`.
+
+### Changes
+
+- **Card-list backdrop-blur fade.** New `.list-search-fade` element above the card-list overlay's search input. 56px tall, `backdrop-filter: blur(8px)` with a top-fading mask so list rows scrolling toward the input get progressively blurred — an inline focus cue that the input is the active interaction point. Verified in dark + light modes.
+- **Tool-tray centering with hidden buttons.** Two bugs surfaced when toggling tray buttons in settings: `.controls-tray .btn { width: 32px }` was overriding `.btn-undo { width: 0 }` (so undo silently held a 32px slot when hidden), and the flex `gap: 8px` added a trailing gap before the (now zero-width) undo, shifting the visible buttons 4px left of center per hidden item. Fix: tightened the undo selector to `.controls-tray .btn-undo`, and added `margin-left: -8px` while undo is hidden (animates back to 0 alongside the show animation).
+- **Undo show/hide smooth animation.** Two issues: (a) the rule had a duplicate `transition:` declaration where the second overrode the first, leaving only `opacity, transform` actually transitioning; (b) `width: auto → auto` doesn't animate. Fix: removed the duplicate `transition` line, switched from `width: 0 → auto` to `max-width: 0 → 80px` (animatable), and unified durations at `.28s` for geometry + `.2s` for opacity/border to match the tool-tray slide-out timing. Width animates smoothly from 0 to natural ~50px over the .28s window.
+- **Pencil tray button — focus + flash on open.** `openNoteFromTray()` reworked to share a single `focusAndFlash()` helper across all three paths (panel-closed, panel-open-and-in-view, panel-open-out-of-view). When the panel was just opened, focus is delayed 60ms so the slide-in animation starts before focus steals attention. Flash now fires in all three cases.
+- **"saved" indicator gated on actual change.** Previously `saveNote()` ran on every blur and unconditionally flashed `saved ✓` — even when the user clicked into the textarea and out without typing. Added an early-return when `note === prev`; the indicator only appears when the saved value actually changed.
+
+### Files touched
+
+- `styles.css` — `.list-search-fade`; `.controls-tray .btn-undo` selector tightened, max-width animation, removed duplicate transition, margin-left -8px when hidden
+- `js/events.js` — `renderListView()` appends `.list-search-fade`
+- `js/info-panel.js` — `openNoteFromTray()` rewrite with shared `focusAndFlash`; `saveNote()` early-returns on no change
+- `sw.js` — cache bump
+
+### Verified
+
+- Card list overlay: bottom row visibly blurred while rows higher up are clear; effect works in both dark and light modes.
+- Tray with 4 visible buttons (default, infoPanel hidden): group center 330 = tray center 330, offset 0px.
+- Tray with all 5 visible: undo sits 8px to the right of the rightmost button, group of 5 centered.
+- Undo show animation: width grows 2→16→45→49→50px across the 280ms window with opacity easing 0.07→1.00.
+- Pencil tray click on closed panel: panel opens, `#user-note` is focused (`document.activeElement === ta`), flash class applied for 600ms.
+- saveNote on unchanged blur: no `.show` class added; on text change: `.show` class added; on revert to empty: `.show` added (it changed). All four states correct.
+
+---
+
 ## 2026-04-25 — Phase 2: tray, search consolidation, welcome card — COMPLETE
 
 **Status:** Done on branch `phase-2/tray-search-welcome` (working in `claude/strange-poincare-ca9fde`). Cache bumped `hanzi-v6.54` → `hanzi-v6.55`. Awaiting visual verification before merge.
