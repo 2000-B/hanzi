@@ -253,12 +253,11 @@ function setMode(mode) {
   if (currentMode === 'test' && mode !== 'test' && sessionLog.length > 0) saveSession();
 
   currentMode = mode;
-  // Update card mode button
-  const modeBtn = document.getElementById('card-mode-btn');
-  if (modeBtn) {
-    modeBtn.textContent = mode === 'test' ? 'study' : 'test';
-    modeBtn.classList.toggle('active', mode === 'test');
-  }
+  // Update card mode buttons (one per face)
+  document.querySelectorAll('.card-mode-btn').forEach(btn => {
+    btn.textContent = mode === 'test' ? 'study' : 'test';
+    btn.classList.toggle('active', mode === 'test');
+  });
   // Legacy pill (may be removed)
   const pillTest = document.getElementById('pill-test');
   if (pillTest) pillTest.classList.toggle('active', mode === 'test');

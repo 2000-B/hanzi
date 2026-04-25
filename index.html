@@ -274,6 +274,8 @@
           <div class="card-scene" id="card-scene">
             <div class="card-inner" id="card-inner" onclick="flipCard()">
               <div class="card-face card-front">
+                <button class="card-mode-btn" onclick="event.stopPropagation();setMode(currentMode==='test'?'study':'test')">test</button>
+                <span class="card-counter"></span>
                 <span class="card-note-indicator" id="card-note-icon" title="">✏</span>
                 <div class="card-review-flag" id="card-review-flag">review</div>
                 <div class="card-hanzi" id="front-hanzi"></div>
@@ -281,12 +283,11 @@
                 <div class="card-hint">click to flip · swipe or ← → to navigate</div>
               </div>
               <div class="card-face card-back">
+                <button class="card-mode-btn" onclick="event.stopPropagation();setMode(currentMode==='test'?'study':'test')">test</button>
+                <span class="card-counter"></span>
                 <div class="card-english" id="back-english"></div>
               </div>
             </div>
-            <!-- Counter and test button live OUTSIDE the flipping card-inner so they remain readable on the back face -->
-            <span class="card-counter" id="card-counter"></span>
-            <button class="card-mode-btn" id="card-mode-btn" onclick="setMode(currentMode==='test'?'study':'test')">test</button>
             <!-- Card list overlay — sits on top of card-inner -->
             <div class="list-view" id="list-view"></div>
           </div>

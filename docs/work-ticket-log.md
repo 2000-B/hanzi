@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-04-25 — Phase 1: visual verification fold-ins
+
+**Status:** Five bugs found during visual verification of `phase-1/quick-wins`. All fixed on the same branch. Cache bumped `hanzi-v6.53` → `hanzi-v6.54`.
+
+### Findings during verification
+
+- **Info-panel fade-out was not actually fading.** `.ws-panel:not(.open) { display: none !important }` (`styles.css:468`) was overriding `.info-panel.closing { display: flex }`. The `closing` class was being applied but the panel was instantly hidden, so `slideOutRight` never played — user saw a snap. Fixed by changing the rule to `.ws-panel:not(.open):not(.closing)`. Only `#info-panel` and `#main-content` carry `ws-panel`, and `#main-content` never gets `closing`, so the change is scoped.
+- **Settings section header sizing was applied to the wrong class.** Phase 1 commit edited `.settings-section-title`, but the full-settings modal (`index.html:120+`) actually uses `.fs-section-label`, which was still 10px uppercase. Applied the same typographic update (14px / regular case / `var(--text)` color, with `margin-top: 18px` and a `:first-child { margin-top: 0 }` rule for section-leading labels) to `.fs-section-label`. Inline `style="margin-top:8px|12px"` overrides on sub-labels still take precedence as before.
+- **Undo button anchored to wrong edge.** Phase 1 placed `.btn-undo` at `right: 12px`, which pinned it to the far right of the tray (well past the card). User wanted it adjacent to the rightmost centered tray button. Re-anchored to `left: calc(50% + 64px)` — three centered 32px buttons plus 8px gaps span 112px, so the rightmost button ends 56px right of center; +8px gap puts undo's left edge at center+64px. Three main buttons remain centered, undo sits 8px to the right of `#btn-mastered`.
+- **Counter and test button were stationary, not flipping with the card.** Phase 1 moved them out of `.card-inner` to avoid mirroring on the back face, but the user wanted them to move with the flip. Restored as siblings of `.card-hanzi` etc. inside both `.card-front` and `.card-back`. Each face renders its own copy in normal orientation; `backface-visibility: hidden` on `.card-face` hides the away-facing copy. Switched from `id="card-counter"` / `id="card-mode-btn"` to class-based, and updated `updateProgress()` (deck.js) and `setMode()` (study.js) to write to all matching elements via `querySelectorAll`. Hover selectors moved from `.card-scene:hover` to `.card-face:hover`. The mode-btn `onclick` now stops event propagation so clicking it doesn't also flip the card.
+- **Hidden (mastered) cards still appeared on the card face.** User requested that hidden cards only show as grayed in the context strip (already implemented via `ctx-mastered`) and as a hidden icon in the card list (was a green ✓). Switched `hideMastered` default from `false` to `true` in `state.js` so navigation always skips mastered cards. Replaced the card-list ✓ marker with an eye-slash SVG icon (matching the hide button's icon when active); restyled `.list-mastered` to use `var(--text3)` and `display: inline-flex` for icon alignment.
+
+### Files touched
+- `styles.css` — `.ws-panel:not(.open):not(.closing)`; `.fs-section-label` typography; `.btn-undo` re-anchor; `.list-mastered` restyle; `.card-face:hover` hover selectors
+- `index.html` — counter + mode-btn moved into both `.card-front` and `.card-back`, IDs dropped, mode-btn onclick gains `event.stopPropagation()`
+- `js/deck.js` — `updateProgress()` writes to all `.card-counter` via `querySelectorAll`
+- `js/study.js` — `setMode()` writes to all `.card-mode-btn`
+- `js/state.js` — `hideMastered` default → `true`
+- `js/events.js` — card-list mastered indicator → eye-slash SVG with `title="hidden"`
+- `sw.js` — cache bump
+
+### Verified
+- Info panel close: `closing` class held for 200ms with `display: flex` and `slideOutRight` animation; opacity transitions 1 → 0; panel then hides. Re-opening mid-close still works.
+- Settings modal: all `.fs-section-label` items render at 14px, color `var(--text)`, no uppercase, breathing room between sections. Verified in both light and dark modes.
+- Undo: three centered tray buttons at fixed positions (x=274/314/354); undo sits 8px to the right of the rightmost button at x=394.
+- Card flip: counter `1 / 20` and `TEST` button visible at top-right / top-left in proper reading orientation on both front and back faces; positions match across faces.
+- Hidden cards: marking a card as hidden auto-advances; nextCard / prevCard skip past hidden cards; eye-slash icon renders in the card list for each mastered card; context strip already shows them grayed via `ctx-mastered`.
+- All other Phase 1 items re-verified post-reload.
+
+---
+
 ## 2026-04-24 — Phase 1: quick wins — COMPLETE
 
 **Status:** Done on branch `phase-1/quick-wins`. Cache bumped `hanzi-v6.52` → `hanzi-v6.53`. Awaiting user visual verification in dark/light modes before merge.

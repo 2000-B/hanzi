@@ -227,8 +227,8 @@ body.light header {
   opacity: 0.6;
   transition: opacity .2s;
 }
-.card-scene:hover .card-counter { opacity: 1; }
-/* Card mode button — positioned on the card scene (outside the flipping card-inner so it stays readable on the back) */
+.card-face:hover .card-counter { opacity: 1; }
+/* Card mode button — one copy per face so it flips with the card but reads correctly on whichever face is showing. */
 .card-mode-btn {
   position: absolute;
   top: 8px;
@@ -248,7 +248,7 @@ body.light header {
   z-index: 2;
   opacity: 0.5;
 }
-.card-scene:hover .card-mode-btn { opacity: 1; }
+.card-face:hover .card-mode-btn { opacity: 1; }
 .card-mode-btn:hover { border-color: var(--accent-border); color: var(--text2); }
 .card-mode-btn.active {
   background: var(--accent);
@@ -465,7 +465,7 @@ body.light .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0
   margin: 4px;
   transition: transform .25s ease, opacity .25s ease, filter .2s ease;
 }
-.ws-panel:not(.open) {
+.ws-panel:not(.open):not(.closing) {
   display: none !important;
   pointer-events: none;
 }
@@ -2322,12 +2322,15 @@ body.light .full-settings {
 }
 .fs-section:last-child { border-bottom: none; }
 .fs-section-label {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--text3);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+  margin-top: 18px;
+  margin-bottom: 4px;
 }
+.fs-section > .fs-section-label:first-child { margin-top: 0; }
 /* Background picker */
 .bg-picker {
   display: flex;
@@ -2727,7 +2730,8 @@ body.light .welcome-modal {
   width: auto;
   height: auto;
   position: absolute;
-  right: 12px;
+  /* Sit adjacent to the rightmost centered tray button: 3 buttons × 32px + 2 × 8px gap = 112px wide; half-width 56px + 8px gap to next sibling. */
+  left: calc(50% + 64px);
   top: 50%;
   transform: translateY(-50%) translateX(8px);
   opacity: 0;
@@ -2759,7 +2763,7 @@ body.light .welcome-modal {
 .list-pinyin { color:var(--text2); font-size:13px; }
 .list-english { color:var(--text); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .list-badges { display:flex; gap:4px; align-items:center; }
-.list-mastered { color:var(--green); font-size:11px; }
+.list-mastered { color:var(--text3); display:inline-flex; align-items:center; }
 .list-review-badge { color:var(--orange); font-size:11px; }
 
 /* Search results dropdown — anchored to header-search-wrap, outside the clipping pill */

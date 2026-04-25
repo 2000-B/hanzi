@@ -127,16 +127,12 @@ function shuffleDeck() {
 }
 
 function updateProgress() {
-  const counter = document.getElementById('card-counter');
-  if (counter) {
-    if (activeDeck.length) {
-      counter.textContent = `${currentIndex + 1} / ${activeDeck.length}`;
-      counter.style.display = '';
-    } else {
-      counter.textContent = '';
-      counter.style.display = 'none';
-    }
-  }
+  const counters = document.querySelectorAll('.card-counter');
+  const text = activeDeck.length ? `${currentIndex + 1} / ${activeDeck.length}` : '';
+  counters.forEach(c => {
+    c.textContent = text;
+    c.style.display = activeDeck.length ? '' : 'none';
+  });
 }
 
 let controlsTrayOpen = false;
