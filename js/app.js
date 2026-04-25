@@ -41,8 +41,9 @@ async function init() {
   }
   try { dismissedPromotions = JSON.parse(getProfileData('hanzi-dismissed-promotions') || '[]'); } catch (e) { dismissedPromotions = []; }
 
-  // Phase 6 — tone visualization (Mandarin only)
-  toneGlyphsOnCard = getProfileData('hanzi-tone-glyphs-card') === '1';
+  // Phase 6 — tone pitch visualizer (Mandarin only). Default ON; respect explicit '0'.
+  const savedPitch = getProfileData('hanzi-tone-glyphs-card');
+  if (savedPitch !== null) toneGlyphsOnCard = savedPitch !== '0';
   toneSectionCollapsed = getProfileData('hanzi-tone-section-collapsed') === '1';
   // Load appearance (per-profile)
   try {

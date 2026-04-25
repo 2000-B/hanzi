@@ -168,7 +168,9 @@ function renderInfoPanel(card) {
   }
 
   // ── Header ──
-  const toneLine = currentLang === 'zh' ? tonePitchLineSVG(card.pinyin) : '';
+  // Tone-pitch line shows in Mandarin only and only when the master pitch
+  // visualizer toggle (toneGlyphsOnCard) is on. Defaults to on for new users.
+  const toneLine = (currentLang === 'zh' && toneGlyphsOnCard) ? tonePitchLineSVG(card.pinyin) : '';
   html += `<div class="ip-header">
     <div class="ip-hanzi">${card.hanzi}</div>
     ${isJapanese && card.kana && card.kana !== card.hanzi ? `<div class="ip-kana">${card.kana}</div>` : ''}

@@ -4,6 +4,35 @@
 
 ---
 
+## 2026-04-25 — Phase 6: master pitch toggle in quick settings + tone-3 V
+
+**Status:** Iteration on Phase 6. Cache bumped `hanzi-v6.73` → `hanzi-v6.75`.
+
+### Changes
+
+- **Tone-3 path redrawn as a sharp V.** Old path was two quadratic Beziers ending at y=9 (mid-low) — read as a soft droop instead of the canonical "dip then rise". Replaced with `M2 4 L7 12 L14 4` — two straight lines forming a symmetrical valley starting and ending at y=4 (high) with the bottom at y=12. Verified for `běi jīng`: V (běi tone 3) followed by flat (jīng tone 1).
+- **Master pitch-visualizer toggle added to quick settings.** New "tone pitch" toggle row in the gear popover under STUDY. Same handler as the full-settings row (`toggleToneGlyphsOnCard`), so they stay synchronized.
+- **`toneGlyphsOnCard` is now a master toggle.** Previously it only gated the card-face glyph display; the info-panel pitch line was unconditional. Now both the info panel and the card face check it. Default flipped from `false` to `true` — pitch viz is the new shiny feature, on by default for new users; existing profiles that explicitly saved `'0'` keep it off.
+- **Defensive: removed the hardcoded `class="toggle-switch on"` from the `#context-strip-toggle` button.** The toggle's class is updated by `syncSettingsUI` based on `showContextStrip`, but the hardcoded `on` meant the visual briefly read on before init ran. The class now starts neutral.
+
+### Files touched
+
+- `js/tone-viz.js` (tone-3 path)
+- `js/state.js` (`toneGlyphsOnCard` default → `true`)
+- `js/app.js` (load with explicit-0 respect; default-on otherwise)
+- `js/info-panel.js` (gates `tonePitchLineSVG` on `toneGlyphsOnCard`)
+- `js/settings.js` (`toggleToneGlyphsOnCard` re-renders info panel; `syncSettingsUI` reflects the new quick-settings row, hidden in JP mode)
+- `index.html` (new `#pitch-toggle` row under STUDY in quick settings; removed hardcoded `on` from context-strip toggle)
+- `sw.js` (cache bump)
+
+### Verified (preview)
+
+- Quick settings popover shows: `show pinyin` (on), `context strip` (off), `tone pitch` (on). Pitch toggle reflects state via `.on` class.
+- Tone-3 path now renders as a V; verified path string for `běi jīng` is `M2 4 L7 12 L14 4` (V) then `M2 4 L14 4` (flat).
+- Toggling pitch off via either quick settings or full settings hides the line in both info panel and card face.
+
+---
+
 ## 2026-04-25 — Phase 6: continuous pitch line above pinyin
 
 **Status:** Iteration on Phase 6. Cache bumped `hanzi-v6.72` → `hanzi-v6.73`.
