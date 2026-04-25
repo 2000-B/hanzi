@@ -191,19 +191,24 @@ body.light header {
   left: 6px;
   right: 6px;
   bottom: 6px;
-  background: rgba(255,255,255,0.72);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   z-index: 2;
 }
+.list-view .list-search:hover .search-bar { border-color: var(--text2); }
+.list-view .list-search .search-bar:focus-within { border-color: var(--accent); }
 body:not(.light) .list-view .list-search {
-  background: rgba(13,13,26,0.55);
+  background: rgba(13,13,26,0.78);
 }
 /* In dark mode, give the pill a brighter outline + brighter placeholder/icon
  * so it reads visibly without lifting the bg shade itself. */
 body:not(.light) .list-view .list-search .search-bar {
   border-color: rgba(255,255,255,0.32);
 }
+body:not(.light) .list-view .list-search:hover .search-bar { border-color: rgba(255,255,255,0.55); }
+/* Focus state wins over hover and over the dark-mode default outline. */
+body:not(.light) .list-view .list-search .search-bar:focus-within { border-color: var(--accent); }
 body:not(.light) .list-view .list-search .search-input { color: #fff; }
 body:not(.light) .list-view .list-search .search-input::placeholder { color: rgba(255,255,255,0.65); }
 body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,0.7); }
@@ -249,6 +254,11 @@ body:not(.light) .list-view .list-search .search-icon { color: rgba(255,255,255,
   max-height: 60%;
 }
 .list-view .list-scroll { padding-bottom: 56px; }
+/* Hide the native scrollbar — webkit scrollbars render above the
+ * backdrop-filter and can't be blurred by it. The fade-blur above the
+ * pill is now the only "more rows up there" indicator. */
+.list-view .list-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+.list-view .list-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .search-result-group {
   padding: 6px 12px 4px;
   font-size: 10px;

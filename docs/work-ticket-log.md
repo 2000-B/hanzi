@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 7)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.61` → `hanzi-v6.62`.
+
+### Changes
+
+- **List-view native scrollbar hidden.** The `backdrop-filter` blur on the fade element couldn't blur the webkit scrollbar (scrollbars render above the filter and aren't subject to it), so the scrollbar always appeared sharp through the fade region. Hidden the list-scroll scrollbar entirely (`scrollbar-width: none`, `::-webkit-scrollbar { display: none }`); the fade-blur above the pill remains as the "more rows above" indicator.
+- **Search pill bumped brighter.** Dark-mode bg `0.55 → 0.78` opacity and light-mode `0.72 → 0.85` so the pill reads as a clearly defined frosted bar rather than a faint translucent strip.
+- **Hover highlight on pill.** New `.list-search:hover .search-bar` rule strengthens the border on hover — `var(--text2)` in light mode, `rgba(255,255,255,0.55)` in dark — so the pill responds visibly when the user mouses over.
+- **Accent outline on focus.** Restored `:focus-within` border-color: `var(--accent)` with high enough specificity to beat the dark-mode default-border override. Clicking into the input now outlines the pill in the user's accent color.
+
+### Files touched
+
+- `styles.css` — `.list-view .list-scroll` scrollbar hidden; `.list-search` bg opacity bumped (light + dark); `.list-search:hover .search-bar` rules (light + dark); `:focus-within` rule re-added with body-scoped specificity
+- `sw.js` — cache bump
+
+### Verified
+
+- Scrollbar `scrollbar-width = none`; rows extend full width with no scroll lane visible.
+- Pill `backgroundColor` = `rgba(13,13,26,0.78)` in dark mode.
+- `:focus-within` border = `rgba(235,167,118,0.6)` (accent at current orange hue).
+- Pill's whiter outline visible against the darker bg in screenshot.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 6)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.60` → `hanzi-v6.61`.
