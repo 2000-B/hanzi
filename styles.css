@@ -149,48 +149,72 @@ body.light header {
 .header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 
 /* Collapsible search in header */
-.header-search-wrap {
+/* Inline search pill — used in deck panel (top) and card list overlay (bottom). */
+.search-pill { position: relative; }
+.search-pill .search-input { width: 100%; }
+.search-pill .search-bar {
   display: flex;
   align-items: center;
-  position: relative;
-}
-.search-pill {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 0;
-  overflow: hidden;
-  border-radius: 999px;
-  transition: max-width .25s ease, opacity .2s ease, visibility 0s .25s;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-  z-index: 10;
-}
-.header-search-wrap.open .search-pill {
-  max-width: 300px;
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
-  transition: max-width .25s ease, opacity .2s ease, visibility 0s;
-}
-.header-search-wrap.open #btn-search {
-  visibility: hidden;
-}
-.search-pill .search-input {
-  width: 280px;
-}
-.search-pill .search-bar {
-  border: 1.5px solid transparent;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--border);
   border-radius: 999px;
   background: var(--bg);
+  transition: border-color .2s;
 }
-.header-search-wrap.open .search-pill .search-bar {
-  border-color: var(--border);
+.search-pill .search-bar:focus-within { border-color: var(--accent); }
+/* Deck-panel: sticky top of sidebar */
+.sidebar > .deck-search {
+  flex-shrink: 0;
+  margin: 10px 12px 8px;
 }
-.search-pill .search-bar:focus-within {
-  border-color: var(--accent);
+.sidebar > .deck-search .search-results {
+  position: relative;
+  top: 6px;
+  right: auto;
+  width: 100%;
+  max-height: 360px;
+}
+/* Card-list: pinned bottom of overlay */
+.list-view .list-search {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  background: var(--bg2);
+  z-index: 2;
+}
+.list-view .list-search-results {
+  position: absolute;
+  top: auto;
+  left: 12px;
+  right: 12px;
+  bottom: 60px;
+  width: auto;
+  max-height: 60%;
+}
+.list-view .list-scroll { padding-bottom: 64px; }
+.search-result-group {
+  padding: 6px 12px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  background: var(--bg2);
+  position: sticky;
+  top: 0;
+}
+.search-deck-row {
+  font-size: 13px;
+  color: var(--text);
+  padding: 8px 12px;
+}
+.search-empty {
+  padding: 14px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 12px;
 }
 
 .header-title {
@@ -1477,21 +1501,63 @@ body.light .deck-item.active .deck-name {
   line-height: 1;
   user-select: none;
 }
-.empty-text {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--text);
-  letter-spacing: 0.02em;
+
+/* Welcome card — empty state placeholder, mirrors the .card-face flashcard look. */
+.welcome-card {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(13,13,26,0.92);
+  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
 }
-.empty-sub {
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
+  pointer-events: none;
+}
+body.light .welcome-card {
+  background: #fefefe;
+  border-color: rgba(0,0,0,0.06);
+  box-shadow:
+    0 1px 4px rgba(0,0,0,.04),
+    0 4px 16px rgba(0,0,0,.04),
+    0 12px 32px rgba(0,0,0,.02);
+}
+body.light .welcome-card::before { background: none; }
+.welcome-card-greeting {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 64px;
+  font-weight: 300;
+  background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 50%, var(--grad-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  user-select: none;
+}
+body.ja-mode .welcome-card-greeting { font-family: 'Noto Sans JP', sans-serif; }
+.welcome-card-hello {
+  font-size: 18px;
+  color: var(--text2);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+.empty-hint {
   font-size: 13px;
   color: var(--text3);
-}
-body.light .empty-text {
-  color: var(--text2);
-}
-body.light .empty-sub {
-  color: var(--text3);
+  text-align: center;
 }
 
 /* Study area */
@@ -1631,14 +1697,17 @@ body.light .card-face::before {
 }
 .card-note-indicator {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  font-size: 14px;
-  opacity: 0.5;
+  top: 10px;
+  right: 50px; /* left of the .card-counter (right:12px, ~28px wide) — out of the test button's footprint at top-left */
+  font-size: 13px;
+  opacity: 0.55;
   cursor: default;
+  z-index: 2;
   display: none;
+  pointer-events: auto; /* keep so browser title-tooltip shows the note text on hover */
 }
 .card-note-indicator.visible { display: block; }
+.card-face:hover .card-note-indicator.visible { opacity: 0.9; }
 .card-review-flag {
   position: absolute;
   top: 14px;
@@ -2331,6 +2400,19 @@ body.light .full-settings {
   margin-bottom: 4px;
 }
 .fs-section > .fs-section-label:first-child { margin-top: 0; }
+.fs-reset-link {
+  background: none;
+  border: none;
+  padding: 4px 0 0;
+  margin: 4px 0 0;
+  align-self: flex-start;
+  font-size: 12px;
+  color: var(--text3);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.fs-reset-link:hover { color: var(--text2); }
 /* Background picker */
 .bg-picker {
   display: flex;
@@ -2725,24 +2807,32 @@ body.light .welcome-modal {
 .btn-undo {
   font-size: 10px;
   font-weight: 500;
-  padding: 4px 12px;
+  padding: 0;
   border-radius: var(--radius);
-  width: auto;
   height: auto;
-  position: absolute;
-  /* Sit adjacent to the rightmost centered tray button: 3 buttons × 32px + 2 × 8px gap = 112px wide; half-width 56px + 8px gap to next sibling. */
-  left: calc(50% + 64px);
-  top: 50%;
-  transform: translateY(-50%) translateX(8px);
+  /* Inline flex sibling — sits adjacent to the rightmost button. Animates width 0 → auto so it
+   * doesn't reserve space until shown; the centered group recenters when it appears. */
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-width: 0;
   opacity: 0;
   pointer-events: none;
+  transform: translateX(8px);
+  transition: width .25s cubic-bezier(.4,0,.2,1), padding .25s cubic-bezier(.4,0,.2,1), opacity .2s ease, transform .25s cubic-bezier(.4,0,.2,1), border-width .2s;
   transition: opacity .2s ease, transform .2s ease;
 }
 .btn-undo.visible {
   opacity: 1;
-  transform: translateY(-50%) translateX(0);
+  width: auto;
+  padding: 4px 12px;
+  border-width: 1px;
+  transform: translateX(0);
   pointer-events: auto;
 }
+/* Hidden tray buttons (per-button settings toggle) */
+.controls-tray .btn[data-tray-hidden="true"] { display: none; }
 
 /* Mastered list panel */
 .mastered-list-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
@@ -2836,7 +2926,8 @@ body.light .search-results { background:rgba(255,255,255,0.85); backdrop-filter:
 .sh-empty { text-align: center; color: var(--text3); padding: 16px; font-size: 13px; }
 
 /* Note save feedback */
-.ip-note-area { transition: border-color .2s; }
+.ip-note-area { transition: border-color .2s, box-shadow .2s; }
+.ip-note-area.flash { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 .ip-note-saved { font-size:11px; color:var(--green); opacity:0; transition:opacity .3s; margin-top:4px; }
 .ip-note-saved.show { opacity:1; }
 

@@ -146,17 +146,17 @@ Each phase has: goal, scope-in, scope-out, dependencies, done criteria, task che
 - Cache bumped, work ticket added
 
 **Tasks:**
-- [ ] Investigate pencil-on-hover bug (z-order with `#btn-test`?) and document finding
-- [ ] Add pencil button to tool tray, wire to "open info panel + focus note field"
-- [ ] Add info panel button to tool tray
-- [ ] Implement tool tray settings section with per-button toggles
-- [ ] Build deck-panel search input + filter logic
-- [ ] Build card-list-overlay search input + filter logic
-- [ ] Remove header search markup, CSS, and `toggleSearch()` references
-- [ ] Repoint `/` and `Cmd+K` keyboard handlers
-- [ ] Implement welcome card empty state
-- [ ] Bump cache version
-- [ ] Add work ticket entry
+- [x] Investigate pencil-on-hover bug — z-order overlap confirmed; pencil indicator moved to top-right (left of counter), z-index 2
+- [x] Add pencil button to tool tray, wire to "open info panel + focus note field"
+- [x] Add info panel button to tool tray
+- [x] Implement tool tray settings section with per-button toggles
+- [x] Build deck-panel search input + filter logic
+- [x] Build card-list-overlay search input + filter logic
+- [x] Remove header search markup, CSS, and `toggleSearch()` references
+- [x] Repoint `/` and `Cmd+K` keyboard handlers
+- [x] Implement welcome card empty state
+- [x] Bump cache version
+- [x] Add work ticket entry
 
 ---
 

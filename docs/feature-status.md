@@ -14,8 +14,8 @@
 | JLPT N5–N1 decks | done | `japanese-toggle-spec.md` |
 | Custom decks (CSV import, AI generation) | done | `hanzi-app-spec-v5_3.md` |
 | Chunk system (split decks into smaller groups) | done | `hanzi-app-spec-v5_3.md` |
-| Search (header pill, global) | done | being replaced — see `search-consolidation-spec.md` |
-| Card list overlay | done | being extended with search — see `search-consolidation-spec.md` |
+| Search (header pill, global) | removed | replaced by deck-panel + card-list searches in Phase 2 |
+| Card list overlay | done | gained inline search in Phase 2 (`search-consolidation-spec.md`) |
 | Mastery toggle + undo | done | label fix in roadmap Phase 1 |
 | Hide/show mastered toggle | done | relabel in roadmap Phase 1 |
 | Welcome modal (first launch) | done | `hanzi-app-spec-v5_3.md` |
@@ -46,7 +46,7 @@
 | Active focus chunk | not-started | `progress-management-spec.md` |
 | Daily session abstraction | not-started | `progress-management-spec.md` |
 | Mastery-gated promotion suggestions | not-started | `progress-management-spec.md` |
-| Welcome card (empty state) | not-started | basic in Phase 2, integrated with daily session in Phase 5 |
+| Welcome card (empty state) | done | basic flashcard-shaped greeting card in Phase 2; daily session integration deferred to Phase 5 |
 
 ## Info panel
 
@@ -56,7 +56,7 @@
 | TTS audio button (Web Speech API) | done | hide-when-unavailable in Phase 1 |
 | Pre-recorded HSK 1 audio | deferred | depends on audio sourcing decision |
 | Tutor chat (AI-powered) | done | `hanzi-app-spec-v5_3.md` |
-| User notes (per card) | done | pencil-icon-to-tray fix in roadmap Phase 2 |
+| User notes (per card) | done | tray pencil button shipped in Phase 2; on-card pencil indicator z-order fixed |
 | Tone visualization (mnemonic) | not-started | roadmap Phase 6 |
 | Homophone / minimal pair groupings | not-started | roadmap Phase 7 |
 | Japanese pitch accent visualization | deferred | needs separate design pass |
@@ -80,19 +80,19 @@
 | Shuffle button | done | |
 | Card list button | done | |
 | Hide/show mastered button | done | relabel in Phase 1 |
-| Pencil/note button | not-started | roadmap Phase 2 (`tray-customization-spec.md`) |
-| Info panel button | not-started | roadmap Phase 2 (also kept in header) |
-| Per-button visibility toggles in settings | not-started | `tray-customization-spec.md` |
-| Centered layout when undo button appears | broken | Phase 1 polish |
+| Pencil/note button | done | Phase 2 — opens info panel and focuses note field |
+| Info panel button | done | Phase 2 — toggles panel; default off in tray, also lives in header |
+| Per-button visibility toggles in settings | done | Phase 2 — `trayButtonVisibility` profile data, reset link |
+| Centered layout when undo button appears | done | Phase 1 — undo is inline-flex with width animation, sits adjacent to rightmost button |
 
 ## Search
 
 | Feature | State | Spec / Notes |
 |---|---|---|
-| Header search pill | done | being removed — `search-consolidation-spec.md` |
-| Deck-panel search (hierarchical) | not-started | `search-consolidation-spec.md` |
-| Card list overlay search (deck-scoped + cross-deck) | not-started | `search-consolidation-spec.md` |
-| Keyboard shortcut (`/`, `Cmd+K`) | done | repointing to deck panel in Phase 2 |
+| Header search pill | removed | Phase 2 — replaced by per-list searches |
+| Deck-panel search (hierarchical) | done | Phase 2 — decks + chunks + cards |
+| Card list overlay search (deck-scoped + cross-deck) | done | Phase 2 — current-deck above divider, other decks below |
+| Keyboard shortcut (`/`, `Cmd+K`) | done | Phase 2 — opens deck panel and focuses its search input |
 
 ## Settings
 
@@ -104,7 +104,7 @@
 | Curated swatch palette | done | |
 | Tint UI to accent toggle | done | |
 | Profile picker | done | `user-profiles-spec.md` |
-| Tool tray button toggles | not-started | `tray-customization-spec.md` |
+| Tool tray button toggles | done | Phase 2 — section in full settings, three toggles + reset link |
 | Desired retention setting | not-started | Phase 4 |
 | Daily new-card budget setting | not-started | Phase 5 |
 | Export / import data | done | reassess after Supabase ships |
@@ -113,7 +113,7 @@
 
 | Feature | State | Spec / Notes |
 |---|---|---|
-| Title + deck/info/settings buttons | done | search button removed in Phase 2 |
+| Title + deck/info/settings buttons | done | Phase 2 — search button removed; redesign with progress indicators in Phase 5 |
 | Header redesign with progress indicators | not-started | Phase 5 (paired with progress management) |
 
 ## Pronunciation / audio

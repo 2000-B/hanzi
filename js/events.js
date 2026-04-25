@@ -81,6 +81,23 @@ function renderListView() {
     scroll.appendChild(row);
     if (i === currentIndex) activeRow = row;
   });
+
+  // Search results container (shown when query is non-empty; hides .list-scroll)
+  const sr = document.createElement('div');
+  sr.className = 'search-results list-search-results';
+  sr.id = 'card-list-search-results';
+  el.appendChild(sr);
+
+  // Search input pinned at the bottom of the overlay
+  const searchPill = document.createElement('div');
+  searchPill.className = 'search-pill list-search';
+  searchPill.innerHTML = `
+    <div class="search-bar">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input class="search-input" id="card-list-search-input" type="text" placeholder="search this deck and others…" autocomplete="off">
+    </div>`;
+  el.appendChild(searchPill);
+
   if (activeRow) requestAnimationFrame(() => activeRow.scrollIntoView({ block: 'center' }));
 }
 
@@ -89,23 +106,18 @@ function renderListView() {
 // KEYBOARD SHORTCUTS
 // ══════════════════════════════════════════
 document.addEventListener('keydown', e => {
-  // Don't intercept when typing in inputs
+  // Don't intercept when typing in inputs (the per-input Escape handlers in search.js handle clearing)
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-    if (e.key === '/' && e.target !== document.getElementById('search-input')) {
-      // Allow / to focus search even from other inputs
-    } else if (e.key === 'Escape' && e.target === document.getElementById('search-input')) {
-      closeSearchBar();
-      return;
-    } else {
-      return;
-    }
+    return;
   }
 
-  if (e.key === '/' || (e.metaKey && e.key === 'k')) {
+  // `/` and Cmd+K (Ctrl+K on non-Mac) → open the deck panel and focus its search input.
+  if (e.key === '/' || ((e.metaKey || e.ctrlKey) && e.key === 'k')) {
     e.preventDefault();
-    const wrap = document.getElementById('header-search-wrap');
-    if (!wrap.classList.contains('open')) toggleSearch();
-    else document.getElementById('search-input').focus();
+    if (!document.querySelector('.sidebar').classList.contains('open')) {
+      document.getElementById('btn-deck').click();
+    }
+    setTimeout(() => document.getElementById('deck-search-input')?.focus(), 50);
     return;
   }
 
@@ -135,7 +147,6 @@ document.addEventListener('keydown', e => {
     if (settingsOverlay && settingsOverlay.classList.contains('open')) { closeSettings(); return; }
     const masteredModal = document.getElementById('mastered-list-modal');
     if (masteredModal && masteredModal.classList.contains('open')) { toggleMasteredList(); return; }
-    if (document.getElementById('header-search-wrap').classList.contains('open')) { closeSearch(); searchSelectedIdx = -1; return; }
     if (sidebarOpen) { closeSidebar(); return; }
     if (infoPanelOpen) { toggleInfoPanel(); return; }
   }
@@ -209,9 +220,15 @@ function applyLangUI() {
   // Header + page title
   document.querySelector('.header-title').textContent = cfg.headerTitle;
   document.title = cfg.pageTitle;
-  // Search placeholder
-  const si = document.getElementById('search-input');
-  if (si) si.placeholder = cfg.searchPlaceholder;
+  // Welcome card greeting (empty-state placeholder)
+  const wg = document.getElementById('welcome-greeting');
+  if (wg) wg.textContent = cfg.welcomeGreeting;
+  document.body.classList.toggle('ja-mode', currentLang === 'ja');
+  // Search placeholders (deck panel + card list)
+  const dsi = document.getElementById('deck-search-input');
+  if (dsi) dsi.placeholder = cfg.searchPlaceholder;
+  const cli = document.getElementById('card-list-search-input');
+  if (cli) cli.placeholder = cfg.searchPlaceholder;
   // "Show pinyin/romaji" labels
   ['show-reading-label', 'fs-show-reading-label'].forEach(id => {
     const el = document.getElementById(id);

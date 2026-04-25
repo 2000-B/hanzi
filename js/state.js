@@ -27,6 +27,7 @@ const LANG_CONFIGS = {
     tutorSystemPrompt: 'You are a helpful Chinese language tutor. Keep answers concise and focused.',
     showReadingLabel: 'show pinyin',
     font: "'Noto Sans SC', sans-serif",
+    welcomeGreeting: '你好',
   },
   ja: {
     id: 'ja',
@@ -44,6 +45,7 @@ const LANG_CONFIGS = {
     tutorSystemPrompt: 'You are a helpful Japanese language tutor. Keep answers concise and focused.',
     showReadingLabel: 'show romaji',
     font: "'Noto Sans JP', sans-serif",
+    welcomeGreeting: 'こんにちは',
   }
 };
 let currentLang = localStorage.getItem('app-lang') || 'zh';
@@ -67,6 +69,7 @@ let showContextStrip = true;       // persists in profile as 'hanzi-context-stri
 let showDifficultyRatings = false; // persists in localStorage as 'hanzi-diff-ratings'
 let listViewActive = false;
 let hideMastered = true;
+let trayButtonVisibility = { hideMastered: true, notePencil: true, infoPanel: false };
 let lastMasteredCard = null; // { hanzi, prevData } for undo
 let undoTimer = null;
 let infoPanelHistory = [];    // stack of card objects for info panel back navigation

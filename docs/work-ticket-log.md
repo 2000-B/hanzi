@@ -4,6 +4,76 @@
 
 ---
 
+## 2026-04-25 — Phase 2: tray, search consolidation, welcome card — COMPLETE
+
+**Status:** Done on branch `phase-2/tray-search-welcome` (working in `claude/strange-poincare-ca9fde`). Cache bumped `hanzi-v6.54` → `hanzi-v6.55`. Awaiting visual verification before merge.
+
+**Context:** Restructure of the tool tray (two new buttons + per-button settings toggles), search consolidation (header search removed, deck-panel and card-list-overlay searches added), and a welcome card placeholder for the empty state. See `docs/roadmap.md` Phase 2, `docs/tray-customization-spec.md`, and `docs/search-consolidation-spec.md`.
+
+### Changes
+
+**Welcome card (empty state):**
+- `LANG_CONFIGS` gains `welcomeGreeting` (`你好` / `こんにちは`); `applyLangUI()` writes it into `#welcome-greeting` and toggles `body.ja-mode` so the JP font is used in Japanese mode.
+- `index.html` empty-state replaced with a flashcard-shaped `.welcome-card` containing the greeting + "Hello" + a hint underneath. Mirrors `.card-face` styling (rounded, subtle shadow, dark/light variants).
+
+**Pencil-on-hover bug:**
+- Confirmed: `.card-note-indicator` (top-left, z-index auto) was fully covered by `.card-mode-btn` (top-left, z-index 2) when both were rendered. Test button only visible at opacity 0.5 by default but rose to 1 on hover, fully obscuring the pencil.
+- Fix: pencil moved to top-right (`right: 50px`, left of `.card-counter`), z-index 2. Hover now boosts opacity to 0.9 in addition to default 0.55.
+
+**Tray customization:**
+- Two new buttons in `.controls-tray`: `#btn-tray-note` (pencil, `data-tray-key="notePencil"`) and `#btn-tray-info` (i-in-circle, `data-tray-key="infoPanel"`). `#btn-mastered` gains `data-tray-key="hideMastered"`.
+- Pencil click → new `openNoteFromTray()` in `js/info-panel.js`: opens panel if closed and focuses `#user-note`; if open and visible, flashes the textarea border with `.flash` class for 600ms.
+- Info-panel tray click → `toggleInfoPanel()` (same as header). Both `#btn-info` and `#btn-tray-info` toggle `.active` together.
+- New full-settings section "tool tray" with three toggles (default `hideMastered: true, notePencil: true, infoPanel: false`) plus a "reset to defaults" link. State persists per profile under `hanzi-tray-visibility`.
+- New CSS: `.controls-tray .btn[data-tray-hidden="true"] { display: none }`; `.fs-reset-link` styling.
+- Undo button reworked to inline-flex with `width: 0 → auto` animation so it sits adjacent to whichever button is rightmost (3, 4, or 5 visible buttons all work). Keeps the centered group's behavior but no longer hardcodes button count.
+
+**Search consolidation:**
+- Removed from header: `header-search-wrap`, `search-pill`, `search-bar`, `btn-search`, `search-results` markup; CSS for the collapse animation; `toggleSearch()` and `closeSearch()` from `js/settings.js`; the global `window blur` handler that called `closeSearch()`.
+- Deck-panel: new sticky `.search-pill.deck-search` at the top of `#sidebar` with `#deck-search-input`. Hierarchical results — decks (matching name), then cards (deck index + dictionary fallback) — render into a relative-positioned `#deck-search-results` dropdown.
+- Card-list overlay: `renderListView()` now appends `#card-list-search-results` and a pinned `.search-pill.list-search` at the bottom. Results split into "in this deck" and "from other decks" groups; typing hides `.list-scroll`.
+- `js/search.js` rewritten: `_searchCards()` and `_searchDictionary()` are reusable matchers; `runDeckPanelSearch()` and `runCardListSearch()` drive the two placements. `navigateToSearchResult()` retained for shared navigation logic.
+- Keyboard shortcuts: `/` and `Cmd+K` (`Ctrl+K` on non-Mac) now open the sidebar and focus `#deck-search-input`. Per-input `Escape` clears value first, then defocuses. Removed the legacy header-search Escape branch.
+- `applyLangUI()` updates placeholders on both new inputs.
+
+### Files touched
+
+- `index.html` — header search removed; deck-search added to sidebar; tray buttons added; tool-tray settings section added; empty-state replaced with welcome card
+- `styles.css` — search-pill rewrite (inline base instead of header-collapse); deck-search and list-search placements; tray button visibility selector; fs-reset-link; welcome-card; pencil indicator reposition; .btn-undo inline-flex with width animation
+- `js/state.js` — `welcomeGreeting` per language; `trayButtonVisibility` defaults
+- `js/app.js` — `loadTrayVisibility()` call in `init()`
+- `js/events.js` — `applyLangUI()` writes welcome greeting + ja-mode body class + new placeholders; `renderListView()` adds search input/results; keyboard shortcut repointed; legacy header-search Escape branch removed
+- `js/search.js` — full rewrite; `_searchCards`/`_searchDictionary`/`runDeckPanelSearch`/`runCardListSearch`/`navigateToSearchResult`
+- `js/settings.js` — removed `toggleSearch()`/`closeSearch()`; added tray-visibility loaders + `applyTrayVisibility()`; `syncSettingsUI()` now reflects tray toggles
+- `js/info-panel.js` — `openNoteFromTray()`; `toggleInfoPanel()` also toggles `.active` on the tray info button
+- `sw.js` — cache bump
+- `docs/roadmap.md` — Phase 2 task list marked done
+- `docs/feature-status.md` — search rows, tool-tray rows, welcome-card row, header row updated
+
+### Verified
+
+- Welcome card: 你好 in Chinese, こんにちは in Japanese; gradient text, dark and light backgrounds.
+- Pencil overlap: confirmed via DOM inspection that pencil now sits at top-right (x=428) clear of test button (x=181-226) and to the left of counter (x=449); horizontal overlap = 0.
+- Tray buttons: 5 button render (`shuffle`, `card-list`, `note`, `hide`, `info`) with infoPanel hidden by default. Toggling each persists to `hanzi-tray-visibility`.
+- Pencil tray click: opens info panel; `#user-note` is rendered. Header info button shows `.active` orange tint when panel open; tray info button does the same when toggled visible.
+- Settings section: "tool tray" header at 14px, three labeled toggles, defaults reflected on first open, "reset to defaults" link wired.
+- Deck-panel search: typing "love" returns `爱 ài / to love / love` under a "cards" group; clicking navigates to the card.
+- Card-list search: typing "love" with HSK 1 chunk 1 active shows `爱` under "in this deck"; typing "school" (not in current chunk) shows `学校` under "from other decks".
+- `/` keypress: opens sidebar, focuses `#deck-search-input`.
+
+### Pending verification (user-side)
+
+- Visual smoke test in dark and light modes
+- Welcome card on full empty state (no profile data + first launch)
+- Card-list search dropdown layout when many results push past 60% viewport (scroll behavior)
+- Mobile narrow widths — tray button overflow with all 5 visible
+
+### Next
+
+- Visual verification, then merge to main and start Phase 3 (`phase-3/tiling-cleanup`).
+
+---
+
 ## 2026-04-25 — Phase 1: visual verification fold-ins
 
 **Status:** Five bugs found during visual verification of `phase-1/quick-wins`. All fixed on the same branch. Cache bumped `hanzi-v6.53` → `hanzi-v6.54`.

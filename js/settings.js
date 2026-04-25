@@ -1,24 +1,5 @@
 // SETTINGS
 // ══════════════════════════════════════════
-function toggleSearch() {
-  if (currentMode === 'test') return;
-  const wrap = document.getElementById('header-search-wrap');
-  const isOpen = wrap.classList.toggle('open');
-  if (isOpen) {
-    setTimeout(() => document.getElementById('search-input').focus(), 50);
-  } else {
-    document.getElementById('search-input').value = '';
-    document.getElementById('search-results').style.display = 'none';
-  }
-}
-function closeSearch() {
-  const wrap = document.getElementById('header-search-wrap');
-  if (!wrap.classList.contains('open')) return;
-  wrap.classList.remove('open');
-  document.getElementById('search-input').value = '';
-  document.getElementById('search-results').style.display = 'none';
-}
-window.addEventListener('blur', () => closeSearch());
 
 // Appearance state
 let appearance = {
@@ -98,6 +79,11 @@ function syncSettingsUI() {
   // Match-bg toggle
   const matchBgToggle = document.getElementById('fs-match-bg-toggle');
   if (matchBgToggle) matchBgToggle.classList.toggle('on', !!appearance.matchBg);
+  // Tray button toggles
+  ['hideMastered', 'notePencil', 'infoPanel'].forEach(key => {
+    const el = document.getElementById('fs-tray-' + key);
+    if (el) el.classList.toggle('on', trayButtonVisibility[key] !== false);
+  });
 }
 
 function updatePrefsVisibility() {
@@ -398,6 +384,45 @@ function toggleTimerOnly() {
 function setFormat(fmt) {
   currentFormat = fmt;
   syncSettingsUI();
+}
+
+// ── Tool tray button visibility ──
+const TRAY_DEFAULTS = { hideMastered: true, notePencil: true, infoPanel: false };
+
+function loadTrayVisibility() {
+  try {
+    const raw = getProfileData('hanzi-tray-visibility');
+    if (raw) trayButtonVisibility = { ...TRAY_DEFAULTS, ...JSON.parse(raw) };
+  } catch (e) { trayButtonVisibility = { ...TRAY_DEFAULTS }; }
+  applyTrayVisibility();
+}
+
+function saveTrayVisibility() {
+  try { setProfileData('hanzi-tray-visibility', JSON.stringify(trayButtonVisibility)); } catch (e) {}
+  applyTrayVisibility();
+}
+
+function applyTrayVisibility() {
+  document.querySelectorAll('.controls-tray .btn[data-tray-key]').forEach(btn => {
+    const key = btn.dataset.trayKey;
+    const visible = trayButtonVisibility[key] !== false;
+    btn.dataset.trayHidden = visible ? 'false' : 'true';
+  });
+  // Sync settings toggles if rendered
+  ['hideMastered', 'notePencil', 'infoPanel'].forEach(key => {
+    const el = document.getElementById('fs-tray-' + key);
+    if (el) el.classList.toggle('on', trayButtonVisibility[key] !== false);
+  });
+}
+
+function toggleTrayButton(key) {
+  trayButtonVisibility[key] = !trayButtonVisibility[key];
+  saveTrayVisibility();
+}
+
+function resetTrayVisibility() {
+  trayButtonVisibility = { ...TRAY_DEFAULTS };
+  saveTrayVisibility();
 }
 
 // ══════════════════════════════════════════

@@ -38,6 +38,9 @@ async function init() {
   // Apply language-specific UI
   applyLangUI();
 
+  // Load tray button visibility (per-profile)
+  loadTrayVisibility();
+
   // Load progress from localStorage
   loadProgress();
   loadTutorHistory();

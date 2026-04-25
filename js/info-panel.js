@@ -4,6 +4,7 @@ function toggleInfoPanel() {
   infoPanelOpen = !infoPanelOpen;
   const panel = document.getElementById('info-panel');
   document.getElementById('btn-info').classList.toggle('active', infoPanelOpen);
+  document.getElementById('btn-tray-info')?.classList.toggle('active', infoPanelOpen);
 
   if (!infoPanelOpen) {
     // Closing — play fade-out animation, then drop display:flex by removing both classes.
@@ -69,6 +70,44 @@ function toggleInfoPanel() {
 function _syncTutorBarVisibility() {
   const bar = document.querySelector('.tutor-bar');
   if (bar) bar.style.display = getApiKey() ? '' : 'none';
+}
+
+/**
+ * Tray pencil button action.
+ * If the info panel is closed → open it; once rendered, scroll to and focus the note field.
+ * If the panel is open and the note field is in view → flash the note border briefly.
+ * If the panel is open but the note is out of view → scroll to it.
+ */
+function openNoteFromTray() {
+  const panelOpen = !!infoPanelOpen;
+  if (!panelOpen) {
+    toggleInfoPanel();
+    // renderInfoPanel runs synchronously inside toggleInfoPanel → user-note exists by next tick.
+    requestAnimationFrame(() => {
+      const ta = document.getElementById('user-note');
+      if (!ta) return;
+      ta.scrollIntoView({ block: 'center', behavior: 'instant' });
+      ta.focus();
+    });
+    return;
+  }
+  const ta = document.getElementById('user-note');
+  if (!ta) return;
+  const scroll = ta.closest('.info-panel-scroll');
+  let inView = true;
+  if (scroll) {
+    const tr = ta.getBoundingClientRect();
+    const sr = scroll.getBoundingClientRect();
+    inView = tr.top >= sr.top && tr.bottom <= sr.bottom;
+  }
+  if (inView) {
+    ta.classList.add('flash');
+    setTimeout(() => ta.classList.remove('flash'), 600);
+    ta.focus();
+  } else {
+    ta.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    setTimeout(() => ta.focus(), 250);
+  }
 }
 
 function getEnriched() { return currentLang === 'ja' ? ENRICHED_JP : ENRICHED; }
