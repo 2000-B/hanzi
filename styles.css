@@ -149,24 +149,31 @@ body.light header {
 .header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 
 /* Collapsible search in header */
-/* Inline search pill — used in deck panel (top) and card list overlay (bottom). */
+/* Inline search pill — used in deck panel (top) and card list overlay (bottom).
+ * Slim by default, matches the look of the (removed) header search pill. */
 .search-pill { position: relative; }
-.search-pill .search-input { width: 100%; }
+.search-pill .search-input {
+  width: 100%;
+  font-size: 12px;
+  padding: 3px 8px 3px 26px;
+}
+.search-pill .search-icon { width: 12px; height: 12px; left: 8px; }
 .search-pill .search-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 3px 10px;
   border: 1.5px solid var(--border);
   border-radius: 999px;
   background: var(--bg);
   transition: border-color .2s;
 }
 .search-pill .search-bar:focus-within { border-color: var(--accent); }
-/* Deck-panel: sticky top of sidebar */
+/* Deck-panel: sticky top of sidebar. Tight margins so the pill's rounded ends
+ * sit close to the panel's rounded corners without an obvious whitespace ring. */
 .sidebar > .deck-search {
   flex-shrink: 0;
-  margin: 10px 12px 8px;
+  margin: 6px 6px 4px;
 }
 .sidebar > .deck-search .search-results {
   position: relative;
@@ -1915,30 +1922,30 @@ body.light .controls-tray-wrap.tray-open .controls-tray-chevron:hover { backgrou
   opacity: 1;
   padding: 8px 0 4px;
 }
-/* Tray buttons — lighter to match card face */
+/* Tray buttons — same shade as the flashcard so they read as part of the same surface. */
 .controls-tray .btn {
   width: 32px;
   height: 32px;
   padding: 0;
   border-radius: 50%;
   color: var(--text3);
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(13,13,26,0.92);
 }
 .controls-tray .btn:hover {
   color: var(--text);
-  border-color: rgba(255,255,255,0.20);
-  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(20,20,34,0.96);
 }
 body.light .controls-tray .btn {
   color: var(--text3);
-  border-color: rgba(0,0,0,0.08);
-  background: rgba(255,255,255,0.70);
+  border-color: rgba(0,0,0,0.06);
+  background: #fefefe;
 }
 body.light .controls-tray .btn:hover {
   color: var(--text);
   border-color: rgba(0,0,0,0.14);
-  background: rgba(255,255,255,0.90);
+  background: #ffffff;
 }
 
 /* ══════════════════════════════════════════

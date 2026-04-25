@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-04-25 — Phase 2: post-merge tweaks (round 4)
+
+**Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.58` → `hanzi-v6.59`.
+
+### Changes
+
+- **Deck-panel search pill slimmed and tightened.** The pill was inheriting the original full-size dimensions and reading too "weighty" at the top of the panel. Reduced `.search-pill .search-bar` padding from `6px 12px` to `3px 10px`, dropped input font-size 13 → 12px, shrunk the search icon 14 → 12px and pulled it left 10 → 8px, and tightened `.sidebar > .deck-search` margin from `10px 12px 8px` to `6px 6px 4px`. The pill now sits closer to the panel's rounded corners and matches the silhouette of the (removed) header search pill. The card-list overlay search inherits the same slim look.
+- **Tool tray buttons now share the flashcard's shade.** Previously the buttons used translucent white over the card, which read as a separate surface. Switched the bg to `rgba(13,13,26,0.92)` (matches `.card-face` in dark mode) and `#fefefe` (matches in light mode); border colors and hover states retuned to match the card's edge treatment. Buttons now feel like extensions of the flashcard rather than overlay chrome.
+
+### Files touched
+
+- `styles.css` — `.search-pill .search-bar` padding tighter; `.search-pill .search-input` size + padding; `.search-pill .search-icon` size + position; `.sidebar > .deck-search` margin; `.controls-tray .btn` and light variant + hover states match `.card-face`
+- `sw.js` — cache bump
+
+### Verified
+
+- Deck-panel pill: padding `3px 10px`, input font-size 12px, sidebar margin `6px 6px 4px` confirmed via computed styles.
+- Tray button bg in dark = `rgba(13,13,26,0.92)` = `.card-face` bg.
+- Tray button bg in light = `rgb(254,254,254)` = `.card-face` bg `#fefefe`.
+
+---
+
 ## 2026-04-25 — Phase 2: post-merge tweaks (round 3)
 
 **Status:** Visual polish on `phase-2/tray-search-welcome`. Cache bumped `hanzi-v6.57` → `hanzi-v6.58`.
