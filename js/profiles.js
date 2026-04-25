@@ -165,7 +165,7 @@ function switchProfile(id) {
   // Re-apply appearance settings
   try {
     const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');
-    appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false, matchBg: false };
+    appearance = { type: 'theme', primaryHue: 300, complementSecondary: true, secondaryHue: null, color: '#c47ad6', image: null, blur: false, matchBg: false };
     if (savedApp) Object.assign(appearance, savedApp);
   } catch(e) {}
   applyBackground();
@@ -229,7 +229,7 @@ function deleteProfile(id) {
     loadTutorHistory();
     try {
       const savedApp = JSON.parse(getProfileData('hanzi-appearance') || 'null');
-      appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false, matchBg: false };
+      appearance = { type: 'theme', primaryHue: 300, complementSecondary: true, secondaryHue: null, color: '#c47ad6', image: null, blur: false, matchBg: false };
       if (savedApp) Object.assign(appearance, savedApp);
     } catch(e) {}
     applyBackground();

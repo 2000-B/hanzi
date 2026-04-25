@@ -4,10 +4,10 @@
 // Appearance state
 let appearance = {
   type: 'theme',             // 'theme' | 'color' | 'image'
-  primaryHue: 25,            // hue for gradient elements (--grad-start/mid/end) and blobs
+  primaryHue: 300,           // hue for gradient elements (--grad-start/mid/end) and blobs
   complementSecondary: true, // if true, auto-compute secondary from primary
   secondaryHue: null,        // manual secondary hue; null means use getSecondaryHue(primaryHue)
-  color: '#ffb347',          // solid background color (for type='color')
+  color: '#c47ad6',          // solid background color (for type='color')
   image: null,
   blur: false,
   matchBg: false             // if true, tint all bg/border/surface colors to accent hue
@@ -213,7 +213,7 @@ function toggleBgBlur() {
 }
 
 function resetAppearance() {
-  appearance = { type: 'theme', primaryHue: 25, complementSecondary: true, secondaryHue: null, color: '#ffb347', image: null, blur: false, matchBg: false };
+  appearance = { type: 'theme', primaryHue: 300, complementSecondary: true, secondaryHue: null, color: '#c47ad6', image: null, blur: false, matchBg: false };
   ['blob-style', 'accent-theme', 'theme-colors'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
   applyBackground();
   syncSettingsUI();
